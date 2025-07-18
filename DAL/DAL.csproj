@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C6FFF274-A158-484D-BBD3-FF7D9C2DDF44}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DAL</RootNamespace>
+    <AssemblyName>DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cliente.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DatabaseService.cs" />
+    <Compile Include="Detalle_informe_material_faltante.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Detalle_proyecto_empleado.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Detalle_proyecto_material.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Empleado.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Factory.cs" />
+    <Compile Include="GestorCMBDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GestorCMBDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="GestorCMBEntityModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GestorCMBEntityModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GestorCMBEntityModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GestorCMBEntityModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GestorCMBEntityModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Informe_compra.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Informe_monto.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Inventario.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoginDAL\PasswordHasher.cs" />
+    <Compile Include="LoginDAL\PermisoRepository.cs" />
+    <Compile Include="LoginDAL\UsuarioRepository.cs" />
+    <Compile Include="LoginDAL\UsuarioService.cs" />
+    <Compile Include="Material.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Material_faltante.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectRepo\DetalleEmpleadosRepository.cs" />
+    <Compile Include="ProjectRepo\DetalleMaterialesRepository.cs" />
+    <Compile Include="ProjectRepo\EmpleadoRepository.cs" />
+    <Compile Include="ProjectRepo\InformeMontoRepository.cs" />
+    <Compile Include="ProjectRepo\InventarioRepository.cs" />
+    <Compile Include="ProjectRepo\MaterialFaltanteRepository.cs" />
+    <Compile Include="ProjectRepo\MaterialRepository.cs" />
+    <Compile Include="ProjectRepo\ProveedorRepo.cs" />
+    <Compile Include="ProjectRepo\ProyectoRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProjectRepo\ProveedorRepository.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Proveedor.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Proyecto.cs">
+      <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DomainModel\DomainModel.csproj">
+      <Project>{f44ba8e1-9dd9-4860-907d-c3a82dc7b74e}</Project>
+      <Name>DomainModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
+      <Project>{bcf0c972-b0c8-47fa-bf8d-0888c565df9d}</Project>
+      <Name>Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Services\Services.csproj">
+      <Project>{1dcb5e64-dfcd-4d80-b425-aa9f13dab451}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="GestorCMBDataSet.xsc">
+      <DependentUpon>GestorCMBDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="GestorCMBDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>GestorCMBDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="GestorCMBDataSet.xss">
+      <DependentUpon>GestorCMBDataSet.xsd</DependentUpon>
+    </None>
+    <EntityDeploy Include="GestorCMBEntityModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>GestorCMBEntityModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="GestorCMBEntityModel.edmx.diagram">
+      <DependentUpon>GestorCMBEntityModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GestorCMBEntityModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>GestorCMBEntityModel.edmx</DependentUpon>
+      <LastGenOutput>GestorCMBEntityModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="GestorCMBEntityModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>GestorCMBEntityModel.edmx</DependentUpon>
+      <LastGenOutput>GestorCMBEntityModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+</Project>

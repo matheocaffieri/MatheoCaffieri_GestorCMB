@@ -1,0 +1,139 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace MatheoCaffieri_GestorCMB
+{
+
+    public partial class MainForm : Form
+    {
+        public Point mouseLocation;
+
+        public MainForm()
+        {
+            
+
+            InitializeComponent();
+            HomeControl homeControl = new HomeControl(this);
+            addUserControl(homeControl);
+
+        }
+
+        
+        private void buttonExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        
+        private void MainForm_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        
+        private void MainForm_MouseUp(object sender, MouseEventArgs e)
+        {
+        }
+
+        
+        private void MainForm_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void FormPanel_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseLocation = new Point(-e.X, -e.Y);
+        }
+
+        private void FormPanel_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Left)
+            {
+                Point mousePosition = MousePosition;
+                mousePosition.Offset(mouseLocation.X, mouseLocation.Y);
+                Location = mousePosition;
+            }
+        }
+
+        public void addUserControl(UserControl userControl)
+        {
+            userControl.Dock = DockStyle.Fill;
+            MainPanel.Controls.Clear();
+            MainPanel.Controls.Add(userControl);
+            userControl.BringToFront();
+        }
+
+        private void verProyectosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            VerProyectosControl verProyectosControl = new VerProyectosControl(this);
+            addUserControl(verProyectosControl);
+        }
+
+        private void homeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HomeControl homeControl = new HomeControl(this);
+            addUserControl(homeControl);
+        }
+
+        private void verInventarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            VerInventarioControl verInventarioControl = new VerInventarioControl();
+            addUserControl(verInventarioControl);
+        }
+
+        private void verEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            VerEmpleadosControl verEmpleadosControl = new VerEmpleadosControl();
+            addUserControl(verEmpleadosControl);
+        }
+
+        private void agregarProyectosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddProyectosForm addProyectosForm = new AddProyectosForm();
+            addProyectosForm.Show();
+        }
+
+        private void cargarEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddEmpleadosForm addEmpleadosForm = new AddEmpleadosForm();
+            addEmpleadosForm.Show();
+        }
+
+        private void agregarMaterialesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddMaterialesForm addMaterialesForm = new AddMaterialesForm();
+            addMaterialesForm.Show();
+        }
+
+        private void agregarProveedoresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProveedorControl proveedorControl = new ProveedorControl();
+            addUserControl(proveedorControl);
+        }
+
+        private void consultarInfToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InformesDeCompraControl informesDeCompraControl = new InformesDeCompraControl();
+            addUserControl(informesDeCompraControl);
+        }
+
+        private void verLogsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gestionarUsuariosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GestionUsuariosControl gestionUsuariosControl = new GestionUsuariosControl();
+            addUserControl(gestionUsuariosControl);
+        }
+    }
+}

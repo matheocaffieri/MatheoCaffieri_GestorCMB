@@ -1,0 +1,855 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GestorCMBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="idCliente" />
+          </Key>
+          <Property Name="idCliente" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="nombreContacto" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="razonSocial" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="mail" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="telefono" Type="int" Nullable="false" />
+          <Property Name="isActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Detalle_informe_material_faltante">
+          <Key>
+            <PropertyRef Name="idDetalleMaterialFaltante" />
+          </Key>
+          <Property Name="idDetalleMaterialFaltante" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="idInformeCompra" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="idMaterialFaltante" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Detalle_proyecto_empleado">
+          <Key>
+            <PropertyRef Name="idDetalleEmpleado" />
+          </Key>
+          <Property Name="idDetalleEmpleado" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="idProyecto" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="idEmpleado" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="fechaIngresoEmpleado" Type="date" Nullable="false" />
+          <Property Name="valorGanancia" Type="float" Nullable="false" />
+          <Property Name="estado" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Detalle_proyecto_material">
+          <Key>
+            <PropertyRef Name="idDetalleMaterial" />
+          </Key>
+          <Property Name="idDetalleMaterial" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="idProyecto" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="idMaterial" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="valorGanancia" Type="float" Nullable="false" />
+          <Property Name="fechaIngresoMaterial" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Empleado">
+          <Key>
+            <PropertyRef Name="idEmpleado" />
+          </Key>
+          <Property Name="idEmpleado" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="apellido" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="nroDocumento" Type="int" Nullable="false" />
+          <Property Name="sueldo" Type="float" Nullable="false" />
+          <Property Name="cantidadProyectosActivos" Type="int" Nullable="false" />
+          <Property Name="isActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Informe_compra">
+          <Key>
+            <PropertyRef Name="idInformeCompra" />
+          </Key>
+          <Property Name="idInformeCompra" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="idProyecto" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="fechaRealizacion" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Informe_monto">
+          <Key>
+            <PropertyRef Name="idInformeMonto" />
+          </Key>
+          <Property Name="idInformeMonto" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="idProyecto" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="totalMateriales" Type="float" Nullable="false" />
+          <Property Name="totalEmpleados" Type="float" Nullable="false" />
+          <Property Name="montoTotal" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Inventario">
+          <Key>
+            <PropertyRef Name="idMaterialInventario" />
+          </Key>
+          <Property Name="idMaterialInventario" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="idMaterial" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Material">
+          <Key>
+            <PropertyRef Name="idMaterial" />
+          </Key>
+          <Property Name="idMaterial" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="descripcionArticulo" Type="varchar(max)" Nullable="false" />
+          <Property Name="tipoMaterial" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="tipoUnidad" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="costoPorUnidad" Type="float" Nullable="false" />
+          <Property Name="idProveedor" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Material_faltante">
+          <Key>
+            <PropertyRef Name="idMaterialFaltante" />
+          </Key>
+          <Property Name="idMaterialFaltante" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="descripcionArticuloFaltante" Type="varchar(max)" Nullable="false" />
+          <Property Name="tipoMaterialFaltante" Type="varchar(max)" Nullable="false" />
+          <Property Name="tipoUnidadMaterialFaltante" Type="varchar(max)" Nullable="false" />
+          <Property Name="idProyecto" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="cantidadFaltante" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Proveedor">
+          <Key>
+            <PropertyRef Name="idProveedor" />
+          </Key>
+          <Property Name="idProveedor" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="descripcion" Type="varchar(max)" Nullable="false" />
+          <Property Name="telefono" Type="int" Nullable="false" />
+          <Property Name="isActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Proyecto">
+          <Key>
+            <PropertyRef Name="idProyecto" />
+          </Key>
+          <Property Name="idProyecto" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="idCliente" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fechaInicio" Type="date" Nullable="false" />
+          <Property Name="fechaFin" Type="date" Nullable="false" />
+          <Property Name="ubicacion" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Detalle_informe_material_faltante_Informe_compra">
+          <End Role="Informe_compra" Type="Self.Informe_compra" Multiplicity="1" />
+          <End Role="Detalle_informe_material_faltante" Type="Self.Detalle_informe_material_faltante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Informe_compra">
+              <PropertyRef Name="idInformeCompra" />
+            </Principal>
+            <Dependent Role="Detalle_informe_material_faltante">
+              <PropertyRef Name="idInformeCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_informe_material_faltante_Material_faltante">
+          <End Role="Material_faltante" Type="Self.Material_faltante" Multiplicity="1" />
+          <End Role="Detalle_informe_material_faltante" Type="Self.Detalle_informe_material_faltante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material_faltante">
+              <PropertyRef Name="idMaterialFaltante" />
+            </Principal>
+            <Dependent Role="Detalle_informe_material_faltante">
+              <PropertyRef Name="idMaterialFaltante" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_proyecto_empleado_Empleado">
+          <End Role="Empleado" Type="Self.Empleado" Multiplicity="1" />
+          <End Role="Detalle_proyecto_empleado" Type="Self.Detalle_proyecto_empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empleado">
+              <PropertyRef Name="idEmpleado" />
+            </Principal>
+            <Dependent Role="Detalle_proyecto_empleado">
+              <PropertyRef Name="idEmpleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_proyecto_empleado_Proyecto">
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Detalle_proyecto_empleado" Type="Self.Detalle_proyecto_empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proyecto">
+              <PropertyRef Name="idProyecto" />
+            </Principal>
+            <Dependent Role="Detalle_proyecto_empleado">
+              <PropertyRef Name="idProyecto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_proyecto_material_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="Detalle_proyecto_material" Type="Self.Detalle_proyecto_material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="idMaterial" />
+            </Principal>
+            <Dependent Role="Detalle_proyecto_material">
+              <PropertyRef Name="idMaterial" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_proyecto_material_Proyecto">
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Detalle_proyecto_material" Type="Self.Detalle_proyecto_material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proyecto">
+              <PropertyRef Name="idProyecto" />
+            </Principal>
+            <Dependent Role="Detalle_proyecto_material">
+              <PropertyRef Name="idProyecto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Informe_compra_Proyecto">
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Informe_compra" Type="Self.Informe_compra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proyecto">
+              <PropertyRef Name="idProyecto" />
+            </Principal>
+            <Dependent Role="Informe_compra">
+              <PropertyRef Name="idProyecto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Informe_monto_Proyecto">
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Informe_monto" Type="Self.Informe_monto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proyecto">
+              <PropertyRef Name="idProyecto" />
+            </Principal>
+            <Dependent Role="Informe_monto">
+              <PropertyRef Name="idProyecto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Inventario_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="Inventario" Type="Self.Inventario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="idMaterial" />
+            </Principal>
+            <Dependent Role="Inventario">
+              <PropertyRef Name="idMaterial" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_faltante_Proyecto">
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Material_faltante" Type="Self.Material_faltante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proyecto">
+              <PropertyRef Name="idProyecto" />
+            </Principal>
+            <Dependent Role="Material_faltante">
+              <PropertyRef Name="idProyecto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_Proveedor">
+          <End Role="Proveedor" Type="Self.Proveedor" Multiplicity="1" />
+          <End Role="Material" Type="Self.Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedor">
+              <PropertyRef Name="idProveedor" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="idProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Proyecto_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="idCliente" />
+            </Principal>
+            <Dependent Role="Proyecto">
+              <PropertyRef Name="idCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GestorCMBModelStoreContainer">
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Detalle_informe_material_faltante" EntityType="Self.Detalle_informe_material_faltante" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Detalle_proyecto_empleado" EntityType="Self.Detalle_proyecto_empleado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Detalle_proyecto_material" EntityType="Self.Detalle_proyecto_material" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Empleado" EntityType="Self.Empleado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Informe_compra" EntityType="Self.Informe_compra" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Informe_monto" EntityType="Self.Informe_monto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Inventario" EntityType="Self.Inventario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Material" EntityType="Self.Material" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Material_faltante" EntityType="Self.Material_faltante" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Proveedor" EntityType="Self.Proveedor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Proyecto" EntityType="Self.Proyecto" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Detalle_informe_material_faltante_Informe_compra" Association="Self.FK_Detalle_informe_material_faltante_Informe_compra">
+            <End Role="Informe_compra" EntitySet="Informe_compra" />
+            <End Role="Detalle_informe_material_faltante" EntitySet="Detalle_informe_material_faltante" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_informe_material_faltante_Material_faltante" Association="Self.FK_Detalle_informe_material_faltante_Material_faltante">
+            <End Role="Material_faltante" EntitySet="Material_faltante" />
+            <End Role="Detalle_informe_material_faltante" EntitySet="Detalle_informe_material_faltante" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_proyecto_empleado_Empleado" Association="Self.FK_Detalle_proyecto_empleado_Empleado">
+            <End Role="Empleado" EntitySet="Empleado" />
+            <End Role="Detalle_proyecto_empleado" EntitySet="Detalle_proyecto_empleado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_proyecto_empleado_Proyecto" Association="Self.FK_Detalle_proyecto_empleado_Proyecto">
+            <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Detalle_proyecto_empleado" EntitySet="Detalle_proyecto_empleado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_proyecto_material_Material" Association="Self.FK_Detalle_proyecto_material_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="Detalle_proyecto_material" EntitySet="Detalle_proyecto_material" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_proyecto_material_Proyecto" Association="Self.FK_Detalle_proyecto_material_Proyecto">
+            <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Detalle_proyecto_material" EntitySet="Detalle_proyecto_material" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Informe_compra_Proyecto" Association="Self.FK_Informe_compra_Proyecto">
+            <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Informe_compra" EntitySet="Informe_compra" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Informe_monto_Proyecto" Association="Self.FK_Informe_monto_Proyecto">
+            <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Informe_monto" EntitySet="Informe_monto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Inventario_Material" Association="Self.FK_Inventario_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="Inventario" EntitySet="Inventario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_faltante_Proyecto" Association="Self.FK_Material_faltante_Proyecto">
+            <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Material_faltante" EntitySet="Material_faltante" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_Proveedor" Association="Self.FK_Material_Proveedor">
+            <End Role="Proveedor" EntitySet="Proveedor" />
+            <End Role="Material" EntitySet="Material" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Proyecto_Cliente" Association="Self.FK_Proyecto_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Proyecto" EntitySet="Proyecto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GestorCMBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="idCliente" />
+          </Key>
+          <Property Name="idCliente" Type="Guid" Nullable="false" />
+          <Property Name="nombreContacto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="razonSocial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="mail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefono" Type="Int32" Nullable="false" />
+          <Property Name="isActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Proyecto" Relationship="Self.FK_Proyecto_Cliente" FromRole="Cliente" ToRole="Proyecto" />
+        </EntityType>
+        <EntityType Name="Detalle_informe_material_faltante">
+          <Key>
+            <PropertyRef Name="idDetalleMaterialFaltante" />
+          </Key>
+          <Property Name="idDetalleMaterialFaltante" Type="Guid" Nullable="false" />
+          <Property Name="idInformeCompra" Type="Guid" Nullable="false" />
+          <Property Name="idMaterialFaltante" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Informe_compra" Relationship="Self.FK_Detalle_informe_material_faltante_Informe_compra" FromRole="Detalle_informe_material_faltante" ToRole="Informe_compra" />
+          <NavigationProperty Name="Material_faltante" Relationship="Self.FK_Detalle_informe_material_faltante_Material_faltante" FromRole="Detalle_informe_material_faltante" ToRole="Material_faltante" />
+        </EntityType>
+        <EntityType Name="Detalle_proyecto_empleado">
+          <Key>
+            <PropertyRef Name="idDetalleEmpleado" />
+          </Key>
+          <Property Name="idDetalleEmpleado" Type="Guid" Nullable="false" />
+          <Property Name="idProyecto" Type="Guid" Nullable="false" />
+          <Property Name="idEmpleado" Type="Guid" Nullable="false" />
+          <Property Name="fechaIngresoEmpleado" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="valorGanancia" Type="Double" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Empleado" Relationship="Self.FK_Detalle_proyecto_empleado_Empleado" FromRole="Detalle_proyecto_empleado" ToRole="Empleado" />
+          <NavigationProperty Name="Proyecto" Relationship="Self.FK_Detalle_proyecto_empleado_Proyecto" FromRole="Detalle_proyecto_empleado" ToRole="Proyecto" />
+        </EntityType>
+        <EntityType Name="Detalle_proyecto_material">
+          <Key>
+            <PropertyRef Name="idDetalleMaterial" />
+          </Key>
+          <Property Name="idDetalleMaterial" Type="Guid" Nullable="false" />
+          <Property Name="idProyecto" Type="Guid" Nullable="false" />
+          <Property Name="idMaterial" Type="Guid" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="valorGanancia" Type="Double" Nullable="false" />
+          <Property Name="fechaIngresoMaterial" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Material" Relationship="Self.FK_Detalle_proyecto_material_Material" FromRole="Detalle_proyecto_material" ToRole="Material" />
+          <NavigationProperty Name="Proyecto" Relationship="Self.FK_Detalle_proyecto_material_Proyecto" FromRole="Detalle_proyecto_material" ToRole="Proyecto" />
+        </EntityType>
+        <EntityType Name="Empleado">
+          <Key>
+            <PropertyRef Name="idEmpleado" />
+          </Key>
+          <Property Name="idEmpleado" Type="Guid" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nroDocumento" Type="Int32" Nullable="false" />
+          <Property Name="sueldo" Type="Double" Nullable="false" />
+          <Property Name="cantidadProyectosActivos" Type="Int32" Nullable="false" />
+          <Property Name="isActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Detalle_proyecto_empleado" Relationship="Self.FK_Detalle_proyecto_empleado_Empleado" FromRole="Empleado" ToRole="Detalle_proyecto_empleado" />
+        </EntityType>
+        <EntityType Name="Informe_compra">
+          <Key>
+            <PropertyRef Name="idInformeCompra" />
+          </Key>
+          <Property Name="idInformeCompra" Type="Guid" Nullable="false" />
+          <Property Name="idProyecto" Type="Guid" Nullable="false" />
+          <Property Name="fechaRealizacion" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Detalle_informe_material_faltante" Relationship="Self.FK_Detalle_informe_material_faltante_Informe_compra" FromRole="Informe_compra" ToRole="Detalle_informe_material_faltante" />
+          <NavigationProperty Name="Proyecto" Relationship="Self.FK_Informe_compra_Proyecto" FromRole="Informe_compra" ToRole="Proyecto" />
+        </EntityType>
+        <EntityType Name="Informe_monto">
+          <Key>
+            <PropertyRef Name="idInformeMonto" />
+          </Key>
+          <Property Name="idInformeMonto" Type="Guid" Nullable="false" />
+          <Property Name="idProyecto" Type="Guid" Nullable="false" />
+          <Property Name="totalMateriales" Type="Double" Nullable="false" />
+          <Property Name="totalEmpleados" Type="Double" Nullable="false" />
+          <Property Name="montoTotal" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Proyecto" Relationship="Self.FK_Informe_monto_Proyecto" FromRole="Informe_monto" ToRole="Proyecto" />
+        </EntityType>
+        <EntityType Name="Inventario">
+          <Key>
+            <PropertyRef Name="idMaterialInventario" />
+          </Key>
+          <Property Name="idMaterialInventario" Type="Guid" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="idMaterial" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Material" Relationship="Self.FK_Inventario_Material" FromRole="Inventario" ToRole="Material" />
+        </EntityType>
+        <EntityType Name="Material">
+          <Key>
+            <PropertyRef Name="idMaterial" />
+          </Key>
+          <Property Name="idMaterial" Type="Guid" Nullable="false" />
+          <Property Name="descripcionArticulo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipoMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipoUnidad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="costoPorUnidad" Type="Double" Nullable="false" />
+          <Property Name="idProveedor" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Detalle_proyecto_material" Relationship="Self.FK_Detalle_proyecto_material_Material" FromRole="Material" ToRole="Detalle_proyecto_material" />
+          <NavigationProperty Name="Inventario" Relationship="Self.FK_Inventario_Material" FromRole="Material" ToRole="Inventario" />
+          <NavigationProperty Name="Proveedor" Relationship="Self.FK_Material_Proveedor" FromRole="Material" ToRole="Proveedor" />
+        </EntityType>
+        <EntityType Name="Material_faltante">
+          <Key>
+            <PropertyRef Name="idMaterialFaltante" />
+          </Key>
+          <Property Name="idMaterialFaltante" Type="Guid" Nullable="false" />
+          <Property Name="descripcionArticuloFaltante" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipoMaterialFaltante" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipoUnidadMaterialFaltante" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Detalle_informe_material_faltante" Relationship="Self.FK_Detalle_informe_material_faltante_Material_faltante" FromRole="Material_faltante" ToRole="Detalle_informe_material_faltante" />
+          <Property Name="idProyecto" Type="Guid" Nullable="false" />
+          <Property Name="cantidadFaltante" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Proyecto" Relationship="GestorCMBModel.FK_Material_faltante_Proyecto" FromRole="Material_faltante" ToRole="Proyecto" />
+        </EntityType>
+        <EntityType Name="Proveedor">
+          <Key>
+            <PropertyRef Name="idProveedor" />
+          </Key>
+          <Property Name="idProveedor" Type="Guid" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefono" Type="Int32" Nullable="false" />
+          <Property Name="isActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Material" Relationship="Self.FK_Material_Proveedor" FromRole="Proveedor" ToRole="Material" />
+        </EntityType>
+        <EntityType Name="Proyecto">
+          <Key>
+            <PropertyRef Name="idProyecto" />
+          </Key>
+          <Property Name="idProyecto" Type="Guid" Nullable="false" />
+          <Property Name="idCliente" Type="Guid" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fechaInicio" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="fechaFin" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ubicacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Proyecto_Cliente" FromRole="Proyecto" ToRole="Cliente" />
+          <NavigationProperty Name="Detalle_proyecto_empleado" Relationship="Self.FK_Detalle_proyecto_empleado_Proyecto" FromRole="Proyecto" ToRole="Detalle_proyecto_empleado" />
+          <NavigationProperty Name="Detalle_proyecto_material" Relationship="Self.FK_Detalle_proyecto_material_Proyecto" FromRole="Proyecto" ToRole="Detalle_proyecto_material" />
+          <NavigationProperty Name="Informe_compra" Relationship="Self.FK_Informe_compra_Proyecto" FromRole="Proyecto" ToRole="Informe_compra" />
+          <NavigationProperty Name="Informe_monto" Relationship="Self.FK_Informe_monto_Proyecto" FromRole="Proyecto" ToRole="Informe_monto" />
+          <NavigationProperty Name="Material_faltante" Relationship="GestorCMBModel.FK_Material_faltante_Proyecto" FromRole="Proyecto" ToRole="Material_faltante" />
+        </EntityType>
+        <Association Name="FK_Proyecto_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="idCliente" />
+            </Principal>
+            <Dependent Role="Proyecto">
+              <PropertyRef Name="idCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_informe_material_faltante_Informe_compra">
+          <End Role="Informe_compra" Type="Self.Informe_compra" Multiplicity="1" />
+          <End Role="Detalle_informe_material_faltante" Type="Self.Detalle_informe_material_faltante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Informe_compra">
+              <PropertyRef Name="idInformeCompra" />
+            </Principal>
+            <Dependent Role="Detalle_informe_material_faltante">
+              <PropertyRef Name="idInformeCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_informe_material_faltante_Material_faltante">
+          <End Role="Material_faltante" Type="Self.Material_faltante" Multiplicity="1" />
+          <End Role="Detalle_informe_material_faltante" Type="Self.Detalle_informe_material_faltante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material_faltante">
+              <PropertyRef Name="idMaterialFaltante" />
+            </Principal>
+            <Dependent Role="Detalle_informe_material_faltante">
+              <PropertyRef Name="idMaterialFaltante" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_proyecto_empleado_Empleado">
+          <End Role="Empleado" Type="Self.Empleado" Multiplicity="1" />
+          <End Role="Detalle_proyecto_empleado" Type="Self.Detalle_proyecto_empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empleado">
+              <PropertyRef Name="idEmpleado" />
+            </Principal>
+            <Dependent Role="Detalle_proyecto_empleado">
+              <PropertyRef Name="idEmpleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_proyecto_empleado_Proyecto">
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Detalle_proyecto_empleado" Type="Self.Detalle_proyecto_empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proyecto">
+              <PropertyRef Name="idProyecto" />
+            </Principal>
+            <Dependent Role="Detalle_proyecto_empleado">
+              <PropertyRef Name="idProyecto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_proyecto_material_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="Detalle_proyecto_material" Type="Self.Detalle_proyecto_material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="idMaterial" />
+            </Principal>
+            <Dependent Role="Detalle_proyecto_material">
+              <PropertyRef Name="idMaterial" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_proyecto_material_Proyecto">
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Detalle_proyecto_material" Type="Self.Detalle_proyecto_material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proyecto">
+              <PropertyRef Name="idProyecto" />
+            </Principal>
+            <Dependent Role="Detalle_proyecto_material">
+              <PropertyRef Name="idProyecto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Informe_compra_Proyecto">
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Informe_compra" Type="Self.Informe_compra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proyecto">
+              <PropertyRef Name="idProyecto" />
+            </Principal>
+            <Dependent Role="Informe_compra">
+              <PropertyRef Name="idProyecto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Informe_monto_Proyecto">
+          <End Role="Proyecto" Type="Self.Proyecto" Multiplicity="1" />
+          <End Role="Informe_monto" Type="Self.Informe_monto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proyecto">
+              <PropertyRef Name="idProyecto" />
+            </Principal>
+            <Dependent Role="Informe_monto">
+              <PropertyRef Name="idProyecto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Inventario_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="Inventario" Type="Self.Inventario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="idMaterial" />
+            </Principal>
+            <Dependent Role="Inventario">
+              <PropertyRef Name="idMaterial" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_Proveedor">
+          <End Role="Proveedor" Type="Self.Proveedor" Multiplicity="1" />
+          <End Role="Material" Type="Self.Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedor">
+              <PropertyRef Name="idProveedor" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="idProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GestorCMBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" />
+          <EntitySet Name="Detalle_informe_material_faltante" EntityType="Self.Detalle_informe_material_faltante" />
+          <EntitySet Name="Detalle_proyecto_empleado" EntityType="Self.Detalle_proyecto_empleado" />
+          <EntitySet Name="Detalle_proyecto_material" EntityType="Self.Detalle_proyecto_material" />
+          <EntitySet Name="Empleado" EntityType="Self.Empleado" />
+          <EntitySet Name="Informe_compra" EntityType="Self.Informe_compra" />
+          <EntitySet Name="Informe_monto" EntityType="Self.Informe_monto" />
+          <EntitySet Name="Inventario" EntityType="Self.Inventario" />
+          <EntitySet Name="Material" EntityType="Self.Material" />
+          <EntitySet Name="Material_faltante" EntityType="Self.Material_faltante" />
+          <EntitySet Name="Proveedor" EntityType="Self.Proveedor" />
+          <EntitySet Name="Proyecto" EntityType="Self.Proyecto" />
+          <AssociationSet Name="FK_Proyecto_Cliente" Association="Self.FK_Proyecto_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Proyecto" EntitySet="Proyecto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_informe_material_faltante_Informe_compra" Association="Self.FK_Detalle_informe_material_faltante_Informe_compra">
+            <End Role="Informe_compra" EntitySet="Informe_compra" />
+            <End Role="Detalle_informe_material_faltante" EntitySet="Detalle_informe_material_faltante" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_informe_material_faltante_Material_faltante" Association="Self.FK_Detalle_informe_material_faltante_Material_faltante">
+            <End Role="Material_faltante" EntitySet="Material_faltante" />
+            <End Role="Detalle_informe_material_faltante" EntitySet="Detalle_informe_material_faltante" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_proyecto_empleado_Empleado" Association="Self.FK_Detalle_proyecto_empleado_Empleado">
+            <End Role="Empleado" EntitySet="Empleado" />
+            <End Role="Detalle_proyecto_empleado" EntitySet="Detalle_proyecto_empleado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_proyecto_empleado_Proyecto" Association="Self.FK_Detalle_proyecto_empleado_Proyecto">
+            <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Detalle_proyecto_empleado" EntitySet="Detalle_proyecto_empleado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_proyecto_material_Material" Association="Self.FK_Detalle_proyecto_material_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="Detalle_proyecto_material" EntitySet="Detalle_proyecto_material" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_proyecto_material_Proyecto" Association="Self.FK_Detalle_proyecto_material_Proyecto">
+            <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Detalle_proyecto_material" EntitySet="Detalle_proyecto_material" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Informe_compra_Proyecto" Association="Self.FK_Informe_compra_Proyecto">
+            <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Informe_compra" EntitySet="Informe_compra" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Informe_monto_Proyecto" Association="Self.FK_Informe_monto_Proyecto">
+            <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Informe_monto" EntitySet="Informe_monto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Inventario_Material" Association="Self.FK_Inventario_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="Inventario" EntitySet="Inventario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_Proveedor" Association="Self.FK_Material_Proveedor">
+            <End Role="Proveedor" EntitySet="Proveedor" />
+            <End Role="Material" EntitySet="Material" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_faltante_Proyecto" Association="GestorCMBModel.FK_Material_faltante_Proyecto">
+            <End Role="Proyecto" EntitySet="Proyecto" />
+            <End Role="Material_faltante" EntitySet="Material_faltante" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_Material_faltante_Proyecto">
+          <End Type="GestorCMBModel.Proyecto" Role="Proyecto" Multiplicity="1" />
+          <End Type="GestorCMBModel.Material_faltante" Role="Material_faltante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proyecto">
+              <PropertyRef Name="idProyecto" />
+            </Principal>
+            <Dependent Role="Material_faltante">
+              <PropertyRef Name="idProyecto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GestorCMBModelStoreContainer" CdmEntityContainer="GestorCMBEntities">
+          <EntitySetMapping Name="Cliente">
+            <EntityTypeMapping TypeName="GestorCMBModel.Cliente">
+              <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="idCliente" ColumnName="idCliente" />
+                <ScalarProperty Name="nombreContacto" ColumnName="nombreContacto" />
+                <ScalarProperty Name="razonSocial" ColumnName="razonSocial" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Detalle_informe_material_faltante">
+            <EntityTypeMapping TypeName="GestorCMBModel.Detalle_informe_material_faltante">
+              <MappingFragment StoreEntitySet="Detalle_informe_material_faltante">
+                <ScalarProperty Name="idDetalleMaterialFaltante" ColumnName="idDetalleMaterialFaltante" />
+                <ScalarProperty Name="idInformeCompra" ColumnName="idInformeCompra" />
+                <ScalarProperty Name="idMaterialFaltante" ColumnName="idMaterialFaltante" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Detalle_proyecto_empleado">
+            <EntityTypeMapping TypeName="GestorCMBModel.Detalle_proyecto_empleado">
+              <MappingFragment StoreEntitySet="Detalle_proyecto_empleado">
+                <ScalarProperty Name="idDetalleEmpleado" ColumnName="idDetalleEmpleado" />
+                <ScalarProperty Name="idProyecto" ColumnName="idProyecto" />
+                <ScalarProperty Name="idEmpleado" ColumnName="idEmpleado" />
+                <ScalarProperty Name="fechaIngresoEmpleado" ColumnName="fechaIngresoEmpleado" />
+                <ScalarProperty Name="valorGanancia" ColumnName="valorGanancia" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Detalle_proyecto_material">
+            <EntityTypeMapping TypeName="GestorCMBModel.Detalle_proyecto_material">
+              <MappingFragment StoreEntitySet="Detalle_proyecto_material">
+                <ScalarProperty Name="idDetalleMaterial" ColumnName="idDetalleMaterial" />
+                <ScalarProperty Name="idProyecto" ColumnName="idProyecto" />
+                <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="valorGanancia" ColumnName="valorGanancia" />
+                <ScalarProperty Name="fechaIngresoMaterial" ColumnName="fechaIngresoMaterial" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Empleado">
+            <EntityTypeMapping TypeName="GestorCMBModel.Empleado">
+              <MappingFragment StoreEntitySet="Empleado">
+                <ScalarProperty Name="idEmpleado" ColumnName="idEmpleado" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="nroDocumento" ColumnName="nroDocumento" />
+                <ScalarProperty Name="sueldo" ColumnName="sueldo" />
+                <ScalarProperty Name="cantidadProyectosActivos" ColumnName="cantidadProyectosActivos" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Informe_compra">
+            <EntityTypeMapping TypeName="GestorCMBModel.Informe_compra">
+              <MappingFragment StoreEntitySet="Informe_compra">
+                <ScalarProperty Name="idInformeCompra" ColumnName="idInformeCompra" />
+                <ScalarProperty Name="idProyecto" ColumnName="idProyecto" />
+                <ScalarProperty Name="fechaRealizacion" ColumnName="fechaRealizacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Informe_monto">
+            <EntityTypeMapping TypeName="GestorCMBModel.Informe_monto">
+              <MappingFragment StoreEntitySet="Informe_monto">
+                <ScalarProperty Name="idInformeMonto" ColumnName="idInformeMonto" />
+                <ScalarProperty Name="idProyecto" ColumnName="idProyecto" />
+                <ScalarProperty Name="totalMateriales" ColumnName="totalMateriales" />
+                <ScalarProperty Name="totalEmpleados" ColumnName="totalEmpleados" />
+                <ScalarProperty Name="montoTotal" ColumnName="montoTotal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Inventario">
+            <EntityTypeMapping TypeName="GestorCMBModel.Inventario">
+              <MappingFragment StoreEntitySet="Inventario">
+                <ScalarProperty Name="idMaterialInventario" ColumnName="idMaterialInventario" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Material">
+            <EntityTypeMapping TypeName="GestorCMBModel.Material">
+              <MappingFragment StoreEntitySet="Material">
+                <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+                <ScalarProperty Name="descripcionArticulo" ColumnName="descripcionArticulo" />
+                <ScalarProperty Name="tipoMaterial" ColumnName="tipoMaterial" />
+                <ScalarProperty Name="tipoUnidad" ColumnName="tipoUnidad" />
+                <ScalarProperty Name="costoPorUnidad" ColumnName="costoPorUnidad" />
+                <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Material_faltante">
+            <EntityTypeMapping TypeName="GestorCMBModel.Material_faltante">
+              <MappingFragment StoreEntitySet="Material_faltante">
+                <ScalarProperty Name="cantidadFaltante" ColumnName="cantidadFaltante" />
+                <ScalarProperty Name="idProyecto" ColumnName="idProyecto" />
+                <ScalarProperty Name="idMaterialFaltante" ColumnName="idMaterialFaltante" />
+                <ScalarProperty Name="descripcionArticuloFaltante" ColumnName="descripcionArticuloFaltante" />
+                <ScalarProperty Name="tipoMaterialFaltante" ColumnName="tipoMaterialFaltante" />
+                <ScalarProperty Name="tipoUnidadMaterialFaltante" ColumnName="tipoUnidadMaterialFaltante" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proveedor">
+            <EntityTypeMapping TypeName="GestorCMBModel.Proveedor">
+              <MappingFragment StoreEntitySet="Proveedor">
+                <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proyecto">
+            <EntityTypeMapping TypeName="GestorCMBModel.Proyecto">
+              <MappingFragment StoreEntitySet="Proyecto">
+                <ScalarProperty Name="idProyecto" ColumnName="idProyecto" />
+                <ScalarProperty Name="idCliente" ColumnName="idCliente" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fechaInicio" ColumnName="fechaInicio" />
+                <ScalarProperty Name="fechaFin" ColumnName="fechaFin" />
+                <ScalarProperty Name="ubicacion" ColumnName="ubicacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
