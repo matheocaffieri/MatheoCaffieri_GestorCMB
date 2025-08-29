@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IGenericRepository.cs" />
+    <Compile Include="LoginInterfaces\IAuthAppService.cs" />
+    <Compile Include="LoginInterfaces\IPasswordHasher.cs" />
+    <Compile Include="LoginInterfaces\IPermiso.cs" />
+    <Compile Include="LoginInterfaces\IPermisoRepository.cs" />
+    <Compile Include="LoginInterfaces\TipoPermiso.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

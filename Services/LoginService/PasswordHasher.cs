@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Interfaces.LoginInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Services.LoginService
 {
-    public class PasswordHasher 
+    public class PasswordHasher : IPasswordHasher
     {
         public string Hash(string plainText)
         {
-            using (var sha = System.Security.Cryptography.SHA256.Create())
+            using (var sha = SHA256.Create())
             {
                 var bytes = Encoding.UTF8.GetBytes(plainText);
                 var hash = sha.ComputeHash(bytes);
@@ -20,6 +22,9 @@ namespace Services.LoginService
 
         public bool Verify(string hash, string plainText)
         {
+            if (string.IsNullOrWhiteSpace(hash) || string.IsNullOrWhiteSpace(plainText))
+                return false;
+
             return Hash(plainText) == hash;
         }
     }

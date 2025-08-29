@@ -1,11 +1,10 @@
-﻿using DomainModel.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel.Login
+namespace Interfaces.LoginInterfaces
 {
     public interface IPermisoRepository : IGenericRepository<IPermiso>
     {

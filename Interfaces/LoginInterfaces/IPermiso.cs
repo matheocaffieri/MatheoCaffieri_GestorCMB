@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel.Login
+namespace Interfaces.LoginInterfaces
 {
     public interface IPermiso
     {

@@ -43,10 +43,9 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft YaHei UI", 32F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(30, 8);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(22, 6);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(290, 70);
+            this.label1.Size = new System.Drawing.Size(233, 57);
             this.label1.TabIndex = 22;
             this.label1.Text = "Inventario";
             // 
@@ -54,10 +53,9 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(45, 107);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(34, 87);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(166, 39);
+            this.label2.Size = new System.Drawing.Size(132, 31);
             this.label2.TabIndex = 23;
             this.label2.Text = "Materiales";
             // 
@@ -65,27 +63,28 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(219, 94);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(164, 76);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(472, 39);
+            this.label3.Size = new System.Drawing.Size(399, 31);
             this.label3.TabIndex = 24;
             this.label3.Text = "___________________________________";
             // 
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(52, 164);
+            this.textBox1.Location = new System.Drawing.Point(39, 133);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(611, 30);
+            this.textBox1.Size = new System.Drawing.Size(459, 26);
             this.textBox1.TabIndex = 25;
             // 
             // MaterialesItemPanel
             // 
             this.MaterialesItemPanel.AutoScroll = true;
-            this.MaterialesItemPanel.Location = new System.Drawing.Point(37, 228);
+            this.MaterialesItemPanel.Location = new System.Drawing.Point(28, 185);
+            this.MaterialesItemPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaterialesItemPanel.Name = "MaterialesItemPanel";
-            this.MaterialesItemPanel.Size = new System.Drawing.Size(1019, 210);
+            this.MaterialesItemPanel.Size = new System.Drawing.Size(764, 171);
             this.MaterialesItemPanel.TabIndex = 27;
             // 
             // buttonSearchMaterial
@@ -94,9 +93,10 @@
             this.buttonSearchMaterial.BackgroundImage = global::MatheoCaffieri_GestorCMB.Properties.Resources.search_logo;
             this.buttonSearchMaterial.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.buttonSearchMaterial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSearchMaterial.Location = new System.Drawing.Point(669, 164);
+            this.buttonSearchMaterial.Location = new System.Drawing.Point(502, 133);
+            this.buttonSearchMaterial.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonSearchMaterial.Name = "buttonSearchMaterial";
-            this.buttonSearchMaterial.Size = new System.Drawing.Size(36, 36);
+            this.buttonSearchMaterial.Size = new System.Drawing.Size(27, 29);
             this.buttonSearchMaterial.TabIndex = 28;
             this.buttonSearchMaterial.UseVisualStyleBackColor = false;
             // 
@@ -106,12 +106,14 @@
             this.buttonAgregarMaterial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAgregarMaterial.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonAgregarMaterial.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.buttonAgregarMaterial.Location = new System.Drawing.Point(751, 107);
+            this.buttonAgregarMaterial.Location = new System.Drawing.Point(563, 87);
+            this.buttonAgregarMaterial.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonAgregarMaterial.Name = "buttonAgregarMaterial";
-            this.buttonAgregarMaterial.Size = new System.Drawing.Size(239, 52);
+            this.buttonAgregarMaterial.Size = new System.Drawing.Size(179, 42);
             this.buttonAgregarMaterial.TabIndex = 29;
             this.buttonAgregarMaterial.Text = "Agregar material";
             this.buttonAgregarMaterial.UseVisualStyleBackColor = false;
+            this.buttonAgregarMaterial.Click += new System.EventHandler(this.buttonAgregarMaterial_Click);
             // 
             // buttonGestionarProveedores
             // 
@@ -119,9 +121,10 @@
             this.buttonGestionarProveedores.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonGestionarProveedores.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonGestionarProveedores.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.buttonGestionarProveedores.Location = new System.Drawing.Point(751, 25);
+            this.buttonGestionarProveedores.Location = new System.Drawing.Point(563, 20);
+            this.buttonGestionarProveedores.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonGestionarProveedores.Name = "buttonGestionarProveedores";
-            this.buttonGestionarProveedores.Size = new System.Drawing.Size(239, 52);
+            this.buttonGestionarProveedores.Size = new System.Drawing.Size(179, 42);
             this.buttonGestionarProveedores.TabIndex = 30;
             this.buttonGestionarProveedores.Text = "Gestionar proveedores";
             this.buttonGestionarProveedores.UseVisualStyleBackColor = false;
@@ -132,16 +135,17 @@
             this.buttonVerInformesCompra.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonVerInformesCompra.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonVerInformesCompra.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.buttonVerInformesCompra.Location = new System.Drawing.Point(466, 25);
+            this.buttonVerInformesCompra.Location = new System.Drawing.Point(350, 20);
+            this.buttonVerInformesCompra.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonVerInformesCompra.Name = "buttonVerInformesCompra";
-            this.buttonVerInformesCompra.Size = new System.Drawing.Size(239, 52);
+            this.buttonVerInformesCompra.Size = new System.Drawing.Size(179, 42);
             this.buttonVerInformesCompra.TabIndex = 31;
             this.buttonVerInformesCompra.Text = "Ver informes de compra";
             this.buttonVerInformesCompra.UseVisualStyleBackColor = false;
             // 
             // VerInventarioControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.buttonVerInformesCompra);
             this.Controls.Add(this.buttonGestionarProveedores);
@@ -152,8 +156,9 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "VerInventarioControl";
-            this.Size = new System.Drawing.Size(853, 352);
+            this.Size = new System.Drawing.Size(640, 286);
             this.Load += new System.EventHandler(this.VerInventarioControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

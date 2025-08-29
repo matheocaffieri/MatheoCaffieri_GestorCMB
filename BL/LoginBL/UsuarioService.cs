@@ -1,24 +1,74 @@
-﻿using DomainModel.Login;
+﻿using DAL.LoginDAL;
+using DomainModel.Login;
+using Interfaces.LoginInterfaces;
+using Services.LoginService;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BL.LoginBL
 {
-   public class UsuarioService : IUsuarioService
+    public class UsuarioService
     {
-        private readonly IUsuarioRepository _repo;
-        public UsuarioService(IUsuarioRepository repo)
+        private readonly IUsuarioRepository _usuarioRepo;
+        private readonly IPasswordHasher _hasher;
+
+        public UsuarioService(IUsuarioRepository usuarioRepo, IPasswordHasher hasher)
         {
-            _repo = repo;
+            _usuarioRepo = usuarioRepo ?? throw new ArgumentNullException(nameof(usuarioRepo));
+            _hasher = hasher ?? throw new ArgumentNullException(nameof(hasher));
         }
-        public IEnumerable<Usuario> GetAllUsuarios() => _repo.GetAll();
-        public Usuario GetUsuarioById(Guid id) => _repo.GetById(id);
-        public Usuario FindByEmail(string mail) => _repo.FindByEmail(mail);
-        public void CreateUsuario(Usuario u) => _repo.Add(u);
-        public void UpdateUsuario(Usuario u) => _repo.Update(u);
-        public void DeleteUsuario(Usuario u) => _repo.Delete(u);
-    } 
+
+        // <- OVERLOAD para UI
+        public UsuarioService(string connectionString)
+    : this(new UsuarioRepository(), new PasswordHasher())
+        { }
+
+
+        public List<Usuario> ObtenerTodos()
+        {
+            return _usuarioRepo.GetAll();
+        }
+
+        public void SetActivo(Guid idUsuario, bool activo)
+        {
+            _usuarioRepo.SetActivo(idUsuario, activo);
+        }
+
+        public Usuario ObtenerPorId(Guid id)
+        {
+            return _usuarioRepo.GetById(id);
+        }
+
+        public Usuario ObtenerPorMail(string mail)
+        {
+            return _usuarioRepo.FindByEmail(mail);
+        }
+
+        public void CrearUsuario(Usuario u, string contraseñaPlano)
+        {
+            u.Contraseña = _hasher.Hash(contraseñaPlano);
+            _usuarioRepo.Add(u);
+        }
+
+        public void ActualizarUsuario(Usuario u)
+        {
+            _usuarioRepo.Update(u);
+        }
+
+        public void EliminarUsuario(Guid id)
+        {
+            var usuario = _usuarioRepo.GetById(id);
+            if (usuario != null)
+                _usuarioRepo.Delete(usuario);
+        }
+
+        public bool ValidarLogin(string mail, string contraseñaPlano)
+        {
+            var usuario = _usuarioRepo.FindByEmail(mail);
+            if (usuario == null) return false;
+
+            return _hasher.Verify(usuario.Contraseña, contraseñaPlano);
+        }
+    }
 }

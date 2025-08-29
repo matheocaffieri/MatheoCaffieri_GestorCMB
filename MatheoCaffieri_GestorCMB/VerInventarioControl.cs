@@ -46,5 +46,10 @@ namespace MatheoCaffieri_GestorCMB
         {
             ObtenerMaterialesItems();
         }
+
+        private void buttonAgregarMaterial_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

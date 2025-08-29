@@ -93,11 +93,22 @@
     <Compile Include="DetalleProyectoControl.Designer.cs">
       <DependentUpon>DetalleProyectoControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditUserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditUserForm.Designer.cs">
+      <DependentUpon>EditUserForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GestionUsuariosControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GestionUsuariosControl.Designer.cs">
       <DependentUpon>GestionUsuariosControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GestorCMB_UsersDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="InformesDeCompraControl.cs">
       <SubType>UserControl</SubType>
@@ -236,6 +247,9 @@
     <EmbeddedResource Include="DetalleProyectoControl.resx">
       <DependentUpon>DetalleProyectoControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EditUserForm.resx">
+      <DependentUpon>EditUserForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GestionUsuariosControl.resx">
       <DependentUpon>GestionUsuariosControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -309,6 +323,17 @@
     <EmbeddedResource Include="VerProyectosControl.resx">
       <DependentUpon>VerProyectosControl.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="GestorCMB_UsersDataSet.xsc">
+      <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="GestorCMB_UsersDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>GestorCMB_UsersDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="GestorCMB_UsersDataSet.xss">
+      <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

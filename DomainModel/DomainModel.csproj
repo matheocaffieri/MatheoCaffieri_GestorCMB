@@ -74,12 +74,7 @@
     <Compile Include="Interfaces\IProveedorRepository.cs" />
     <Compile Include="Interfaces\IProyectoRepository.cs" />
     <Compile Include="Login\Acceso.cs" />
-    <Compile Include="Login\IPasswordHasher.cs" />
-    <Compile Include="Login\IPermiso.cs" />
-    <Compile Include="Login\IPermisoRepository.cs" />
-    <Compile Include="Login\IUsuarioRepository.cs" />
     <Compile Include="Login\RolCompuesto.cs" />
-    <Compile Include="Login\TipoPermiso.cs" />
     <Compile Include="Login\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Proveedor.cs" />

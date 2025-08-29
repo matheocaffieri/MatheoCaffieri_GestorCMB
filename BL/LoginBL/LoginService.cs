@@ -1,4 +1,6 @@
-﻿using DomainModel.Login;
+﻿using DAL.LoginDAL;
+using DomainModel.Login;
+using Interfaces.LoginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,16 +20,13 @@ namespace BL.LoginBL
             _hasher = hasher;
         }
 
-        public Usuario Login(string mail, string plainPassword)
+        public Usuario Login(string mail, string password)
         {
-            var usuario = _usuarioRepo.FindByEmail(mail);
-            if (usuario == null)
+            var user = _usuarioRepo.FindByEmail(mail);
+            if (user == null || !_hasher.Verify(user.Contraseña, password))
                 return null;
 
-            if (!_hasher.Verify(usuario.Contraseña, plainPassword))
-                return null;
-
-            return usuario;
+            return user;
         }
     }
 }

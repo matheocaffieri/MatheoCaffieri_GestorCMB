@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.LoginService
+namespace Interfaces.LoginInterfaces
 {
     public interface IAuthAppService
     {
