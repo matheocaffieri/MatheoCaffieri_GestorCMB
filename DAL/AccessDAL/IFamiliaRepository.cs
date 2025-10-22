@@ -19,5 +19,6 @@ namespace DAL.AccessDAL
         List<Usuario> GetUsuarios(Guid idFamilia);
         void AddUsuario(Guid idFamilia, Guid idUsuario);
         void RemoveUsuario(Guid idFamilia, Guid idUsuario);
+        List<(Guid Id, string Nombre)> GetRolesDeUsuario(Guid idUsuario);
     }
 }

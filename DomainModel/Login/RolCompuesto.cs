@@ -13,8 +13,9 @@ namespace DomainModel.Login
         public Guid Id { get; private set; } = Guid.NewGuid();
         private readonly List<IPermiso> _hijos = new List<IPermiso>();
 
-        public RolCompuesto(string nombre)
+        public RolCompuesto(Guid id, string nombre)
         {
+            Id = id;
             Nombre = nombre;
         }
 

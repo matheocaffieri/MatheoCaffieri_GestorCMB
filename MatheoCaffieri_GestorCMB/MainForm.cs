@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BL.AccessBL;
+using BL.LoginBL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,18 +16,28 @@ namespace MatheoCaffieri_GestorCMB
     public partial class MainForm : Form
     {
         public Point mouseLocation;
+        private readonly RolesService _rolesService;
+        private readonly UsuarioService _usuarioService;
 
         public MainForm()
         {
-            
-
             InitializeComponent();
-            HomeControl homeControl = new HomeControl(this);
+            var homeControl = new HomeControl(this);   // HomeControl NO lleva servicios
             addUserControl(homeControl);
-
         }
 
-        
+        // Runtime: pasás servicios acá (HomeControl sigue sin params)
+        public MainForm(RolesService rolesService, UsuarioService usuarioService)
+        {
+            InitializeComponent();
+            _rolesService = rolesService ?? throw new ArgumentNullException(nameof(rolesService));
+            _usuarioService = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));
+
+            var homeControl = new HomeControl(this);
+            addUserControl(homeControl);
+        }
+
+
         private void buttonExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -132,8 +144,13 @@ namespace MatheoCaffieri_GestorCMB
 
         private void gestionarUsuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GestionUsuariosControl gestionUsuariosControl = new GestionUsuariosControl();
+            // Si abriste MainForm con el ctor sin servicios, marcá el error claro:
+            if (_rolesService is null || _usuarioService is null)
+                throw new InvalidOperationException("MainForm fue creado sin servicios. Usá MainForm(RolesService, UsuarioService).");
+
+            var gestionUsuariosControl = new GestionUsuariosControl(_rolesService, _usuarioService);
             addUserControl(gestionUsuariosControl);
         }
+
     }
 }

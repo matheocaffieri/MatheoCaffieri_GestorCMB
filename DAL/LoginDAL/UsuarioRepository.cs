@@ -22,8 +22,8 @@ namespace DAL.LoginDAL
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                var query = @"INSERT INTO Usuario (IdUsuario, Mail, Contraseña, Telefono, IsActive, Otp, OtpExpiry)
-                              VALUES (@Id, @Mail, @Pass, @Tel, @Act, @Otp, @OtpExp)";
+                var query = @"INSERT INTO Usuario (IdUsuario, Mail, Contraseña, Telefono, Idioma, IsActive, Otp, OtpExpiry)
+                              VALUES (@Id, @Mail, @Pass, @Tel, @Idi, @Act, @Otp, @OtpExp)";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -31,6 +31,7 @@ namespace DAL.LoginDAL
                     cmd.Parameters.AddWithValue("@Mail", entity.Mail);
                     cmd.Parameters.AddWithValue("@Pass", entity.Contraseña);
                     cmd.Parameters.AddWithValue("@Tel", entity.Telefono);
+                    cmd.Parameters.AddWithValue("@Idi", entity.Idioma);
                     cmd.Parameters.AddWithValue("@Act", entity.IsActive);
                     cmd.Parameters.AddWithValue("@Otp", entity.Otp ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@OtpExp", entity.OtpExpiry ?? (object)DBNull.Value);
@@ -76,7 +77,7 @@ namespace DAL.LoginDAL
 
             using (var conn = new SqlConnection(_connectionString))
             using (var cmd = new SqlCommand(@"
-        SELECT idUsuario, mail, [contraseña], isActive, telefono, otp
+        SELECT idUsuario, mail, [contraseña], isActive, telefono, idioma, otp
         FROM dbo.Usuario
         ORDER BY mail;", conn))
             {
@@ -88,6 +89,7 @@ namespace DAL.LoginDAL
                     var ordPass = reader.GetOrdinal("contraseña"); // con ñ
                     var ordAct = reader.GetOrdinal("isActive");
                     var ordTel = reader.GetOrdinal("telefono");
+                    var ordIdi = reader.GetOrdinal("idioma");
                     var ordOtp = reader.GetOrdinal("otp");
 
                     while (reader.Read())
@@ -101,6 +103,7 @@ namespace DAL.LoginDAL
                             Contraseña = reader.GetString(ordPass),
                             IsActive = reader.GetBoolean(ordAct),
                             Telefono = (int)Math.Min(tel, int.MaxValue), // si tu modelo es int
+                            Idioma = reader.IsDBNull(ordIdi) ? null : reader.GetString(ordIdi),
                             Otp = reader.IsDBNull(ordOtp) ? null : reader.GetString(ordOtp)
                         });
                     }
@@ -132,6 +135,7 @@ namespace DAL.LoginDAL
                                 Mail = reader.GetString(reader.GetOrdinal("Mail")),
                                 Contraseña = reader.GetString(reader.GetOrdinal("Contraseña")),
                                 Telefono = reader.GetInt32(reader.GetOrdinal("Telefono")),
+                                Idioma = reader.GetString(reader.GetOrdinal("Idioma")),
                                 IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
                                 Otp = reader.IsDBNull(reader.GetOrdinal("Otp")) ? null : reader.GetString(reader.GetOrdinal("Otp")),
                                 OtpExpiry = reader.IsDBNull(reader.GetOrdinal("OtpExpiry"))
@@ -154,6 +158,7 @@ namespace DAL.LoginDAL
                       SET Mail = @Mail, 
                           Contraseña = @Contraseña,
                           Telefono = @Telefono,
+                          Idioma = @Idioma,
                           IsActive = @IsActive,
                           Otp = @Otp,
                           OtpExpiry = @OtpExpiry
@@ -165,6 +170,7 @@ namespace DAL.LoginDAL
                     cmd.Parameters.AddWithValue("@Mail", entity.Mail);
                     cmd.Parameters.AddWithValue("@Contraseña", entity.Contraseña);
                     cmd.Parameters.AddWithValue("@Telefono", entity.Telefono);
+                    cmd.Parameters.AddWithValue("@Idioma", entity.Idioma);
                     cmd.Parameters.AddWithValue("@IsActive", entity.IsActive);
                     cmd.Parameters.AddWithValue("@Otp", entity.Otp != null ? (object)entity.Otp : DBNull.Value);
                     cmd.Parameters.AddWithValue("@OtpExpiry", entity.OtpExpiry.HasValue ? (object)entity.OtpExpiry.Value : DBNull.Value);
@@ -198,6 +204,7 @@ namespace DAL.LoginDAL
                                 Mail = reader.GetString(reader.GetOrdinal("Mail")),
                                 Contraseña = reader.GetString(reader.GetOrdinal("Contraseña")),
                                 Telefono = reader.GetInt32(reader.GetOrdinal("Telefono")),
+                                Idioma = reader.GetString(reader.GetOrdinal("Idioma")),
                                 IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
                                 Otp = reader.IsDBNull(reader.GetOrdinal("Otp")) ? null : reader.GetString(reader.GetOrdinal("Otp")),
                                 OtpExpiry = reader.IsDBNull(reader.GetOrdinal("OtpExpiry")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("OtpExpiry"))

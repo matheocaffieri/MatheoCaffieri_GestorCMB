@@ -39,7 +39,7 @@ namespace BL.AccessBL
                 Guid id = tupla.Id;
                 string nombre = tupla.Nombre;
 
-                var rol = new RolCompuesto(nombre);
+                var rol = new RolCompuesto(id, nombre);
                 var propId = typeof(RolCompuesto).GetProperty("Id");
                 if (propId != null) propId.SetValue(rol, id, null);
 
@@ -113,6 +113,21 @@ namespace BL.AccessBL
                 }
                 _famRepo.AddAcceso(rolId, acc.Id);
             }
+        }
+
+
+
+        public class RolPlano
+        {
+            public Guid IdRol { get; set; }
+            public string Nombre { get; set; }
+        }
+
+        public List<RolPlano> RolesDeUsuario(Guid idUsuario)
+        {
+            var raws = _famRepo.GetRolesDeUsuario(idUsuario); // (Id, Nombre)
+            return raws.Select(t => new RolPlano { IdRol = t.Id, Nombre = t.Nombre })
+                       .ToList();
         }
     }
 }

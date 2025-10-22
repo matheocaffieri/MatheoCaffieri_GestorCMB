@@ -179,6 +179,8 @@
     <Compile Include="ItemControls\UsuarioItemControl.Designer.cs">
       <DependentUpon>UsuarioItemControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Language\ResxLanguageRepository.cs" />
+    <Compile Include="Localization\ResxLanguageRepository.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>

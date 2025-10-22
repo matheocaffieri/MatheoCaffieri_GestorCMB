@@ -15,6 +15,7 @@ namespace DomainModel.Login
         public string Contraseña { get; set; }
         public bool IsActive { get; set; }
         public int Telefono { get; set; }
+        public string Idioma { get; set; }
         public string Otp { get; set; }
         public DateTime? OtpExpiry { get; set; }
 

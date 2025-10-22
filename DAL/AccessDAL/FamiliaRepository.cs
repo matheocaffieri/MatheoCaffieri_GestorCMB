@@ -112,7 +112,7 @@ namespace DAL.AccessDAL
 
             using (var cn = new SqlConnection(_cs))
             using (var cmd = new SqlCommand(
-                @"SELECT u.idUsuario, u.mail, u.isActive, u.telefono
+                @"SELECT u.idUsuario, u.mail, u.isActive, u.telefono, u.idioma
                   FROM Usuario_Familia uf
                   JOIN Usuario u ON u.idUsuario = uf.idUsuario
                   WHERE uf.idFamilia = @f
@@ -132,7 +132,8 @@ namespace DAL.AccessDAL
                             IsActive = rd.GetBoolean(2),
                             Telefono = rd.IsDBNull(3)
                                 ? 0
-                                : (int)Math.Max(int.MinValue, Math.Min(int.MaxValue, rd.GetInt64(3)))
+                                : (int)Math.Max(int.MinValue, Math.Min(int.MaxValue, rd.GetInt64(3))),
+                            Idioma = rd.IsDBNull(4) ? "es" : rd.GetString(4)
                         });
                     }
                 }
@@ -166,6 +167,32 @@ namespace DAL.AccessDAL
                 cn.Open();
                 cmd.ExecuteNonQuery();
             }
+        }
+
+
+
+
+
+        public List<(Guid Id, string Nombre)> GetRolesDeUsuario(Guid idUsuario)
+        {
+            var list = new List<(Guid, string)>();
+            using (var cn = new SqlConnection(_cs))
+            using (var cmd = new SqlCommand(@"
+            SELECT f.idFamilia, f.nombre
+            FROM Usuario_Familia uf
+            JOIN Familia f ON f.idFamilia = uf.idFamilia
+            WHERE uf.idUsuario = @u
+            ORDER BY f.nombre;", cn))
+            {
+                cmd.Parameters.AddWithValue("@u", idUsuario);
+                cn.Open();
+                using (var rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
+                        list.Add((rd.GetGuid(0), rd.GetString(1)));
+                }
+            }
+            return list;
         }
     }
 }

@@ -39,19 +39,39 @@ namespace MatheoCaffieri_GestorCMB
         private bool _updatingChecks = false;
         private Usuario _usuarioActual;
 
-        public GestionUsuariosControl()
+        public GestionUsuariosControl(RolesService rolesService, UsuarioService usuarioService)
         {
             InitializeComponent();
 
             var cs = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"].ConnectionString;
 
-            _usuarioSrv = new UsuarioService(cs);      // asegurate de tener este ctor en tu BL.LoginBL.UsuarioService
-            _rolesSrv = new RolesService(cs);
+            // Si preferís usar los servicios que llegan por ctor:
+            _rolesSrv = rolesService ?? throw new ArgumentNullException(nameof(rolesService));
+            _usuarioSrv = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));
+
+            // Si NECESITÁS además los otros servicios con CS:
             _userPermsSrv = new UsuarioPermisosService(cs);
             _accesoSrv = new AccesoService(cs);
 
             treeViewRoles.CheckBoxes = true;
         }
+
+
+        private void CargarComboIdiomas()
+        {
+            var items = new List<KeyValuePair<string, string>>
+    {
+        new KeyValuePair<string,string>("es", "Español"),
+        new KeyValuePair<string,string>("en", "English")
+    };
+
+            comboBoxIdioma.DisplayMember = "Value"; // lo que se ve
+            comboBoxIdioma.ValueMember = "Key";   // el código ("es"/"en")
+            comboBoxIdioma.DataSource = items;
+            comboBoxIdioma.SelectedValue = "es";    // por defecto
+        }
+        private readonly RolesService _rolService;
+        private readonly UsuarioService _usuarioService;
 
         private void ObtenerUsuariosItems()
         {
@@ -62,7 +82,8 @@ namespace MatheoCaffieri_GestorCMB
 
             foreach (var u in usuarios)
             {
-                var item = new ItemControls.UsuarioItemControl
+                // ESTO ESTÁ BIEN (los campos que sí existen y están asignados)
+                var item = new ItemControls.UsuarioItemControl(_rolesSrv, _usuarioSrv)
                 {
                     MailUsuario = u.Mail,
                     Activo = u.IsActive,   // pinta el switch según DB
@@ -84,7 +105,11 @@ namespace MatheoCaffieri_GestorCMB
                         ctrl.Activo = !on; // revertir
                         MessageBox.Show("No se pudo actualizar el estado: " + ex.Message);
                     }
+                    item.SetUsuario(u);
+                    UsuariosLayoutPanel.Controls.Add(item);
                 };
+
+
 
                 // Selección de usuario
                 item.Click += (s, ev) =>
@@ -366,6 +391,7 @@ namespace MatheoCaffieri_GestorCMB
             var mail = (textBox1?.Text ?? "").Trim();
             var passPlano = textBox2?.Text ?? "";
             var telStr = (textBox4?.Text ?? "").Trim();
+            var idi = (comboBoxIdioma?.SelectedValue as string) ?? "es";
 
             // Validaciones básicas
             if (string.IsNullOrWhiteSpace(mail))
@@ -400,6 +426,7 @@ namespace MatheoCaffieri_GestorCMB
                     Mail = mail,
                     IsActive = true,
                     Telefono = string.IsNullOrWhiteSpace(telStr) ? 0 : int.Parse(telStr),
+                    Idioma = idi
                 };
 
                 _usuarioSrv.CrearUsuario(nuevo, passPlano); // hashea adentro
@@ -420,13 +447,17 @@ namespace MatheoCaffieri_GestorCMB
 
         private void GestionUsuariosControl_Load(object sender, EventArgs e)
         {
-            ObtenerUsuariosItems();
-            CargarComboRoles();      // si ya lo tenés
-                                     // MostrarVistaCategorias();  // para ver permisos por USUARIO
-            MostrarVistaRoles();         // para editar permisos por ROL (tu caso)
-            treeViewRoles.CheckBoxes = true;            // <- acá
+            if (LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
+            if (_rolesSrv == null || _usuarioSrv == null)
+                throw new InvalidOperationException("GestionUsuariosControl requiere RolesService y UsuarioService.");
 
+            ObtenerUsuariosItems();
+            CargarComboRoles();
+            MostrarVistaRoles();
+            treeViewRoles.CheckBoxes = true;
+            CargarComboIdiomas();
         }
+
 
 
         private void buttonAgregarRol_Click(object sender, EventArgs e)
