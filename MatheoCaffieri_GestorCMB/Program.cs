@@ -54,7 +54,7 @@ namespace MatheoCaffieri_GestorCMB
             // var usuarioService = new UsuarioService(usuarioRepo);
 
             // 4) Correr la app con el MainForm que recibe servicios
-            Application.Run(new MainForm(rolesService, usuarioService));
+            Application.Run(new LoginForm());
         }
     }
 }

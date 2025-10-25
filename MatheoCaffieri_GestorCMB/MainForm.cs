@@ -139,7 +139,8 @@ namespace MatheoCaffieri_GestorCMB
 
         private void verLogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            VerLogsForm verLogsForm = new VerLogsForm();
+            verLogsForm.Show();
         }
 
         private void gestionarUsuariosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -151,6 +152,5 @@ namespace MatheoCaffieri_GestorCMB
             var gestionUsuariosControl = new GestionUsuariosControl(_rolesService, _usuarioService);
             addUserControl(gestionUsuariosControl);
         }
-
     }
 }

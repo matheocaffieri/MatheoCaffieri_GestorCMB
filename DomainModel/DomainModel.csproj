@@ -73,8 +73,13 @@
     <Compile Include="Interfaces\IMaterialRepository.cs" />
     <Compile Include="Interfaces\IProveedorRepository.cs" />
     <Compile Include="Interfaces\IProyectoRepository.cs" />
+    <Compile Include="LoginDALInterfaces\IAccesoRepository.cs" />
+    <Compile Include="LoginDALInterfaces\IFamiliaRepository.cs" />
+    <Compile Include="LoginDALInterfaces\IUsuarioAccesoRepository.cs" />
+    <Compile Include="LoginDALInterfaces\IUsuarioRepository.cs" />
     <Compile Include="Login\Acceso.cs" />
     <Compile Include="Login\RolCompuesto.cs" />
+    <Compile Include="Login\UserSession.cs" />
     <Compile Include="Login\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Proveedor.cs" />

@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DomainModel;
 
 namespace DAL.LoginDAL
 {
@@ -13,7 +14,7 @@ namespace DAL.LoginDAL
     {
         private readonly string _connectionString;
 
-        public UsuarioRepository()
+        public UsuarioRepository(string cs)
         {
             _connectionString = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"].ConnectionString;
         }
@@ -117,38 +118,55 @@ namespace DAL.LoginDAL
 
         public Usuario FindByEmail(string mail)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (var conn = new SqlConnection(_connectionString))
+            using (var cmd = new SqlCommand(@"
+        SELECT 
+            u.idUsuario,
+            u.mail,
+            u.[contraseña]     AS contrasena,
+            u.telefono,
+            u.idioma,
+            u.isActive,
+            u.otp,
+            u.otpExpiry
+        FROM dbo.Usuario u
+        WHERE u.mail = @mail;", conn))
             {
-                var query = "SELECT * FROM Usuario WHERE Mail = @Mail";
+                // Evitá AddWithValue cuando puedas; forzá tipo/tamaño razonable
+                cmd.Parameters.Add("@mail", System.Data.SqlDbType.NVarChar, 256).Value = mail;
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
                 {
-                    cmd.Parameters.AddWithValue("@Mail", mail);
-                    conn.Open();
-                    using (var reader = cmd.ExecuteReader())
+                    if (!reader.Read()) return null;
+
+                    var ordId = reader.GetOrdinal("idUsuario");
+                    var ordMail = reader.GetOrdinal("mail");
+                    var ordPass = reader.GetOrdinal("contrasena");
+                    var ordTel = reader.GetOrdinal("telefono");
+                    var ordIdi = reader.GetOrdinal("idioma");
+                    var ordAct = reader.GetOrdinal("isActive");
+                    var ordOtp = reader.GetOrdinal("otp");
+                    var ordExp = reader.GetOrdinal("otpExpiry");
+
+                    // telefono puede ser BIGINT o NULL
+                    long telLong = reader.IsDBNull(ordTel) ? 0L : reader.GetInt64(ordTel);
+
+                    return new Usuario
                     {
-                        if (reader.Read())
-                        {
-                            return new Usuario
-                            {
-                                IdUsuario = reader.GetGuid(reader.GetOrdinal("IdUsuario")),
-                                Mail = reader.GetString(reader.GetOrdinal("Mail")),
-                                Contraseña = reader.GetString(reader.GetOrdinal("Contraseña")),
-                                Telefono = reader.GetInt32(reader.GetOrdinal("Telefono")),
-                                Idioma = reader.GetString(reader.GetOrdinal("Idioma")),
-                                IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
-                                Otp = reader.IsDBNull(reader.GetOrdinal("Otp")) ? null : reader.GetString(reader.GetOrdinal("Otp")),
-                                OtpExpiry = reader.IsDBNull(reader.GetOrdinal("OtpExpiry"))
-                                ? (DateTime?)null
-                                : reader.GetDateTime(reader.GetOrdinal("OtpExpiry"))
-                            };
-                        }
-                    }
+                        IdUsuario = reader.GetGuid(ordId),
+                        Mail = reader.GetString(ordMail),
+                        Contraseña = reader.GetString(ordPass), // viene como [contraseña]
+                        Telefono = (int)Math.Min(telLong, int.MaxValue), // si tu entidad usa int
+                        Idioma = reader.IsDBNull(ordIdi) ? null : reader.GetString(ordIdi),
+                        IsActive = reader.GetBoolean(ordAct),
+                        Otp = reader.IsDBNull(ordOtp) ? null : reader.GetString(ordOtp),
+                        OtpExpiry = reader.IsDBNull(ordExp) ? (DateTime?)null : reader.GetDateTime(ordExp)
+                    };
                 }
             }
-
-            return null;
         }
+
 
         public void Update(Usuario entity)
         {

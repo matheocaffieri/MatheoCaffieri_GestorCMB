@@ -57,9 +57,6 @@
     <Compile Include="AccessDAL\AccesoRepository.cs" />
     <Compile Include="AccessDAL\DALBase.cs" />
     <Compile Include="AccessDAL\FamiliaRepository.cs" />
-    <Compile Include="AccessDAL\IAccesoRepository.cs" />
-    <Compile Include="AccessDAL\IFamiliaRepository.cs" />
-    <Compile Include="AccessDAL\IUsuarioAccesoRepository.cs" />
     <Compile Include="AccessDAL\UsuarioAccesoRepository.cs" />
     <Compile Include="Cliente.cs">
       <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
@@ -112,7 +109,6 @@
     <Compile Include="Inventario.cs">
       <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="LoginDAL\IUsuarioRepository.cs" />
     <Compile Include="LoginDAL\UsuarioRepository.cs" />
     <Compile Include="Material.cs">
       <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>

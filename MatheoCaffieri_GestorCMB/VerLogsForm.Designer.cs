@@ -45,6 +45,8 @@
             this.FormPanel.Name = "FormPanel";
             this.FormPanel.Size = new System.Drawing.Size(536, 32);
             this.FormPanel.TabIndex = 47;
+            this.FormPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormPanel_MouseDown_1);
+            this.FormPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FormPanel_MouseMove_1);
             // 
             // buttonExitAM
             // 
@@ -54,6 +56,7 @@
             this.buttonExitAM.TabIndex = 31;
             this.buttonExitAM.Text = "X";
             this.buttonExitAM.UseVisualStyleBackColor = true;
+            this.buttonExitAM.Click += new System.EventHandler(this.buttonExitAM_Click);
             // 
             // buttonExit
             // 

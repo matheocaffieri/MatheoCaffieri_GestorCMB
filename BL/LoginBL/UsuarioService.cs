@@ -20,9 +20,16 @@ namespace BL.LoginBL
         }
 
         // <- OVERLOAD para UI
+        // En UsuarioService.cs (forma correcta)
         public UsuarioService(string connectionString)
-    : this(new UsuarioRepository(), new PasswordHasher())
-        { }
+            : this(new DAL.LoginDAL.UsuarioRepository(connectionString), new Services.LoginService.PasswordHasher())
+        {
+            // Validar connectionString si es necesario
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }
+        }
 
 
         public List<Usuario> ObtenerTodos()
