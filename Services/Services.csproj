@@ -68,6 +68,7 @@
     <Compile Include="Logs\LoggerLogic.cs" />
     <Compile Include="Logs\LoggerRepository.cs" />
     <Compile Include="Logs\ScopeContext.cs" />
+    <Compile Include="Logs\Strategy\CompositeLoggerStrategy.cs" />
     <Compile Include="Logs\Strategy\DatabaseLoggerStrategy.cs" />
     <Compile Include="Logs\Strategy\FileLoggerStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
