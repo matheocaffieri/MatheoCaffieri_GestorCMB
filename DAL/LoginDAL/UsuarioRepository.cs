@@ -1,239 +1,222 @@
-﻿using DomainModel.Login;
+﻿using DomainModel;
+using DomainModel.Interfaces;   // IUnitOfWork
+using DomainModel.Login;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DomainModel;
 
 namespace DAL.LoginDAL
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        private readonly string _connectionString;
+        private readonly IUnitOfWork _uow;
 
-        public UsuarioRepository(string cs)
+        public UsuarioRepository(IUnitOfWork uow)
         {
-            _connectionString = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"].ConnectionString;
+            _uow = uow;
         }
+
+
+
+        /* ============================================================
+         *  MÉTODOS PRINCIPALES (idénticos a los que ya usabas)
+         * ============================================================ */
 
         public void Add(Usuario entity)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (var cmd = _uow.Connection.CreateCommand())
             {
-                var query = @"INSERT INTO Usuario (IdUsuario, Mail, Contraseña, Telefono, Idioma, IsActive, Otp, OtpExpiry)
-                              VALUES (@Id, @Mail, @Pass, @Tel, @Idi, @Act, @Otp, @OtpExp)";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Id", entity.IdUsuario);
-                    cmd.Parameters.AddWithValue("@Mail", entity.Mail);
-                    cmd.Parameters.AddWithValue("@Pass", entity.Contraseña);
-                    cmd.Parameters.AddWithValue("@Tel", entity.Telefono);
-                    cmd.Parameters.AddWithValue("@Idi", entity.Idioma);
-                    cmd.Parameters.AddWithValue("@Act", entity.IsActive);
-                    cmd.Parameters.AddWithValue("@Otp", entity.Otp ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@OtpExp", entity.OtpExpiry ?? (object)DBNull.Value);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                cmd.Transaction = _uow.Transaction;
+                cmd.CommandText = @"
+                    INSERT INTO Usuario (IdUsuario, Mail, [Contraseña], Telefono, Idioma, IsActive, Otp, OtpExpiry)
+                    VALUES (@Id, @Mail, @Pass, @Tel, @Idi, @Act, @Otp, @OtpExp)";
+                Add(cmd, "@Id", entity.IdUsuario);
+                Add(cmd, "@Mail", entity.Mail, SqlDbType.NVarChar, 256);
+                Add(cmd, "@Pass", entity.Contraseña, SqlDbType.NVarChar, 256);
+                Add(cmd, "@Tel", entity.Telefono);
+                Add(cmd, "@Idi", (object)entity.Idioma ?? DBNull.Value);
+                Add(cmd, "@Act", entity.IsActive);
+                Add(cmd, "@Otp", (object)entity.Otp ?? DBNull.Value);
+                Add(cmd, "@OtpExp", (object)entity.OtpExpiry ?? DBNull.Value);
+                cmd.ExecuteNonQuery();
             }
         }
 
-        public void Delete(Usuario entity)
+        public void Update(Usuario entity)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (var cmd = _uow.Connection.CreateCommand())
             {
-                var query = "DELETE FROM Usuario WHERE IdUsuario = @Id";
+                cmd.Transaction = _uow.Transaction;
+                cmd.CommandText = @"
+                    UPDATE Usuario SET 
+                      Mail=@Mail, [Contraseña]=@Pass, Telefono=@Tel, Idioma=@Idi,
+                      IsActive=@Act, Otp=@Otp, OtpExpiry=@OtpExp
+                    WHERE IdUsuario=@Id";
+                Add(cmd, "@Id", entity.IdUsuario);
+                Add(cmd, "@Mail", entity.Mail, SqlDbType.NVarChar, 256);
+                Add(cmd, "@Pass", entity.Contraseña, SqlDbType.NVarChar, 256);
+                Add(cmd, "@Tel", entity.Telefono);
+                Add(cmd, "@Idi", (object)entity.Idioma ?? DBNull.Value);
+                Add(cmd, "@Act", entity.IsActive);
+                Add(cmd, "@Otp", (object)entity.Otp ?? DBNull.Value);
+                Add(cmd, "@OtpExp", (object)entity.OtpExpiry ?? DBNull.Value);
+                cmd.ExecuteNonQuery();
+            }
+        }
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Id", entity.IdUsuario);
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
+        public void Delete(object id)
+        {
+            using (var cmd = _uow.Connection.CreateCommand())
+            {
+                cmd.Transaction = _uow.Transaction;
+                cmd.CommandText = "DELETE FROM Usuario WHERE IdUsuario=@Id";
+                Add(cmd, "@Id", id);
+                cmd.ExecuteNonQuery();
             }
         }
 
         public void SetActivo(Guid idUsuario, bool activo)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (var cmd = new SqlCommand(
-                "UPDATE Usuario SET isActive = @a WHERE idUsuario = @id", conn))
+            using (var cmd = _uow.Connection.CreateCommand())
             {
-                cmd.Parameters.AddWithValue("@a", activo);
-                cmd.Parameters.AddWithValue("@id", idUsuario);
-                conn.Open();
-                var rows = cmd.ExecuteNonQuery();
-                if (rows == 0) throw new InvalidOperationException("Usuario no encontrado.");
+                cmd.Transaction = _uow.Transaction;
+                cmd.CommandText = "UPDATE Usuario SET IsActive=@a WHERE IdUsuario=@id";
+                Add(cmd, "@a", activo);
+                Add(cmd, "@id", idUsuario);
+                if (cmd.ExecuteNonQuery() == 0)
+                    throw new InvalidOperationException("Usuario no encontrado.");
             }
         }
 
-        public List<Usuario> GetAll()
+        public IEnumerable<Usuario> List()
         {
-            var lista = new List<Usuario>();
-
-            using (var conn = new SqlConnection(_connectionString))
-            using (var cmd = new SqlCommand(@"
-        SELECT idUsuario, mail, [contraseña], isActive, telefono, idioma, otp
-        FROM dbo.Usuario
-        ORDER BY mail;", conn))
+            using (var cmd = _uow.Connection.CreateCommand())
             {
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
+                cmd.Transaction = _uow.Transaction;
+                cmd.CommandText = @"
+                    SELECT IdUsuario, Mail, [Contraseña], IsActive, Telefono, Idioma, Otp, OtpExpiry
+                    FROM dbo.Usuario ORDER BY Mail;";
+                using (var rd = cmd.ExecuteReader())
                 {
-                    var ordId = reader.GetOrdinal("idUsuario");
-                    var ordMail = reader.GetOrdinal("mail");
-                    var ordPass = reader.GetOrdinal("contraseña"); // con ñ
-                    var ordAct = reader.GetOrdinal("isActive");
-                    var ordTel = reader.GetOrdinal("telefono");
-                    var ordIdi = reader.GetOrdinal("idioma");
-                    var ordOtp = reader.GetOrdinal("otp");
-
-                    while (reader.Read())
+                    while (rd.Read())
                     {
-                        long tel = reader.IsDBNull(ordTel) ? 0L : reader.GetInt64(ordTel);
-
-                        lista.Add(new Usuario
+                        long tel = rd.IsDBNull(rd.GetOrdinal("Telefono")) ? 0L : rd.GetInt64(rd.GetOrdinal("Telefono"));
+                        yield return new Usuario
                         {
-                            IdUsuario = reader.GetGuid(ordId),
-                            Mail = reader.GetString(ordMail),
-                            Contraseña = reader.GetString(ordPass),
-                            IsActive = reader.GetBoolean(ordAct),
-                            Telefono = (int)Math.Min(tel, int.MaxValue), // si tu modelo es int
-                            Idioma = reader.IsDBNull(ordIdi) ? null : reader.GetString(ordIdi),
-                            Otp = reader.IsDBNull(ordOtp) ? null : reader.GetString(ordOtp)
-                        });
+                            IdUsuario = rd.GetGuid(rd.GetOrdinal("IdUsuario")),
+                            Mail = rd.GetString(rd.GetOrdinal("Mail")),
+                            Contraseña = rd.GetString(rd.GetOrdinal("Contraseña")),
+                            IsActive = rd.GetBoolean(rd.GetOrdinal("IsActive")),
+                            Telefono = (int)Math.Min(tel, int.MaxValue),
+                            Idioma = rd.IsDBNull(rd.GetOrdinal("Idioma")) ? null : rd.GetString(rd.GetOrdinal("Idioma")),
+                            Otp = rd.IsDBNull(rd.GetOrdinal("Otp")) ? null : rd.GetString(rd.GetOrdinal("Otp")),
+                            OtpExpiry = rd.IsDBNull(rd.GetOrdinal("OtpExpiry")) ? (DateTime?)null : rd.GetDateTime(rd.GetOrdinal("OtpExpiry"))
+                        };
                     }
                 }
             }
-            return lista;
         }
-
-
-
 
         public Usuario FindByEmail(string mail)
         {
-            using (var conn = new SqlConnection(_connectionString))
-            using (var cmd = new SqlCommand(@"
-        SELECT 
-            u.idUsuario,
-            u.mail,
-            u.[contraseña]     AS contrasena,
-            u.telefono,
-            u.idioma,
-            u.isActive,
-            u.otp,
-            u.otpExpiry
-        FROM dbo.Usuario u
-        WHERE u.mail = @mail;", conn))
+            using (var cmd = _uow.Connection.CreateCommand())
             {
-                // Evitá AddWithValue cuando puedas; forzá tipo/tamaño razonable
-                cmd.Parameters.Add("@mail", System.Data.SqlDbType.NVarChar, 256).Value = mail;
+                cmd.Transaction = _uow.Transaction;
+                cmd.CommandText = @"
+                    SELECT IdUsuario, Mail, [Contraseña] AS Contrasena, Telefono, Idioma, IsActive, Otp, OtpExpiry
+                    FROM dbo.Usuario WHERE Mail=@mail;";
+                Add(cmd, "@mail", mail, SqlDbType.NVarChar, 256);
 
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
+                using (var rd = cmd.ExecuteReader())
                 {
-                    if (!reader.Read()) return null;
-
-                    var ordId = reader.GetOrdinal("idUsuario");
-                    var ordMail = reader.GetOrdinal("mail");
-                    var ordPass = reader.GetOrdinal("contrasena");
-                    var ordTel = reader.GetOrdinal("telefono");
-                    var ordIdi = reader.GetOrdinal("idioma");
-                    var ordAct = reader.GetOrdinal("isActive");
-                    var ordOtp = reader.GetOrdinal("otp");
-                    var ordExp = reader.GetOrdinal("otpExpiry");
-
-                    // telefono puede ser BIGINT o NULL
-                    long telLong = reader.IsDBNull(ordTel) ? 0L : reader.GetInt64(ordTel);
-
+                    if (!rd.Read()) return null;
+                    long tel = rd.IsDBNull(rd.GetOrdinal("Telefono")) ? 0L : rd.GetInt64(rd.GetOrdinal("Telefono"));
                     return new Usuario
                     {
-                        IdUsuario = reader.GetGuid(ordId),
-                        Mail = reader.GetString(ordMail),
-                        Contraseña = reader.GetString(ordPass), // viene como [contraseña]
-                        Telefono = (int)Math.Min(telLong, int.MaxValue), // si tu entidad usa int
-                        Idioma = reader.IsDBNull(ordIdi) ? null : reader.GetString(ordIdi),
-                        IsActive = reader.GetBoolean(ordAct),
-                        Otp = reader.IsDBNull(ordOtp) ? null : reader.GetString(ordOtp),
-                        OtpExpiry = reader.IsDBNull(ordExp) ? (DateTime?)null : reader.GetDateTime(ordExp)
+                        IdUsuario = rd.GetGuid(rd.GetOrdinal("IdUsuario")),
+                        Mail = rd.GetString(rd.GetOrdinal("Mail")),
+                        Contraseña = rd.GetString(rd.GetOrdinal("Contrasena")),
+                        Telefono = (int)Math.Min(tel, int.MaxValue),
+                        Idioma = rd.IsDBNull(rd.GetOrdinal("Idioma")) ? null : rd.GetString(rd.GetOrdinal("Idioma")),
+                        IsActive = rd.GetBoolean(rd.GetOrdinal("IsActive")),
+                        Otp = rd.IsDBNull(rd.GetOrdinal("Otp")) ? null : rd.GetString(rd.GetOrdinal("Otp")),
+                        OtpExpiry = rd.IsDBNull(rd.GetOrdinal("OtpExpiry")) ? (DateTime?)null : rd.GetDateTime(rd.GetOrdinal("OtpExpiry"))
                     };
                 }
             }
         }
 
-
-        public void Update(Usuario entity)
+        public Usuario GetById(object id)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (var cmd = _uow.Connection.CreateCommand())
             {
-                var query = @"UPDATE Usuario
-                      SET Mail = @Mail, 
-                          Contraseña = @Contraseña,
-                          Telefono = @Telefono,
-                          Idioma = @Idioma,
-                          IsActive = @IsActive,
-                          Otp = @Otp,
-                          OtpExpiry = @OtpExpiry
-                      WHERE IdUsuario = @IdUsuario";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                cmd.Transaction = _uow.Transaction;
+                cmd.CommandText = "SELECT * FROM Usuario WHERE IdUsuario=@Id";
+                Add(cmd, "@Id", id);
+                using (var rd = cmd.ExecuteReader())
                 {
-                    cmd.Parameters.AddWithValue("@IdUsuario", entity.IdUsuario);
-                    cmd.Parameters.AddWithValue("@Mail", entity.Mail);
-                    cmd.Parameters.AddWithValue("@Contraseña", entity.Contraseña);
-                    cmd.Parameters.AddWithValue("@Telefono", entity.Telefono);
-                    cmd.Parameters.AddWithValue("@Idioma", entity.Idioma);
-                    cmd.Parameters.AddWithValue("@IsActive", entity.IsActive);
-                    cmd.Parameters.AddWithValue("@Otp", entity.Otp != null ? (object)entity.Otp : DBNull.Value);
-                    cmd.Parameters.AddWithValue("@OtpExpiry", entity.OtpExpiry.HasValue ? (object)entity.OtpExpiry.Value : DBNull.Value);
-
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
-
-        public Usuario GetById(Guid id)
-        {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
-            {
-                var query = "SELECT * FROM Usuario WHERE IdUsuario = @Id";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    conn.Open();
-
-                    using (var reader = cmd.ExecuteReader())
+                    if (!rd.Read()) return null;
+                    return new Usuario
                     {
-                        if (reader.Read())
-                        {
-                            return new Usuario
-                            {
-                                IdUsuario = reader.GetGuid(reader.GetOrdinal("IdUsuario")),
-                                Mail = reader.GetString(reader.GetOrdinal("Mail")),
-                                Contraseña = reader.GetString(reader.GetOrdinal("Contraseña")),
-                                Telefono = reader.GetInt32(reader.GetOrdinal("Telefono")),
-                                Idioma = reader.GetString(reader.GetOrdinal("Idioma")),
-                                IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
-                                Otp = reader.IsDBNull(reader.GetOrdinal("Otp")) ? null : reader.GetString(reader.GetOrdinal("Otp")),
-                                OtpExpiry = reader.IsDBNull(reader.GetOrdinal("OtpExpiry")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("OtpExpiry"))
-                            };
-                        }
-                    }
+                        IdUsuario = rd.GetGuid(rd.GetOrdinal("IdUsuario")),
+                        Mail = rd.GetString(rd.GetOrdinal("Mail")),
+                        Contraseña = rd.GetString(rd.GetOrdinal("Contraseña")),
+                        Telefono = rd.GetInt32(rd.GetOrdinal("Telefono")),
+                        Idioma = rd.IsDBNull(rd.GetOrdinal("Idioma")) ? null : rd.GetString(rd.GetOrdinal("Idioma")),
+                        IsActive = rd.GetBoolean(rd.GetOrdinal("IsActive")),
+                        Otp = rd.IsDBNull(rd.GetOrdinal("Otp")) ? null : rd.GetString(rd.GetOrdinal("Otp")),
+                        OtpExpiry = rd.IsDBNull(rd.GetOrdinal("OtpExpiry")) ? (DateTime?)null : rd.GetDateTime(rd.GetOrdinal("OtpExpiry"))
+                    };
                 }
             }
-
-            return null;
         }
 
+        /* ============================================================
+         *  ADAPTADORES para cumplir con IGenericRepository<Usuario>
+         * ============================================================ */
+
+        // Implementación explícita correcta para tu interfaz
+        System.Collections.Generic.List<Usuario> DomainModel.Interfaces.IGenericRepository<Usuario>.GetAll()
+        {
+            // tu método List() devuelve IEnumerable<Usuario>,
+            // así que simplemente lo convertís a List<Usuario>:
+            return new List<Usuario>(List());
+        }
+
+
+        Usuario IGenericRepository<Usuario>.GetById(Guid id) => GetById((object)id);
+
+        void IGenericRepository<Usuario>.Delete(Usuario entity)
+        {
+            if (entity == null) throw new ArgumentNullException("entity");
+            Delete((object)entity.IdUsuario);
+        }
+
+        /* ============================================================
+         *  HELPERS internos
+         * ============================================================ */
+
+        private static void Add(IDbCommand cmd, string name, object value)
+        {
+            var p = cmd.CreateParameter();
+            p.ParameterName = name;
+            p.Value = value ?? DBNull.Value;
+            cmd.Parameters.Add(p);
+        }
+
+        private static void Add(IDbCommand cmd, string name, string value, SqlDbType type, int size)
+        {
+            var p = cmd.CreateParameter();
+            p.ParameterName = name;
+            ((SqlParameter)p).SqlDbType = type;
+            ((SqlParameter)p).Size = size;
+            p.Value = (object)value ?? DBNull.Value;
+            cmd.Parameters.Add(p);
+        }
     }
 }

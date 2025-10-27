@@ -17,8 +17,9 @@ namespace BL
         public ProveedorBL()
         {
             
-            var context = new GestorCMBEntities();
-            proveedorRepository = new ProveedorRepository(context);
+            var context = new DAL.GestorCMBEntities();
+            var uow = new DAL.FactoryDAL.SqlUnitOfWork(context.Database.Connection.ConnectionString);
+            proveedorRepository = new ProveedorRepository(uow);
         }
 
         

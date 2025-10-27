@@ -15,8 +15,9 @@ namespace BL
         private readonly IInventarioRepository inventarioRepository;
         public InventarioBL()
         {
-            var context = new GestorCMBEntities();
-            inventarioRepository = new InventarioRepository(context);
+            var context = new DAL.GestorCMBEntities();
+            var uow = new DAL.FactoryDAL.SqlUnitOfWork(context.Database.Connection.ConnectionString);
+            inventarioRepository = new InventarioRepository(uow);
         }
 
         

@@ -16,8 +16,9 @@ namespace BL
         private readonly IDetalleEmpleadosRepository detalleEmpleadoRepository;
         public DetalleEmpleadoBL()
         {
-            var context = new GestorCMBEntities();
-            detalleEmpleadoRepository = new DetalleEmpleadosRepository(context);
+            var context = new DAL.GestorCMBEntities();
+            var uow = new DAL.FactoryDAL.SqlUnitOfWork(context.Database.Connection.ConnectionString);
+            detalleEmpleadoRepository = new DetalleEmpleadosRepository(uow);
         }
 
 

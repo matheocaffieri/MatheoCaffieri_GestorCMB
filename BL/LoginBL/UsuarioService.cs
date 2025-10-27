@@ -1,34 +1,99 @@
-﻿using DAL.LoginDAL;
+﻿using System;
+using System.Configuration;
+using DAL.FactoryDAL;
+using DAL.LoginDAL;
+using DomainModel.Interfaces;
 using DomainModel.Login;
-using Interfaces.LoginInterfaces;
-using Services.LoginService;
-using System;
 using System.Collections.Generic;
-
+using Services.LoginService;
+using Interfaces.LoginInterfaces;
 
 namespace BL.LoginBL
 {
-    public class UsuarioService
+    public class UsuarioService : IDisposable
     {
         private readonly IUsuarioRepository _usuarioRepo;
         private readonly IPasswordHasher _hasher;
+        private readonly IUnitOfWork _uow; 
 
-        public UsuarioService(IUsuarioRepository usuarioRepo, IPasswordHasher hasher)
+        // --- Constructor “correcto” con DI (usa Factory/UoW compartido) ---
+        public UsuarioService(IRepositoryFactory factory, IPasswordHasher hasher, string csName = "MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios")
+        {
+            if (factory == null) throw new ArgumentNullException(nameof(factory));
+            if (hasher == null) throw new ArgumentNullException(nameof(hasher));
+
+            _uow = factory.CreateUnitOfWork(csName);         
+            var bundle = factory.CreateRepositories(_uow);    
+            _usuarioRepo = bundle.Usuarios;
+            _hasher = hasher;
+        }
+
+
+
+        public UsuarioService(IUsuarioRepository usuarioRepo, IPasswordHasher hasher, IUnitOfWork uow = null)
         {
             _usuarioRepo = usuarioRepo ?? throw new ArgumentNullException(nameof(usuarioRepo));
             _hasher = hasher ?? throw new ArgumentNullException(nameof(hasher));
+            _uow = uow; // puede ser null si el repo maneja su propio ciclo de vida
         }
 
-        // <- OVERLOAD para UI
-        // En UsuarioService.cs (forma correcta)
-        public UsuarioService(string connectionString)
-            : this(new DAL.LoginDAL.UsuarioRepository(connectionString), new Services.LoginService.PasswordHasher())
+        // --- Overload LEGACY (acepta string: nombre de CS o CS completa) ---
+        public UsuarioService(string connectionStringOrName)
         {
-            // Validar connectionString si es necesario
-            if (string.IsNullOrEmpty(connectionString))
+            if (string.IsNullOrWhiteSpace(connectionStringOrName))
+                throw new ArgumentNullException(nameof(connectionStringOrName));
+
+            // Si es nombre de CS en App.config, lo resolvemos; si no, lo tomamos como CS directa
+            var cs = TryResolveConnectionString(connectionStringOrName);
+
+            // Creamos UoW y repo "a mano"
+            _uow = new SqlUnitOfWork(cs);
+            _usuarioRepo = new UsuarioRepository(_uow);
+            _hasher = new Services.LoginService.PasswordHasher();
+        }
+
+
+        private static string TryResolveConnectionString(string csOrName)
+        {
+            try
             {
-                throw new ArgumentNullException(nameof(connectionString));
+                var entry = ConfigurationManager.ConnectionStrings[csOrName];
+                if (entry != null && !string.IsNullOrWhiteSpace(entry.ConnectionString))
+                    return entry.ConnectionString;
             }
+            catch
+            {
+                // Si no está el paquete/config, simplemente caemos a usar csOrName como CS directa
+            }
+            return csOrName;
+        }
+
+
+        // Helper: crea el repositorio a partir de un string o nombre de conexión
+        private static IUsuarioRepository CreateRepoFromString(string csOrName)
+        {
+            if (string.IsNullOrWhiteSpace(csOrName))
+                throw new ArgumentNullException(nameof(csOrName));
+
+            // Si te pasan el nombre de una connection string, la busca en el app.config
+            string cs = csOrName;
+            var csEntry = System.Configuration.ConfigurationManager.ConnectionStrings[csOrName];
+            if (csEntry != null)
+                cs = csEntry.ConnectionString;
+
+            // Crea un UnitOfWork con esa cadena de conexión
+            var uow = new DAL.FactoryDAL.SqlUnitOfWork(cs);
+
+            // Devuelve el repo ya inicializado con ese UnitOfWork
+            return new DAL.LoginDAL.UsuarioRepository(uow);
+        }
+
+
+
+        public void Dispose()
+        {
+            // Si viniste por el ctor DI con factory, _uow no es null y lo cerramos acá
+            if (_uow != null) _uow.Dispose();
         }
 
 

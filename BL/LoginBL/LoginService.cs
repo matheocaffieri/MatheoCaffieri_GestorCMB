@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DAL.FactoryDAL;
+using DomainModel.Interfaces;    
 
 namespace BL.LoginBL
 {
@@ -24,7 +26,7 @@ namespace BL.LoginBL
 
         // Constructor para ser llamado fácilmente desde UI (pasando solo la conexión)
         public LoginService(string connectionStringUsers)
-            : this(new UsuarioRepository(connectionStringUsers), new PasswordHasher()) // <--- CORRECCIÓN AQUÍ
+        : this(new UsuarioRepository(new SqlUnitOfWork(connectionStringUsers)), new PasswordHasher())
         {
             if (string.IsNullOrEmpty(connectionStringUsers))
             {

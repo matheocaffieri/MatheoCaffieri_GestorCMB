@@ -15,8 +15,9 @@ namespace BL
         private readonly IDetalleMaterialesRepository detalleMaterialRepository;
         public DetalleMaterialBL()
         {
-            var context = new GestorCMBEntities();
-            detalleMaterialRepository = new DetalleMaterialesRepository(context);
+            var context = new DAL.GestorCMBEntities();
+            var uow = new DAL.FactoryDAL.SqlUnitOfWork(context.Database.Connection.ConnectionString);
+            detalleMaterialRepository = new DetalleMaterialesRepository(uow);
         }
 
         public List<DetalleProyectoMaterial> GetAll(Guid idProyecto)

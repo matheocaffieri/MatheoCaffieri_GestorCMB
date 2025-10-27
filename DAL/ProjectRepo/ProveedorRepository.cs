@@ -1,131 +1,122 @@
-﻿using DomainModel;
-using DomainModel.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Data.Common;
+using System.Data.Entity;
+using System.Data.Entity.Core.EntityClient;
+using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
+
+using DomainModel;
+using DomainModel.Interfaces;
+
+// Alias a la entidad EF (ajustá namespace si difiere)
+using ProveedorEf = DAL.Proveedor;
 
 namespace DAL.ProjectRepo
 {
     public class ProveedorRepository : IProveedorRepository
     {
+        private readonly IUnitOfWork _uow;
         private readonly GestorCMBEntities _context;
+        private readonly DbSet<ProveedorEf> _set;
 
-        // Constructor para inyectar el contexto
-        public ProveedorRepository(GestorCMBEntities context)
+        // ===== Proyección EF -> Dominio (100% traducible a SQL) =====
+        private static readonly Expression<Func<ProveedorEf, DomainModel.Proveedor>> ToDomainExpr =
+            p => new DomainModel.Proveedor
+            {
+                IdProveedor = p.idProveedor,
+                Descripcion = p.descripcion,
+                Telefono = p.telefono,
+                IsActive = p.isActive
+            };
+
+        public ProveedorRepository(IUnitOfWork uow)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            if (uow == null) throw new ArgumentNullException(nameof(uow));
+            _uow = uow;
+
+            var sqlUow = (DAL.FactoryDAL.SqlUnitOfWork)uow;
+            var sqlConn = (SqlConnection)sqlUow.Connection;
+
+            // Contexto temporal para capturar MetadataWorkspace del EDMX
+            using (var tmp = new GestorCMBEntities(
+                       new EntityConnection("name=GestorCMBEntities"),
+                       contextOwnsConnection: true))
+            {
+                var workspace = ((IObjectContextAdapter)tmp).ObjectContext.MetadataWorkspace;
+
+                // EntityConnection que reutiliza la MISMA SqlConnection del UoW
+                var entityConn = new EntityConnection(workspace, sqlConn);
+
+                // Contexto real (no dueño de la conexión)
+                _context = new GestorCMBEntities(entityConn, contextOwnsConnection: false);
+            }
+
+            // Compartimos transacción del UoW si existe
+            if (sqlUow.Transaction != null)
+                _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
+
+            _set = _context.Set<ProveedorEf>();
         }
 
+        // ===== Map Dominio -> EF (para altas/ediciones) =====
+        private static void MapToEf(DomainModel.Proveedor src, ProveedorEf dst)
+        {
+            dst.idProveedor = src.IdProveedor;
+            dst.descripcion = src.Descripcion;
+            dst.telefono = src.Telefono;
+            dst.isActive = src.IsActive;
+        }
+
+        // ===== CRUD =====
         public void Add(DomainModel.Proveedor entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            try
-            {
-                var proveedor = new Proveedor
-                {
-                    idProveedor = entity.IdProveedor,
-                    descripcion = entity.Descripcion,
-                    telefono = entity.Telefono,
-                    isActive = entity.IsActive
-                };
-
-                _context.Proveedor.Add(proveedor);
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al agregar el proveedor.", ex);
-            }
-        }
-
-        public void Delete(DomainModel.Proveedor entity)
-        {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            try
-            {
-                var proveedor = _context.Proveedor.FirstOrDefault(p => p.idProveedor == entity.IdProveedor);
-
-                if (proveedor == null)
-                    throw new KeyNotFoundException("Proveedor no encontrado.");
-
-                _context.Proveedor.Remove(proveedor);
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al eliminar el proveedor.", ex);
-            }
-        }
-
-        public DomainModel.Proveedor GetById(Guid id)
-        {
-            try
-            {
-                var proveedor = _context.Proveedor.FirstOrDefault(p => p.idProveedor == id);
-
-                if (proveedor == null)
-                    throw new KeyNotFoundException("Proveedor no encontrado.");
-
-                return new DomainModel.Proveedor
-                {
-                    IdProveedor = proveedor.idProveedor,
-                    Descripcion = proveedor.descripcion,
-                    Telefono = proveedor.telefono,
-                    IsActive = proveedor.isActive
-                };
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al obtener el proveedor.", ex);
-            }
+            var ef = new ProveedorEf();
+            MapToEf(entity, ef);
+            _set.Add(ef);
+            _context.SaveChanges();
         }
 
         public void Update(DomainModel.Proveedor entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            try
-            {
-                var proveedor = _context.Proveedor.FirstOrDefault(p => p.idProveedor == entity.IdProveedor);
+            var ef = _set.Find(entity.IdProveedor);
+            if (ef == null) throw new InvalidOperationException("Proveedor no encontrado.");
 
-                if (proveedor == null)
-                    throw new KeyNotFoundException("Proveedor no encontrado.");
+            MapToEf(entity, ef);
+            _context.Entry(ef).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
 
-                proveedor.descripcion = entity.Descripcion;
-                proveedor.telefono = entity.Telefono;
-                proveedor.isActive = entity.IsActive;
+        public void Delete(DomainModel.Proveedor entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al actualizar el proveedor.", ex);
-            }
+            var ef = _set.Find(entity.IdProveedor);
+            if (ef == null) return;
+
+            _set.Remove(ef);
+            _context.SaveChanges();
+        }
+
+        public DomainModel.Proveedor GetById(Guid id)
+        {
+            return _set.AsNoTracking()
+                       .Where(p => p.idProveedor == id)
+                       .Select(ToDomainExpr)
+                       .FirstOrDefault();
         }
 
         public List<DomainModel.Proveedor> GetAll()
         {
-            return _context.Proveedor
-                .AsNoTracking() // Mejora el rendimiento en consultas de solo lectura
-                .Select(p => new DomainModel.Proveedor
-                {
-                    IdProveedor = p.idProveedor,
-                    Descripcion = p.descripcion,
-                    Telefono = p.telefono,
-                    IsActive = p.isActive
-                })
-                .ToList();
+            return _set.AsNoTracking()
+                       .Select(ToDomainExpr)
+                       .ToList();
         }
-
     }
 }
-

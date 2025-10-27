@@ -16,8 +16,9 @@ namespace BL
 
         public MaterialFaltanteBL()
         {
-            var context = new GestorCMBEntities();
-            materialesFaltantesRepository = new MaterialFaltanteRepository(context);
+            var context = new DAL.GestorCMBEntities();
+            var uow = new DAL.FactoryDAL.SqlUnitOfWork(context.Database.Connection.ConnectionString);
+            materialesFaltantesRepository = new MaterialFaltanteRepository(uow);
         }
 
         public List<MaterialFaltante> GetAll(Guid idProyecto)

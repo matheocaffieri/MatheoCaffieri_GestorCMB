@@ -16,8 +16,9 @@ namespace BL
         private readonly IProyectoRepository proyectoRepository;
         public ProyectoBL()
         {
-            var context = new GestorCMBEntities();
-            proyectoRepository = new ProyectoRepository(context);
+            var context = new DAL.GestorCMBEntities();
+            var uow = new DAL.FactoryDAL.SqlUnitOfWork(context.Database.Connection.ConnectionString);
+            proyectoRepository = new ProyectoRepository(uow);
         }
 
 

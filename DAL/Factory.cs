@@ -1,36 +1,46 @@
-﻿using DAL.ProjectRepo;
+﻿using DAL.FactoryDAL;
+using DAL.ProjectRepo;
 using DomainModel.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class Factory
+    public sealed class Factory
     {
-        #region Singleton
-        private static readonly Factory _instance = new Factory();
-        public static Factory Instance => _instance;
-        private Factory() { }
-        #endregion
+        // ... CreateScope() como lo tenés
 
-        private readonly GestorCMBEntities _context = new GestorCMBEntities();
-
-        public IGenericRepository<Proveedor> GetProveedorRepository()
+        public sealed class RepoScope : IDisposable
         {
-            return new ProjectRepo.ProveedorRepository(_context) as IGenericRepository<Proveedor>;
-        }
+            private readonly IUnitOfWork _uow;
 
-        public IGenericRepository<Empleado> GetEmpleadoRepository()
-        {
-            return new ProjectRepo.EmpleadoRepository(_context) as IGenericRepository<Empleado>;
-        }
+            public IGenericRepository<DomainModel.Empleado> Empleados { get; }
+            public IGenericRepository<DomainModel.Proveedor> Proveedores { get; }
+            public IGenericRepository<DomainModel.Proyecto> Proyectos { get; }
+            public IGenericRepository<DomainModel.Material> Materiales { get; }
+            public IGenericRepository<DomainModel.Inventario> Inventario { get; }
+            public IGenericRepository<DomainModel.MaterialFaltante> MaterialesFaltantes { get; }
+            public IGenericRepository<DomainModel.InformeDeCompra> InformesDeCompra { get; }
+            public IGenericRepository<DomainModel.Cliente> Clientes { get; }
+            public IGenericRepository<DomainModel.DetalleProyectoEmpleado> DetallesProyectoEmpleado { get; }
+            public IGenericRepository<DomainModel.DetalleProyectoMaterial> DetallesProyectoMaterial { get; }
 
-        public IGenericRepository<Proyecto> GetProyectoRepository()
-        {
-            return new ProjectRepo.ProyectoRepository(_context) as IGenericRepository<Proyecto>;
+            internal RepoScope(IUnitOfWork uow)
+            {
+                _uow = uow;
+
+                // No castees, ya implementan la interfaz correcta
+                Empleados = new EmpleadoRepository(uow);
+                
+            }
+
+            public void Commit() => _uow.Commit();
+            public void Rollback() => _uow.Rollback();
+            public void Dispose() => _uow.Dispose();
         }
     }
 }
