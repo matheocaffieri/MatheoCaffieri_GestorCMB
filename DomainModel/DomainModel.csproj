@@ -73,8 +73,6 @@
     <Compile Include="Interfaces\IMaterialRepository.cs" />
     <Compile Include="Interfaces\IProveedorRepository.cs" />
     <Compile Include="Interfaces\IProyectoRepository.cs" />
-    <Compile Include="Interfaces\IRepositoryFactory.cs" />
-    <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="LoginDALInterfaces\IAccesoRepository.cs" />
     <Compile Include="LoginDALInterfaces\IFamiliaRepository.cs" />
     <Compile Include="Interfaces\IRepoBundle.cs" />

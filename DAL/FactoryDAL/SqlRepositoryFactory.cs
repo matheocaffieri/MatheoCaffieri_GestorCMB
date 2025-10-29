@@ -11,24 +11,13 @@ namespace DAL.FactoryDAL
 {
     public class SqlRepositoryFactory : IRepositoryFactory
     {
-        public IUnitOfWork CreateUnitOfWork(string csOrName)
+        public IUnitOfWork CreateUnitOfWork(string csName)
         {
-            if (string.IsNullOrWhiteSpace(csOrName))
-                throw new ArgumentNullException(nameof(csOrName), "Debe indicar nombre o cadena de conexión.");
-
-            // Si existe como nombre en config, lo resuelvo; si no, lo tomo como cadena directa
-            var entry = ConfigurationManager.ConnectionStrings[csOrName];
-            var cs = entry != null && !string.IsNullOrWhiteSpace(entry.ConnectionString)
-                        ? entry.ConnectionString
-                        : csOrName;
-
+            var cs = ConfigurationManager.ConnectionStrings[csName].ConnectionString;
             return new SqlUnitOfWork(cs);
         }
 
         public IRepoBundle CreateRepositories(IUnitOfWork uow)
-        {
-            if (uow == null) throw new ArgumentNullException(nameof(uow));
-            return new SqlRepoBundle(uow);
-        }
+            => new SqlRepoBundle(uow); // tu “bundle” que expone los repos
     }
 }
