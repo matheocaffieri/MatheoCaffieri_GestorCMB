@@ -73,7 +73,7 @@
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(39, 133);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(459, 26);
             this.textBox1.TabIndex = 25;
@@ -82,7 +82,7 @@
             // 
             this.MaterialesItemPanel.AutoScroll = true;
             this.MaterialesItemPanel.Location = new System.Drawing.Point(28, 185);
-            this.MaterialesItemPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MaterialesItemPanel.Margin = new System.Windows.Forms.Padding(2);
             this.MaterialesItemPanel.Name = "MaterialesItemPanel";
             this.MaterialesItemPanel.Size = new System.Drawing.Size(764, 171);
             this.MaterialesItemPanel.TabIndex = 27;
@@ -94,7 +94,7 @@
             this.buttonSearchMaterial.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.buttonSearchMaterial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSearchMaterial.Location = new System.Drawing.Point(502, 133);
-            this.buttonSearchMaterial.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonSearchMaterial.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSearchMaterial.Name = "buttonSearchMaterial";
             this.buttonSearchMaterial.Size = new System.Drawing.Size(27, 29);
             this.buttonSearchMaterial.TabIndex = 28;
@@ -107,7 +107,7 @@
             this.buttonAgregarMaterial.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonAgregarMaterial.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.buttonAgregarMaterial.Location = new System.Drawing.Point(563, 87);
-            this.buttonAgregarMaterial.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonAgregarMaterial.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAgregarMaterial.Name = "buttonAgregarMaterial";
             this.buttonAgregarMaterial.Size = new System.Drawing.Size(179, 42);
             this.buttonAgregarMaterial.TabIndex = 29;
@@ -122,12 +122,13 @@
             this.buttonGestionarProveedores.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonGestionarProveedores.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.buttonGestionarProveedores.Location = new System.Drawing.Point(563, 20);
-            this.buttonGestionarProveedores.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonGestionarProveedores.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGestionarProveedores.Name = "buttonGestionarProveedores";
             this.buttonGestionarProveedores.Size = new System.Drawing.Size(179, 42);
             this.buttonGestionarProveedores.TabIndex = 30;
             this.buttonGestionarProveedores.Text = "Gestionar proveedores";
             this.buttonGestionarProveedores.UseVisualStyleBackColor = false;
+            this.buttonGestionarProveedores.Click += new System.EventHandler(this.buttonGestionarProveedores_Click);
             // 
             // buttonVerInformesCompra
             // 
@@ -136,7 +137,7 @@
             this.buttonVerInformesCompra.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonVerInformesCompra.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.buttonVerInformesCompra.Location = new System.Drawing.Point(350, 20);
-            this.buttonVerInformesCompra.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonVerInformesCompra.Margin = new System.Windows.Forms.Padding(2);
             this.buttonVerInformesCompra.Name = "buttonVerInformesCompra";
             this.buttonVerInformesCompra.Size = new System.Drawing.Size(179, 42);
             this.buttonVerInformesCompra.TabIndex = 31;
@@ -156,7 +157,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "VerInventarioControl";
             this.Size = new System.Drawing.Size(640, 286);
             this.Load += new System.EventHandler(this.VerInventarioControl_Load);

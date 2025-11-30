@@ -27,29 +27,28 @@ namespace DAL.ProjectRepo
 
         // ===== Proyección EF -> Dominio (100% traducible a SQL) =====
         private static readonly Expression<Func<InventarioEf, DomainModel.Inventario>> ToDomainExpr =
-            inv => new DomainModel.Inventario
+    inv => new DomainModel.Inventario
+    {
+        IdMaterialInventario = inv.idMaterialInventario,
+        Cantidad = inv.cantidad,
+        IdMaterial = inv.idMaterial,
+        Material = new DomainModel.Material
+        {
+            IdMaterial = inv.Material.idMaterial,
+            DescripcionArticulo = inv.Material.descripcionArticulo,
+            TipoMaterial = inv.Material.tipoMaterial,
+            TipoUnidad = inv.Material.tipoUnidad,
+            CostoPorUnidad = (float)inv.Material.costoPorUnidad,
+            IdProveedor = inv.Material.idProveedor,
+            Proveedor = inv.Material.Proveedor == null ? null : new DomainModel.Proveedor
             {
-                IdMaterialInventario = inv.idMaterialInventario,
-                Cantidad = inv.cantidad,
-                IdMaterial = inv.idMaterial,
+                IdProveedor = inv.Material.Proveedor.idProveedor,
+                Descripcion = inv.Material.Proveedor.descripcion,
+                Telefono = inv.Material.Proveedor.telefono
+            }
+        }
+    };
 
-                Material = new DomainModel.Material
-                {
-                    IdMaterial = inv.Material.idMaterial,
-                    DescripcionArticulo = inv.Material.descripcionArticulo,
-                    TipoMaterial = inv.Material.tipoMaterial,
-                    TipoUnidad = inv.Material.tipoUnidad,
-                    CostoPorUnidad = (float)inv.Material.costoPorUnidad, // decimal -> float
-                    IdProveedor = inv.Material.idProveedor,
-
-                    Proveedor = new DomainModel.Proveedor
-                    {
-                        IdProveedor = inv.Material.Proveedor.idProveedor,
-                        Descripcion = inv.Material.Proveedor.descripcion,
-                        Telefono = inv.Material.Proveedor.telefono
-                    }
-                }
-            };
 
         public InventarioRepository(IUnitOfWork uow)
         {
@@ -148,5 +147,23 @@ namespace DAL.ProjectRepo
                        .Select(ToDomainExpr)
                        .ToList();
         }
+
+
+        public DomainModel.Inventario GetByMaterialId(Guid idMaterial)
+        {
+            return _set.AsNoTracking()
+                       .Where(inv => inv.idMaterial == idMaterial)
+                       .Select(ToDomainExpr)
+                       .FirstOrDefault();
+        }
+
+        public decimal GetCantidad(Guid idMaterial)
+        {
+            return _set.AsNoTracking()
+                       .Where(inv => inv.idMaterial == idMaterial)
+                       .Select(inv => inv.cantidad)
+                       .FirstOrDefault();
+        }
+
     }
 }

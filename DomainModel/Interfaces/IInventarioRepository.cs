@@ -8,5 +8,7 @@ namespace DomainModel.Interfaces
 {
     public interface IInventarioRepository : IGenericRepository<Inventario>
     {
+        DomainModel.Inventario GetByMaterialId(Guid idMaterial);
+        decimal GetCantidad(Guid idMaterial);
     }
 }

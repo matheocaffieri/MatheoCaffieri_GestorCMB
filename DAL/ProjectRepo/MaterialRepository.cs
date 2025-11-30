@@ -93,8 +93,9 @@ namespace DAL.ProjectRepo
             MapToEf(entity, ef);
 
             _set.Add(ef);
-            _context.SaveChanges();
+            _context.SaveChanges(); 
         }
+
 
         public void Update(DomainModel.Material entity)
         {

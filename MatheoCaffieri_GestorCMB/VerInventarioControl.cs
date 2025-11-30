@@ -16,6 +16,10 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class VerInventarioControl : UserControl
     {
+
+        private readonly IGenericRepository<Inventario> _invRepo;
+        private readonly MainForm _mainForm;
+
         public VerInventarioControl()
         {
             InitializeComponent();
@@ -49,7 +53,30 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonAgregarMaterial_Click(object sender, EventArgs e)
         {
-
+            using (var form = new AddMaterialesForm())
+            {
+                form.StartPosition = FormStartPosition.CenterParent; // centrado
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    ObtenerMaterialesItems(); // refresca lista
+                }
+            }
         }
+
+        private void buttonGestionarProveedores_Click(object sender, EventArgs e)
+        {
+            var host = _mainForm ?? (this.FindForm() as MainForm);
+            if (host == null)
+            {
+                MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            host.addUserControl(new ProveedorControl());
+        }
+
+
+
     }
 }

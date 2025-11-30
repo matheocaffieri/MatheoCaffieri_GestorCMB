@@ -39,7 +39,7 @@ namespace Services.Logs
             using (var cmd = cn.CreateCommand())
             {
                 cmd.CommandText = @"
-                    INSERT INTO Logs (Fecha, Nivel, Mensaje, Excepcion)
+                    INSERT INTO Log (Fecha, Nivel, Mensaje, Excepcion)
                     VALUES (@fecha, @nivel, @mensaje, @excepcion)";
 
                 cmd.Parameters.AddWithValue("@fecha", log.Date);
