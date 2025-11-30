@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DAL.FactoryDAL;
+using DomainModel;
+using DomainModel.Interfaces;
+using Services.Logs;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
@@ -7,11 +11,6 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
-using DAL.FactoryDAL;
-
-using DomainModel;
-using DomainModel.Interfaces;
-
 // Aliases a las entidades EF (ajusta namespaces si difieren)
 using MaterialEf = DAL.Material;
 using ProveedorEf = DAL.Proveedor;
@@ -93,7 +92,10 @@ namespace DAL.ProjectRepo
             MapToEf(entity, ef);
 
             _set.Add(ef);
-            _context.SaveChanges(); 
+
+            // DEBUG EXTRA: ver cuántas filas se afectan
+            var rows = _context.SaveChanges();
+            LoggerLogic.Info($"[MaterialRepository] SaveChanges filas afectadas: {rows}");
         }
 
 

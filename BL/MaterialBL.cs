@@ -54,7 +54,7 @@ namespace BL
                 if (entity.IdMaterial == Guid.Empty)
                     entity.IdMaterial = Guid.NewGuid();
 
-                _materialRepository.Add(entity);  // <-- solo esto, sin _uow.SaveChanges()
+                _materialRepository.Add(entity);   // <-- SOLO ESTO
 
                 LoggerLogic.Info($"[MaterialBL] Nuevo material agregado: {entity.DescripcionArticulo} ({entity.IdMaterial})");
             }
@@ -64,6 +64,7 @@ namespace BL
                 throw;
             }
         }
+
 
         public void Update(Material entity)
         {
