@@ -158,6 +158,36 @@ namespace BL
             }
         }
 
+        public int CambiarCantidad(Guid idInventario, int delta)
+        {
+            if (delta == 0)
+                return _inventarioRepository.GetById(idInventario).Cantidad;
+
+            var inv = _inventarioRepository.GetById(idInventario);
+            if (inv == null)
+                throw new ArgumentException("Inventario no encontrado.", nameof(idInventario));
+
+            var nuevaCantidad = inv.Cantidad + delta;
+
+            if (nuevaCantidad < 0)
+            {
+                LoggerLogic.Warn(
+                    $"[InventarioBL] Intento de cantidad negativa. Id={idInventario}, Actual={inv.Cantidad}, Delta={delta}");
+                // no actualiza, devuelve la actual
+                return inv.Cantidad;
+            }
+
+            inv.Cantidad = nuevaCantidad;
+            _inventarioRepository.Update(inv);
+
+            LoggerLogic.Info(
+                $"[InventarioBL] Cantidad modificada. Id={idInventario}, NuevaCantidad={nuevaCantidad}");
+
+            return nuevaCantidad;
+        }
+
+
+
         // ============= Implementación explícita de IGenericRepository =============
         List<Inventario> IGenericRepository<Inventario>.GetAll() => GetAll();
         Inventario IGenericRepository<Inventario>.GetById(Guid id) => GetById(id);

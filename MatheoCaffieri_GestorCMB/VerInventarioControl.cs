@@ -40,8 +40,11 @@ namespace MatheoCaffieri_GestorCMB
                     InfoGeneralArticuloInventario = $"| {e.Material.Proveedor.Descripcion} | Unidad: {e.Material.TipoUnidad} | {e.Material.CostoPorUnidad}",
                     CantidadArticuloInventario = e.Cantidad.ToString()
                 };
-                
 
+                // *** ESTA ES LA LÍNEA QUE FALTABA ***
+                inventarioItemControl.SetInventarioId(e.IdMaterialInventario);
+
+            
                 // Agregas el control al LayoutPanel
                 MaterialesItemPanel.Controls.Add(inventarioItemControl);
             });

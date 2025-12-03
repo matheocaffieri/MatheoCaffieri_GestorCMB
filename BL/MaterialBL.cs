@@ -13,18 +13,24 @@ namespace BL
     {
         private readonly IMaterialRepository _materialRepository;
         private readonly IUnitOfWork _uow;
+        private readonly IInventarioRepository _inventarioDAL;
+
 
         public MaterialBL()
         {
             var ctx = new DAL.GestorCMBEntities();
             _uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx.Database.Connection.ConnectionString);
             _materialRepository = new MaterialRepository(_uow);
+            _inventarioDAL = new InventarioRepository(_uow);
+
         }
 
-        public MaterialBL(IUnitOfWork uow, IMaterialRepository repo)
+        public MaterialBL(IUnitOfWork uow, IMaterialRepository repo, IInventarioRepository inventarioDAL)
         {
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
             _materialRepository = repo ?? throw new ArgumentNullException(nameof(repo));
+            _inventarioDAL = inventarioDAL;
+
         }
 
         // ===== Validación común =====
@@ -47,20 +53,39 @@ namespace BL
 
         public void Add(Material entity)
         {
+            // Validaciones de negocio
             Validate(entity);
 
             try
             {
+                // Si no viene el Id, lo genero acá
                 if (entity.IdMaterial == Guid.Empty)
                     entity.IdMaterial = Guid.NewGuid();
 
-                _materialRepository.Add(entity);   // <-- SOLO ESTO
+                // 1) Guardar el material
+                _materialRepository.Add(entity);
 
-                LoggerLogic.Info($"[MaterialBL] Nuevo material agregado: {entity.DescripcionArticulo} ({entity.IdMaterial})");
+                LoggerLogic.Info(
+                    $"[MaterialBL] Nuevo material agregado: {entity.DescripcionArticulo} ({entity.IdMaterial})");
+
+                // 2) Crear inventario inicial en 0 para ese material
+                var inventario = new Inventario
+                {
+                    IdMaterial = entity.IdMaterial,
+                    Cantidad = 0
+                    // IdMaterialInventario = Guid.NewGuid();  // si tu modelo lo requiere
+                };
+
+                _inventarioDAL.Add(inventario);
+
+                LoggerLogic.Info(
+                    $"[MaterialBL] Inventario inicial creado (Cantidad=0) para material {entity.DescripcionArticulo} ({entity.IdMaterial})");
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error($"[MaterialBL] Error al agregar material ({entity?.DescripcionArticulo ?? "desconocido"})", ex);
+                LoggerLogic.Error(
+                    $"[MaterialBL] Error al agregar material e inventario ({entity?.DescripcionArticulo ?? "desconocido"})",
+                    ex);
                 throw;
             }
         }

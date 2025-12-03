@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +17,10 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         {
             InitializeComponent();
         }
+
+
+        private readonly InventarioBL _invBL = new InventarioBL();
+
 
         public string DescripcionArticuloInventario
         {
@@ -39,6 +44,52 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         {
             get => labelInfoCantidadInventario.Text;
             set => labelInfoCantidadInventario.Text = value ?? "Sin cantidad";
+        }
+
+        private void buttonIncreaseQ_Click(object sender, EventArgs e)
+        {
+            var btn = (Button)sender;
+            if (btn.Tag is Guid idInv)
+            {
+                try
+                {
+                    int nuevaCantidad = _invBL.CambiarCantidad(idInv, +1);
+                    labelInfoCantidadInventario.Text = nuevaCantidad.ToString(); // label de esa fila
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No se pudo aumentar la cantidad.\n" + ex.Message,
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+
+        public void SetInventarioId(Guid idInventario)
+        {
+            buttonIncreaseQ.Tag = idInventario;
+            buttonDecreaseQ.Tag = idInventario;
+        }
+
+
+        private void buttonDecreaseQ_Click(object sender, EventArgs e)
+        {
+            var btn = (Button)sender;
+            if (btn.Tag is Guid idInv)
+            {
+                try
+                {
+                    int nuevaCantidad = _invBL.CambiarCantidad(idInv, -1);
+
+                    // BL ya evita negativos, pero si querés también lo chequeás acá
+                    labelInfoCantidadInventario.Text = nuevaCantidad.ToString();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No se pudo disminuir la cantidad.\n" + ex.Message,
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }
