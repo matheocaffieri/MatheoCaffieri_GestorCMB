@@ -16,41 +16,109 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class ProveedorControl : UserControl
     {
-        public ProveedorControl()
+        public ProveedorControl() : this(new ProveedorBL())
         {
-            InitializeComponent();
         }
 
-        
+        private readonly MainForm _mainForm;
 
-void ObtenerProveedoresItems()
+
+        // ctor para inyección de dependencias (tests, etc.)
+        public ProveedorControl(IGenericRepository<Proveedor> proveedorRepo)
         {
-            // Obtenemos los datos de la base de datos
-            List<Proveedor> proveedores = ((IGenericRepository<Proveedor>)new ProveedorBLL()).GetAll();
+            InitializeComponent();
+            _proveedorRepo = proveedorRepo ?? throw new ArgumentNullException(nameof(proveedorRepo));
 
-            // Asegúrate de limpiar el LayoutPanel antes de agregar nuevos controles
+            this.Load += ProveedorControl_Load;
+            buttonAddProveedor.Click += buttonAddProveedor_Click;
+        }
+
+        private readonly IGenericRepository<Proveedor> _proveedorRepo;
+
+
+        private void ObtenerProveedoresItems()
+        {
+            // Traemos los proveedores desde la BL
+            List<Proveedor> proveedores = _proveedorRepo.GetAll();
+
+            proveedorLayoutPanel.SuspendLayout();
             proveedorLayoutPanel.Controls.Clear();
 
-            // Usamos LINQ para crear y agregar los controles
             proveedores.ForEach(proveedor =>
             {
-                // Creas un nuevo UserControl para cada proveedor
-                ProveedorItemControl proveedorItemControl = new ProveedorItemControl
+                var proveedorItemControl = new ProveedorItemControl
                 {
-                    // Asignas los datos del proveedor al control
                     Descripcion = proveedor.Descripcion,
                     Telefono = proveedor.Telefono.ToString()
-                    //proveedorItemControl.IsActive = proveedor.IsActive;
+                    // proveedorItemControl.IsActive = proveedor.IsActive;  // si tenés este campo
                 };
 
-                // Agregas el control al LayoutPanel
                 proveedorLayoutPanel.Controls.Add(proveedorItemControl);
             });
+
+            proveedorLayoutPanel.ResumeLayout();
         }
 
         private void ProveedorControl_Load(object sender, EventArgs e)
         {
             ObtenerProveedoresItems();
+        }
+
+        private void buttonAddProveedor_Click(object sender, EventArgs e)
+        {
+            // Usá los nombres reales de tus TextBox
+            string descripcion = textBoxDescripcion.Text.Trim();
+            string telefonoStr = textBoxTelefono.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(descripcion))
+            {
+                MessageBox.Show("La descripción es obligatoria.", "Validación",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            long? telefono = null;
+            if (!string.IsNullOrWhiteSpace(telefonoStr))
+            {
+                if (long.TryParse(telefonoStr, out long telParsed))
+                    telefono = telParsed;
+                else
+                {
+                    MessageBox.Show("El teléfono debe ser numérico.", "Validación",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
+            var nuevoProveedor = new Proveedor
+            {
+                Descripcion = descripcion,
+                Telefono = (int)telefono
+                // IsActive = true;  // si tu entidad tiene este campo
+            };
+
+            _proveedorRepo.Add(nuevoProveedor);
+
+            // Refrescamos el listado
+            ObtenerProveedoresItems();
+
+            // Limpiamos el formulario
+            textBoxDescripcion.Clear();
+            textBoxTelefono.Clear();
+            textBoxDescripcion.Focus();
+        }
+
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
+            var host = _mainForm ?? (this.FindForm() as MainForm);
+            if (host == null)
+            {
+                MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            host.addUserControl(new VerInventarioControl());
         }
     }
 }

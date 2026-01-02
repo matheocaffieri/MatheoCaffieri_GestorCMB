@@ -31,9 +31,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.buttonAddProveedor = new System.Windows.Forms.Button();
+            this.textBoxTelefono = new System.Windows.Forms.TextBox();
+            this.textBoxDescripcion = new System.Windows.Forms.TextBox();
             this.buttonBack = new System.Windows.Forms.Button();
             this.buttonSearchClientes = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -65,47 +65,55 @@
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel1.Location = new System.Drawing.Point(387, 86);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(2, 300);
+            this.panel1.Size = new System.Drawing.Size(3, 300);
             this.panel1.TabIndex = 55;
             // 
-            // button1
+            // buttonAddProveedor
             // 
-            this.button1.Location = new System.Drawing.Point(31, 253);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(114, 36);
-            this.button1.TabIndex = 54;
-            this.button1.Text = "Add";
-            this.button1.UseVisualStyleBackColor = true;
+            this.buttonAddProveedor.Location = new System.Drawing.Point(31, 254);
+            this.buttonAddProveedor.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonAddProveedor.Name = "buttonAddProveedor";
+            this.buttonAddProveedor.Size = new System.Drawing.Size(115, 36);
+            this.buttonAddProveedor.TabIndex = 54;
+            this.buttonAddProveedor.Text = "Add";
+            this.buttonAddProveedor.UseVisualStyleBackColor = true;
+            this.buttonAddProveedor.Click += new System.EventHandler(this.buttonAddProveedor_Click);
             // 
-            // textBox3
+            // textBoxTelefono
             // 
-            this.textBox3.Location = new System.Drawing.Point(31, 190);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(275, 22);
-            this.textBox3.TabIndex = 51;
+            this.textBoxTelefono.Location = new System.Drawing.Point(31, 190);
+            this.textBoxTelefono.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBoxTelefono.Name = "textBoxTelefono";
+            this.textBoxTelefono.Size = new System.Drawing.Size(275, 22);
+            this.textBoxTelefono.TabIndex = 51;
             // 
-            // textBox2
+            // textBoxDescripcion
             // 
-            this.textBox2.Location = new System.Drawing.Point(31, 117);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(275, 22);
-            this.textBox2.TabIndex = 50;
+            this.textBoxDescripcion.Location = new System.Drawing.Point(31, 117);
+            this.textBoxDescripcion.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBoxDescripcion.Name = "textBoxDescripcion";
+            this.textBoxDescripcion.Size = new System.Drawing.Size(275, 22);
+            this.textBoxDescripcion.TabIndex = 50;
             // 
             // buttonBack
             // 
             this.buttonBack.Location = new System.Drawing.Point(31, 30);
+            this.buttonBack.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.Size = new System.Drawing.Size(48, 42);
             this.buttonBack.TabIndex = 49;
             this.buttonBack.Text = "Back";
             this.buttonBack.UseVisualStyleBackColor = true;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // buttonSearchClientes
             // 
-            this.buttonSearchClientes.Location = new System.Drawing.Point(969, 35);
+            this.buttonSearchClientes.Location = new System.Drawing.Point(969, 34);
+            this.buttonSearchClientes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonSearchClientes.Name = "buttonSearchClientes";
-            this.buttonSearchClientes.Size = new System.Drawing.Size(70, 42);
+            this.buttonSearchClientes.Size = new System.Drawing.Size(69, 42);
             this.buttonSearchClientes.TabIndex = 48;
             this.buttonSearchClientes.Text = "Search";
             this.buttonSearchClientes.UseVisualStyleBackColor = true;
@@ -114,18 +122,19 @@
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(469, 38);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(482, 30);
+            this.textBox1.Size = new System.Drawing.Size(481, 26);
             this.textBox1.TabIndex = 47;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(86, 30);
+            this.label2.Location = new System.Drawing.Point(85, 30);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(342, 39);
+            this.label2.Size = new System.Drawing.Size(275, 31);
             this.label2.TabIndex = 46;
             this.label2.Text = "Gestionar proveedores";
             // 
@@ -133,6 +142,7 @@
             // 
             this.proveedorLayoutPanel.AutoScroll = true;
             this.proveedorLayoutPanel.Location = new System.Drawing.Point(432, 117);
+            this.proveedorLayoutPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.proveedorLayoutPanel.Name = "proveedorLayoutPanel";
             this.proveedorLayoutPanel.Size = new System.Drawing.Size(544, 321);
             this.proveedorLayoutPanel.TabIndex = 59;
@@ -150,13 +160,14 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.buttonAddProveedor);
+            this.Controls.Add(this.textBoxTelefono);
+            this.Controls.Add(this.textBoxDescripcion);
             this.Controls.Add(this.buttonBack);
             this.Controls.Add(this.buttonSearchClientes);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "ProveedorControl";
             this.Size = new System.Drawing.Size(1067, 441);
             this.Load += new System.EventHandler(this.ProveedorControl_Load);
@@ -171,9 +182,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button buttonAddProveedor;
+        private System.Windows.Forms.TextBox textBoxTelefono;
+        private System.Windows.Forms.TextBox textBoxDescripcion;
         private System.Windows.Forms.Button buttonBack;
         private System.Windows.Forms.Button buttonSearchClientes;
         private System.Windows.Forms.TextBox textBox1;

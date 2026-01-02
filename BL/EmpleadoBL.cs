@@ -24,20 +24,23 @@ namespace BL
 
         public void Add(DomainModel.Empleado entity)
         {
-            throw new NotImplementedException();
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            empleadoRepository.Add(entity);
         }
 
        
 
         public void Delete(DomainModel.Empleado entity)
         {
-            throw new NotImplementedException();
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            empleadoRepository.Delete(entity);
         }
 
 
         public void Update(DomainModel.Empleado entity)
         {
-            throw new NotImplementedException();
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            empleadoRepository.Update(entity);
         }
 
         List<DomainModel.Empleado> IGenericRepository<DomainModel.Empleado>.GetAll()
@@ -47,7 +50,7 @@ namespace BL
 
         DomainModel.Empleado IGenericRepository<DomainModel.Empleado>.GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return empleadoRepository.GetById(id);
         }
     }
 }

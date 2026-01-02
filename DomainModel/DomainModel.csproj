@@ -62,6 +62,7 @@
     <Compile Include="Entities\Inventario.cs" />
     <Compile Include="Entities\Material.cs" />
     <Compile Include="Entities\MaterialFaltante.cs" />
+    <Compile Include="Interfaces\IClienteRepository.cs" />
     <Compile Include="Interfaces\IDetalleEmpleadosRepository.cs" />
     <Compile Include="Interfaces\IDetalleGeneric.cs" />
     <Compile Include="Interfaces\IDetalleMaterialesRepository.cs" />

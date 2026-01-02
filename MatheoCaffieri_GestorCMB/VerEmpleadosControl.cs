@@ -44,10 +44,26 @@ namespace MatheoCaffieri_GestorCMB
             ObtenerEmpleadosItems();
         }
 
+        private readonly IGenericRepository<Empleado> _empleadoRepo = new EmpleadoBL();
+
+
         private void buttonAgregarEmpleado_Click(object sender, EventArgs e)
         {
-            AddEmpleadosForm addEmpleadosForm = new AddEmpleadosForm();
-            addEmpleadosForm.Show();
+
+            // Pasás el mismo repo al form
+            using (var addEmpleadosForm = new AddEmpleadosForm(_empleadoRepo))
+            {
+                var owner = this.FindForm();
+                DialogResult dr = (owner != null)
+                    ? addEmpleadosForm.ShowDialog(owner)
+                    : addEmpleadosForm.ShowDialog();
+
+                if (dr == DialogResult.OK)
+                {
+                    // Se agregó correctamente: recargás la lista
+                    ObtenerEmpleadosItems();
+                }
+            }
         }
     }
 }

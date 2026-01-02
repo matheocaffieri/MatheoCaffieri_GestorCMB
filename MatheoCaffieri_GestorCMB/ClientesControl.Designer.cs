@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxBuscar = new System.Windows.Forms.TextBox();
             this.buttonSearchClientes = new System.Windows.Forms.Button();
             this.buttonBack = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textBoxRazonSocial = new System.Windows.Forms.TextBox();
+            this.textBoxTelefono = new System.Windows.Forms.TextBox();
+            this.textBoxMail = new System.Windows.Forms.TextBox();
+            this.textBoxNombreContacto = new System.Windows.Forms.TextBox();
             this.buttonAddCliente = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -52,17 +52,18 @@
             this.label2.Location = new System.Drawing.Point(82, 37);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(271, 39);
+            this.label2.Size = new System.Drawing.Size(218, 31);
             this.label2.TabIndex = 30;
             this.label2.Text = "Gestionar clientes";
             // 
-            // textBox1
+            // textBoxBuscar
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(407, 45);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(540, 30);
-            this.textBox1.TabIndex = 31;
+            this.textBoxBuscar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxBuscar.Location = new System.Drawing.Point(407, 45);
+            this.textBoxBuscar.Name = "textBoxBuscar";
+            this.textBoxBuscar.Size = new System.Drawing.Size(540, 26);
+            this.textBoxBuscar.TabIndex = 31;
+            this.textBoxBuscar.TextChanged += new System.EventHandler(this.textBoxBuscar_TextChanged);
             // 
             // buttonSearchClientes
             // 
@@ -82,33 +83,33 @@
             this.buttonBack.Text = "Back";
             this.buttonBack.UseVisualStyleBackColor = true;
             // 
-            // textBox2
+            // textBoxRazonSocial
             // 
-            this.textBox2.Location = new System.Drawing.Point(27, 124);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(275, 22);
-            this.textBox2.TabIndex = 34;
+            this.textBoxRazonSocial.Location = new System.Drawing.Point(27, 124);
+            this.textBoxRazonSocial.Name = "textBoxRazonSocial";
+            this.textBoxRazonSocial.Size = new System.Drawing.Size(275, 22);
+            this.textBoxRazonSocial.TabIndex = 34;
             // 
-            // textBox3
+            // textBoxTelefono
             // 
-            this.textBox3.Location = new System.Drawing.Point(27, 197);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(275, 22);
-            this.textBox3.TabIndex = 35;
+            this.textBoxTelefono.Location = new System.Drawing.Point(27, 197);
+            this.textBoxTelefono.Name = "textBoxTelefono";
+            this.textBoxTelefono.Size = new System.Drawing.Size(275, 22);
+            this.textBoxTelefono.TabIndex = 35;
             // 
-            // textBox4
+            // textBoxMail
             // 
-            this.textBox4.Location = new System.Drawing.Point(27, 270);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(275, 22);
-            this.textBox4.TabIndex = 36;
+            this.textBoxMail.Location = new System.Drawing.Point(27, 270);
+            this.textBoxMail.Name = "textBoxMail";
+            this.textBoxMail.Size = new System.Drawing.Size(275, 22);
+            this.textBoxMail.TabIndex = 36;
             // 
-            // textBox5
+            // textBoxNombreContacto
             // 
-            this.textBox5.Location = new System.Drawing.Point(27, 344);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(275, 22);
-            this.textBox5.TabIndex = 37;
+            this.textBoxNombreContacto.Location = new System.Drawing.Point(27, 344);
+            this.textBoxNombreContacto.Name = "textBoxNombreContacto";
+            this.textBoxNombreContacto.Size = new System.Drawing.Size(275, 22);
+            this.textBoxNombreContacto.TabIndex = 37;
             // 
             // buttonAddCliente
             // 
@@ -118,6 +119,7 @@
             this.buttonAddCliente.TabIndex = 38;
             this.buttonAddCliente.Text = "Agregar";
             this.buttonAddCliente.UseVisualStyleBackColor = true;
+            this.buttonAddCliente.Click += new System.EventHandler(this.buttonAddCliente_Click);
             // 
             // panel1
             // 
@@ -182,13 +184,13 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.buttonAddCliente);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBoxNombreContacto);
+            this.Controls.Add(this.textBoxMail);
+            this.Controls.Add(this.textBoxTelefono);
+            this.Controls.Add(this.textBoxRazonSocial);
             this.Controls.Add(this.buttonBack);
             this.Controls.Add(this.buttonSearchClientes);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxBuscar);
             this.Controls.Add(this.label2);
             this.Name = "ClientesControl";
             this.Size = new System.Drawing.Size(1067, 441);
@@ -201,13 +203,13 @@
         #endregion
 
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxBuscar;
         private System.Windows.Forms.Button buttonSearchClientes;
         private System.Windows.Forms.Button buttonBack;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox textBoxRazonSocial;
+        private System.Windows.Forms.TextBox textBoxTelefono;
+        private System.Windows.Forms.TextBox textBoxMail;
+        private System.Windows.Forms.TextBox textBoxNombreContacto;
         private System.Windows.Forms.Button buttonAddCliente;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;

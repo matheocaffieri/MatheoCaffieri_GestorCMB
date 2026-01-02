@@ -58,6 +58,7 @@
     <Compile Include="AccessBL\AccesoService.cs" />
     <Compile Include="AccessBL\RolesService.cs" />
     <Compile Include="AccessBL\UsuarioPermisosService.cs" />
+    <Compile Include="ClienteBL.cs" />
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="DetalleEmpleadoBL.cs" />
     <Compile Include="DetalleMaterialBL.cs" />

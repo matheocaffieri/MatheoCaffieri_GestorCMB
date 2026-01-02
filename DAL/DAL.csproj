@@ -122,6 +122,7 @@
     <Compile Include="Material_faltante.cs">
       <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ProjectRepo\ClienteRepository.cs" />
     <Compile Include="ProjectRepo\DetalleEmpleadosRepository.cs" />
     <Compile Include="ProjectRepo\DetalleMaterialesRepository.cs" />
     <Compile Include="ProjectRepo\EmpleadoRepository.cs" />
