@@ -3,6 +3,7 @@ using Interfaces.LoginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using DomainModel.LoginDALInterfaces;
 
 namespace DAL.AccessDAL
 {

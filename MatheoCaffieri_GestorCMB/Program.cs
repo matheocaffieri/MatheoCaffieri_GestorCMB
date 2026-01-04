@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Windows.Forms;
+using RolesServiceLogic = Services.RoleService.Logic.RolesService;
 
 
 namespace MatheoCaffieri_GestorCMB
@@ -44,7 +45,7 @@ namespace MatheoCaffieri_GestorCMB
 
             // 3) Construir servicios con CS (ajustá según tus constructores reales)
             // Si tus servicios aceptan (string cs):
-            var rolesService = new RolesService(cs);
+            var rolesService = AccessServicesFactory.CreateRolesService(cs);     // RolesServiceLogic
             var usuarioService = new UsuarioService(cs);
 
             // --- Alternativa si tus servicios aceptan repositorios ---

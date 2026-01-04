@@ -1,5 +1,6 @@
 ﻿using BL.AccessBL;
 using BL.LoginBL;
+using Services.RoleService.Logic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RolesServiceLogic = Services.RoleService.Logic.RolesService;
+
 
 namespace MatheoCaffieri_GestorCMB
 {
@@ -16,7 +19,7 @@ namespace MatheoCaffieri_GestorCMB
     public partial class MainForm : Form
     {
         public Point mouseLocation;
-        private readonly RolesService _rolesService;
+        private readonly RolesServiceLogic _rolesService;
         private readonly UsuarioService _usuarioService;
 
         public MainForm()

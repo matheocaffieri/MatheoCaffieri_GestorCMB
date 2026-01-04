@@ -7,6 +7,7 @@ using DomainModel.Login;
 using System.Collections.Generic;
 using Services.LoginService;
 using Interfaces.LoginInterfaces;
+using DomainModel.LoginDALInterfaces;
 
 namespace BL.LoginBL
 {

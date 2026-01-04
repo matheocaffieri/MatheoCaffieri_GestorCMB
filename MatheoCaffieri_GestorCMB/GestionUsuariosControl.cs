@@ -1,9 +1,14 @@
-﻿using Services.RoleService.Logic;
+﻿using RolesServiceLogic = Services.RoleService.Logic.RolesService;
+using UsuarioPermisosServiceLogic = Services.RoleService.Logic.UsuarioPermisosService;
+using AccesoServiceLogic = Services.RoleService.Logic.AccesoService;
+using BL.AccessBL;
 using BL.LoginBL;
 using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.LoginService;
+using Services.RoleService.Logic;
+using Services.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +19,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Services.Tools;
 
 
 namespace MatheoCaffieri_GestorCMB
@@ -45,13 +49,13 @@ namespace MatheoCaffieri_GestorCMB
 
             var cs = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"].ConnectionString;
 
-            
+
             _rolesSrv = rolesService ?? throw new ArgumentNullException(nameof(rolesService));
             _usuarioSrv = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));
 
-            
-            _userPermsSrv = new UsuarioPermisosService(cs);
-            _accesoSrv = new AccesoService(cs);
+
+            _userPermsSrv = AccessServicesFactory.CreateUsuarioPermisosService(cs);
+            _accesoSrv = AccessServicesFactory.CreateAccesoService(cs);
 
             treeViewRoles.CheckBoxes = true;
         }
@@ -82,18 +86,23 @@ namespace MatheoCaffieri_GestorCMB
 
             foreach (var u in usuarios)
             {
-                // ESTO ESTÁ BIEN (los campos que sí existen y están asignados)
+                var usuario = u; // evitás capturas raras
+
                 var item = new ItemControls.UsuarioItemControl(_rolesSrv, _usuarioSrv)
                 {
-                    MailUsuario = u.Mail,
-                    Activo = u.IsActive,   // pinta el switch según DB
-                    Tag = u
+                    MailUsuario = usuario.Mail,
+                    Activo = usuario.IsActive,
+                    Tag = usuario
                 };
 
-                // ON/OFF -> persiste isActive
+                // si tu control necesita setear más cosas del usuario, hacelo acá una vez
+                item.SetUsuario(usuario);
+
                 item.ActivoChanged += (s, on) =>
                 {
-                    var usr = (Usuario)((Control)s).Tag;
+                    var ctrl = (ItemControls.UsuarioItemControl)s;
+                    var usr = (Usuario)ctrl.Tag;
+
                     try
                     {
                         _usuarioSrv.SetActivo(usr.IdUsuario, on);
@@ -101,27 +110,17 @@ namespace MatheoCaffieri_GestorCMB
                     }
                     catch (Exception ex)
                     {
-                        var ctrl = (ItemControls.UsuarioItemControl)s;
                         ctrl.Activo = !on; // revertir
                         MessageBox.Show("No se pudo actualizar el estado: " + ex.Message);
                     }
-                    item.SetUsuario(u);
-                    UsuariosLayoutPanel.Controls.Add(item);
                 };
 
-
-
-                // Selección de usuario
                 item.Click += (s, ev) =>
                 {
                     _usuarioActual = (Usuario)((Control)s).Tag;
 
-                    // SOLO refrescá checks si estás en la vista Categorías→Permisos
                     if (_treeMode == TreeMode.CategoriasPermisos)
-                    {
                         CargarPermisosUsuario(_usuarioActual);
-                    }
-                    // En vista Roles→Permisos NO toques el tree (así no se borran los checks)
                 };
 
                 UsuariosLayoutPanel.Controls.Add(item);
@@ -129,6 +128,7 @@ namespace MatheoCaffieri_GestorCMB
 
             UsuariosLayoutPanel.ResumeLayout();
         }
+
 
 
         // ---------- Árbol de permisos (categorías visuales + hojas enum) ----------

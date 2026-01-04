@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RolesServiceLogic = Services.RoleService.Logic.RolesService;
 
 
 namespace MatheoCaffieri_GestorCMB
@@ -90,7 +91,7 @@ namespace MatheoCaffieri_GestorCMB
 
                     // Abre el formulario principal
 
-                    var rolesService = new RolesService(connectionStringUsers);
+                    var rolesService = AccessServicesFactory.CreateRolesService(connectionStringUsers);
                     var usuarioService = new UsuarioService(connectionStringUsers);
 
                     MainForm mainForm = new MainForm(rolesService, usuarioService);

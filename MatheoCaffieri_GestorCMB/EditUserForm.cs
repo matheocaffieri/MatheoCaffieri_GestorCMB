@@ -10,18 +10,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static BL.AccessBL.RolesService;
+using RolesServiceLogic = Services.RoleService.Logic.RolesService;
+
 
 namespace MatheoCaffieri_GestorCMB
 {
     public partial class EditUserForm : Form
     {
-        private readonly RolesService _rolService;
+        private readonly RolesServiceLogic _rolService;
         private readonly UsuarioService _usuarioService;
         private Usuario _usuario;
 
 
-        public EditUserForm(DomainModel.Login.Usuario usuario, RolesService rolService /* inyectás como venías */)
+        public EditUserForm(DomainModel.Login.Usuario usuario, RolesServiceLogic rolService /* inyectás como venías */)
         {
             InitializeComponent();
             _usuario = usuario ?? throw new ArgumentNullException(nameof(usuario));
@@ -240,7 +241,7 @@ namespace MatheoCaffieri_GestorCMB
             var row = dataGridRoles.Rows[e.RowIndex];
 
             // Intentamos obtener el item tipado (DTO que usás para el grid)
-            var item = row.DataBoundItem as RolesService.RolPlano;
+            var item = row.DataBoundItem as RolesServiceLogic.RolPlano;
 
             Guid rolId;
             string nombreRol;

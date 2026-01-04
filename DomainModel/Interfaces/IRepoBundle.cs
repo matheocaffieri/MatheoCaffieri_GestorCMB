@@ -1,4 +1,4 @@
-﻿using DAL.LoginDAL;
+﻿using DomainModel.LoginDALInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

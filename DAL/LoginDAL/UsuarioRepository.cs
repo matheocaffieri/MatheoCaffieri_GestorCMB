@@ -10,6 +10,7 @@ using System.Linq;
 using DAL.FactoryDAL;
 using System.Text;
 using System.Threading.Tasks;
+using DomainModel.LoginDALInterfaces;
 
 namespace DAL.LoginDAL
 {

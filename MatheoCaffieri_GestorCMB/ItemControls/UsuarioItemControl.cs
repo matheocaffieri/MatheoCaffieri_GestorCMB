@@ -1,21 +1,17 @@
-﻿using BL.AccessBL;
-using BL.LoginBL;
+﻿using BL.LoginBL;
 using DomainModel.Login;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+// Alias para evitar conflictos con otros RolesService viejos
+using RolesServiceLogic = Services.RoleService.Logic.RolesService;
 
 namespace MatheoCaffieri_GestorCMB.ItemControls
 {
     public partial class UsuarioItemControl : UserControl
     {
-        private readonly RolesService _rolService;
+        private readonly RolesServiceLogic _rolService;
         private readonly UsuarioService _usuarioService;
 
         private Usuario _usuario;
@@ -29,20 +25,18 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         public event EventHandler<Usuario> UsuarioEditado;
 
         // === SOLO diseñador ===
-        public UsuarioItemControl() // SOLO diseñador
+        public UsuarioItemControl()
         {
             InitializeComponent();
             if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
             {
                 MessageBox.Show("UsuarioItemControl() sin servicios.\n\n" + Environment.StackTrace,
                                 "Diagnóstico", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // no lanzar: solo para encontrar dónde lo instancian mal
             }
         }
 
-
-        // === Runtime: NO encadenar con : this() ===
-        public UsuarioItemControl(RolesService rolService, UsuarioService usuarioService)
+        // === Runtime ===
+        public UsuarioItemControl(RolesServiceLogic rolService, UsuarioService usuarioService)
         {
             InitializeComponent();
 
@@ -59,18 +53,17 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             _usuario = u;
             MailUsuario = u?.Mail ?? string.Empty;
             Activo = u?.IsActive ?? false;
-            Tag = u; // si lo usás en otros lados
+            Tag = u;
         }
 
         // --- Propiedades de UI ---
-
         public bool Activo
         {
             get => SwitchHabilitarUsuario.IsOn;
             set
             {
                 SwitchHabilitarUsuario.IsOn = value;
-                SwitchHabilitarUsuario.Invalidate(); // repintado
+                SwitchHabilitarUsuario.Invalidate();
             }
         }
 
@@ -101,7 +94,6 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             {
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
-                    // refrescar UI local con el estado que haya quedado en u
                     MailUsuario = u.Mail;
                     Activo = u.IsActive;
                     UsuarioEditado?.Invoke(this, u);

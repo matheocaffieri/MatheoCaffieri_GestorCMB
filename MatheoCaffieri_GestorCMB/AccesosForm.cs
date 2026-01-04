@@ -11,21 +11,27 @@ using System.Text;
 using Services.RoleService;  
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Services.RoleService.Logic;
+using RolesServiceLogic = Services.RoleService.Logic.RolesService;
+using AccesoServiceLogic = Services.RoleService.Logic.AccesoService;
+
+
 
 namespace MatheoCaffieri_GestorCMB
 {
     public partial class AccesosForm : Form
     {
-        private readonly AccesoService _accesoSrv;
-        private readonly RolesService _rolesSrv;
+        private readonly AccesoServiceLogic _accesoSrv;
+        private readonly RolesServiceLogic _rolesSrv;
+
 
         public AccesosForm()
         {
             InitializeComponent();
 
             var cs = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"].ConnectionString;
-            _accesoSrv = new AccesoService(cs);
-            _rolesSrv = new RolesService(cs);
+            _accesoSrv = AccessServicesFactory.CreateAccesoService(cs);
+            _rolesSrv = AccessServicesFactory.CreateRolesService(cs);
         }
 
         private void AccesosForm_Load(object sender, EventArgs e)

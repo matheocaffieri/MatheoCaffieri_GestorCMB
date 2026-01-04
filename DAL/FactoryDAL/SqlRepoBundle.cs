@@ -1,4 +1,4 @@
-﻿using DAL.LoginDAL;
+﻿using DomainModel.LoginDALInterfaces;
 using DomainModel.Interfaces;
 using DomainModel.Login;
 using System;
@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
+using DAL.LoginDAL;
 
 namespace DAL.FactoryDAL
 {
@@ -26,7 +27,7 @@ namespace DAL.FactoryDAL
 
         public SqlRepoBundle(IUnitOfWork uow)
         {
-            Usuarios = new UsuarioRepository(uow); // OK
+            Usuarios = new DAL.LoginDAL.UsuarioRepository(uow);  // OK
             Empleados = new EmpleadoRepository(uow); // Pendiente de implementar
             Inventario = new InventarioRepository(uow);
             Materiales = new MaterialRepository(uow);

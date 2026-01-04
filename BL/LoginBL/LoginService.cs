@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.FactoryDAL;
+using DomainModel.LoginDALInterfaces;
 using DomainModel.Interfaces;    
 
 namespace BL.LoginBL
