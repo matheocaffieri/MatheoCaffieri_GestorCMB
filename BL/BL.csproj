@@ -55,9 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccessBL\AccesoService.cs" />
-    <Compile Include="AccessBL\RolesService.cs" />
-    <Compile Include="AccessBL\UsuarioPermisosService.cs" />
+    <Compile Include="AccessBL\AccessServicesFactory.cs" />
     <Compile Include="ClienteBL.cs" />
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="DetalleEmpleadoBL.cs" />

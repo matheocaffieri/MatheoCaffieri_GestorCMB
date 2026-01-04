@@ -213,8 +213,8 @@ namespace MatheoCaffieri_GestorCMB
             var todos = _rolService.ListarRoles(); // List<RolCompuesto>
             var asignados = new HashSet<Guid>(_rolService.RolesDeUsuario(usuarioId).Select(r => r.IdRol));
 
-            Guid GetId(DomainModel.Login.RolCompuesto r)
-                => (Guid)typeof(DomainModel.Login.RolCompuesto).GetProperty("Id").GetValue(r);
+            Guid GetId(Services.RoleService.RolCompuesto r)
+                => (Guid)typeof(Services.RoleService.RolCompuesto).GetProperty("Id").GetValue(r);
 
             var opciones = todos
                 .Select(r => new RolOption { IdRol = GetId(r), Nombre = r.Nombre })

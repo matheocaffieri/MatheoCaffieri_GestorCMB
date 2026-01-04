@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Interfaces.LoginInterfaces;
 
-namespace DomainModel.Login
+namespace Services.RoleService
 {
     public class RolCompuesto : IPermiso
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DomainModel.Login;
 
-namespace DAL.LoginDAL
+namespace DomainModel.LoginDALInterfaces
 {
     public interface IUsuarioRepository : IGenericRepository<Usuario>
     {

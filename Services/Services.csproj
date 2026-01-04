@@ -77,6 +77,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="RoleService\Logic\AccesoService.cs" />
+    <Compile Include="RoleService\Logic\RolesService.cs" />
+    <Compile Include="RoleService\Logic\UsuarioPermisosService.cs" />
+    <Compile Include="RoleService\RolCompuesto.cs" />
     <Compile Include="Tools\NodoPermRol.cs" />
     <Compile Include="Tools\RolItem.cs" />
   </ItemGroup>
@@ -101,6 +105,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\DomainModel\DomainModel.csproj">
+      <Project>{f44ba8e1-9dd9-4860-907d-c3a82dc7b74e}</Project>
+      <Name>DomainModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj">
       <Project>{bcf0c972-b0c8-47fa-bf8d-0888c565df9d}</Project>
       <Name>Interfaces</Name>

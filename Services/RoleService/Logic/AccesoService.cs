@@ -1,51 +1,34 @@
 ﻿using DomainModel.Login;
-using Interfaces;
 using Interfaces.LoginInterfaces; // IAccesoRepository
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DomainModel.LoginDALInterfaces;
 
-namespace BL.AccessBL
+namespace Services.RoleService.Logic
 {
     public class AccesoService
     {
         private readonly IAccesoRepository _repo;
 
-        // Oculto para UI: inyección directa
-        internal AccesoService(IAccesoRepository repo)
+        public AccesoService(IAccesoRepository repo)
         {
-            if (repo == null) throw new ArgumentNullException(nameof(repo));
-            _repo = repo;
+            _repo = repo ?? throw new ArgumentNullException(nameof(repo));
         }
 
-        // Público para UI: recibe connection string
-        public AccesoService(string connectionString)
-            : this(new DAL.AccessDAL.AccesoRepository(connectionString))
-        { }
-
-        // ----- Operaciones sobre Acceso -----
-
-        public List<Acceso> Listar()
-        {
-            return _repo.GetAll();
-        }
+        public List<Acceso> Listar() => _repo.GetAll();
 
         public Acceso Crear(string nombre, TipoPermiso key)
         {
             if (string.IsNullOrWhiteSpace(nombre))
-                throw new ArgumentException("Nombre requerido.", "nombre");
+                throw new ArgumentException("Nombre requerido.", nameof(nombre));
 
             return _repo.Create(nombre.Trim(), key);
         }
 
-        // Búsqueda simple por DataKey (sin tocar interfaz del repo)
         public Acceso BuscarPorKey(TipoPermiso key)
-        {
-            var todos = _repo.GetAll();
-            return todos.FirstOrDefault(a => a.DataKey == key);
-        }
+            => _repo.GetAll().FirstOrDefault(a => a.DataKey == key);
 
-        // Devuelve el Id del Acceso para un TipoPermiso; si no existe, lo crea
         public Guid GetOrCreateId(TipoPermiso key, string nombreFallback)
         {
             var acc = BuscarPorKey(key);
@@ -57,23 +40,18 @@ namespace BL.AccessBL
 
                 acc = _repo.Create(nombre, key);
             }
-
-            var prop = typeof(Acceso).GetProperty("Id");
-            return (Guid)prop.GetValue(acc, null);
+            return acc.Id;
         }
 
-        // Seed: crea accesos faltantes a partir del enum
         public int SeedDesdeEnum()
         {
             var actuales = _repo.GetAll();
-            var set = new HashSet<string>(
-                actuales.Select(a => a.DataKey.ToString()),
-                StringComparer.OrdinalIgnoreCase);
+            var set = new HashSet<TipoPermiso>(actuales.Select(a => a.DataKey));
 
             var creados = 0;
             foreach (TipoPermiso p in Enum.GetValues(typeof(TipoPermiso)))
             {
-                if (!set.Contains(p.ToString()))
+                if (!set.Contains(p))
                 {
                     _repo.Create(p.ToString().Replace('_', ' '), p);
                     creados++;

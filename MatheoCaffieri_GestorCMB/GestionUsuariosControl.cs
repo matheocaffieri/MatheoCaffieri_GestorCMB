@@ -1,4 +1,4 @@
-﻿using BL.AccessBL;
+﻿using Services.RoleService.Logic;
 using BL.LoginBL;
 using DomainModel.Login;
 using Interfaces.LoginInterfaces;
@@ -45,11 +45,11 @@ namespace MatheoCaffieri_GestorCMB
 
             var cs = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"].ConnectionString;
 
-            // Si preferís usar los servicios que llegan por ctor:
+            
             _rolesSrv = rolesService ?? throw new ArgumentNullException(nameof(rolesService));
             _usuarioSrv = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));
 
-            // Si NECESITÁS además los otros servicios con CS:
+            
             _userPermsSrv = new UsuarioPermisosService(cs);
             _accesoSrv = new AccesoService(cs);
 
@@ -340,9 +340,7 @@ namespace MatheoCaffieri_GestorCMB
             foreach (TreeNode root in treeViewRoles.Nodes) UncheckAll(root);
             _updatingChecks = false;
 
-            // Si querés mostrar "efectivos", usá u.TienePermiso; si preferís solo directos:
-            // var directos = _userPermsSrv.ObtenerDirectos(u.IdUsuario).Select(a => a.DataKey).ToHashSet();
-            // y marcás según ese set.
+            
             foreach (TipoPermiso permiso in Enum.GetValues(typeof(TipoPermiso)))
             {
                 TreeNode node;
@@ -387,7 +385,6 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonAgregarUser_Click(object sender, EventArgs e)
         {
-            // Asumo: textBox1 = Mail, textBox2 = Contraseña, textBox3 = Teléfono (opcional)
             var mail = (textBox1?.Text ?? "").Trim();
             var passPlano = textBox2?.Text ?? "";
             var telStr = (textBox4?.Text ?? "").Trim();
@@ -473,7 +470,7 @@ namespace MatheoCaffieri_GestorCMB
 
             try
             {
-                // Usamos el servicio que ya deberías tener instanciado arriba
+                // Usa el servicio ya instanciado arriba
                 var idRol = _rolesSrv.CrearRol(nombreRol);
 
                 MessageBox.Show($"Rol '{nombreRol}' creado correctamente.\nID: {idRol}",
@@ -481,8 +478,7 @@ namespace MatheoCaffieri_GestorCMB
 
                 textBox3.Clear();
 
-                // Si tenés combo de roles, lo recargás acá
-                // CargarComboRoles();
+                
             }
             catch (Exception ex)
             {
@@ -498,17 +494,15 @@ namespace MatheoCaffieri_GestorCMB
         {
             _treeMode = TreeMode.CategoriasPermisos;
             treeViewRoles.AfterCheck -= treeViewRoles_AfterCheck_Roles;
-            CargarTreeRolesPermisos();               // tu método existente (categorías → permisos)
-                                                // Si CargarTreePermisos NO engancha el handler adentro, entonces:
-                                                // treeViewRoles.AfterCheck -= treeViewRoles_AfterCheck;
-                                                // treeViewRoles.AfterCheck += treeViewRoles_AfterCheck;
+            CargarTreeRolesPermisos();               
+
         }
 
         private void MostrarVistaRoles()
         {
             _treeMode = TreeMode.RolesPermisos;
             treeViewRoles.AfterCheck -= treeViewRoles_AfterCheck;
-            CargarTreeRolesPermisos();          // tu método de roles → permisos
+            CargarTreeRolesPermisos();         
             treeViewRoles.AfterCheck -= treeViewRoles_AfterCheck_Roles;
             treeViewRoles.AfterCheck += treeViewRoles_AfterCheck_Roles;
         }
