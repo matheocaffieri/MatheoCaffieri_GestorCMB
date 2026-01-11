@@ -18,6 +18,8 @@ namespace MatheoCaffieri_GestorCMB
             InitializeComponent();
         }
 
+        private readonly MainForm _mainForm;
+
         private void ObtenerInformesItems()
         {
             InformeCompraItemControl[] informeCompraItemControls = new InformeCompraItemControl[5];
@@ -40,6 +42,19 @@ namespace MatheoCaffieri_GestorCMB
         private void InformesDeCompraControl_Load(object sender, EventArgs e)
         {
             ObtenerInformesItems();
+        }
+
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
+            var host = _mainForm ?? (this.FindForm() as MainForm);
+            if (host == null)
+            {
+                MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            host.addUserControl(new VerInventarioControl());
         }
     }
 }

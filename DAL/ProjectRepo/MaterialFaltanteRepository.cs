@@ -74,6 +74,39 @@ namespace DAL.ProjectRepo
                        .ToList();
         }
 
+        public void AddOrUpdate(Guid idProyecto, string descripcion, string tipoMaterial, string tipoUnidad, int cantidad)
+        {
+            if (cantidad <= 0) return;
+
+            var row = _set.FirstOrDefault(x =>
+                x.idProyecto == idProyecto &&
+                x.descripcionArticuloFaltante == descripcion &&
+                x.tipoMaterialFaltante == tipoMaterial &&
+                x.tipoUnidadMaterialFaltante == tipoUnidad
+            );
+
+            if (row == null)
+            {
+                var nuevo = new MaterialFaltanteEf
+                {
+                    idMaterialFaltante = Guid.NewGuid(),
+                    idProyecto = idProyecto,
+                    descripcionArticuloFaltante = descripcion,
+                    tipoMaterialFaltante = tipoMaterial,
+                    tipoUnidadMaterialFaltante = tipoUnidad,
+                    cantidadFaltante = cantidad
+                };
+                _set.Add(nuevo);
+            }
+            else
+            {
+                row.cantidadFaltante += cantidad;
+                _context.Entry(row).State = EntityState.Modified;
+            }
+
+            _context.SaveChanges();
+        }
+
         // Si más adelante querés CRUD, mantené el mapeo simple:
         // private static void MapToEf(MaterialFaltante src, MaterialFaltanteEf dst) { ... }
         // y aplicá _context.Entry(...).State = EntityState.Modified para updates.

@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -127,20 +129,58 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonArchivo_Click(object sender, EventArgs e)
         {
-            // Ruta configurable en App.config (ej. <add key="LogFilePath" value="C:\Logs\app.log" />)
-            var path = System.Configuration.ConfigurationManager.AppSettings["LogFilePath"];
-            if (string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
+            // 1) Tomar carpeta de logs desde App.config
+            var dirSetting = ConfigurationManager.AppSettings["LogDirectory"];
+            var dir = string.IsNullOrWhiteSpace(dirSetting) ? "logs" : Environment.ExpandEnvironmentVariables(dirSetting);
+
+            // Si es relativa, la hacemos relativa al EXE
+            if (!Path.IsPathRooted(dir))
+                dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir);
+
+            // 2) Si no existe, avisar
+            if (!Directory.Exists(dir))
             {
-                MessageBox.Show("No se encontró el archivo de logs configurado.", "Logs", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    $"No existe el directorio de logs:\n{dir}\n\nConfiguralo en App.config (LogDirectory).",
+                    "Logs",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
                 return;
             }
 
-            var psi = new ProcessStartInfo
+            // 3) Buscar el archivo .log más reciente
+            var last = Directory.GetFiles(dir, "*.log")
+                .Select(f => new FileInfo(f))
+                .OrderByDescending(f => f.LastWriteTime)
+                .FirstOrDefault();
+
+            // 4) Si no hay logs, abrir igual la carpeta
+            if (last == null)
             {
-                FileName = path,
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "explorer.exe",
+                    Arguments = $"\"{dir}\"",
+                    UseShellExecute = true
+                });
+
+                MessageBox.Show(
+                    $"No se encontraron archivos .log en:\n{dir}\n\nSe abrió la carpeta igualmente.",
+                    "Logs",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                return;
+            }
+
+            // 5) Abrir el explorador seleccionando el archivo
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "explorer.exe",
+                Arguments = $"/select,\"{last.FullName}\"",
                 UseShellExecute = true
-            };
-            Process.Start(psi);
+            });
         }
 
         private void VerLogsForm_Load(object sender, EventArgs e)

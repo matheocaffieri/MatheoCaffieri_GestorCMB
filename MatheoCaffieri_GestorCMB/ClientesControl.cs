@@ -35,15 +35,18 @@ namespace MatheoCaffieri_GestorCMB
 
         private void WireEvents()
         {
-            this.Load += ClientesControl_Load;
+            // NO enganchar Load ni TextChanged acá: ya están en el Designer
 
-            // Ajustá estos nombres a los de tu diseñador
+            if (buttonSearchClientes != null)
+                buttonSearchClientes.Click += buttonSearchClientes_Click;
+
             if (textBoxBuscar != null)
-                textBoxBuscar.TextChanged += textBoxBuscar_TextChanged;
+                textBoxBuscar.KeyDown += textBoxBuscar_KeyDown;
 
             if (buttonAddCliente != null)
                 buttonAddCliente.Click += buttonAddCliente_Click;
         }
+
 
 
         private void ObtenerClientesItems()
@@ -183,6 +186,26 @@ namespace MatheoCaffieri_GestorCMB
         private void textBoxBuscar_TextChanged(object sender, EventArgs e)
         {
             CargarListado(textBoxBuscar.Text);
+
+        }
+
+        private void buttonSearchClientes_Click(object sender, EventArgs e)
+        {
+            CargarListado(textBoxBuscar.Text);
+
+        }
+
+        private void textBoxBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                CargarListado(textBoxBuscar.Text);
+            }
+        }
+
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
 
         }
     }

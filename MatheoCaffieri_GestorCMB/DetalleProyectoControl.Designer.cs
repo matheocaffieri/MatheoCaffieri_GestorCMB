@@ -75,19 +75,19 @@
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.flowLayoutPanelMatFal);
-            this.panel1.Location = new System.Drawing.Point(32, 112);
+            this.panel1.Location = new System.Drawing.Point(24, 91);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1002, 326);
+            this.panel1.Size = new System.Drawing.Size(752, 265);
             this.panel1.TabIndex = 0;
             // 
             // labelUtilidadEmpresa
             // 
             this.labelUtilidadEmpresa.AutoSize = true;
             this.labelUtilidadEmpresa.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUtilidadEmpresa.Location = new System.Drawing.Point(740, 253);
-            this.labelUtilidadEmpresa.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelUtilidadEmpresa.Location = new System.Drawing.Point(555, 206);
             this.labelUtilidadEmpresa.Name = "labelUtilidadEmpresa";
-            this.labelUtilidadEmpresa.Size = new System.Drawing.Size(108, 27);
+            this.labelUtilidadEmpresa.Size = new System.Drawing.Size(82, 21);
             this.labelUtilidadEmpresa.TabIndex = 66;
             this.labelUtilidadEmpresa.Text = "$1000000";
             // 
@@ -95,10 +95,9 @@
             // 
             this.labelTotalMateriales.AutoSize = true;
             this.labelTotalMateriales.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTotalMateriales.Location = new System.Drawing.Point(279, 290);
-            this.labelTotalMateriales.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelTotalMateriales.Location = new System.Drawing.Point(209, 236);
             this.labelTotalMateriales.Name = "labelTotalMateriales";
-            this.labelTotalMateriales.Size = new System.Drawing.Size(108, 27);
+            this.labelTotalMateriales.Size = new System.Drawing.Size(82, 21);
             this.labelTotalMateriales.TabIndex = 65;
             this.labelTotalMateriales.Text = "$1000000";
             // 
@@ -106,10 +105,9 @@
             // 
             this.labelTotalEmpleados.AutoSize = true;
             this.labelTotalEmpleados.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTotalEmpleados.Location = new System.Drawing.Point(279, 253);
-            this.labelTotalEmpleados.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelTotalEmpleados.Location = new System.Drawing.Point(209, 206);
             this.labelTotalEmpleados.Name = "labelTotalEmpleados";
-            this.labelTotalEmpleados.Size = new System.Drawing.Size(108, 27);
+            this.labelTotalEmpleados.Size = new System.Drawing.Size(82, 21);
             this.labelTotalEmpleados.TabIndex = 64;
             this.labelTotalEmpleados.Text = "$1000000";
             // 
@@ -117,10 +115,9 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(503, 253);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Location = new System.Drawing.Point(377, 206);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(231, 27);
+            this.label6.Size = new System.Drawing.Size(185, 21);
             this.label6.TabIndex = 63;
             this.label6.Text = "Utilidad de la empresa:";
             // 
@@ -128,10 +125,9 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(96, 290);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(72, 236);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(167, 27);
+            this.label5.Size = new System.Drawing.Size(135, 21);
             this.label5.TabIndex = 62;
             this.label5.Text = "Total materiales:";
             // 
@@ -139,47 +135,51 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(96, 253);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(72, 206);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(175, 27);
+            this.label4.Size = new System.Drawing.Size(140, 21);
             this.label4.TabIndex = 42;
             this.label4.Text = "Total empleados:";
             // 
             // flowLayoutPanelMat
             // 
             this.flowLayoutPanelMat.AutoScroll = true;
-            this.flowLayoutPanelMat.Location = new System.Drawing.Point(508, 19);
+            this.flowLayoutPanelMat.Location = new System.Drawing.Point(381, 15);
+            this.flowLayoutPanelMat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.flowLayoutPanelMat.Name = "flowLayoutPanelMat";
-            this.flowLayoutPanelMat.Size = new System.Drawing.Size(393, 182);
+            this.flowLayoutPanelMat.Size = new System.Drawing.Size(295, 148);
             this.flowLayoutPanelMat.TabIndex = 61;
             // 
             // flowLayoutPanelEmp
             // 
             this.flowLayoutPanelEmp.AutoScroll = true;
-            this.flowLayoutPanelEmp.Location = new System.Drawing.Point(101, 19);
+            this.flowLayoutPanelEmp.Location = new System.Drawing.Point(76, 15);
+            this.flowLayoutPanelEmp.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.flowLayoutPanelEmp.Name = "flowLayoutPanelEmp";
-            this.flowLayoutPanelEmp.Size = new System.Drawing.Size(393, 182);
+            this.flowLayoutPanelEmp.Size = new System.Drawing.Size(295, 148);
             this.flowLayoutPanelEmp.TabIndex = 60;
             // 
             // linkLabelAgregarMat
             // 
             this.linkLabelAgregarMat.AutoSize = true;
             this.linkLabelAgregarMat.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelAgregarMat.Location = new System.Drawing.Point(713, 204);
+            this.linkLabelAgregarMat.Location = new System.Drawing.Point(515, 166);
+            this.linkLabelAgregarMat.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabelAgregarMat.Name = "linkLabelAgregarMat";
-            this.linkLabelAgregarMat.Size = new System.Drawing.Size(188, 20);
+            this.linkLabelAgregarMat.Size = new System.Drawing.Size(158, 17);
             this.linkLabelAgregarMat.TabIndex = 59;
             this.linkLabelAgregarMat.TabStop = true;
             this.linkLabelAgregarMat.Text = "Agregar más materiales";
+            this.linkLabelAgregarMat.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelAgregarMat_LinkClicked);
             // 
             // linkLabelAgregarEmp
             // 
             this.linkLabelAgregarEmp.AutoSize = true;
             this.linkLabelAgregarEmp.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelAgregarEmp.Location = new System.Drawing.Point(97, 204);
+            this.linkLabelAgregarEmp.Location = new System.Drawing.Point(79, 166);
+            this.linkLabelAgregarEmp.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabelAgregarEmp.Name = "linkLabelAgregarEmp";
-            this.linkLabelAgregarEmp.Size = new System.Drawing.Size(191, 20);
+            this.linkLabelAgregarEmp.Size = new System.Drawing.Size(162, 17);
             this.linkLabelAgregarEmp.TabIndex = 58;
             this.linkLabelAgregarEmp.TabStop = true;
             this.linkLabelAgregarEmp.Text = "Agregar más empleados";
@@ -187,46 +187,47 @@
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.panel3.Location = new System.Drawing.Point(101, 237);
+            this.panel3.Location = new System.Drawing.Point(76, 193);
+            this.panel3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(800, 2);
+            this.panel3.Size = new System.Drawing.Size(600, 2);
             this.panel3.TabIndex = 57;
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.panel2.Location = new System.Drawing.Point(500, 19);
+            this.panel2.Location = new System.Drawing.Point(375, 15);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(2, 220);
+            this.panel2.Size = new System.Drawing.Size(2, 179);
             this.panel2.TabIndex = 56;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft YaHei UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(509, 117);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Location = new System.Drawing.Point(382, 95);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(144, 20);
+            this.label7.Size = new System.Drawing.Size(112, 16);
             this.label7.TabIndex = 67;
             this.label7.Text = "Materiales faltantes:";
             // 
             // flowLayoutPanelMatFal
             // 
             this.flowLayoutPanelMatFal.AutoScroll = true;
-            this.flowLayoutPanelMatFal.Location = new System.Drawing.Point(508, 140);
+            this.flowLayoutPanelMatFal.Location = new System.Drawing.Point(381, 114);
+            this.flowLayoutPanelMatFal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.flowLayoutPanelMatFal.Name = "flowLayoutPanelMatFal";
-            this.flowLayoutPanelMatFal.Size = new System.Drawing.Size(393, 57);
+            this.flowLayoutPanelMatFal.Size = new System.Drawing.Size(295, 46);
             this.flowLayoutPanelMatFal.TabIndex = 62;
             // 
             // labelNumProyecto
             // 
             this.labelNumProyecto.AutoSize = true;
             this.labelNumProyecto.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNumProyecto.Location = new System.Drawing.Point(25, 20);
-            this.labelNumProyecto.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelNumProyecto.Location = new System.Drawing.Point(19, 16);
             this.labelNumProyecto.Name = "labelNumProyecto";
-            this.labelNumProyecto.Size = new System.Drawing.Size(195, 39);
+            this.labelNumProyecto.Size = new System.Drawing.Size(158, 31);
             this.labelNumProyecto.TabIndex = 30;
             this.labelNumProyecto.Text = "Proyecto #N";
             // 
@@ -235,10 +236,9 @@
             this.labelDescProyecto.AutoSize = true;
             this.labelDescProyecto.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDescProyecto.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.labelDescProyecto.Location = new System.Drawing.Point(228, 20);
-            this.labelDescProyecto.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelDescProyecto.Location = new System.Drawing.Point(171, 16);
             this.labelDescProyecto.Name = "labelDescProyecto";
-            this.labelDescProyecto.Size = new System.Drawing.Size(184, 39);
+            this.labelDescProyecto.Size = new System.Drawing.Size(147, 31);
             this.labelDescProyecto.TabIndex = 31;
             this.labelDescProyecto.Text = "Descripcion";
             // 
@@ -246,10 +246,9 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(36, 72);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(27, 58);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(81, 27);
+            this.label2.Size = new System.Drawing.Size(67, 21);
             this.label2.TabIndex = 32;
             this.label2.Text = "Cliente:";
             // 
@@ -257,10 +256,9 @@
             // 
             this.labelNomCliente.AutoSize = true;
             this.labelNomCliente.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNomCliente.Location = new System.Drawing.Point(125, 72);
-            this.labelNomCliente.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelNomCliente.Location = new System.Drawing.Point(94, 58);
             this.labelNomCliente.Name = "labelNomCliente";
-            this.labelNomCliente.Size = new System.Drawing.Size(162, 27);
+            this.labelNomCliente.Size = new System.Drawing.Size(131, 21);
             this.labelNomCliente.TabIndex = 33;
             this.labelNomCliente.Text = "Nombre Cliente";
             // 
@@ -268,10 +266,9 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(345, 72);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(259, 58);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(111, 27);
+            this.label1.Size = new System.Drawing.Size(89, 21);
             this.label1.TabIndex = 34;
             this.label1.Text = "Ubicación:";
             // 
@@ -279,27 +276,28 @@
             // 
             this.labelUbiProyecto.AutoSize = true;
             this.labelUbiProyecto.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUbiProyecto.Location = new System.Drawing.Point(464, 72);
-            this.labelUbiProyecto.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelUbiProyecto.Location = new System.Drawing.Point(348, 58);
             this.labelUbiProyecto.Name = "labelUbiProyecto";
-            this.labelUbiProyecto.Size = new System.Drawing.Size(204, 27);
+            this.labelUbiProyecto.Size = new System.Drawing.Size(162, 21);
             this.labelUbiProyecto.TabIndex = 35;
             this.labelUbiProyecto.Text = "Dirección falsa 1234";
             // 
             // buttonModificar
             // 
-            this.buttonModificar.Location = new System.Drawing.Point(687, 72);
+            this.buttonModificar.Location = new System.Drawing.Point(515, 58);
+            this.buttonModificar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonModificar.Name = "buttonModificar";
-            this.buttonModificar.Size = new System.Drawing.Size(144, 27);
+            this.buttonModificar.Size = new System.Drawing.Size(108, 22);
             this.buttonModificar.TabIndex = 36;
             this.buttonModificar.Text = "Modificar";
             this.buttonModificar.UseVisualStyleBackColor = true;
             // 
             // buttonGenerarInforme
             // 
-            this.buttonGenerarInforme.Location = new System.Drawing.Point(853, 72);
+            this.buttonGenerarInforme.Location = new System.Drawing.Point(640, 58);
+            this.buttonGenerarInforme.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonGenerarInforme.Name = "buttonGenerarInforme";
-            this.buttonGenerarInforme.Size = new System.Drawing.Size(197, 27);
+            this.buttonGenerarInforme.Size = new System.Drawing.Size(148, 22);
             this.buttonGenerarInforme.TabIndex = 37;
             this.buttonGenerarInforme.Text = "Generar informe de compra";
             this.buttonGenerarInforme.UseVisualStyleBackColor = true;
@@ -308,10 +306,9 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft YaHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(694, 9);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(520, 7);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(137, 23);
+            this.label3.Size = new System.Drawing.Size(113, 20);
             this.label3.TabIndex = 38;
             this.label3.Text = "Fecha de inicio:";
             // 
@@ -319,10 +316,9 @@
             // 
             this.labelE.AutoSize = true;
             this.labelE.Font = new System.Drawing.Font("Microsoft YaHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelE.Location = new System.Drawing.Point(694, 36);
-            this.labelE.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelE.Location = new System.Drawing.Point(520, 29);
             this.labelE.Name = "labelE";
-            this.labelE.Size = new System.Drawing.Size(68, 23);
+            this.labelE.Size = new System.Drawing.Size(57, 20);
             this.labelE.TabIndex = 39;
             this.labelE.Text = "Estado:";
             // 
@@ -330,10 +326,9 @@
             // 
             this.labelEstado.AutoSize = true;
             this.labelEstado.Font = new System.Drawing.Font("Microsoft YaHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelEstado.Location = new System.Drawing.Point(763, 36);
-            this.labelEstado.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelEstado.Location = new System.Drawing.Point(572, 29);
             this.labelEstado.Name = "labelEstado";
-            this.labelEstado.Size = new System.Drawing.Size(117, 23);
+            this.labelEstado.Size = new System.Drawing.Size(97, 20);
             this.labelEstado.TabIndex = 40;
             this.labelEstado.Text = "EN PROCESO";
             // 
@@ -341,16 +336,15 @@
             // 
             this.labelFechaInicio.AutoSize = true;
             this.labelFechaInicio.Font = new System.Drawing.Font("Microsoft YaHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFechaInicio.Location = new System.Drawing.Point(839, 9);
-            this.labelFechaInicio.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelFechaInicio.Location = new System.Drawing.Point(629, 7);
             this.labelFechaInicio.Name = "labelFechaInicio";
-            this.labelFechaInicio.Size = new System.Drawing.Size(104, 23);
+            this.labelFechaInicio.Size = new System.Drawing.Size(85, 20);
             this.labelFechaInicio.TabIndex = 41;
             this.labelFechaInicio.Text = "01/01/2025";
             // 
             // DetalleProyectoControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.labelFechaInicio);
             this.Controls.Add(this.labelEstado);
@@ -365,8 +359,9 @@
             this.Controls.Add(this.labelDescProyecto);
             this.Controls.Add(this.labelNumProyecto);
             this.Controls.Add(this.panel1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "DetalleProyectoControl";
-            this.Size = new System.Drawing.Size(1067, 441);
+            this.Size = new System.Drawing.Size(800, 358);
             this.Load += new System.EventHandler(this.DetalleProyectoControl_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

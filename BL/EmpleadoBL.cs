@@ -20,15 +20,23 @@ namespace BL
             empleadoRepository = new EmpleadoRepository(uow);
         }
 
-        
+
 
         public void Add(DomainModel.Empleado entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            if (entity.IdEmpleado == Guid.Empty)
+                entity.IdEmpleado = Guid.NewGuid();
+
+            // opcional si tu DB espera true por defecto
+            // entity.IsActive = true;
+
             empleadoRepository.Add(entity);
         }
 
-       
+
+
 
         public void Delete(DomainModel.Empleado entity)
         {

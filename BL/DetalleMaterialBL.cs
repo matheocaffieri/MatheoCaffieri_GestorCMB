@@ -21,9 +21,17 @@ namespace BL
             detalleMaterialRepository = new DetalleMaterialesRepository(uow);
         }
 
+        public void AddOrUpdate(Guid idProyecto, Guid idMaterial, int cantidad, double valorGanancia, DateTime fechaIngreso)
+        {
+            detalleMaterialRepository.AddOrUpdate(idProyecto, idMaterial, cantidad, valorGanancia, fechaIngreso);
+        }
+
         public List<DetalleProyectoMaterial> GetAll(Guid idProyecto)
         {
             return detalleMaterialRepository.GetAll(idProyecto);
         }
+
+
+        
     }
 }

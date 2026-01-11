@@ -22,6 +22,11 @@ namespace BL
             materialesFaltantesRepository = new MaterialFaltanteRepository(uow);
         }
 
+        public void AddOrUpdate(Guid idProyecto, string descripcion, string tipoMaterial, string tipoUnidad, int cantidad)
+        {
+            materialesFaltantesRepository.AddOrUpdate(idProyecto, descripcion, tipoMaterial, tipoUnidad, cantidad);
+        }
+
         public List<MaterialFaltante> GetAll(Guid idProyecto)
         {
             return materialesFaltantesRepository.GetAll(idProyecto);

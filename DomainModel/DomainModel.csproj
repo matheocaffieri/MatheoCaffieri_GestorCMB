@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\AsignacionMaterialResult.cs" />
     <Compile Include="Entities\Cliente.cs" />
     <Compile Include="Entities\DetalleInformeMaterialFaltante.cs" />
     <Compile Include="Entities\DetalleProyectoEmpleado.cs" />

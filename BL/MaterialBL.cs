@@ -53,41 +53,24 @@ namespace BL
 
         public void Add(Material entity)
         {
-            // Validaciones de negocio
             Validate(entity);
 
-            try
+            if (entity.IdMaterial == Guid.Empty)
+                entity.IdMaterial = Guid.NewGuid();
+
+            if (entity.IdProveedor == Guid.Empty)
+                throw new ArgumentException("Debés seleccionar un proveedor.");
+
+            _materialRepository.Add(entity);
+
+            var inventario = new Inventario
             {
-                // Si no viene el Id, lo genero acá
-                if (entity.IdMaterial == Guid.Empty)
-                    entity.IdMaterial = Guid.NewGuid();
+                IdMaterialInventario = Guid.NewGuid(),
+                IdMaterial = entity.IdMaterial,
+                Cantidad = 0
+            };
 
-                // 1) Guardar el material
-                _materialRepository.Add(entity);
-
-                LoggerLogic.Info(
-                    $"[MaterialBL] Nuevo material agregado: {entity.DescripcionArticulo} ({entity.IdMaterial})");
-
-                // 2) Crear inventario inicial en 0 para ese material
-                var inventario = new Inventario
-                {
-                    IdMaterial = entity.IdMaterial,
-                    Cantidad = 0
-                    // IdMaterialInventario = Guid.NewGuid();  // si tu modelo lo requiere
-                };
-
-                _inventarioDAL.Add(inventario);
-
-                LoggerLogic.Info(
-                    $"[MaterialBL] Inventario inicial creado (Cantidad=0) para material {entity.DescripcionArticulo} ({entity.IdMaterial})");
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error(
-                    $"[MaterialBL] Error al agregar material e inventario ({entity?.DescripcionArticulo ?? "desconocido"})",
-                    ex);
-                throw;
-            }
+            _inventarioDAL.Add(inventario);
         }
 
 

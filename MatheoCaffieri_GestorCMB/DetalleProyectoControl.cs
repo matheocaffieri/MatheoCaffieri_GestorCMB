@@ -180,5 +180,17 @@ namespace MatheoCaffieri_GestorCMB
 
 
         }
+
+        private void linkLabelAgregarMat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // suponiendo que tenés el proyecto cargado en una variable/campo
+            // ejemplo: _proyecto.IdProyecto
+            var frm = new AgregarMaterialProyectoForm(_proyecto.IdProyecto);
+            frm.ShowDialog();
+
+            // al volver, refrescás el detalle del proyecto (materiales + faltantes)
+            ObtenerDetallesMaterialesItems(_proyecto.IdProyecto);
+            ObtenerMaterialFaltanteItems(_proyecto.IdProyecto);
+        }
     }
 }

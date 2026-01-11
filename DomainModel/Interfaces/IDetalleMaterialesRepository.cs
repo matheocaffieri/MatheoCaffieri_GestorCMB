@@ -8,5 +8,6 @@ namespace DomainModel.Interfaces
 {
     public interface IDetalleMaterialesRepository : IDetalleGeneric<DetalleProyectoMaterial>
     {
+        void AddOrUpdate(Guid idProyecto, Guid idMaterial, int cantidad, double valorGanancia, DateTime fechaIngreso);
     }
 }

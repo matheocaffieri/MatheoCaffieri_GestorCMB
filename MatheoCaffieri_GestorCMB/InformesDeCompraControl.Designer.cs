@@ -37,18 +37,21 @@
             // 
             // buttonBack
             // 
-            this.buttonBack.Location = new System.Drawing.Point(29, 26);
+            this.buttonBack.Location = new System.Drawing.Point(22, 21);
+            this.buttonBack.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonBack.Name = "buttonBack";
-            this.buttonBack.Size = new System.Drawing.Size(48, 42);
+            this.buttonBack.Size = new System.Drawing.Size(36, 34);
             this.buttonBack.TabIndex = 37;
             this.buttonBack.Text = "Back";
             this.buttonBack.UseVisualStyleBackColor = true;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // buttonSearchClientes
             // 
-            this.buttonSearchClientes.Location = new System.Drawing.Point(967, 31);
+            this.buttonSearchClientes.Location = new System.Drawing.Point(725, 25);
+            this.buttonSearchClientes.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonSearchClientes.Name = "buttonSearchClientes";
-            this.buttonSearchClientes.Size = new System.Drawing.Size(70, 42);
+            this.buttonSearchClientes.Size = new System.Drawing.Size(52, 34);
             this.buttonSearchClientes.TabIndex = 36;
             this.buttonSearchClientes.Text = "Search";
             this.buttonSearchClientes.UseVisualStyleBackColor = true;
@@ -56,33 +59,34 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(409, 34);
+            this.textBox1.Location = new System.Drawing.Point(307, 28);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(540, 30);
+            this.textBox1.Size = new System.Drawing.Size(406, 26);
             this.textBox1.TabIndex = 35;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(84, 26);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(63, 21);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(306, 39);
+            this.label2.Size = new System.Drawing.Size(244, 31);
             this.label2.TabIndex = 34;
             this.label2.Text = "Informes de compra";
             // 
             // informeLayoutPanel
             // 
             this.informeLayoutPanel.AutoScroll = true;
-            this.informeLayoutPanel.Location = new System.Drawing.Point(91, 100);
+            this.informeLayoutPanel.Location = new System.Drawing.Point(68, 81);
+            this.informeLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.informeLayoutPanel.Name = "informeLayoutPanel";
-            this.informeLayoutPanel.Size = new System.Drawing.Size(973, 338);
+            this.informeLayoutPanel.Size = new System.Drawing.Size(730, 275);
             this.informeLayoutPanel.TabIndex = 39;
             // 
             // InformesDeCompraControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.Controls.Add(this.informeLayoutPanel);
@@ -90,8 +94,9 @@
             this.Controls.Add(this.buttonSearchClientes);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "InformesDeCompraControl";
-            this.Size = new System.Drawing.Size(1067, 441);
+            this.Size = new System.Drawing.Size(800, 358);
             this.Load += new System.EventHandler(this.InformesDeCompraControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

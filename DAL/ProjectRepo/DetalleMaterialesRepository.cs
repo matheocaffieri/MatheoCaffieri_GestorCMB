@@ -78,5 +78,36 @@ namespace DAL.ProjectRepo
                        .Select(ToDomainExpr)
                        .ToList();
         }
+
+        public void AddOrUpdate(Guid idProyecto, Guid idMaterial, int cantidad, double valorGanancia, DateTime fechaIngreso)
+        {
+            if (cantidad <= 0) return;
+
+            var row = _set.FirstOrDefault(d => d.idProyecto == idProyecto && d.idMaterial == idMaterial);
+
+            if (row == null)
+            {
+                var nuevo = new DetMatEf
+                {
+                    idDetalleMaterial = Guid.NewGuid(),
+                    idProyecto = idProyecto,
+                    idMaterial = idMaterial,
+                    cantidad = cantidad,
+                    valorGanancia = valorGanancia,
+                    fechaIngresoMaterial = fechaIngreso
+                };
+
+                _set.Add(nuevo);
+            }
+            else
+            {
+                row.cantidad += cantidad;
+                row.valorGanancia = valorGanancia;          // si querés mantener el último valor
+                row.fechaIngresoMaterial = fechaIngreso;    // idem
+                _context.Entry(row).State = EntityState.Modified;
+            }
+
+            _context.SaveChanges();
+        }
     }
 }
