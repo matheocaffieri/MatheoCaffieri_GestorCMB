@@ -76,7 +76,7 @@
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.flowLayoutPanelMatFal);
             this.panel1.Location = new System.Drawing.Point(24, 91);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(752, 265);
             this.panel1.TabIndex = 0;
@@ -145,7 +145,7 @@
             // 
             this.flowLayoutPanelMat.AutoScroll = true;
             this.flowLayoutPanelMat.Location = new System.Drawing.Point(381, 15);
-            this.flowLayoutPanelMat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flowLayoutPanelMat.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanelMat.Name = "flowLayoutPanelMat";
             this.flowLayoutPanelMat.Size = new System.Drawing.Size(295, 148);
             this.flowLayoutPanelMat.TabIndex = 61;
@@ -154,7 +154,7 @@
             // 
             this.flowLayoutPanelEmp.AutoScroll = true;
             this.flowLayoutPanelEmp.Location = new System.Drawing.Point(76, 15);
-            this.flowLayoutPanelEmp.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flowLayoutPanelEmp.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanelEmp.Name = "flowLayoutPanelEmp";
             this.flowLayoutPanelEmp.Size = new System.Drawing.Size(295, 148);
             this.flowLayoutPanelEmp.TabIndex = 60;
@@ -183,12 +183,13 @@
             this.linkLabelAgregarEmp.TabIndex = 58;
             this.linkLabelAgregarEmp.TabStop = true;
             this.linkLabelAgregarEmp.Text = "Agregar más empleados";
+            this.linkLabelAgregarEmp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelAgregarEmp_LinkClicked);
             // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel3.Location = new System.Drawing.Point(76, 193);
-            this.panel3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel3.Margin = new System.Windows.Forms.Padding(2);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(600, 2);
             this.panel3.TabIndex = 57;
@@ -197,7 +198,7 @@
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel2.Location = new System.Drawing.Point(375, 15);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(2, 179);
             this.panel2.TabIndex = 56;
@@ -216,7 +217,7 @@
             // 
             this.flowLayoutPanelMatFal.AutoScroll = true;
             this.flowLayoutPanelMatFal.Location = new System.Drawing.Point(381, 114);
-            this.flowLayoutPanelMatFal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flowLayoutPanelMatFal.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanelMatFal.Name = "flowLayoutPanelMatFal";
             this.flowLayoutPanelMatFal.Size = new System.Drawing.Size(295, 46);
             this.flowLayoutPanelMatFal.TabIndex = 62;
@@ -285,7 +286,7 @@
             // buttonModificar
             // 
             this.buttonModificar.Location = new System.Drawing.Point(515, 58);
-            this.buttonModificar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonModificar.Margin = new System.Windows.Forms.Padding(2);
             this.buttonModificar.Name = "buttonModificar";
             this.buttonModificar.Size = new System.Drawing.Size(108, 22);
             this.buttonModificar.TabIndex = 36;
@@ -295,7 +296,7 @@
             // buttonGenerarInforme
             // 
             this.buttonGenerarInforme.Location = new System.Drawing.Point(640, 58);
-            this.buttonGenerarInforme.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonGenerarInforme.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGenerarInforme.Name = "buttonGenerarInforme";
             this.buttonGenerarInforme.Size = new System.Drawing.Size(148, 22);
             this.buttonGenerarInforme.TabIndex = 37;
@@ -359,7 +360,7 @@
             this.Controls.Add(this.labelDescProyecto);
             this.Controls.Add(this.labelNumProyecto);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "DetalleProyectoControl";
             this.Size = new System.Drawing.Size(800, 358);
             this.Load += new System.EventHandler(this.DetalleProyectoControl_Load);

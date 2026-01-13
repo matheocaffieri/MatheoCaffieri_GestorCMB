@@ -8,13 +8,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using DAL.FactoryDAL;
-
 using DomainModel;
 using DomainModel.Interfaces;
 
-// Aliases EF (ajustá namespaces si difieren)
+// EF aliases
 using DetEmpEf = DAL.Detalle_proyecto_empleado;
-using EmpEf = DAL.Empleado;
 
 namespace DAL.ProjectRepo
 {
@@ -24,7 +22,6 @@ namespace DAL.ProjectRepo
         private readonly GestorCMBEntities _context;
         private readonly DbSet<DetEmpEf> _set;
 
-        // Proyección EF -> Dominio (100% traducible a SQL)
         private static readonly Expression<Func<DetEmpEf, DomainModel.DetalleProyectoEmpleado>> ToDomainExpr =
             d => new DomainModel.DetalleProyectoEmpleado
             {
@@ -54,7 +51,6 @@ namespace DAL.ProjectRepo
             var sqlUow = (DAL.FactoryDAL.SqlUnitOfWork)uow;
             var sqlConn = (SqlConnection)sqlUow.Connection;
 
-            // Contexto temporal para obtener MetadataWorkspace
             using (var tmp = new GestorCMBEntities(
                        new EntityConnection("name=GestorCMBEntities"),
                        contextOwnsConnection: true))
@@ -64,20 +60,81 @@ namespace DAL.ProjectRepo
                 _context = new GestorCMBEntities(econn, contextOwnsConnection: false);
             }
 
-            // Compartir transacción si existe
             if (sqlUow.Transaction != null)
                 _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
 
             _set = _context.Set<DetEmpEf>();
         }
 
-        public List<DomainModel.DetalleProyectoEmpleado> GetAll(Guid idProyecto)
+        public List<DetalleProyectoEmpleado> GetAll(Guid idProyecto)
         {
-            // No hace falta Include cuando proyectás: EF genera el JOIN por los accesos a d.Empleado.*
             return _set.AsNoTracking()
                        .Where(d => d.idProyecto == idProyecto)
                        .Select(ToDomainExpr)
                        .ToList();
+        }
+
+        public bool Exists(Guid idProyecto, Guid idEmpleado)
+        {
+            return _set.AsNoTracking()
+                       .Any(d => d.idProyecto == idProyecto && d.idEmpleado == idEmpleado && d.estado == "1");
+            // si querés considerar también inactivos como “ya existe”, sacá el && d.estado == "1"
+        }
+
+        public void Add(DetalleProyectoEmpleado detalle, string estado = "1")
+        {
+            if (detalle == null) throw new ArgumentNullException(nameof(detalle));
+
+            var nuevo = new DetEmpEf
+            {
+                idDetalleEmpleado = detalle.IdDetalleProyectoEmpleado == Guid.Empty ? Guid.NewGuid() : detalle.IdDetalleProyectoEmpleado,
+                idProyecto = detalle.IdProyecto,
+                idEmpleado = detalle.IdEmpleado,
+                fechaIngresoEmpleado = detalle.FechaIngresoEmpleado == default(DateTime) ? DateTime.Now : detalle.FechaIngresoEmpleado,
+                valorGanancia = detalle.ValorGanancia,
+                estado = string.IsNullOrWhiteSpace(estado) ? "1" : estado
+            };
+
+            _set.Add(nuevo);
+            _context.SaveChanges();
+
+            detalle.IdDetalleProyectoEmpleado = nuevo.idDetalleEmpleado;
+        }
+
+        public DetalleProyectoEmpleado GetByProyectoEmpleado(Guid idProyecto, Guid idEmpleado)
+        {
+            return _set.AsNoTracking()
+                       .Where(d => d.idProyecto == idProyecto && d.idEmpleado == idEmpleado)
+                       .Select(ToDomainExpr)
+                       .FirstOrDefault();
+        }
+
+        public void Update(DetalleProyectoEmpleado detalle)
+        {
+            if (detalle == null) throw new ArgumentNullException(nameof(detalle));
+            if (detalle.IdDetalleProyectoEmpleado == Guid.Empty)
+                throw new ArgumentException("IdDetalleProyectoEmpleado requerido.", nameof(detalle));
+
+            var row = _set.SingleOrDefault(d => d.idDetalleEmpleado == detalle.IdDetalleProyectoEmpleado);
+            if (row == null) throw new InvalidOperationException("No existe el detalle de empleado.");
+
+            // NO tocar FKs
+            row.fechaIngresoEmpleado = detalle.FechaIngresoEmpleado;
+            row.valorGanancia = detalle.ValorGanancia;
+
+            _context.SaveChanges();
+        }
+
+        public void SetEstado(Guid idDetalleEmpleado, string estado)
+        {
+            if (idDetalleEmpleado == Guid.Empty)
+                throw new ArgumentException("idDetalleEmpleado requerido.", nameof(idDetalleEmpleado));
+
+            var row = _set.SingleOrDefault(d => d.idDetalleEmpleado == idDetalleEmpleado);
+            if (row == null) throw new InvalidOperationException("No existe el detalle de empleado.");
+
+            row.estado = string.IsNullOrWhiteSpace(estado) ? "0" : estado; // "0" inactivo, "1" activo
+            _context.SaveChanges();
         }
     }
 }

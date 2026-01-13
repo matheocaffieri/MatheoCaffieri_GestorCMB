@@ -71,6 +71,7 @@
     <Compile Include="ProveedorBL.cs" />
     <Compile Include="ProveedorBLL.cs" />
     <Compile Include="ProyectoBL.cs" />
+    <Compile Include="ProyectoEmpleadoBL.cs" />
     <Compile Include="ProyectoMaterialBL.cs" />
   </ItemGroup>
   <ItemGroup>

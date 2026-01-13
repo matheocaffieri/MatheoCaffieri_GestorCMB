@@ -81,6 +81,12 @@
     <Compile Include="AddProyectosForm.Designer.cs">
       <DependentUpon>AddProyectosForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AgregarEmpleadoProyectoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AgregarEmpleadoProyectoForm.Designer.cs">
+      <DependentUpon>AgregarEmpleadoProyectoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AgregarMaterialProyectoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +127,12 @@
     </Compile>
     <Compile Include="InformesDeCompraControl.Designer.cs">
       <DependentUpon>InformesDeCompraControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ItemControls\AddEmpleadoProyectoItemControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ItemControls\AddEmpleadoProyectoItemControl.Designer.cs">
+      <DependentUpon>AddEmpleadoProyectoItemControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ItemControls\AddMaterialProyectoItemControl.cs">
       <SubType>UserControl</SubType>
@@ -254,6 +266,9 @@
     <EmbeddedResource Include="AddProyectosForm.resx">
       <DependentUpon>AddProyectosForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AgregarEmpleadoProyectoForm.resx">
+      <DependentUpon>AgregarEmpleadoProyectoForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AgregarMaterialProyectoForm.resx">
       <DependentUpon>AgregarMaterialProyectoForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -271,6 +286,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="InformesDeCompraControl.resx">
       <DependentUpon>InformesDeCompraControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemControls\AddEmpleadoProyectoItemControl.resx">
+      <DependentUpon>AddEmpleadoProyectoItemControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ItemControls\AddMaterialProyectoItemControl.resx">
       <DependentUpon>AddMaterialProyectoItemControl.cs</DependentUpon>

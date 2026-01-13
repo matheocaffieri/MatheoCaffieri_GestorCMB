@@ -192,5 +192,14 @@ namespace MatheoCaffieri_GestorCMB
             ObtenerDetallesMaterialesItems(_proyecto.IdProyecto);
             ObtenerMaterialFaltanteItems(_proyecto.IdProyecto);
         }
+
+        private void linkLabelAgregarEmp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var frm = new AgregarEmpleadoProyectoForm(_proyecto.IdProyecto);
+            frm.ShowDialog();
+
+            ObtenerDetallesEmpleadosItems(_proyecto.IdProyecto);
+            
+        }
     }
 }
