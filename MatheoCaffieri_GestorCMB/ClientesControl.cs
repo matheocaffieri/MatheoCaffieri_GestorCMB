@@ -1,4 +1,8 @@
-﻿using MatheoCaffieri_GestorCMB.ItemControls;
+﻿using BL;
+using DomainModel;
+using DomainModel.Interfaces;
+using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.RoleService;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,14 +12,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BL;
-using DomainModel;
-using DomainModel.Interfaces;
 
 namespace MatheoCaffieri_GestorCMB
 {
     public partial class ClientesControl : UserControl
     {
+
+        private const string REQUIRED = "GESTIONAR_CLIENTES";
+
+
         // ctor por defecto -> usa BL real
         public ClientesControl() : this(new ClienteBL())
         {
@@ -26,6 +31,18 @@ namespace MatheoCaffieri_GestorCMB
         public ClientesControl(IGenericRepository<Cliente> clienteRepo)
         {
             InitializeComponent();
+
+            if (!SessionContext.Has(REQUIRED))
+            {
+                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+             
+                return;
+            }
+
+
+
             _clienteRepo = clienteRepo ?? throw new ArgumentNullException(nameof(clienteRepo));
 
             WireEvents();

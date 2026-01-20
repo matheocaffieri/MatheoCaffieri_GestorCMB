@@ -39,10 +39,9 @@
             // 
             this.labelNumeroProyecto.AutoSize = true;
             this.labelNumeroProyecto.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNumeroProyecto.Location = new System.Drawing.Point(29, 15);
-            this.labelNumeroProyecto.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelNumeroProyecto.Location = new System.Drawing.Point(22, 12);
             this.labelNumeroProyecto.Name = "labelNumeroProyecto";
-            this.labelNumeroProyecto.Size = new System.Drawing.Size(132, 27);
+            this.labelNumeroProyecto.Size = new System.Drawing.Size(105, 21);
             this.labelNumeroProyecto.TabIndex = 35;
             this.labelNumeroProyecto.Text = "Proyecto #N";
             // 
@@ -51,27 +50,28 @@
             this.labelNombreProyecto.AutoSize = true;
             this.labelNombreProyecto.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelNombreProyecto.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelNombreProyecto.Location = new System.Drawing.Point(169, 15);
-            this.labelNombreProyecto.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelNombreProyecto.Location = new System.Drawing.Point(127, 12);
             this.labelNombreProyecto.Name = "labelNombreProyecto";
-            this.labelNombreProyecto.Size = new System.Drawing.Size(214, 27);
+            this.labelNombreProyecto.Size = new System.Drawing.Size(169, 21);
             this.labelNombreProyecto.TabIndex = 36;
             this.labelNombreProyecto.Text = "Nombre de proyecto";
             // 
             // buttonAgregarCompra
             // 
-            this.buttonAgregarCompra.Location = new System.Drawing.Point(34, 58);
+            this.buttonAgregarCompra.Location = new System.Drawing.Point(26, 47);
+            this.buttonAgregarCompra.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonAgregarCompra.Name = "buttonAgregarCompra";
-            this.buttonAgregarCompra.Size = new System.Drawing.Size(127, 29);
+            this.buttonAgregarCompra.Size = new System.Drawing.Size(95, 24);
             this.buttonAgregarCompra.TabIndex = 37;
             this.buttonAgregarCompra.Text = "Agregar compra";
             this.buttonAgregarCompra.UseVisualStyleBackColor = true;
             // 
             // buttonEliminar
             // 
-            this.buttonEliminar.Location = new System.Drawing.Point(177, 58);
+            this.buttonEliminar.Location = new System.Drawing.Point(133, 47);
+            this.buttonEliminar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonEliminar.Name = "buttonEliminar";
-            this.buttonEliminar.Size = new System.Drawing.Size(127, 29);
+            this.buttonEliminar.Size = new System.Drawing.Size(95, 24);
             this.buttonEliminar.TabIndex = 38;
             this.buttonEliminar.Text = "Eliminar";
             this.buttonEliminar.UseVisualStyleBackColor = true;
@@ -79,16 +79,17 @@
             // textBoxItemsFaltantes
             // 
             this.textBoxItemsFaltantes.Enabled = false;
-            this.textBoxItemsFaltantes.Location = new System.Drawing.Point(431, 4);
+            this.textBoxItemsFaltantes.Location = new System.Drawing.Point(323, 3);
+            this.textBoxItemsFaltantes.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBoxItemsFaltantes.Multiline = true;
             this.textBoxItemsFaltantes.Name = "textBoxItemsFaltantes";
             this.textBoxItemsFaltantes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxItemsFaltantes.Size = new System.Drawing.Size(424, 93);
+            this.textBoxItemsFaltantes.Size = new System.Drawing.Size(319, 76);
             this.textBoxItemsFaltantes.TabIndex = 0;
             // 
             // InformeCompraItemControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.Controls.Add(this.textBoxItemsFaltantes);
@@ -96,8 +97,9 @@
             this.Controls.Add(this.buttonAgregarCompra);
             this.Controls.Add(this.labelNombreProyecto);
             this.Controls.Add(this.labelNumeroProyecto);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "InformeCompraItemControl";
-            this.Size = new System.Drawing.Size(858, 100);
+            this.Size = new System.Drawing.Size(644, 81);
             this.ResumeLayout(false);
             this.PerformLayout();
 

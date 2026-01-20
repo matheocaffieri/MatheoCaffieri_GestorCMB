@@ -1,12 +1,10 @@
-﻿using RolesServiceLogic = Services.RoleService.Logic.RolesService;
-using UsuarioPermisosServiceLogic = Services.RoleService.Logic.UsuarioPermisosService;
-using AccesoServiceLogic = Services.RoleService.Logic.AccesoService;
-using BL.AccessBL;
+﻿using BL.AccessBL;
 using BL.LoginBL;
 using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.LoginService;
+using Services.RoleService;
 using Services.RoleService.Logic;
 using Services.Tools;
 using System;
@@ -19,6 +17,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AccesoServiceLogic = Services.RoleService.Logic.AccesoService;
+using RolesServiceLogic = Services.RoleService.Logic.RolesService;
+using UsuarioPermisosServiceLogic = Services.RoleService.Logic.UsuarioPermisosService;
 
 
 namespace MatheoCaffieri_GestorCMB
@@ -30,6 +31,7 @@ namespace MatheoCaffieri_GestorCMB
     {
         private TreeMode _treeMode;
 
+        private const string REQUIRED = "GESTIONAR_USUARIOS";
 
 
         // Servicios BL (reciben CS)
@@ -46,6 +48,18 @@ namespace MatheoCaffieri_GestorCMB
         public GestionUsuariosControl(RolesService rolesService, UsuarioService usuarioService)
         {
             InitializeComponent();
+
+            if (!SessionContext.Has(REQUIRED))
+            {
+                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                
+                return;
+            }
+
+
+
 
             var cs = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"].ConnectionString;
 

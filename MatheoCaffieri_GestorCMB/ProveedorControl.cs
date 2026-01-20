@@ -2,6 +2,7 @@
 using DomainModel;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.RoleService;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +21,10 @@ namespace MatheoCaffieri_GestorCMB
         {
         }
 
+
+        private const string REQUIRED = "AGREGAR_PROVEEDORES";
+
+
         private readonly MainForm _mainForm;
 
 
@@ -27,6 +32,27 @@ namespace MatheoCaffieri_GestorCMB
         public ProveedorControl(IGenericRepository<Proveedor> proveedorRepo)
         {
             InitializeComponent();
+
+            if (!SessionContext.Has(REQUIRED))
+            {
+                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                var host = _mainForm ?? (this.FindForm() as MainForm);
+                if (host == null)
+                {
+                    MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                host.addUserControl(new HomeControl(_mainForm));
+                return;
+            }
+
+
+
+
             _proveedorRepo = proveedorRepo ?? throw new ArgumentNullException(nameof(proveedorRepo));
 
             this.Load += ProveedorControl_Load;

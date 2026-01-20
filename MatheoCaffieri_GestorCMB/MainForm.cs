@@ -1,5 +1,6 @@
 ﻿using BL.AccessBL;
 using BL.LoginBL;
+using Services.RoleService;
 using Services.RoleService.Logic;
 using System;
 using System.Collections.Generic;
@@ -112,9 +113,42 @@ namespace MatheoCaffieri_GestorCMB
 
         private void agregarProyectosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddProyectosForm addProyectosForm = new AddProyectosForm();
+            const string REQUIRED = "AGREGAR_PROYECTOS";
+
+            if (!SessionContext.Has(REQUIRED))
+            {
+                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var addProyectosForm = new AddProyectosForm();
+
+            addProyectosForm.FormClosed += (s, ev) =>
+            {
+                // Solo refresco si realmente guardó
+                if (!addProyectosForm.ProyectoGuardado) return;
+
+                var ver = FindControl<VerProyectosControl>(this);
+                ver?.Refrescar();
+            };
+
             addProyectosForm.Show();
         }
+
+        private static T FindControl<T>(Control parent) where T : Control
+        {
+            foreach (Control c in parent.Controls)
+            {
+                if (c is T t) return t;
+
+                var found = FindControl<T>(c);
+                if (found != null) return found;
+            }
+            return null;
+        }
+
+
 
         private void cargarEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
         {

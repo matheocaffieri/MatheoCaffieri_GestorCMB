@@ -2,6 +2,7 @@
 using DomainModel;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.RoleService;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,9 +21,31 @@ namespace MatheoCaffieri_GestorCMB
         private readonly IGenericRepository<Inventario> _invRepo;
         private readonly MainForm _mainForm;
 
+        private const string REQUIRED = "VER_INVENTARIO";
+
+
         public VerInventarioControl()
         {
             InitializeComponent();
+
+            if (!SessionContext.Has(REQUIRED))
+            {
+                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                var host = _mainForm ?? (this.FindForm() as MainForm);
+                if (host == null)
+                {
+                    MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                host.addUserControl(new HomeControl(_mainForm));
+                return;
+            }
+
+
         }
 
         private void ObtenerMaterialesItems()
@@ -79,7 +102,9 @@ namespace MatheoCaffieri_GestorCMB
             host.addUserControl(new ProveedorControl());
         }
 
+        private void buttonVerInformesCompra_Click(object sender, EventArgs e)
+        {
 
-
+        }
     }
 }

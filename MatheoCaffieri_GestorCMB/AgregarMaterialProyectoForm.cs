@@ -2,6 +2,7 @@
 using DomainModel;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.RoleService;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,10 +19,26 @@ namespace MatheoCaffieri_GestorCMB
     {
         private readonly Guid _idProyecto;
 
+        private const string REQUIRED = "AGREGAR_MATERIALES";
+
+
+
+        public event EventHandler MaterialesProyectoActualizados;
+
+
         public AgregarMaterialProyectoForm(Guid idProyecto)
         {
             InitializeComponent();
             _idProyecto = idProyecto;
+
+            if (!SessionContext.Has(REQUIRED))
+            {
+                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close();
+                return;
+            }
+
 
             this.Load += AgregarMaterialProyectoForm_Load;
         }
@@ -88,8 +105,11 @@ namespace MatheoCaffieri_GestorCMB
                     valorGanancia
                 );
 
-                // refrescar para ver stock actualizado
+                // refrescar stock del inventario en este form
                 CargarInventarioItems();
+
+                // avisar al padre (DetalleProyectoControl) para refrescar materiales + faltantes
+                MaterialesProyectoActualizados?.Invoke(this, EventArgs.Empty);
 
                 // opcional: feedback al usuario
                 if (r.Faltante > 0)

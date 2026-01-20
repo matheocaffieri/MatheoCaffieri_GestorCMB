@@ -1,6 +1,7 @@
 ﻿using BL;
 using DomainModel;
 using DomainModel.Interfaces;
+using Services.RoleService;
 using System;
 using System.Drawing;
 using System.Globalization;
@@ -10,6 +11,7 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class AddEmpleadosForm : Form
     {
+        private const string REQUIRED = "CARGAR_EMPLEADOS";
 
         private readonly IGenericRepository<Empleado> _empleadoRepo;
 
@@ -23,6 +25,15 @@ namespace MatheoCaffieri_GestorCMB
         public AddEmpleadosForm(IGenericRepository<Empleado> empleadoRepo)
         {
             InitializeComponent();
+
+            if (!SessionContext.Has(REQUIRED))
+            {
+                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close();
+                return;
+            }
+
             _empleadoRepo = empleadoRepo ?? throw new ArgumentNullException(nameof(empleadoRepo));
         }
 

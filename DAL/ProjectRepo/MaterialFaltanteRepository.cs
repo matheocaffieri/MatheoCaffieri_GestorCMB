@@ -58,14 +58,13 @@ namespace DAL.ProjectRepo
                 _context = new GestorCMBEntities(entityConn, contextOwnsConnection: false);
             }
 
-            // Compartimos transacción del UoW si existe
+            // Compartimos transacción del UoW
             if (sqlUow.Transaction != null)
                 _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
 
             _set = _context.Set<MaterialFaltanteEf>();
         }
 
-        // ===== Query principal =====
         public List<MaterialFaltante> GetAll(Guid idProyecto)
         {
             return _set.AsNoTracking()
@@ -107,8 +106,5 @@ namespace DAL.ProjectRepo
             _context.SaveChanges();
         }
 
-        // Si más adelante querés CRUD, mantené el mapeo simple:
-        // private static void MapToEf(MaterialFaltante src, MaterialFaltanteEf dst) { ... }
-        // y aplicá _context.Entry(...).State = EntityState.Modified para updates.
     }
 }

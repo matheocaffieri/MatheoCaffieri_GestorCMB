@@ -67,6 +67,7 @@
     <Compile Include="Logs\LoggerFactory.cs" />
     <Compile Include="Logs\LoggerLogic.cs" />
     <Compile Include="Logs\LoggerRepository.cs" />
+    <Compile Include="Logs\LogHelper.cs" />
     <Compile Include="Logs\ScopeContext.cs" />
     <Compile Include="Logs\Strategy\CompositeLoggerStrategy.cs" />
     <Compile Include="Logs\Strategy\DatabaseLoggerStrategy.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="RoleService\Logic\RolesService.cs" />
     <Compile Include="RoleService\Logic\UsuarioPermisosService.cs" />
     <Compile Include="RoleService\RolCompuesto.cs" />
+    <Compile Include="RoleService\SessionContext.cs" />
     <Compile Include="Tools\NodoPermRol.cs" />
     <Compile Include="Tools\RolItem.cs" />
   </ItemGroup>

@@ -143,6 +143,7 @@
             this.buttonVerInformesCompra.TabIndex = 31;
             this.buttonVerInformesCompra.Text = "Ver informes de compra";
             this.buttonVerInformesCompra.UseVisualStyleBackColor = false;
+            this.buttonVerInformesCompra.Click += new System.EventHandler(this.buttonVerInformesCompra_Click);
             // 
             // VerInventarioControl
             // 

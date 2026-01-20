@@ -1,11 +1,12 @@
 ﻿using BL;
 using BL.AccessBL;
 using BL.LoginBL;
+using Services.Logs;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Configuration;
 using System.Windows.Forms;
 using RolesServiceLogic = Services.RoleService.Logic.RolesService;
 
@@ -17,6 +18,20 @@ namespace MatheoCaffieri_GestorCMB
         [STAThread]
         static void Main()
         {
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+
+            Application.ThreadException += (s, e) => HandleFatalException(e.Exception);
+
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+                HandleFatalException(e.ExceptionObject as Exception ?? new Exception("UnhandledException sin Exception"));
+
+            TaskScheduler.UnobservedTaskException += (s, e) =>
+            {
+                HandleFatalException(e.Exception);
+                e.SetObserved();
+            };
+
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -57,5 +72,29 @@ namespace MatheoCaffieri_GestorCMB
             // 4) Correr la app con el MainForm que recibe servicios
             Application.Run(new LoginForm());
         }
+
+        private static void HandleFatalException(Exception ex)
+        {
+            try
+            {
+                // 1) Log
+                LogHelper.Error("Excepción no controlada", ex);
+
+                // 2) UI
+                MessageBox.Show(
+                    "Ocurrió un error inesperado.\n\n" +
+                    "Se registró en el log. Abrí el visor de logs para ver el detalle.",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+            catch
+            {
+                // Último recurso: evitar loop/crash por fallos al loguear
+            }
+        }
+
+
     }
 }

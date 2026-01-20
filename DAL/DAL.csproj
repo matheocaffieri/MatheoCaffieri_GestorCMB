@@ -124,8 +124,10 @@
     </Compile>
     <Compile Include="ProjectRepo\ClienteRepository.cs" />
     <Compile Include="ProjectRepo\DetalleEmpleadosRepository.cs" />
+    <Compile Include="ProjectRepo\DetalleInformeMaterialFaltanteRepository.cs" />
     <Compile Include="ProjectRepo\DetalleMaterialesRepository.cs" />
     <Compile Include="ProjectRepo\EmpleadoRepository.cs" />
+    <Compile Include="ProjectRepo\InformeDeCompraRepository.cs" />
     <Compile Include="ProjectRepo\InformeMontoRepository.cs" />
     <Compile Include="ProjectRepo\InventarioRepository.cs" />
     <Compile Include="ProjectRepo\MaterialFaltanteRepository.cs" />

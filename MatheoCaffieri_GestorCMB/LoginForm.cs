@@ -11,6 +11,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Services.RoleService;                 // SessionContext
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RolesServiceLogic = Services.RoleService.Logic.RolesService;
@@ -89,10 +90,31 @@ namespace MatheoCaffieri_GestorCMB
                     // después de autenticar:
                     UserSession.UserDisplayName = usuarioLogueado.Mail; // o el campo que tengas
 
+
                     // Abre el formulario principal
 
+                    // Servicios
                     var rolesService = AccessServicesFactory.CreateRolesService(connectionStringUsers);
                     var usuarioService = new UsuarioService(connectionStringUsers);
+                    var userPermsService = AccessServicesFactory.CreateUsuarioPermisosService(connectionStringUsers);
+
+                    // 1) Permisos por roles asignados al usuario
+                    var permisos = new HashSet<TipoPermiso>();
+
+                    var rolesDelUsuario = rolesService.RolesDeUsuario(usuarioLogueado.IdUsuario);
+                    foreach (var rol in rolesDelUsuario)
+                        permisos.UnionWith(rolesService.ObtenerPermisosDeRol(rol.IdRol));
+
+                    // 2) Permisos directos (Usuario_Acceso)
+                    var directos = userPermsService.ObtenerDirectos(usuarioLogueado.IdUsuario)
+                                                  .Select(a => a.DataKey);
+                    permisos.UnionWith(directos);
+
+                    // 3) Setear contexto de sesión (strings tipo "AGREGAR_PROYECTOS")
+                    SessionContext.SetUsuario(usuarioLogueado.IdUsuario, permisos.Select(p => p.ToString()));
+
+
+
 
                     MainForm mainForm = new MainForm(rolesService, usuarioService);
                     mainForm.Show();

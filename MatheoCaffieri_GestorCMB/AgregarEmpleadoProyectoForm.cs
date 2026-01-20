@@ -1,21 +1,32 @@
 ﻿using BL;
 using DomainModel;
 using DomainModel.Interfaces;
+using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.RoleService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using MatheoCaffieri_GestorCMB.ItemControls;
 
 namespace MatheoCaffieri_GestorCMB
 {
     public partial class AgregarEmpleadoProyectoForm : Form
     {
         private readonly Guid _idProyecto;
+        private const string REQUIRED = "CARGAR_EMPLEADOS";
 
         public AgregarEmpleadoProyectoForm(Guid idProyecto)
         {
             InitializeComponent();
+
+            if (!SessionContext.Has(REQUIRED))
+            {
+                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close();
+                return;
+            }
+
             _idProyecto = idProyecto;
 
             gestionarEmpleadosDetalleLayoutPanel.AutoScroll = true;

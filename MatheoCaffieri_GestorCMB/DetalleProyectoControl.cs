@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DomainModel;
+using Services;
 
 namespace MatheoCaffieri_GestorCMB
 {
@@ -186,9 +187,22 @@ namespace MatheoCaffieri_GestorCMB
             // suponiendo que tenés el proyecto cargado en una variable/campo
             // ejemplo: _proyecto.IdProyecto
             var frm = new AgregarMaterialProyectoForm(_proyecto.IdProyecto);
+            
+
+            frm.MaterialesProyectoActualizados += (_, __) =>
+            {
+                ObtenerDetallesMaterialesItems(_proyecto.IdProyecto);
+                ObtenerMaterialFaltanteItems(_proyecto.IdProyecto);
+                // si tenés el ajuste de layout, llamalo acá también
+                // AjustarLayoutFaltantes();
+                if (flowLayoutPanelMatFal.Controls.Count > 0)
+                    flowLayoutPanelMat.Height -= 70; 
+            };
+
+            
+
             frm.ShowDialog();
 
-            // al volver, refrescás el detalle del proyecto (materiales + faltantes)
             ObtenerDetallesMaterialesItems(_proyecto.IdProyecto);
             ObtenerMaterialFaltanteItems(_proyecto.IdProyecto);
         }
@@ -200,6 +214,27 @@ namespace MatheoCaffieri_GestorCMB
 
             ObtenerDetallesEmpleadosItems(_proyecto.IdProyecto);
             
+        }
+
+
+
+
+        private void buttonGenerarInforme_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var bl = new InformeDeCompraBL();
+                var idInforme = bl.GenerarDesdeFaltantes(_proyecto.IdProyecto, unicoPorDia: true);
+
+                MessageBox.Show($"Informe generado.\nID: {idInforme}", "OK",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo generar el informe.\n" + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

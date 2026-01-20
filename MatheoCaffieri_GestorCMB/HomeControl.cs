@@ -34,10 +34,10 @@ namespace MatheoCaffieri_GestorCMB
         private void linkLabelUser_DoubleClick(object sender, EventArgs e)
         {
             var result = MessageBox.Show(
-      "¿Querés cerrar sesión?",
-      "Cerrar sesión",
-      MessageBoxButtons.YesNo,
-      MessageBoxIcon.Question);
+            "¿Querés cerrar sesión?",
+            "Cerrar sesión",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {

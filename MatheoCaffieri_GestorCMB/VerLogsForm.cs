@@ -1,4 +1,5 @@
 ﻿using Services.Logs;
+using Services.RoleService;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +19,8 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class VerLogsForm : Form
     {
-       
+
+        private const string REQUIRED = "VER_LOGS";
 
 
 
@@ -26,6 +28,15 @@ namespace MatheoCaffieri_GestorCMB
         public VerLogsForm()
         {
             InitializeComponent();
+
+
+            if (!SessionContext.Has(REQUIRED))
+            {
+                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close();
+                return;
+            }
         }
 
         private void SetupListView()

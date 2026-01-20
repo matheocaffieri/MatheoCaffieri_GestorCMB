@@ -302,6 +302,7 @@
             this.buttonGenerarInforme.TabIndex = 37;
             this.buttonGenerarInforme.Text = "Generar informe de compra";
             this.buttonGenerarInforme.UseVisualStyleBackColor = true;
+            this.buttonGenerarInforme.Click += new System.EventHandler(this.buttonGenerarInforme_Click);
             // 
             // label3
             // 

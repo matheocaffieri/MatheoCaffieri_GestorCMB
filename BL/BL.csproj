@@ -59,8 +59,10 @@
     <Compile Include="ClienteBL.cs" />
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="DetalleEmpleadoBL.cs" />
+    <Compile Include="DetalleInformeCompraBL.cs" />
     <Compile Include="DetalleMaterialBL.cs" />
     <Compile Include="EmpleadoBL.cs" />
+    <Compile Include="InformeDeCompraBL.cs" />
     <Compile Include="InventarioBL.cs" />
     <Compile Include="LoginBL\LoginService.cs" />
     <Compile Include="LoginBL\SessionManager.cs" />
