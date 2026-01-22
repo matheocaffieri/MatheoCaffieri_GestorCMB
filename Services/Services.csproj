@@ -61,6 +61,7 @@
     <Compile Include="Language\ILanguageService.cs" />
     <Compile Include="Language\Language.cs" />
     <Compile Include="Language\LanguageService.cs" />
+    <Compile Include="LoginService\LoginResult.cs" />
     <Compile Include="LoginService\PasswordHasher.cs" />
     <Compile Include="Logs\ILoggerStrategy.cs" />
     <Compile Include="Logs\Log.cs" />

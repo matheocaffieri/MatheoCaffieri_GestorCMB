@@ -25,7 +25,6 @@ namespace BL.LoginBL
         }
 
 
-        // Constructor para ser llamado fácilmente desde UI (pasando solo la conexión)
         public LoginService(string connectionStringUsers)
         : this(new UsuarioRepository(new SqlUnitOfWork(connectionStringUsers)), new PasswordHasher())
         {
@@ -34,18 +33,47 @@ namespace BL.LoginBL
                 throw new ArgumentNullException(nameof(connectionStringUsers), "La cadena de conexión no puede ser nula o vacía.");
             }
             // La llamada a ': this(...)' ejecuta el constructor principal
-            // pasando las instancias recién creadas, AHORA UsuarioRepository
-            // recibe la cadena de conexión como debe ser.
+            // pasando las instancias recién creadas
+            // recibe la cadena de conexión
         }
-   
+
+        public LoginResult TryLogin(string mail, string password, out Usuario usuario)
+        {
+            usuario = null;
+
+            var user = _usuarioRepo.FindByEmail(mail);
+            if (user == null)
+                return LoginResult.CredencialesInvalidas;
+
+            // Bloquear si no está activo (antes o después de password; así es explícito)
+            if (!user.IsActive)
+                return LoginResult.UsuarioInactivo;
+
+            // Validar contraseña
+            if (!_hasher.Verify(user.Contraseña, password))
+                return LoginResult.CredencialesInvalidas;
+
+            usuario = user;
+            return LoginResult.Ok;
+        }
+
+
+
 
         public Usuario Login(string mail, string password)
         {
             var user = _usuarioRepo.FindByEmail(mail);
-            if (user == null || !_hasher.Verify(user.Contraseña, password))
+            if (user == null)
+                return null;
+
+            if (!user.IsActive)
+                return null;
+
+            if (!_hasher.Verify(user.Contraseña, password))
                 return null;
 
             return user;
         }
+
     }
 }

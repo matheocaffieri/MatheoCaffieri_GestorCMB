@@ -1,5 +1,6 @@
 ﻿using BL.AccessBL;
 using BL.LoginBL;
+using Interfaces.LoginInterfaces;
 using Services.RoleService;
 using Services.RoleService.Logic;
 using System;
@@ -37,9 +38,89 @@ namespace MatheoCaffieri_GestorCMB
             _rolesService = rolesService ?? throw new ArgumentNullException(nameof(rolesService));
             _usuarioService = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));
 
+
+            SetupMenuPermissionTags();
+            ApplyMenuPermissions();
+
             var homeControl = new HomeControl(this);
             addUserControl(homeControl);
         }
+
+        private bool Require(string permiso)
+        {
+            if (SessionContext.Has(permiso)) return true;
+            MessageBox.Show("No tenés permisos.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
+
+
+
+        private void SetupMenuPermissionTags()
+        {
+            // Proyectos
+            verProyectosToolStripMenuItem.Tag = TipoPermiso.VER_PROYECTOS.ToString();
+            agregarProyectosToolStripMenuItem.Tag = TipoPermiso.AGREGAR_PROYECTOS.ToString();
+
+            // Inventario
+            verInventarioToolStripMenuItem.Tag = TipoPermiso.VER_INVENTARIO.ToString();
+            agregarMaterialesToolStripMenuItem.Tag = TipoPermiso.AGREGAR_MATERIALES.ToString();
+            consultarInfToolStripMenuItem.Tag = TipoPermiso.CONSULTAR_INFORMES_COMPRA.ToString();
+            agregarProveedoresToolStripMenuItem.Tag = TipoPermiso.AGREGAR_PROVEEDORES.ToString();
+
+            // Personal
+            verEmpleadosToolStripMenuItem.Tag = TipoPermiso.VER_EMPLEADOS.ToString();
+            cargarEmpleadosToolStripMenuItem.Tag = TipoPermiso.CARGAR_EMPLEADOS.ToString();
+
+            // Ajustes
+            verLogsToolStripMenuItem.Tag = TipoPermiso.VER_LOGS.ToString();
+            configurarParámetrosToolStripMenuItem.Tag = TipoPermiso.CONFIGURAR_PARAMETROS.ToString();
+            gestionarUsuariosToolStripMenuItem.Tag = TipoPermiso.GESTIONAR_USUARIOS.ToString();
+
+            // Menú raíz sin permiso propio (se habilita si tiene algún hijo habilitado)
+            homeToolStripMenuItem.Tag = null;
+            proyectosToolStripMenuItem.Tag = null;
+            inventarioToolStripMenuItem.Tag = null;
+            personalToolStripMenuItem.Tag = null;
+            ajustesToolStripMenuItem.Tag = null;
+        }
+
+
+        private void ApplyMenuPermissions()
+        {
+            // Si todavía no hay sesión cargada, no tocar el menú
+            if (SessionContext.Accesos == null || SessionContext.Accesos.Count == 0)
+                return;
+
+            foreach (var top in menuStrip1.Items.OfType<ToolStripMenuItem>())
+                ApplyMenuItemPermissions(top);
+        }
+
+        private static void ApplyMenuItemPermissions(ToolStripMenuItem item)
+        {
+            // Primero procesar hijos
+            foreach (var child in item.DropDownItems.OfType<ToolStripMenuItem>())
+                ApplyMenuItemPermissions(child);
+
+            // Evaluar permiso propio si existe
+            var required = item.Tag as string;
+
+            if (!string.IsNullOrWhiteSpace(required))
+            {
+                item.Enabled = SessionContext.Has(required);
+                return;
+            }
+
+            // Si no tiene permiso propio, y es un "contenedor", se habilita si algún hijo quedó habilitado
+            if (item.DropDownItems.Count > 0)
+            {
+                bool anyChildEnabled = item.DropDownItems
+                    .OfType<ToolStripMenuItem>()
+                    .Any(mi => mi.Enabled);
+
+                item.Enabled = anyChildEnabled;
+            }
+        }
+
 
 
         private void buttonExit_Click(object sender, EventArgs e)
@@ -89,6 +170,9 @@ namespace MatheoCaffieri_GestorCMB
 
         private void verProyectosToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!Require(TipoPermiso.VER_PROYECTOS.ToString()))
+                return;
+
             VerProyectosControl verProyectosControl = new VerProyectosControl(this);
             addUserControl(verProyectosControl);
         }
@@ -101,12 +185,18 @@ namespace MatheoCaffieri_GestorCMB
 
         private void verInventarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!Require(TipoPermiso.VER_INVENTARIO.ToString()))
+                return;
+
             VerInventarioControl verInventarioControl = new VerInventarioControl();
             addUserControl(verInventarioControl);
         }
 
         private void verEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!Require(TipoPermiso.VER_EMPLEADOS.ToString()))
+                return;
+
             VerEmpleadosControl verEmpleadosControl = new VerEmpleadosControl();
             addUserControl(verEmpleadosControl);
         }
@@ -152,37 +242,54 @@ namespace MatheoCaffieri_GestorCMB
 
         private void cargarEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!Require(TipoPermiso.CARGAR_EMPLEADOS.ToString()))
+                return;
+
             AddEmpleadosForm addEmpleadosForm = new AddEmpleadosForm();
             addEmpleadosForm.Show();
         }
 
         private void agregarMaterialesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!Require(TipoPermiso.AGREGAR_MATERIALES.ToString()))
+                return;
+
             AddMaterialesForm addMaterialesForm = new AddMaterialesForm();
             addMaterialesForm.Show();
         }
 
         private void agregarProveedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!Require(TipoPermiso.AGREGAR_PROVEEDORES.ToString()))
+                return;
+
             ProveedorControl proveedorControl = new ProveedorControl();
             addUserControl(proveedorControl);
         }
 
         private void consultarInfToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!Require(TipoPermiso.CONSULTAR_INFORMES_COMPRA.ToString()))
+                return;
+
             InformesDeCompraControl informesDeCompraControl = new InformesDeCompraControl();
             addUserControl(informesDeCompraControl);
         }
 
         private void verLogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!Require(TipoPermiso.VER_LOGS.ToString()))
+                return;
+
             VerLogsForm verLogsForm = new VerLogsForm();
             verLogsForm.Show();
         }
 
         private void gestionarUsuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Si abriste MainForm con el ctor sin servicios, marcá el error claro:
+            if (!Require(TipoPermiso.GESTIONAR_USUARIOS.ToString()))
+                return;
+            
             if (_rolesService is null || _usuarioService is null)
                 throw new InvalidOperationException("MainForm fue creado sin servicios. Usá MainForm(RolesService, UsuarioService).");
 

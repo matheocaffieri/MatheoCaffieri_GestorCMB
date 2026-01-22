@@ -65,6 +65,29 @@ namespace MatheoCaffieri_GestorCMB
             }
         }
 
+        private static void CargarPermisosUsuario(Usuario usuario, string cs)
+        {
+            if (usuario == null) return;
+
+            var rolesService = AccessServicesFactory.CreateRolesService(cs);
+            var usuarioPermisosService = AccessServicesFactory.CreateUsuarioPermisosService(cs);
+
+            var set = new HashSet<TipoPermiso>();
+
+            // Permisos directos
+            foreach (var acc in usuarioPermisosService.ObtenerDirectos(usuario.IdUsuario))
+                set.Add(acc.DataKey);
+
+            // Permisos por roles
+            foreach (var rol in rolesService.RolesDeUsuario(usuario.IdUsuario))
+                foreach (var p in rolesService.ObtenerPermisosDeRol(rol.IdRol))
+                    set.Add(p);
+
+            // Hidratar en el objeto Usuario (SessionManager.TienePermiso usa esto)
+            foreach (var p in set)
+                usuario.AgregarPermiso(new Acceso(p.ToString().Replace('_', ' '), p));
+        }
+
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
@@ -80,64 +103,60 @@ namespace MatheoCaffieri_GestorCMB
 
             try
             {
-                // Intenta hacer login usando el servicio de la capa BL
-                Usuario usuarioLogueado = _loginService.Login(mail, password);
+                // Nuevo: login con motivo (Ok / Inactivo / CredencialesInvalidas)
+                var result = _loginService.TryLogin(mail, password, out Usuario usuarioLogueado);
 
-                if (usuarioLogueado != null)
+                if (result == LoginResult.UsuarioInactivo)
                 {
-                    // Login exitoso: Guarda la sesión
-                    SessionManager.Instance.Login(usuarioLogueado);
-                    // después de autenticar:
-                    UserSession.UserDisplayName = usuarioLogueado.Mail; // o el campo que tengas
-
-
-                    // Abre el formulario principal
-
-                    // Servicios
-                    var rolesService = AccessServicesFactory.CreateRolesService(connectionStringUsers);
-                    var usuarioService = new UsuarioService(connectionStringUsers);
-                    var userPermsService = AccessServicesFactory.CreateUsuarioPermisosService(connectionStringUsers);
-
-                    // 1) Permisos por roles asignados al usuario
-                    var permisos = new HashSet<TipoPermiso>();
-
-                    var rolesDelUsuario = rolesService.RolesDeUsuario(usuarioLogueado.IdUsuario);
-                    foreach (var rol in rolesDelUsuario)
-                        permisos.UnionWith(rolesService.ObtenerPermisosDeRol(rol.IdRol));
-
-                    // 2) Permisos directos (Usuario_Acceso)
-                    var directos = userPermsService.ObtenerDirectos(usuarioLogueado.IdUsuario)
-                                                  .Select(a => a.DataKey);
-                    permisos.UnionWith(directos);
-
-                    // 3) Setear contexto de sesión (strings tipo "AGREGAR_PROYECTOS")
-                    SessionContext.SetUsuario(usuarioLogueado.IdUsuario, permisos.Select(p => p.ToString()));
-
-
-
-
-                    MainForm mainForm = new MainForm(rolesService, usuarioService);
-                    mainForm.Show();
-
-                    // Cierra este formulario de login
-                    this.Hide(); // O this.Close(); dependiendo si quieres poder volver o no
-                    mainForm.FormClosed += (s, args) => this.Close(); // Cierra el login si se cierra el main
-
-                }
-                else
-                {
-                    // Login fallido (credenciales incorrectas o usuario inactivo)
-                    MessageBox.Show("Mail o contraseña incorrectos, o el usuario está inactivo.", "Error de Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    // Podrías querer limpiar el campo de contraseña
+                    MessageBox.Show("Este usuario no está activo.", "Usuario inactivo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     textPassword.Clear();
+                    return;
                 }
+
+                if (result == LoginResult.CredencialesInvalidas)
+                {
+                    MessageBox.Show("Mail o contraseña incorrectos.", "Error de Login",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    textPassword.Clear();
+                    return;
+                }
+
+                // ===== Login OK (todo esto queda igual) =====
+
+                SessionManager.Instance.Login(usuarioLogueado);
+                UserSession.UserDisplayName = usuarioLogueado.Mail;
+
+                CargarPermisosUsuario(usuarioLogueado, connectionStringUsers);
+
+                var rolesService = AccessServicesFactory.CreateRolesService(connectionStringUsers);
+                var usuarioService = new UsuarioService(connectionStringUsers);
+                var userPermsService = AccessServicesFactory.CreateUsuarioPermisosService(connectionStringUsers);
+
+                var permisos = new HashSet<TipoPermiso>();
+
+                var rolesDelUsuario = rolesService.RolesDeUsuario(usuarioLogueado.IdUsuario);
+                foreach (var rol in rolesDelUsuario)
+                    permisos.UnionWith(rolesService.ObtenerPermisosDeRol(rol.IdRol));
+
+                var directos = userPermsService.ObtenerDirectos(usuarioLogueado.IdUsuario)
+                                              .Select(a => a.DataKey);
+                permisos.UnionWith(directos);
+
+                SessionContext.SetUsuario(usuarioLogueado.IdUsuario, permisos.Select(p => p.ToString()));
+
+                MainForm mainForm = new MainForm(rolesService, usuarioService);
+                mainForm.Show();
+
+                this.Hide();
+                mainForm.FormClosed += (s, args) => this.Close();
             }
             catch (Exception ex)
             {
-                // Manejo de errores más generales (ej. problema de conexión a DB)
-                MessageBox.Show($"Ocurrió un error inesperado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                // Podrías loguear el error 'ex' para diagnóstico
+                MessageBox.Show($"Ocurrió un error inesperado: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
+
         }
     }
 }

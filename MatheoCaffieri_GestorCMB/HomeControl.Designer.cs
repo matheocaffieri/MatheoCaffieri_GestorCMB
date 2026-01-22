@@ -175,9 +175,10 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.butMainProyectos);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "HomeControl";
             this.Size = new System.Drawing.Size(800, 358);
+            this.Load += new System.EventHandler(this.HomeControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

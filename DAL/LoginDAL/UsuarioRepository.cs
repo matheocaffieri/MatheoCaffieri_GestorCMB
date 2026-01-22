@@ -31,7 +31,7 @@ namespace DAL.LoginDAL
             // Si la conexión está cerrada o no hay transacción, arranco el UoW
             if (_uow.Connection == null || _uow.Connection.State != ConnectionState.Open)
             {
-                _uow.Begin();         // abre conexión, crea contexto EF (si lo usás) y setea transacción
+                _uow.Begin();         // abre conexión y setea transacción
                 return true;          // indica que yo lo empecé
             }
             return false;             // ya estaba iniciado en una capa superior
@@ -42,7 +42,7 @@ namespace DAL.LoginDAL
 
         private void FinishUow(bool iStarted, bool success)
         {
-            if (!iStarted) return;    // no lo empecé yo → no lo cierro yo
+            if (!iStarted) return;    
             try
             {
                 if (success) _uow.Commit();
@@ -56,9 +56,9 @@ namespace DAL.LoginDAL
         }
 
 
-        /* ============================================================
-         *  MÉTODOS PRINCIPALES (idénticos a los que ya usabas)
-         * ============================================================ */
+        /* =====================
+         *  MÉTODOS PRINCIPALES
+         * =====================*/
 
         public void Add(Usuario entity)
         {
