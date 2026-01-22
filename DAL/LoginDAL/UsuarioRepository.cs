@@ -1,48 +1,45 @@
 ﻿using DomainModel;
-using DomainModel.Interfaces;   // IUnitOfWork
 using DomainModel.Login;
+using DomainModel.LoginDALInterfaces;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using DAL.FactoryDAL;
-using System.Text;
-using System.Threading.Tasks;
-using DomainModel.LoginDALInterfaces;
 
+// IMPORTANTE: este es el UoW correcto para este repo
+using DAL.FactoryDAL;
 namespace DAL.LoginDAL
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        private readonly IUnitOfWork _uow;
+        // B) Forzá el tipo exacto para evitar que tome el IUnitOfWork equivocado
+        private readonly ILoginUnitOfWork _uow;
 
-        public UsuarioRepository(IUnitOfWork uow)
+        public UsuarioRepository(ILoginUnitOfWork uow)
         {
-            _uow = uow;
+            _uow = uow ?? throw new ArgumentNullException(nameof(uow));
         }
 
-
-
-
+        // =====================
+        // CONTROL UoW (writes)
+        // =====================
         private bool EnsureUowStarted()
         {
-            // Si la conexión está cerrada o no hay transacción, arranco el UoW
-            if (_uow.Connection == null || _uow.Connection.State != ConnectionState.Open)
+            // Para escrituras: si no hay conexión abierta o no hay transacción, arrancamos el UoW
+            if (_uow.Connection == null ||
+                _uow.Connection.State != ConnectionState.Open ||
+                _uow.Transaction == null)
             {
-                _uow.Begin();         // abre conexión y setea transacción
-                return true;          // indica que yo lo empecé
+                _uow.Begin();
+                return true;
             }
-            return false;             // ya estaba iniciado en una capa superior
+            return false;
         }
-
-
-
 
         private void FinishUow(bool iStarted, bool success)
         {
-            if (!iStarted) return;    
+            if (!iStarted) return;
+
             try
             {
                 if (success) _uow.Commit();
@@ -55,23 +52,54 @@ namespace DAL.LoginDAL
             }
         }
 
+        // =====================
+        // HELPERS (reads)
+        // =====================
+        private SqlConnection RequireSqlConnection()
+        {
+            var cn = _uow.Connection as SqlConnection;
+            if (cn == null) throw new InvalidOperationException("IUnitOfWork.Connection debe ser SqlConnection.");
+            return cn;
+        }
 
-        /* =====================
-         *  MÉTODOS PRINCIPALES
-         * =====================*/
+        private bool EnsureConnectionOpenForRead(out SqlConnection cn)
+        {
+            cn = RequireSqlConnection();
+            var mustOpen = cn.State != ConnectionState.Open;
 
+            if (mustOpen)
+                cn.Open(); // lectura: NO inicia transacción
+
+            return mustOpen;
+        }
+
+        private void CloseIfOpenedForRead(bool mustClose, SqlConnection cn)
+        {
+            // Cierro solo si yo abrí y no hay transacción activa
+            if (mustClose && _uow.Transaction == null && cn.State == ConnectionState.Open)
+                cn.Close();
+        }
+
+        // =====================
+        // CRUD
+        // =====================
         public void Add(Usuario entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
             bool iStarted = EnsureUowStarted();
             bool ok = false;
+
             try
             {
                 using (var cmd = _uow.Connection.CreateCommand())
                 {
-                    cmd.Transaction = _uow.Transaction;
+                    if (_uow.Transaction != null) cmd.Transaction = _uow.Transaction;
+
                     cmd.CommandText = @"
-                INSERT INTO dbo.Usuario (IdUsuario, Mail, [Contraseña], Telefono, Idioma, IsActive, Otp, OtpExpiry)
-                VALUES (@Id, @Mail, @Pass, @Tel, @Idi, @Act, @Otp, @OtpExp)";
+INSERT INTO dbo.Usuario (IdUsuario, Mail, [Contraseña], Telefono, Idioma, IsActive, Otp, OtpExpiry)
+VALUES (@Id, @Mail, @Pass, @Tel, @Idi, @Act, @Otp, @OtpExp);";
+
                     Add(cmd, "@Id", entity.IdUsuario);
                     Add(cmd, "@Mail", entity.Mail, SqlDbType.NVarChar, 256);
                     Add(cmd, "@Pass", entity.Contraseña, SqlDbType.NVarChar, 256);
@@ -80,6 +108,7 @@ namespace DAL.LoginDAL
                     Add(cmd, "@Act", entity.IsActive);
                     Add(cmd, "@Otp", (object)entity.Otp ?? DBNull.Value);
                     Add(cmd, "@OtpExp", (object)entity.OtpExpiry ?? DBNull.Value);
+
                     cmd.ExecuteNonQuery();
                     ok = true;
                 }
@@ -89,18 +118,23 @@ namespace DAL.LoginDAL
 
         public void Update(Usuario entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
             bool iStarted = EnsureUowStarted();
             bool ok = false;
+
             try
             {
                 using (var cmd = _uow.Connection.CreateCommand())
                 {
-                    cmd.Transaction = _uow.Transaction;
+                    if (_uow.Transaction != null) cmd.Transaction = _uow.Transaction;
+
                     cmd.CommandText = @"
-                UPDATE dbo.Usuario SET 
-                    Mail=@Mail, [Contraseña]=@Pass, Telefono=@Tel, Idioma=@Idi,
-                    IsActive=@Act, Otp=@Otp, OtpExpiry=@OtpExp
-                WHERE IdUsuario=@Id";
+UPDATE dbo.Usuario SET 
+    Mail=@Mail, [Contraseña]=@Pass, Telefono=@Tel, Idioma=@Idi,
+    IsActive=@Act, Otp=@Otp, OtpExpiry=@OtpExp
+WHERE IdUsuario=@Id;";
+
                     Add(cmd, "@Id", entity.IdUsuario);
                     Add(cmd, "@Mail", entity.Mail, SqlDbType.NVarChar, 256);
                     Add(cmd, "@Pass", entity.Contraseña, SqlDbType.NVarChar, 256);
@@ -109,6 +143,7 @@ namespace DAL.LoginDAL
                     Add(cmd, "@Act", entity.IsActive);
                     Add(cmd, "@Otp", (object)entity.Otp ?? DBNull.Value);
                     Add(cmd, "@OtpExp", (object)entity.OtpExpiry ?? DBNull.Value);
+
                     cmd.ExecuteNonQuery();
                     ok = true;
                 }
@@ -120,13 +155,16 @@ namespace DAL.LoginDAL
         {
             bool iStarted = EnsureUowStarted();
             bool ok = false;
+
             try
             {
                 using (var cmd = _uow.Connection.CreateCommand())
                 {
-                    cmd.Transaction = _uow.Transaction;
-                    cmd.CommandText = "DELETE FROM dbo.Usuario WHERE IdUsuario=@Id";
+                    if (_uow.Transaction != null) cmd.Transaction = _uow.Transaction;
+
+                    cmd.CommandText = "DELETE FROM dbo.Usuario WHERE IdUsuario=@Id;";
                     Add(cmd, "@Id", id);
+
                     cmd.ExecuteNonQuery();
                     ok = true;
                 }
@@ -138,52 +176,46 @@ namespace DAL.LoginDAL
         {
             bool iStarted = EnsureUowStarted();
             bool ok = false;
+
             try
             {
                 using (var cmd = _uow.Connection.CreateCommand())
                 {
-                    cmd.Transaction = _uow.Transaction;
-                    cmd.CommandText = "UPDATE dbo.Usuario SET IsActive=@a WHERE IdUsuario=@id";
+                    if (_uow.Transaction != null) cmd.Transaction = _uow.Transaction;
+
+                    cmd.CommandText = "UPDATE dbo.Usuario SET IsActive=@a WHERE IdUsuario=@id;";
                     Add(cmd, "@a", activo);
                     Add(cmd, "@id", idUsuario);
 
                     int rows = cmd.ExecuteNonQuery();
+                    if (rows == 0) throw new InvalidOperationException("Usuario no encontrado.");
                     ok = true;
-
-                    if (rows == 0)
-                        throw new InvalidOperationException("Usuario no encontrado.");
                 }
             }
-            finally
-            {
-                FinishUow(iStarted, ok);
-            }
+            finally { FinishUow(iStarted, ok); }
         }
 
         public IEnumerable<Usuario> List()
         {
-            var cn = (SqlConnection)_uow.Connection;
-            var mustOpen = cn.State != ConnectionState.Open;
-
-            if (mustOpen) cn.Open();   // defensa por si el caller no hizo Begin()
+            bool mustClose = EnsureConnectionOpenForRead(out var cn);
 
             try
             {
                 using (var cmd = cn.CreateCommand())
                 {
-                    if (_uow.Transaction != null)
-                        cmd.Transaction = (SqlTransaction)_uow.Transaction;
+                    if (_uow.Transaction != null) cmd.Transaction = (SqlTransaction)_uow.Transaction;
 
                     cmd.CommandText = @"
-                SELECT IdUsuario, Mail, [Contraseña], IsActive, Telefono, Idioma, Otp, OtpExpiry
-                FROM dbo.Usuario
-                ORDER BY Mail;";
+SELECT IdUsuario, Mail, [Contraseña], IsActive, Telefono, Idioma, Otp, OtpExpiry
+FROM dbo.Usuario
+ORDER BY Mail;";
 
                     using (var rd = cmd.ExecuteReader())
                     {
                         while (rd.Read())
                         {
                             long tel = rd.IsDBNull(rd.GetOrdinal("Telefono")) ? 0L : rd.GetInt64(rd.GetOrdinal("Telefono"));
+
                             yield return new Usuario
                             {
                                 IdUsuario = rd.GetGuid(rd.GetOrdinal("IdUsuario")),
@@ -201,31 +233,37 @@ namespace DAL.LoginDAL
             }
             finally
             {
-                // si no estamos dentro de una transacción del UoW, cerrá lo que abriste
-                if (mustOpen && _uow.Transaction == null)
-                    cn.Close();
+                CloseIfOpenedForRead(mustClose, cn);
             }
         }
 
         public Usuario FindByEmail(string mail)
         {
-            bool iStarted = EnsureUowStarted();
-            bool ok = false;
+            if (string.IsNullOrWhiteSpace(mail))
+                throw new ArgumentException("mail requerido.", nameof(mail));
+
+            bool mustClose = EnsureConnectionOpenForRead(out var cn);
+
             try
             {
-                using (var cmd = _uow.Connection.CreateCommand())
+                using (var cmd = cn.CreateCommand())
                 {
-                    cmd.Transaction = _uow.Transaction;   // puede ser null en lecturas, no pasa nada
+                    if (_uow.Transaction != null) cmd.Transaction = (SqlTransaction)_uow.Transaction;
+
                     cmd.CommandText = @"
-                SELECT IdUsuario, Mail, [Contraseña] AS Contrasena, Telefono, Idioma, IsActive, Otp, OtpExpiry
-                FROM dbo.Usuario WHERE Mail=@mail;";
+SELECT IdUsuario, Mail, [Contraseña] AS Contrasena, Telefono, Idioma, IsActive, Otp, OtpExpiry
+FROM dbo.Usuario
+WHERE Mail=@mail;";
+
                     Add(cmd, "@mail", mail, SqlDbType.NVarChar, 256);
 
                     using (var rd = cmd.ExecuteReader())
                     {
-                        if (!rd.Read()) { ok = true; return null; }
+                        if (!rd.Read()) return null;
+
                         long tel = rd.IsDBNull(rd.GetOrdinal("Telefono")) ? 0L : rd.GetInt64(rd.GetOrdinal("Telefono"));
-                        var user = new Usuario
+
+                        return new Usuario
                         {
                             IdUsuario = rd.GetGuid(rd.GetOrdinal("IdUsuario")),
                             Mail = rd.GetString(rd.GetOrdinal("Mail")),
@@ -236,61 +274,71 @@ namespace DAL.LoginDAL
                             Otp = rd.IsDBNull(rd.GetOrdinal("Otp")) ? null : rd.GetString(rd.GetOrdinal("Otp")),
                             OtpExpiry = rd.IsDBNull(rd.GetOrdinal("OtpExpiry")) ? (DateTime?)null : rd.GetDateTime(rd.GetOrdinal("OtpExpiry"))
                         };
-                        ok = true;
-                        return user;
                     }
                 }
             }
             finally
             {
-                FinishUow(iStarted, ok);
+                CloseIfOpenedForRead(mustClose, cn);
             }
         }
 
-
         public Usuario GetById(object id)
         {
-            using (var cmd = _uow.Connection.CreateCommand())
+            bool mustClose = EnsureConnectionOpenForRead(out var cn);
+
+            try
             {
-                cmd.Transaction = _uow.Transaction;
-                cmd.CommandText = "SELECT * FROM Usuario WHERE IdUsuario=@Id";
-                Add(cmd, "@Id", id);
-                using (var rd = cmd.ExecuteReader())
+                using (var cmd = cn.CreateCommand())
                 {
-                    if (!rd.Read()) return null;
-                    return new Usuario
+                    if (_uow.Transaction != null) cmd.Transaction = (SqlTransaction)_uow.Transaction;
+
+                    cmd.CommandText = @"
+SELECT IdUsuario, Mail, [Contraseña], IsActive, Telefono, Idioma, Otp, OtpExpiry
+FROM dbo.Usuario
+WHERE IdUsuario=@Id;";
+
+                    Add(cmd, "@Id", id);
+
+                    using (var rd = cmd.ExecuteReader())
                     {
-                        IdUsuario = rd.GetGuid(rd.GetOrdinal("IdUsuario")),
-                        Mail = rd.GetString(rd.GetOrdinal("Mail")),
-                        Contraseña = rd.GetString(rd.GetOrdinal("Contraseña")),
-                        Telefono = rd.GetInt32(rd.GetOrdinal("Telefono")),
-                        Idioma = rd.IsDBNull(rd.GetOrdinal("Idioma")) ? null : rd.GetString(rd.GetOrdinal("Idioma")),
-                        IsActive = rd.GetBoolean(rd.GetOrdinal("IsActive")),
-                        Otp = rd.IsDBNull(rd.GetOrdinal("Otp")) ? null : rd.GetString(rd.GetOrdinal("Otp")),
-                        OtpExpiry = rd.IsDBNull(rd.GetOrdinal("OtpExpiry")) ? (DateTime?)null : rd.GetDateTime(rd.GetOrdinal("OtpExpiry"))
-                    };
+                        if (!rd.Read()) return null;
+
+                        long tel = rd.IsDBNull(rd.GetOrdinal("Telefono")) ? 0L : rd.GetInt64(rd.GetOrdinal("Telefono"));
+
+                        return new Usuario
+                        {
+                            IdUsuario = rd.GetGuid(rd.GetOrdinal("IdUsuario")),
+                            Mail = rd.GetString(rd.GetOrdinal("Mail")),
+                            Contraseña = rd.GetString(rd.GetOrdinal("Contraseña")),
+                            IsActive = rd.GetBoolean(rd.GetOrdinal("IsActive")),
+                            Telefono = (int)Math.Min(tel, int.MaxValue),
+                            Idioma = rd.IsDBNull(rd.GetOrdinal("Idioma")) ? null : rd.GetString(rd.GetOrdinal("Idioma")),
+                            Otp = rd.IsDBNull(rd.GetOrdinal("Otp")) ? null : rd.GetString(rd.GetOrdinal("Otp")),
+                            OtpExpiry = rd.IsDBNull(rd.GetOrdinal("OtpExpiry")) ? (DateTime?)null : rd.GetDateTime(rd.GetOrdinal("OtpExpiry"))
+                        };
+                    }
                 }
+            }
+            finally
+            {
+                CloseIfOpenedForRead(mustClose, cn);
             }
         }
 
         /* ============================================================
-         *  ADAPTADORES para cumplir con IGenericRepository<Usuario>
+         *  ADAPTADORES IGenericRepository<Usuario>
          * ============================================================ */
 
-        // Implementación explícita correcta para tu interfaz
-        System.Collections.Generic.List<Usuario> DomainModel.Interfaces.IGenericRepository<Usuario>.GetAll()
+        List<Usuario> DomainModel.Interfaces.IGenericRepository<Usuario>.GetAll()
+            => new List<Usuario>(List());
+
+        Usuario DomainModel.Interfaces.IGenericRepository<Usuario>.GetById(Guid id)
+            => GetById((object)id);
+
+        void DomainModel.Interfaces.IGenericRepository<Usuario>.Delete(Usuario entity)
         {
-            // tu método List() devuelve IEnumerable<Usuario>,
-            // así que simplemente lo convertís a List<Usuario>:
-            return new List<Usuario>(List());
-        }
-
-
-        Usuario IGenericRepository<Usuario>.GetById(Guid id) => GetById((object)id);
-
-        void IGenericRepository<Usuario>.Delete(Usuario entity)
-        {
-            if (entity == null) throw new ArgumentNullException("entity");
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             Delete((object)entity.IdUsuario);
         }
 
@@ -308,10 +356,10 @@ namespace DAL.LoginDAL
 
         private static void Add(IDbCommand cmd, string name, string value, SqlDbType type, int size)
         {
-            var p = cmd.CreateParameter();
+            var p = (SqlParameter)cmd.CreateParameter();
             p.ParameterName = name;
-            ((SqlParameter)p).SqlDbType = type;
-            ((SqlParameter)p).Size = size;
+            p.SqlDbType = type;
+            p.Size = size;
             p.Value = (object)value ?? DBNull.Value;
             cmd.Parameters.Add(p);
         }

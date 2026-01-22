@@ -18,7 +18,6 @@ namespace DAL.ProjectRepo
 {
     public class DetalleEmpleadosRepository : IDetalleEmpleadosRepository
     {
-        private readonly IUnitOfWork _uow;
         private readonly GestorCMBEntities _context;
         private readonly DbSet<DetEmpEf> _set;
 
@@ -46,23 +45,7 @@ namespace DAL.ProjectRepo
         public DetalleEmpleadosRepository(IUnitOfWork uow)
         {
             if (uow == null) throw new ArgumentNullException(nameof(uow));
-            _uow = uow;
-
-            var sqlUow = (DAL.FactoryDAL.SqlUnitOfWork)uow;
-            var sqlConn = (SqlConnection)sqlUow.Connection;
-
-            using (var tmp = new GestorCMBEntities(
-                       new EntityConnection("name=GestorCMBEntities"),
-                       contextOwnsConnection: true))
-            {
-                var ws = ((IObjectContextAdapter)tmp).ObjectContext.MetadataWorkspace;
-                var econn = new EntityConnection(ws, sqlConn);
-                _context = new GestorCMBEntities(econn, contextOwnsConnection: false);
-            }
-
-            if (sqlUow.Transaction != null)
-                _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
-
+            _context = uow.Context;
             _set = _context.Set<DetEmpEf>();
         }
 
@@ -78,16 +61,17 @@ namespace DAL.ProjectRepo
         {
             return _set.AsNoTracking()
                        .Any(d => d.idProyecto == idProyecto && d.idEmpleado == idEmpleado && d.estado == "1");
-            // si querés considerar también inactivos como “ya existe”, sacá el && d.estado == "1"
         }
 
         public void Add(DetalleProyectoEmpleado detalle, string estado = "1")
         {
             if (detalle == null) throw new ArgumentNullException(nameof(detalle));
 
+            var newId = detalle.IdDetalleProyectoEmpleado == Guid.Empty ? Guid.NewGuid() : detalle.IdDetalleProyectoEmpleado;
+
             var nuevo = new DetEmpEf
             {
-                idDetalleEmpleado = detalle.IdDetalleProyectoEmpleado == Guid.Empty ? Guid.NewGuid() : detalle.IdDetalleProyectoEmpleado,
+                idDetalleEmpleado = newId,
                 idProyecto = detalle.IdProyecto,
                 idEmpleado = detalle.IdEmpleado,
                 fechaIngresoEmpleado = detalle.FechaIngresoEmpleado == default(DateTime) ? DateTime.Now : detalle.FechaIngresoEmpleado,
@@ -96,9 +80,8 @@ namespace DAL.ProjectRepo
             };
 
             _set.Add(nuevo);
-            _context.SaveChanges();
-
-            detalle.IdDetalleProyectoEmpleado = nuevo.idDetalleEmpleado;
+            detalle.IdDetalleProyectoEmpleado = newId; // ya lo tenés
+            // NO SaveChanges
         }
 
         public DetalleProyectoEmpleado GetByProyectoEmpleado(Guid idProyecto, Guid idEmpleado)
@@ -118,11 +101,10 @@ namespace DAL.ProjectRepo
             var row = _set.SingleOrDefault(d => d.idDetalleEmpleado == detalle.IdDetalleProyectoEmpleado);
             if (row == null) throw new InvalidOperationException("No existe el detalle de empleado.");
 
-            // NO tocar FKs
             row.fechaIngresoEmpleado = detalle.FechaIngresoEmpleado;
             row.valorGanancia = detalle.ValorGanancia;
 
-            _context.SaveChanges();
+            // NO SaveChanges
         }
 
         public void SetEstado(Guid idDetalleEmpleado, string estado)
@@ -133,8 +115,8 @@ namespace DAL.ProjectRepo
             var row = _set.SingleOrDefault(d => d.idDetalleEmpleado == idDetalleEmpleado);
             if (row == null) throw new InvalidOperationException("No existe el detalle de empleado.");
 
-            row.estado = string.IsNullOrWhiteSpace(estado) ? "0" : estado; // "0" inactivo, "1" activo
-            _context.SaveChanges();
+            row.estado = string.IsNullOrWhiteSpace(estado) ? "0" : estado;
+            // NO SaveChanges
         }
     }
 }

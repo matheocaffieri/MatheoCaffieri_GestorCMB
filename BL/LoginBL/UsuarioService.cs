@@ -15,44 +15,29 @@ namespace BL.LoginBL
     {
         private readonly IUsuarioRepository _usuarioRepo;
         private readonly IPasswordHasher _hasher;
-        private readonly IUnitOfWork _uow; 
+        private readonly ILoginUnitOfWork _uow;
 
-        // --- Constructor “correcto” con DI (usa Factory/UoW compartido) ---
-        public UsuarioService(IRepositoryFactory factory, IPasswordHasher hasher, string csName = "MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios")
+        // DI: te recomiendo que el factory de Login devuelva ILoginUnitOfWork (no el de EF)
+        // Si todavía no tenés ese factory, usá el ctor legacy o el ctor directo.
+        public UsuarioService(ILoginUnitOfWork uow, IUsuarioRepository usuarioRepo, IPasswordHasher hasher)
         {
-            if (factory == null) throw new ArgumentNullException(nameof(factory));
-            if (hasher == null) throw new ArgumentNullException(nameof(hasher));
-
-            _uow = factory.CreateUnitOfWork(csName);         
-            var bundle = factory.CreateRepositories(_uow);    
-            _usuarioRepo = bundle.Usuarios;
-            _hasher = hasher;
-        }
-
-
-
-        public UsuarioService(IUsuarioRepository usuarioRepo, IPasswordHasher hasher, IUnitOfWork uow = null)
-        {
+            _uow = uow ?? throw new ArgumentNullException(nameof(uow));
             _usuarioRepo = usuarioRepo ?? throw new ArgumentNullException(nameof(usuarioRepo));
             _hasher = hasher ?? throw new ArgumentNullException(nameof(hasher));
-            _uow = uow; // puede ser null si el repo maneja su propio ciclo de vida
         }
 
-        // --- Overload LEGACY (acepta string: nombre de CS o CS completa) ---
+        // Legacy (string): nombre de CS o CS directa
         public UsuarioService(string connectionStringOrName)
         {
             if (string.IsNullOrWhiteSpace(connectionStringOrName))
                 throw new ArgumentNullException(nameof(connectionStringOrName));
 
-            // Si es nombre de CS en App.config, lo resolvemos; si no, lo tomamos como CS directa
             var cs = TryResolveConnectionString(connectionStringOrName);
 
-            // Creamos UoW y repo "a mano"
-            _uow = new SqlUnitOfWork(cs);
+            _uow = new SqlLoginUnitOfWork(cs);
             _usuarioRepo = new UsuarioRepository(_uow);
-            _hasher = new Services.LoginService.PasswordHasher();
+            _hasher = new PasswordHasher();
         }
-
 
         private static string TryResolveConnectionString(string csOrName)
         {
@@ -62,70 +47,33 @@ namespace BL.LoginBL
                 if (entry != null && !string.IsNullOrWhiteSpace(entry.ConnectionString))
                     return entry.ConnectionString;
             }
-            catch
-            {
-                // Si no está el paquete/config, simplemente caemos a usar csOrName como CS directa
-            }
+            catch { }
             return csOrName;
         }
 
-
-        // Helper: crea el repositorio a partir de un string o nombre de conexión
-        private static IUsuarioRepository CreateRepoFromString(string csOrName)
-        {
-            if (string.IsNullOrWhiteSpace(csOrName))
-                throw new ArgumentNullException(nameof(csOrName));
-
-            // Si te pasan el nombre de una connection string, la busca en el app.config
-            string cs = csOrName;
-            var csEntry = System.Configuration.ConfigurationManager.ConnectionStrings[csOrName];
-            if (csEntry != null)
-                cs = csEntry.ConnectionString;
-
-            // Crea un UnitOfWork con esa cadena de conexión
-            var uow = new DAL.FactoryDAL.SqlUnitOfWork(cs);
-
-            // Devuelve el repo ya inicializado con ese UnitOfWork
-            return new DAL.LoginDAL.UsuarioRepository(uow);
-        }
-
-
-
         public void Dispose()
         {
-            // Si viniste por el ctor DI con factory, _uow no es null y lo cerramos acá
-            if (_uow != null) _uow.Dispose();
+            _uow?.Dispose();
         }
 
+        public List<Usuario> ObtenerTodos() => _usuarioRepo.GetAll();
 
-        public List<Usuario> ObtenerTodos()
-        {
-            return _usuarioRepo.GetAll();
-        }
+        public void SetActivo(Guid idUsuario, bool activo) => _usuarioRepo.SetActivo(idUsuario, activo);
 
-        public void SetActivo(Guid idUsuario, bool activo)
-        {
-            _usuarioRepo.SetActivo(idUsuario, activo);
-        }
+        public Usuario ObtenerPorId(Guid id) => _usuarioRepo.GetById(id);
 
-        public Usuario ObtenerPorId(Guid id)
-        {
-            return _usuarioRepo.GetById(id);
-        }
-
-        public Usuario ObtenerPorMail(string mail)
-        {
-            return _usuarioRepo.FindByEmail(mail);
-        }
+        public Usuario ObtenerPorMail(string mail) => _usuarioRepo.FindByEmail(mail);
 
         public void CrearUsuario(Usuario u, string contraseñaPlano)
         {
+            if (u == null) throw new ArgumentNullException(nameof(u));
             u.Contraseña = _hasher.Hash(contraseñaPlano);
             _usuarioRepo.Add(u);
         }
 
         public void ActualizarUsuario(Usuario u)
         {
+            if (u == null) throw new ArgumentNullException(nameof(u));
             _usuarioRepo.Update(u);
         }
 
@@ -140,7 +88,6 @@ namespace BL.LoginBL
         {
             var usuario = _usuarioRepo.FindByEmail(mail);
             if (usuario == null) return false;
-
             return _hasher.Verify(usuario.Contraseña, contraseñaPlano);
         }
     }

@@ -20,11 +20,9 @@ namespace DAL.ProjectRepo
 {
     public class DetalleMaterialesRepository : IDetalleMaterialesRepository
     {
-        private readonly IUnitOfWork _uow;
         private readonly GestorCMBEntities _context;
         private readonly DbSet<DetMatEf> _set;
 
-        // Proyección EF -> Dominio (100% traducible a SQL)
         private static readonly Expression<Func<DetMatEf, DomainModel.DetalleProyectoMaterial>> ToDomainExpr =
             d => new DomainModel.DetalleProyectoMaterial
             {
@@ -49,25 +47,7 @@ namespace DAL.ProjectRepo
         public DetalleMaterialesRepository(IUnitOfWork uow)
         {
             if (uow == null) throw new ArgumentNullException(nameof(uow));
-            _uow = uow;
-
-            var sqlUow = (DAL.FactoryDAL.SqlUnitOfWork)uow;
-            var sqlConn = (SqlConnection)sqlUow.Connection;
-
-            // Contexto temporal para obtener MetadataWorkspace del EDMX
-            using (var tmp = new GestorCMBEntities(
-                       new EntityConnection("name=GestorCMBEntities"),
-                       contextOwnsConnection: true))
-            {
-                var ws = ((IObjectContextAdapter)tmp).ObjectContext.MetadataWorkspace;
-                var econn = new EntityConnection(ws, sqlConn);
-                _context = new GestorCMBEntities(econn, contextOwnsConnection: false);
-            }
-
-            // Compartir transacción del UoW si existe
-            if (sqlUow.Transaction != null)
-                _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
-
+            _context = uow.Context;
             _set = _context.Set<DetMatEf>();
         }
 
@@ -102,12 +82,12 @@ namespace DAL.ProjectRepo
             else
             {
                 row.cantidad += cantidad;
-                row.valorGanancia = valorGanancia;          // si querés mantener el último valor
-                row.fechaIngresoMaterial = fechaIngreso;    // idem
+                row.valorGanancia = valorGanancia;
+                row.fechaIngresoMaterial = fechaIngreso;
                 _context.Entry(row).State = EntityState.Modified;
             }
 
-            _context.SaveChanges();
+            // NO SaveChanges (lo hace el UoW)
         }
     }
 }

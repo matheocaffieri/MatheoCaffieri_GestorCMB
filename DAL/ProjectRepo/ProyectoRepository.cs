@@ -32,23 +32,8 @@ namespace DAL.ProjectRepo
             if (uow == null) throw new ArgumentNullException(nameof(uow));
             _uow = uow;
 
-            var sqlUow = (DAL.FactoryDAL.SqlUnitOfWork)uow;
-            var sqlConn = (SqlConnection)sqlUow.Connection;
 
-            // Contexto temporal para obtener MetadataWorkspace del EDMX
-            using (var tmp = new GestorCMBEntities(
-                       new EntityConnection("name=GestorCMBEntities"),
-                       contextOwnsConnection: true))
-            {
-                var workspace = ((IObjectContextAdapter)tmp).ObjectContext.MetadataWorkspace;
-                var entityConn = new EntityConnection(workspace, sqlConn);
-                _context = new GestorCMBEntities(entityConn, contextOwnsConnection: false);
-            }
-
-            // Compartir transacción del UoW si existe
-            if (((DAL.FactoryDAL.SqlUnitOfWork)uow).Transaction != null)
-                _context.Database.UseTransaction((DbTransaction)((DAL.FactoryDAL.SqlUnitOfWork)uow).Transaction);
-
+            _context = uow.Context;
             _set = _context.Set<ProyectoEf>();
         }
 
@@ -71,7 +56,6 @@ namespace DAL.ProjectRepo
             var ef = new ProyectoEf();
             MapToEf(entity, ef);
             _set.Add(ef);
-            _context.SaveChanges();
         }
 
         public void Update(DomainModel.Proyecto entity)
@@ -82,7 +66,6 @@ namespace DAL.ProjectRepo
 
             MapToEf(entity, ef);
             _context.Entry(ef).State = EntityState.Modified;
-            _context.SaveChanges();
         }
 
         public void Delete(DomainModel.Proyecto entity)
@@ -92,7 +75,6 @@ namespace DAL.ProjectRepo
             if (ef == null) return;
 
             _set.Remove(ef);
-            _context.SaveChanges();
         }
 
         // ===== Lecturas =====

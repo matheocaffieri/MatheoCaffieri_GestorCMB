@@ -11,8 +11,7 @@ namespace DAL.FactoryDAL
 {
     public interface IUnitOfWork : IDisposable
     {
-        DbConnection Connection { get; }
-        DbTransaction Transaction { get; }
+
         GestorCMBEntities Context { get; }
 
         void Begin();         // abre conn + comienza trans

@@ -1,45 +1,40 @@
-﻿using DAL.FactoryDAL;
+﻿using DAL;
+using DAL.FactoryDAL;
 using DAL.ProjectRepo;
+using DomainModel.Entities;
+using Services.Logs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DomainModel.Entities;
 using System.Threading.Tasks;
 
 namespace BL
 {
     public class ProyectoMaterialBL
     {
-        private readonly string _cs;
-
-        public ProyectoMaterialBL()
-        {
-            var ctx = new DAL.GestorCMBEntities();
-            _cs = ctx.Database.Connection.ConnectionString;
-        }
-
         public AsignacionMaterialResult AgregarMaterialDetalleProyectoDesdeInventario(
             Guid idProyecto,
             Guid idMaterial,
             int cantidadSolicitada,
             double valorGanancia)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto inválido.");
-            if (idMaterial == Guid.Empty) throw new ArgumentException("idMaterial inválido.");
-            if (cantidadSolicitada <= 0) throw new ArgumentException("cantidadSolicitada debe ser > 0.");
+            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto inválido.", nameof(idProyecto));
+            if (idMaterial == Guid.Empty) throw new ArgumentException("idMaterial inválido.", nameof(idMaterial));
+            if (cantidadSolicitada <= 0) throw new ArgumentException("cantidadSolicitada debe ser > 0.", nameof(cantidadSolicitada));
 
-            using (var uow = new SqlUnitOfWork(_cs))
+            using (var ctx = new GestorCMBEntities())
+            using (var uow = new SqlUnitOfWork(ctx))
             {
                 uow.Begin();
 
+                var invRepo = new InventarioRepository(uow);
+                var detRepo = new DetalleMaterialesRepository(uow);
+                var matRepo = new MaterialRepository(uow);
+                var faltRepo = new MaterialFaltanteRepository(uow);
+
                 try
                 {
-                    var invRepo = new InventarioRepository(uow);
-                    var detRepo = new DetalleMaterialesRepository(uow);
-                    var matRepo = new MaterialRepository(uow);
-                    var faltRepo = new MaterialFaltanteRepository(uow);
-
                     var inv = invRepo.GetByMaterialId(idMaterial);
                     var stock = inv?.Cantidad ?? 0;
 
@@ -52,7 +47,10 @@ namespace BL
                         detRepo.AddOrUpdate(idProyecto, idMaterial, cantidadAsignada, valorGanancia, DateTime.Now);
 
                         // 2) Descontar inventario (sin negativo)
-                        inv.Cantidad = stock - cantidadAsignada; // si stock==cantidadAsignada => 0
+                        if (inv == null)
+                            throw new InvalidOperationException("Inventario no encontrado para el material. Inconsistencia de datos.");
+
+                        inv.Cantidad = stock - cantidadAsignada; // puede quedar 0
                         invRepo.Update(inv);
                     }
 
@@ -73,11 +71,18 @@ namespace BL
 
                     uow.Commit();
 
+                    LoggerLogic.Info(
+                        $"[ProyectoMaterialBL] Asignación material ok. Proy={idProyecto} Mat={idMaterial} " +
+                        $"Stock={stock} Sol={cantidadSolicitada} Asig={cantidadAsignada} Falt={cantidadFaltante}");
+
                     return new AsignacionMaterialResult(stock, cantidadSolicitada, cantidadAsignada, cantidadFaltante);
                 }
-                catch
+                catch (Exception ex)
                 {
                     uow.Rollback();
+                    LoggerLogic.Error(
+                        $"[ProyectoMaterialBL] Error asignando material. Proy={idProyecto} Mat={idMaterial} Sol={cantidadSolicitada}",
+                        ex);
                     throw;
                 }
             }

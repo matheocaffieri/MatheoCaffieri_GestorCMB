@@ -1,37 +1,74 @@
-﻿using DAL.ProjectRepo;
-using DAL;
+﻿using DAL;
+using DAL.FactoryDAL;
+using DAL.ProjectRepo;
 using DomainModel;
 using DomainModel.Interfaces;
+using Services.Logs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DAL.FactoryDAL;
 using System.Threading.Tasks;
 
 namespace BL
 {
     public class DetalleMaterialBL : IDetalleMaterialesRepository
     {
-        private readonly IDetalleMaterialesRepository detalleMaterialRepository;
+        private readonly IDetalleMaterialesRepository _repo;
+        private readonly IUnitOfWork _uow;
+
         public DetalleMaterialBL()
         {
-            var context = new DAL.GestorCMBEntities();
-            var uow = new DAL.FactoryDAL.SqlUnitOfWork(context.Database.Connection.ConnectionString);
-            detalleMaterialRepository = new DetalleMaterialesRepository(uow);
+            var ctx = new GestorCMBEntities();
+            _uow = new SqlUnitOfWork(ctx);
+
+            _repo = new DetalleMaterialesRepository(_uow);
+        }
+
+        // (Opcional) ctor para DI/tests
+        public DetalleMaterialBL(IUnitOfWork uow, IDetalleMaterialesRepository repo)
+        {
+            _uow = uow ?? throw new ArgumentNullException(nameof(uow));
+            _repo = repo ?? throw new ArgumentNullException(nameof(repo));
         }
 
         public void AddOrUpdate(Guid idProyecto, Guid idMaterial, int cantidad, double valorGanancia, DateTime fechaIngreso)
         {
-            detalleMaterialRepository.AddOrUpdate(idProyecto, idMaterial, cantidad, valorGanancia, fechaIngreso);
+            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
+            if (idMaterial == Guid.Empty) throw new ArgumentException("idMaterial requerido.", nameof(idMaterial));
+            if (cantidad <= 0) return;
+
+            LoggerLogic.Info($"[DetalleMaterialBL] AddOrUpdate START. idProyecto={idProyecto}, idMaterial={idMaterial}, cant={cantidad}");
+
+            _uow.Begin();
+            try
+            {
+                _repo.AddOrUpdate(idProyecto, idMaterial, cantidad, valorGanancia, fechaIngreso); // pendiente commit
+                _uow.Commit();
+
+                LoggerLogic.Info($"[DetalleMaterialBL] AddOrUpdate OK. idProyecto={idProyecto}, idMaterial={idMaterial}");
+            }
+            catch (Exception ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Error($"[DetalleMaterialBL] AddOrUpdate ERROR. idProyecto={idProyecto}, idMaterial={idMaterial}. {ex.Message}");
+                throw;
+            }
         }
 
         public List<DetalleProyectoMaterial> GetAll(Guid idProyecto)
         {
-            return detalleMaterialRepository.GetAll(idProyecto);
+            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
+
+            try
+            {
+                return _repo.GetAll(idProyecto);
+            }
+            catch (Exception ex)
+            {
+                LoggerLogic.Error($"[DetalleMaterialBL] GetAll ERROR. idProyecto={idProyecto}. {ex.Message}");
+                throw;
+            }
         }
-
-
-        
     }
 }

@@ -18,38 +18,38 @@ namespace BL.LoginBL
         private readonly IUsuarioRepository _usuarioRepo;
         private readonly IPasswordHasher _hasher;
 
+        // ✅ DI
         public LoginService(IUsuarioRepository usuarioRepo, IPasswordHasher hasher)
         {
-            _usuarioRepo = usuarioRepo;
-            _hasher = hasher;
+            _usuarioRepo = usuarioRepo ?? throw new ArgumentNullException(nameof(usuarioRepo));
+            _hasher = hasher ?? throw new ArgumentNullException(nameof(hasher));
         }
 
-
+        // ✅ Legacy: recibe "nombre de CS" o "CS directa" (LOGIN), usa SqlLoginUnitOfWork
         public LoginService(string connectionStringUsers)
-        : this(new UsuarioRepository(new SqlUnitOfWork(connectionStringUsers)), new PasswordHasher())
+            : this(
+                new UsuarioRepository(new SqlLoginUnitOfWork(connectionStringUsers)),
+                new PasswordHasher())
         {
-            if (string.IsNullOrEmpty(connectionStringUsers))
-            {
-                throw new ArgumentNullException(nameof(connectionStringUsers), "La cadena de conexión no puede ser nula o vacía.");
-            }
-            // La llamada a ': this(...)' ejecuta el constructor principal
-            // pasando las instancias recién creadas
-            // recibe la cadena de conexión
+            if (string.IsNullOrWhiteSpace(connectionStringUsers))
+                throw new ArgumentNullException(nameof(connectionStringUsers),
+                    "La cadena (o nombre) de conexión no puede ser nula o vacía.");
         }
 
         public LoginResult TryLogin(string mail, string password, out Usuario usuario)
         {
             usuario = null;
 
+            if (string.IsNullOrWhiteSpace(mail) || string.IsNullOrWhiteSpace(password))
+                return LoginResult.CredencialesInvalidas;
+
             var user = _usuarioRepo.FindByEmail(mail);
             if (user == null)
                 return LoginResult.CredencialesInvalidas;
 
-            // Bloquear si no está activo (antes o después de password; así es explícito)
             if (!user.IsActive)
                 return LoginResult.UsuarioInactivo;
 
-            // Validar contraseña
             if (!_hasher.Verify(user.Contraseña, password))
                 return LoginResult.CredencialesInvalidas;
 
@@ -57,23 +57,17 @@ namespace BL.LoginBL
             return LoginResult.Ok;
         }
 
-
-
-
         public Usuario Login(string mail, string password)
         {
+            if (string.IsNullOrWhiteSpace(mail) || string.IsNullOrWhiteSpace(password))
+                return null;
+
             var user = _usuarioRepo.FindByEmail(mail);
-            if (user == null)
-                return null;
-
-            if (!user.IsActive)
-                return null;
-
-            if (!_hasher.Verify(user.Contraseña, password))
-                return null;
+            if (user == null) return null;
+            if (!user.IsActive) return null;
+            if (!_hasher.Verify(user.Contraseña, password)) return null;
 
             return user;
         }
-
     }
 }

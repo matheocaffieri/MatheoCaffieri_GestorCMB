@@ -25,17 +25,19 @@ namespace DAL.FactoryDAL
         public IDetalleEmpleadosRepository DetalleEmpleados { get; private set; }
         public IDetalleMaterialesRepository DetalleMateriales { get; private set; }
 
-        public SqlRepoBundle(IUnitOfWork uow)
+        public SqlRepoBundle(IUnitOfWork uowEf, ILoginUnitOfWork uowLogin)
         {
-            Usuarios = new DAL.LoginDAL.UsuarioRepository(uow);  // OK
-            Empleados = new EmpleadoRepository(uow); // Pendiente de implementar
-            Inventario = new InventarioRepository(uow);
-            Materiales = new MaterialRepository(uow);
-            MaterialesFaltantes = new MaterialFaltanteRepository(uow);
-            Proveedores = new ProveedorRepository(uow);
-            Proyectos = new ProyectoRepository(uow);
-            DetalleEmpleados = new DetalleEmpleadosRepository(uow);
-            DetalleMateriales = new DetalleMaterialesRepository(uow);
+            Usuarios = new DAL.LoginDAL.UsuarioRepository(uowLogin);
+
+            Empleados = new EmpleadoRepository(uowEf);
+            Inventario = new InventarioRepository(uowEf);
+            Materiales = new MaterialRepository(uowEf);
+            MaterialesFaltantes = new MaterialFaltanteRepository(uowEf);
+            Proveedores = new ProveedorRepository(uowEf);
+            Proyectos = new ProyectoRepository(uowEf);
+            DetalleEmpleados = new DetalleEmpleadosRepository(uowEf);
+            DetalleMateriales = new DetalleMaterialesRepository(uowEf);
         }
+
     }
 }

@@ -80,8 +80,11 @@
       <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Factory.cs" />
+    <Compile Include="FactoryDAL\ILoginUnitOfWork.cs" />
     <Compile Include="FactoryDAL\IRepositoryFactory.cs" />
     <Compile Include="FactoryDAL\IUnitOfWork.cs" />
+    <Compile Include="FactoryDAL\LoginUnitOfWork.cs" />
+    <Compile Include="FactoryDAL\SqlLoginUnitOfWork.cs" />
     <Compile Include="FactoryDAL\SqlRepoBundle.cs" />
     <Compile Include="FactoryDAL\SqlRepositoryFactory.cs" />
     <Compile Include="FactoryDAL\SqlUnitOfWork.cs" />

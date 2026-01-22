@@ -1,4 +1,5 @@
-﻿using DAL.FactoryDAL;
+﻿using DAL;
+using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
 using DomainModel.Interfaces;
@@ -11,28 +12,26 @@ namespace BL
     /// <summary>
     /// Capa de negocio para Inventario: valida, loguea y delega en el repositorio.
     /// </summary>
-    public class InventarioBL : IInventarioRepository, IGenericRepository<Inventario>
+    public class InventarioBL : IInventarioRepository, IGenericRepository<DomainModel.Inventario>
     {
         private readonly IUnitOfWork _uow;
-        private readonly IInventarioRepository _inventarioRepository;
+        private readonly IInventarioRepository _repo;
 
-        // Ctor por defecto: arma UoW desde el connection string del EDMX
         public InventarioBL()
         {
-            var ctx = new DAL.GestorCMBEntities();
-            _uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx.Database.Connection.ConnectionString);
-            _inventarioRepository = new InventarioRepository(_uow);
+            var ctx = new GestorCMBEntities();
+            _uow = new SqlUnitOfWork(ctx);
+            _repo = new InventarioRepository(_uow);
         }
 
-        // Ctor para DI / tests
+        // DI / tests
         public InventarioBL(IUnitOfWork uow, IInventarioRepository repo)
         {
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
-            _inventarioRepository = repo ?? throw new ArgumentNullException(nameof(repo));
+            _repo = repo ?? throw new ArgumentNullException(nameof(repo));
         }
 
-        // ---------- Validaciones ----------
-        private static void Validate(Inventario inv, bool isUpdate = false)
+        private static void Validate(DomainModel.Inventario inv, bool isUpdate = false)
         {
             if (inv == null) throw new ArgumentNullException(nameof(inv));
             if (isUpdate && inv.IdMaterialInventario == Guid.Empty)
@@ -43,153 +42,186 @@ namespace BL
                 throw new ArgumentException("La cantidad no puede ser negativa.");
         }
 
-        // ============= CRUD =============
+        // ========= CRUD (WRITE => Begin/Commit) =========
 
-        public void Add(Inventario entity)
+        public void Add(DomainModel.Inventario entity)
         {
             Validate(entity);
 
+            if (entity.IdMaterialInventario == Guid.Empty)
+                entity.IdMaterialInventario = Guid.NewGuid();
+
+            LoggerLogic.Info($"[InventarioBL] Add START. InvId={entity.IdMaterialInventario} Material={entity.IdMaterial} Cant={entity.Cantidad}");
+
+            _uow.Begin();
             try
             {
-                if (entity.IdMaterialInventario == Guid.Empty)
-                    entity.IdMaterialInventario = Guid.NewGuid();
+                _repo.Add(entity);      // pendiente commit
+                _uow.Commit();
 
-                _inventarioRepository.Add(entity);
-                LoggerLogic.Info($"[InventarioBL] Alta inventario ok. Material={entity.IdMaterial} InvId={entity.IdMaterialInventario} Cant={entity.Cantidad}");
+                LoggerLogic.Info($"[InventarioBL] Add OK. InvId={entity.IdMaterialInventario}");
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error($"[InventarioBL] Error al dar de alta inventario (Material={entity?.IdMaterial})", ex);
+                _uow.Rollback();
+                LoggerLogic.Error($"[InventarioBL] Add ERROR. InvId={entity.IdMaterialInventario}. {ex.Message}");
                 throw;
             }
         }
 
-        public void Update(Inventario entity)
+        public void Update(DomainModel.Inventario entity)
         {
             Validate(entity, isUpdate: true);
 
+            LoggerLogic.Info($"[InventarioBL] Update START. InvId={entity.IdMaterialInventario} Cant={entity.Cantidad}");
+
+            _uow.Begin();
             try
             {
-                _inventarioRepository.Update(entity);
-                LoggerLogic.Info($"[InventarioBL] Inventario actualizado. InvId={entity.IdMaterialInventario} Cant={entity.Cantidad}");
+                _repo.Update(entity);
+                _uow.Commit();
+
+                LoggerLogic.Info($"[InventarioBL] Update OK. InvId={entity.IdMaterialInventario}");
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error($"[InventarioBL] Error al actualizar inventario (InvId={entity?.IdMaterialInventario})", ex);
+                _uow.Rollback();
+                LoggerLogic.Error($"[InventarioBL] Update ERROR. InvId={entity.IdMaterialInventario}. {ex.Message}");
                 throw;
             }
         }
 
-        public void Delete(Inventario entity)
+        public void Delete(DomainModel.Inventario entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
             if (entity.IdMaterialInventario == Guid.Empty)
                 throw new ArgumentException("IdMaterialInventario requerido para eliminar.");
 
+            LoggerLogic.Info($"[InventarioBL] Delete START. InvId={entity.IdMaterialInventario}");
+
+            _uow.Begin();
             try
             {
-                _inventarioRepository.Delete(entity);
-                LoggerLogic.Info($"[InventarioBL] Inventario eliminado. InvId={entity.IdMaterialInventario}");
+                _repo.Delete(entity);
+                _uow.Commit();
+
+                LoggerLogic.Info($"[InventarioBL] Delete OK. InvId={entity.IdMaterialInventario}");
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error($"[InventarioBL] Error al eliminar inventario (InvId={entity?.IdMaterialInventario})", ex);
+                _uow.Rollback();
+                LoggerLogic.Error($"[InventarioBL] Delete ERROR. InvId={entity.IdMaterialInventario}. {ex.Message}");
                 throw;
             }
         }
 
-        public Inventario GetById(Guid id)
+        // ========= READ (sin transacción) =========
+
+        public DomainModel.Inventario GetById(Guid id)
         {
+            if (id == Guid.Empty) throw new ArgumentException("id requerido.", nameof(id));
+
             try
             {
-                var inv = _inventarioRepository.GetById(id);
-                if (inv == null) LoggerLogic.Warn($"[InventarioBL] Inventario no encontrado. InvId={id}");
+                var inv = _repo.GetById(id);
+                if (inv == null) LoggerLogic.Warn($"[InventarioBL] GetById: no encontrado. InvId={id}");
                 return inv;
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error($"[InventarioBL] Error al obtener inventario (InvId={id})", ex);
+                LoggerLogic.Error($"[InventarioBL] GetById ERROR. InvId={id}. {ex.Message}");
                 throw;
             }
         }
 
-        public List<Inventario> GetAll()
+        public List<DomainModel.Inventario> GetAll()
         {
             try
             {
-                var list = _inventarioRepository.GetAll();
-                LoggerLogic.Info($"[InventarioBL] Listado inventario: {list.Count} filas.");
+                var list = _repo.GetAll();
+                LoggerLogic.Info($"[InventarioBL] GetAll OK. Count={list.Count}");
                 return list;
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error("[InventarioBL] Error al obtener listado de inventario", ex);
+                LoggerLogic.Error($"[InventarioBL] GetAll ERROR. {ex.Message}");
                 throw;
             }
         }
 
-        // ============= Extras típicos del repo (si tu interfaz los define) =============
-
-        public Inventario GetByMaterialId(Guid idMaterial)
+        public DomainModel.Inventario GetByMaterialId(Guid idMaterial)
         {
+            if (idMaterial == Guid.Empty) throw new ArgumentException("idMaterial requerido.", nameof(idMaterial));
+
             try
             {
-                var inv = _inventarioRepository.GetByMaterialId(idMaterial);
-                if (inv == null) LoggerLogic.Warn($"[InventarioBL] Sin inventario para Material={idMaterial}");
+                var inv = _repo.GetByMaterialId(idMaterial);
+                if (inv == null) LoggerLogic.Warn($"[InventarioBL] GetByMaterialId: sin inventario. Material={idMaterial}");
                 return inv;
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error($"[InventarioBL] Error en GetByMaterialId (Material={idMaterial})", ex);
+                LoggerLogic.Error($"[InventarioBL] GetByMaterialId ERROR. Material={idMaterial}. {ex.Message}");
                 throw;
             }
         }
 
         public decimal GetCantidad(Guid idMaterial)
         {
+            if (idMaterial == Guid.Empty) throw new ArgumentException("idMaterial requerido.", nameof(idMaterial));
+
             try
             {
-                return _inventarioRepository.GetCantidad(idMaterial);
+                return _repo.GetCantidad(idMaterial);
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error($"[InventarioBL] Error en GetCantidad (Material={idMaterial})", ex);
+                LoggerLogic.Error($"[InventarioBL] GetCantidad ERROR. Material={idMaterial}. {ex.Message}");
                 throw;
             }
         }
 
+        // ========= Extra: cambia cantidad (WRITE => Begin/Commit) =========
+
         public int CambiarCantidad(Guid idInventario, int delta)
         {
-            if (delta == 0)
-                return _inventarioRepository.GetById(idInventario).Cantidad;
+            if (idInventario == Guid.Empty) throw new ArgumentException("idInventario requerido.", nameof(idInventario));
+            if (delta == 0) return GetById(idInventario)?.Cantidad ?? 0;
 
-            var inv = _inventarioRepository.GetById(idInventario);
-            if (inv == null)
-                throw new ArgumentException("Inventario no encontrado.", nameof(idInventario));
+            LoggerLogic.Info($"[InventarioBL] CambiarCantidad START. InvId={idInventario} Delta={delta}");
 
-            var nuevaCantidad = inv.Cantidad + delta;
-
-            if (nuevaCantidad < 0)
+            _uow.Begin();
+            try
             {
-                LoggerLogic.Warn(
-                    $"[InventarioBL] Intento de cantidad negativa. Id={idInventario}, Actual={inv.Cantidad}, Delta={delta}");
-                // no actualiza, devuelve la actual
-                return inv.Cantidad;
+                var inv = _repo.GetById(idInventario);
+                if (inv == null) throw new ArgumentException("Inventario no encontrado.", nameof(idInventario));
+
+                var nuevaCantidad = inv.Cantidad + delta;
+                if (nuevaCantidad < 0)
+                {
+                    LoggerLogic.Warn($"[InventarioBL] CambiarCantidad: queda negativa, no aplica. InvId={idInventario} Actual={inv.Cantidad} Delta={delta}");
+                    _uow.Rollback();
+                    return inv.Cantidad;
+                }
+
+                inv.Cantidad = nuevaCantidad;
+                _repo.Update(inv);
+
+                _uow.Commit();
+                LoggerLogic.Info($"[InventarioBL] CambiarCantidad OK. InvId={idInventario} NuevaCantidad={nuevaCantidad}");
+                return nuevaCantidad;
             }
-
-            inv.Cantidad = nuevaCantidad;
-            _inventarioRepository.Update(inv);
-
-            LoggerLogic.Info(
-                $"[InventarioBL] Cantidad modificada. Id={idInventario}, NuevaCantidad={nuevaCantidad}");
-
-            return nuevaCantidad;
+            catch (Exception ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Error($"[InventarioBL] CambiarCantidad ERROR. InvId={idInventario}. {ex.Message}");
+                throw;
+            }
         }
 
-
-
-        // ============= Implementación explícita de IGenericRepository =============
-        List<Inventario> IGenericRepository<Inventario>.GetAll() => GetAll();
-        Inventario IGenericRepository<Inventario>.GetById(Guid id) => GetById(id);
+        // ========= IGenericRepository explícito =========
+        List<DomainModel.Inventario> IGenericRepository<DomainModel.Inventario>.GetAll() => GetAll();
+        DomainModel.Inventario IGenericRepository<DomainModel.Inventario>.GetById(Guid id) => GetById(id);
     }
 }
+

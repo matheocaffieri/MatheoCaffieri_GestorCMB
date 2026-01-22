@@ -39,31 +39,10 @@ namespace DAL.ProjectRepo
         public MaterialFaltanteRepository(IUnitOfWork uow)
         {
             if (uow == null) throw new ArgumentNullException(nameof(uow));
-            _uow = uow;
-
-            var sqlUow = (DAL.FactoryDAL.SqlUnitOfWork)uow;
-            var sqlConn = (SqlConnection)sqlUow.Connection;
-
-            // Contexto temporal para obtener MetadataWorkspace del EDMX
-            using (var tmp = new GestorCMBEntities(
-                       new EntityConnection("name=GestorCMBEntities"),
-                       contextOwnsConnection: true))
-            {
-                var workspace = ((IObjectContextAdapter)tmp).ObjectContext.MetadataWorkspace;
-
-                // EntityConnection que reutiliza la MISMA SqlConnection del UoW
-                var entityConn = new EntityConnection(workspace, sqlConn);
-
-                // Contexto real (no dueño de la conexión)
-                _context = new GestorCMBEntities(entityConn, contextOwnsConnection: false);
-            }
-
-            // Compartimos transacción del UoW
-            if (sqlUow.Transaction != null)
-                _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
-
+            _context = uow.Context;
             _set = _context.Set<MaterialFaltanteEf>();
         }
+
 
         public List<MaterialFaltante> GetAll(Guid idProyecto)
         {
@@ -103,7 +82,6 @@ namespace DAL.ProjectRepo
                 _context.Entry(row).State = EntityState.Modified;
             }
 
-            _context.SaveChanges();
         }
 
     }

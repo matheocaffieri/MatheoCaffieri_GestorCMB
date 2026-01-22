@@ -53,29 +53,7 @@ namespace DAL.ProjectRepo
         public InventarioRepository(IUnitOfWork uow)
         {
             if (uow == null) throw new ArgumentNullException(nameof(uow));
-            _uow = uow;
-
-            var sqlUow = (DAL.FactoryDAL.SqlUnitOfWork)uow;
-            var sqlConn = (SqlConnection)sqlUow.Connection;
-
-            // Contexto temporal para obtener el MetadataWorkspace del EDMX
-            using (var tmp = new GestorCMBEntities(
-                       new EntityConnection("name=GestorCMBEntities"),
-                       contextOwnsConnection: true))
-            {
-                var workspace = ((IObjectContextAdapter)tmp).ObjectContext.MetadataWorkspace;
-
-                // EntityConnection que reutiliza la MISMA SqlConnection del UoW
-                var entityConn = new EntityConnection(workspace, sqlConn);
-
-                // Instancia del contexto real (no es dueño de la conexión)
-                _context = new GestorCMBEntities(entityConn, contextOwnsConnection: false);
-            }
-
-            // Si el UoW ya tiene transacción, la compartimos
-            if (sqlUow.Transaction != null)
-                _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
-
+            _context = uow.Context;
             _set = _context.Set<InventarioEf>();
         }
 
@@ -104,7 +82,6 @@ namespace DAL.ProjectRepo
             // Adjuntar solo la FK del material (evitamos traer todo el material)
             // Si EF ya conoce Material por id, basta con setear idMaterial como arriba.
             _set.Add(ef);
-            _context.SaveChanges();
         }
 
         public void Update(DomainModel.Inventario entity)
@@ -116,7 +93,6 @@ namespace DAL.ProjectRepo
 
             MapToEf(entity, ef);
             _context.Entry(ef).State = EntityState.Modified;
-            _context.SaveChanges();
         }
 
         public void Delete(DomainModel.Inventario entity)
@@ -127,7 +103,6 @@ namespace DAL.ProjectRepo
             if (ef == null) return;
 
             _set.Remove(ef);
-            _context.SaveChanges();
         }
 
         public DomainModel.Inventario GetById(Guid id)

@@ -45,29 +45,7 @@ namespace DAL.ProjectRepo
         public MaterialRepository(IUnitOfWork uow)
         {
             if (uow == null) throw new ArgumentNullException(nameof(uow));
-            _uow = uow;
-
-            var sqlUow = (DAL.FactoryDAL.SqlUnitOfWork)uow;
-            var sqlConn = (SqlConnection)sqlUow.Connection;
-
-            // Contexto temporal para obtener MetadataWorkspace del EDMX
-            using (var tmp = new GestorCMBEntities(
-                       new EntityConnection("name=GestorCMBEntities"),
-                       contextOwnsConnection: true))
-            {
-                var workspace = ((IObjectContextAdapter)tmp).ObjectContext.MetadataWorkspace;
-
-                // EntityConnection que reutiliza la MISMA SqlConnection del UoW
-                var entityConn = new EntityConnection(workspace, sqlConn);
-
-                // Contexto real (no dueño de la conexión)
-                _context = new GestorCMBEntities(entityConn, contextOwnsConnection: false);
-            }
-
-            // Compartimos transacción del UoW si existe
-            if (sqlUow.Transaction != null)
-                _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
-
+            _context = uow.Context;
             _set = _context.Set<MaterialEf>();
         }
 
@@ -93,9 +71,6 @@ namespace DAL.ProjectRepo
 
             _set.Add(ef);
 
-            // DEBUG EXTRA: ver cuántas filas se afectan
-            var rows = _context.SaveChanges();
-            LoggerLogic.Info($"[MaterialRepository] SaveChanges filas afectadas: {rows}");
         }
 
 
@@ -108,7 +83,6 @@ namespace DAL.ProjectRepo
 
             MapToEf(entity, ef);
             _context.Entry(ef).State = EntityState.Modified;
-            _context.SaveChanges();
         }
 
         public void Delete(DomainModel.Material entity)
@@ -119,7 +93,6 @@ namespace DAL.ProjectRepo
             if (ef == null) return;
 
             _set.Remove(ef);
-            _context.SaveChanges();
         }
 
         public DomainModel.Material GetById(Guid id)

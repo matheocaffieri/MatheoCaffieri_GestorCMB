@@ -19,11 +19,10 @@ namespace DAL.ProjectRepo
 {
     public class ProveedorRepository : IProveedorRepository
     {
-        private readonly IUnitOfWork _uow;
         private readonly GestorCMBEntities _context;
         private readonly DbSet<ProveedorEf> _set;
 
-        // ===== Proyección EF -> Dominio (100% traducible a SQL) =====
+        // EF -> Dominio (traducible a SQL)
         private static readonly Expression<Func<ProveedorEf, DomainModel.Proveedor>> ToDomainExpr =
             p => new DomainModel.Proveedor
             {
@@ -36,33 +35,10 @@ namespace DAL.ProjectRepo
         public ProveedorRepository(IUnitOfWork uow)
         {
             if (uow == null) throw new ArgumentNullException(nameof(uow));
-            _uow = uow;
-
-            var sqlUow = (DAL.FactoryDAL.SqlUnitOfWork)uow;
-            var sqlConn = (SqlConnection)sqlUow.Connection;
-
-            // Contexto temporal para capturar MetadataWorkspace del EDMX
-            using (var tmp = new GestorCMBEntities(
-                       new EntityConnection("name=GestorCMBEntities"),
-                       contextOwnsConnection: true))
-            {
-                var workspace = ((IObjectContextAdapter)tmp).ObjectContext.MetadataWorkspace;
-
-                // EntityConnection que reutiliza la MISMA SqlConnection del UoW
-                var entityConn = new EntityConnection(workspace, sqlConn);
-
-                // Contexto real (no dueño de la conexión)
-                _context = new GestorCMBEntities(entityConn, contextOwnsConnection: false);
-            }
-
-            // Compartimos transacción del UoW si existe
-            if (sqlUow.Transaction != null)
-                _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
-
+            _context = uow.Context;
             _set = _context.Set<ProveedorEf>();
         }
 
-        // ===== Map Dominio -> EF (para altas/ediciones) =====
         private static void MapToEf(DomainModel.Proveedor src, ProveedorEf dst)
         {
             dst.idProveedor = src.IdProveedor;
@@ -71,7 +47,6 @@ namespace DAL.ProjectRepo
             dst.isActive = src.IsActive;
         }
 
-        // ===== CRUD =====
         public void Add(DomainModel.Proveedor entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
@@ -79,7 +54,7 @@ namespace DAL.ProjectRepo
             var ef = new ProveedorEf();
             MapToEf(entity, ef);
             _set.Add(ef);
-            _context.SaveChanges();
+            // NO SaveChanges (lo hace el UoW)
         }
 
         public void Update(DomainModel.Proveedor entity)
@@ -91,7 +66,7 @@ namespace DAL.ProjectRepo
 
             MapToEf(entity, ef);
             _context.Entry(ef).State = EntityState.Modified;
-            _context.SaveChanges();
+            // NO SaveChanges
         }
 
         public void Delete(DomainModel.Proveedor entity)
@@ -102,7 +77,7 @@ namespace DAL.ProjectRepo
             if (ef == null) return;
 
             _set.Remove(ef);
-            _context.SaveChanges();
+            // NO SaveChanges
         }
 
         public DomainModel.Proveedor GetById(Guid id)

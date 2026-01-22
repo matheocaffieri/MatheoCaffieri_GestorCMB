@@ -21,7 +21,6 @@ namespace DAL.ProjectRepo
 {
     public class DetalleInformeMaterialFaltanteRepository : IDetalleInformeMaterialFaltanteRepository
     {
-        private readonly IUnitOfWork _uow;
         private readonly GestorCMBEntities _context;
         private readonly DbSet<DetEf> _set;
 
@@ -36,21 +35,7 @@ namespace DAL.ProjectRepo
         public DetalleInformeMaterialFaltanteRepository(IUnitOfWork uow)
         {
             if (uow == null) throw new ArgumentNullException(nameof(uow));
-            _uow = uow;
-
-            var sqlUow = (SqlUnitOfWork)uow;
-            var sqlConn = (SqlConnection)sqlUow.Connection;
-
-            using (var tmp = new GestorCMBEntities(new EntityConnection("name=GestorCMBEntities"), true))
-            {
-                var workspace = ((IObjectContextAdapter)tmp).ObjectContext.MetadataWorkspace;
-                var entityConn = new EntityConnection(workspace, sqlConn);
-                _context = new GestorCMBEntities(entityConn, contextOwnsConnection: false);
-            }
-
-            if (sqlUow.Transaction != null)
-                _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
-
+            _context = uow.Context;
             _set = _context.Set<DetEf>();
         }
 
@@ -69,7 +54,7 @@ namespace DAL.ProjectRepo
             MapToEf(entity, ef);
 
             _set.Add(ef);
-            _context.SaveChanges();
+            // NO SaveChanges
         }
 
         public void Update(DetalleInformeMaterialFaltante entity)
@@ -81,7 +66,7 @@ namespace DAL.ProjectRepo
 
             MapToEf(entity, ef);
             _context.Entry(ef).State = EntityState.Modified;
-            _context.SaveChanges();
+            // NO SaveChanges
         }
 
         public void Delete(DetalleInformeMaterialFaltante entity)
@@ -92,7 +77,7 @@ namespace DAL.ProjectRepo
             if (ef == null) return;
 
             _set.Remove(ef);
-            _context.SaveChanges();
+            // NO SaveChanges
         }
 
         public DetalleInformeMaterialFaltante GetById(Guid id)

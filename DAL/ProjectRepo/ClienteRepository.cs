@@ -19,11 +19,9 @@ namespace DAL.ProjectRepo
 {
     public class ClienteRepository : IClienteRepository
     {
-        private readonly IUnitOfWork _uow;
         private readonly GestorCMBEntities _context;
         private readonly DbSet<ClienteEf> _set;
 
-        // Proyección EF -> Dominio (100% traducible a SQL)
         private static readonly Expression<Func<ClienteEf, DomainModel.Cliente>> ToDomainExpr =
             c => new DomainModel.Cliente
             {
@@ -31,40 +29,16 @@ namespace DAL.ProjectRepo
                 RazonSocial = c.razonSocial,
                 Telefono = c.telefono,
                 Mail = c.mail,
-                NombreContacto = c.nombreContacto,
-                // agregá acá cualquier otro campo de dominio que tengas
+                NombreContacto = c.nombreContacto
             };
 
         public ClienteRepository(IUnitOfWork uow)
         {
             if (uow == null) throw new ArgumentNullException(nameof(uow));
-            _uow = uow;
-
-            var sqlUow = (SqlUnitOfWork)uow;
-            var sqlConn = (SqlConnection)sqlUow.Connection;
-
-            // Contexto temporal sólo para obtener MetadataWorkspace
-            using (var tmp = new GestorCMBEntities(
-                       new EntityConnection("name=GestorCMBEntities"),
-                       contextOwnsConnection: true))
-            {
-                var workspace = ((IObjectContextAdapter)tmp).ObjectContext.MetadataWorkspace;
-
-                // EntityConnection que reutiliza la MISMA SqlConnection del UoW
-                var entityConn = new EntityConnection(workspace, sqlConn);
-
-                // Contexto real (no dueño de la conexión)
-                _context = new GestorCMBEntities(entityConn, contextOwnsConnection: false);
-            }
-
-            // Compartimos transacción del UoW si existe
-            if (sqlUow.Transaction != null)
-                _context.Database.UseTransaction((DbTransaction)sqlUow.Transaction);
-
+            _context = uow.Context;
             _set = _context.Set<ClienteEf>();
         }
 
-        // ===== Map Dominio -> EF (para altas/ediciones) =====
         private static void MapToEf(DomainModel.Cliente src, ClienteEf dst)
         {
             dst.idCliente = src.IdCliente;
@@ -72,10 +46,7 @@ namespace DAL.ProjectRepo
             dst.telefono = src.Telefono;
             dst.mail = src.Mail;
             dst.nombreContacto = src.NombreContacto;
-            // mapeá acá cualquier otra columna que tengas en la tabla
         }
-
-        // ===== CRUD =====
 
         public void Add(DomainModel.Cliente entity)
         {
@@ -86,8 +57,8 @@ namespace DAL.ProjectRepo
 
             _set.Add(ef);
 
-            var rows = _context.SaveChanges();
-            LoggerLogic.Info($"[ClienteRepository] SaveChanges filas afectadas (Add): {rows}");
+            LoggerLogic.Info($"[ClienteRepository] Add en contexto (pendiente Commit). Id={entity.IdCliente}");
+            // NO SaveChanges
         }
 
         public void Update(DomainModel.Cliente entity)
@@ -100,8 +71,8 @@ namespace DAL.ProjectRepo
             MapToEf(entity, ef);
             _context.Entry(ef).State = EntityState.Modified;
 
-            var rows = _context.SaveChanges();
-            LoggerLogic.Info($"[ClienteRepository] SaveChanges filas afectadas (Update): {rows}");
+            LoggerLogic.Info($"[ClienteRepository] Update en contexto (pendiente Commit). Id={entity.IdCliente}");
+            // NO SaveChanges
         }
 
         public void Delete(DomainModel.Cliente entity)
@@ -113,8 +84,8 @@ namespace DAL.ProjectRepo
 
             _set.Remove(ef);
 
-            var rows = _context.SaveChanges();
-            LoggerLogic.Info($"[ClienteRepository] SaveChanges filas afectadas (Delete): {rows}");
+            LoggerLogic.Info($"[ClienteRepository] Delete en contexto (pendiente Commit). Id={entity.IdCliente}");
+            // NO SaveChanges
         }
 
         public DomainModel.Cliente GetById(Guid id)

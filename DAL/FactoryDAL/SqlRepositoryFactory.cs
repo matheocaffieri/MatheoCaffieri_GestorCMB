@@ -13,11 +13,24 @@ namespace DAL.FactoryDAL
     {
         public IUnitOfWork CreateUnitOfWork(string csName)
         {
-            var cs = ConfigurationManager.ConnectionStrings[csName].ConnectionString;
-            return new SqlUnitOfWork(cs);
+            // si tu contexto usa "name=GestorCMBEntities", no necesitás csName
+            var ctx = new GestorCMBEntities();
+            return new SqlUnitOfWork(ctx);
         }
 
+
         public IRepoBundle CreateRepositories(IUnitOfWork uow)
-            => new SqlRepoBundle(uow); // tu “bundle” que expone los repos
+        {
+            // Tomamos el mismo connectionString que usa EF (siempre desde config)
+            var cs = ConfigurationManager
+                .ConnectionStrings["GestorCMBEntities"]
+                .ConnectionString;
+
+            // UoW del login (ADO.NET)
+            ILoginUnitOfWork uowLogin = new LoginUnitOfWork(cs);
+
+            return new SqlRepoBundle(uow, uowLogin);
+        }
+
     }
 }

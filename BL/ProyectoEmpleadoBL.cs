@@ -3,6 +3,7 @@ using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
 using DomainModel.Interfaces;
+using Services.Logs;
 using System;
 using System.Data.Entity.Core.EntityClient;
 
@@ -11,34 +12,17 @@ namespace BL
     public class ProyectoEmpleadoBL
     {
         private const int MAX_PROYECTOS_ACTIVOS = 3;
-        private readonly string _cs;
-
-        public ProyectoEmpleadoBL()
-        {
-            using (var context = new GestorCMBEntities())
-            {
-                var cs = context.Database.Connection.ConnectionString;
-
-                if (!string.IsNullOrWhiteSpace(cs) &&
-                    cs.IndexOf("metadata=", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    cs = new EntityConnection(cs).StoreConnection.ConnectionString;
-                }
-
-                _cs = cs;
-            }
-        }
 
         public void AgregarEmpleadoDetalleProyecto(Guid idProyecto, Guid idEmpleado, double valorGanancia)
         {
             if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
             if (idEmpleado == Guid.Empty) throw new ArgumentException("idEmpleado requerido.", nameof(idEmpleado));
 
-            using (var uow = new SqlUnitOfWork(_cs))
+            using (var ctx = new GestorCMBEntities())
+            using (var uow = new SqlUnitOfWork(ctx))
             {
-                uow.Begin(); // ✅ PRIMERO la transacción
+                uow.Begin();
 
-                // ✅ Repos DESPUÉS (para que el repo pueda hacer UseTransaction)
                 IEmpleadoRepository empRepo = new EmpleadoRepository(uow);
                 IDetalleEmpleadosRepository detRepo = new DetalleEmpleadosRepository(uow);
 
@@ -63,16 +47,18 @@ namespace BL
                         ValorGanancia = (float)valorGanancia
                     };
 
-                    detRepo.Add(det, estado: "1"); // varchar "1" activo
+                    detRepo.Add(det, estado: "1"); // "1" activo
 
                     emp.CantidadProyectosActivos += 1;
                     empRepo.Update(emp);
 
                     uow.Commit();
+                    LoggerLogic.Info($"[ProyectoEmpleadoBL] Empleado agregado al proyecto. Proy={idProyecto} Emp={idEmpleado} Det={det.IdDetalleProyectoEmpleado}");
                 }
-                catch
+                catch (Exception ex)
                 {
                     uow.Rollback();
+                    LoggerLogic.Error($"[ProyectoEmpleadoBL] Error al agregar empleado. Proy={idProyecto} Emp={idEmpleado}", ex);
                     throw;
                 }
             }
@@ -83,9 +69,10 @@ namespace BL
             if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
             if (idEmpleado == Guid.Empty) throw new ArgumentException("idEmpleado requerido.", nameof(idEmpleado));
 
-            using (var uow = new SqlUnitOfWork(_cs))
+            using (var ctx = new GestorCMBEntities())
+            using (var uow = new SqlUnitOfWork(ctx))
             {
-                uow.Begin(); // ✅ primero
+                uow.Begin();
 
                 IEmpleadoRepository empRepo = new EmpleadoRepository(uow);
                 IDetalleEmpleadosRepository detRepo = new DetalleEmpleadosRepository(uow);
@@ -95,7 +82,7 @@ namespace BL
                     var det = detRepo.GetByProyectoEmpleado(idProyecto, idEmpleado);
                     if (det == null) throw new InvalidOperationException("El empleado no está en este proyecto.");
 
-                    detRepo.SetEstado(det.IdDetalleProyectoEmpleado, "0"); // varchar "0" inactivo
+                    detRepo.SetEstado(det.IdDetalleProyectoEmpleado, "0"); // "0" inactivo
 
                     var emp = empRepo.GetById(idEmpleado);
                     if (emp != null && emp.CantidadProyectosActivos > 0)
@@ -105,10 +92,12 @@ namespace BL
                     }
 
                     uow.Commit();
+                    LoggerLogic.Info($"[ProyectoEmpleadoBL] Empleado quitado del proyecto. Proy={idProyecto} Emp={idEmpleado} Det={det.IdDetalleProyectoEmpleado}");
                 }
-                catch
+                catch (Exception ex)
                 {
                     uow.Rollback();
+                    LoggerLogic.Error($"[ProyectoEmpleadoBL] Error al quitar empleado. Proy={idProyecto} Emp={idEmpleado}", ex);
                     throw;
                 }
             }

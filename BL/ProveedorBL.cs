@@ -12,16 +12,15 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class ProveedorBL : IProveedorRepository, IGenericRepository<DomainModel.Proveedor>
+    public class ProveedorBL : IProveedorRepository, IGenericRepository<DomainModel.Proveedor>, IDisposable
     {
         private readonly IUnitOfWork _uow;
         private readonly IProveedorRepository _repo;
 
-        // Ctor por defecto: arma UoW desde el connection string del EDMX
         public ProveedorBL()
         {
-            var ctx = new DAL.GestorCMBEntities();
-            _uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx.Database.Connection.ConnectionString);
+            var ctx = new GestorCMBEntities();
+            _uow = new SqlUnitOfWork(ctx);          // ✅ NO connectionString
             _repo = new ProveedorRepository(_uow);
         }
 
@@ -32,6 +31,11 @@ namespace BL
             _repo = repo ?? throw new ArgumentNullException(nameof(repo));
         }
 
+        public void Dispose()
+        {
+            _uow?.Dispose();
+        }
+
         // --------- Validaciones ----------
         private static void Validate(DomainModel.Proveedor p, bool isUpdate = false)
         {
@@ -40,25 +44,28 @@ namespace BL
                 throw new ArgumentException("IdProveedor requerido para actualizar.");
             if (string.IsNullOrWhiteSpace(p.Descripcion))
                 throw new ArgumentException("La descripción (nombre del proveedor) es obligatoria.");
-            // Telefono/CUIT/etc.: agregá reglas si las definís como obligatorias
         }
 
         // ================= CRUD =================
 
         public void Add(DomainModel.Proveedor entity)
         {
-            Validate(entity, isUpdate: false);
+            Validate(entity);
 
+            if (entity.IdProveedor == Guid.Empty)
+                entity.IdProveedor = Guid.NewGuid();
+
+            _uow.Begin();
             try
             {
-                if (entity.IdProveedor == Guid.Empty)
-                    entity.IdProveedor = Guid.NewGuid();
-
                 _repo.Add(entity);
-                LoggerLogic.Info($"[ProveedorBL] Proveedor agregado: {entity.Descripcion} ({entity.IdProveedor})");
+
+                _uow.Commit();
+                LoggerLogic.Info($"[ProveedorBL] Proveedor agregado OK: {entity.Descripcion} ({entity.IdProveedor})");
             }
             catch (Exception ex)
             {
+                _uow.Rollback();
                 LoggerLogic.Error($"[ProveedorBL] Error al agregar proveedor ({entity?.Descripcion ?? "desconocido"})", ex);
                 throw;
             }
@@ -68,13 +75,17 @@ namespace BL
         {
             Validate(entity, isUpdate: true);
 
+            _uow.Begin();
             try
             {
                 _repo.Update(entity);
-                LoggerLogic.Info($"[ProveedorBL] Proveedor actualizado: {entity.Descripcion} ({entity.IdProveedor})");
+
+                _uow.Commit();
+                LoggerLogic.Info($"[ProveedorBL] Proveedor actualizado OK: {entity.Descripcion} ({entity.IdProveedor})");
             }
             catch (Exception ex)
             {
+                _uow.Rollback();
                 LoggerLogic.Error($"[ProveedorBL] Error al actualizar proveedor ({entity?.IdProveedor})", ex);
                 throw;
             }
@@ -86,13 +97,17 @@ namespace BL
             if (entity.IdProveedor == Guid.Empty)
                 throw new ArgumentException("IdProveedor requerido para eliminar.");
 
+            _uow.Begin();
             try
             {
                 _repo.Delete(entity);
-                LoggerLogic.Info($"[ProveedorBL] Proveedor eliminado: {entity.Descripcion} ({entity.IdProveedor})");
+
+                _uow.Commit();
+                LoggerLogic.Info($"[ProveedorBL] Proveedor eliminado OK: {entity.Descripcion} ({entity.IdProveedor})");
             }
             catch (Exception ex)
             {
+                _uow.Rollback();
                 LoggerLogic.Error($"[ProveedorBL] Error al eliminar proveedor ({entity?.IdProveedor})", ex);
                 throw;
             }
@@ -100,6 +115,8 @@ namespace BL
 
         public DomainModel.Proveedor GetById(Guid id)
         {
+            if (id == Guid.Empty) throw new ArgumentException("id requerido.", nameof(id));
+
             try
             {
                 var prov = _repo.GetById(id);
@@ -118,7 +135,7 @@ namespace BL
             try
             {
                 var list = _repo.GetAll();
-                LoggerLogic.Info($"[ProveedorBL] Listado de proveedores: {list.Count} filas.");
+                LoggerLogic.Info($"[ProveedorBL] Listado de proveedores OK: {list.Count} filas.");
                 return list;
             }
             catch (Exception ex)
