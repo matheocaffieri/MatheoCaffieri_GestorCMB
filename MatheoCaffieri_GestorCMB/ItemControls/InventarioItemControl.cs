@@ -1,4 +1,5 @@
 ﻿using BL;
+using Services.Language;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -58,8 +59,9 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("No se pudo aumentar la cantidad.\n" + ex.Message,
-                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        LanguageService.Current?.T("err_aumentar_cantidad") ?? "No se pudo aumentar la cantidad.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -86,8 +88,9 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("No se pudo disminuir la cantidad.\n" + ex.Message,
-                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        LanguageService.Current?.T("err_disminuir_cantidad") ?? "No se pudo disminuir la cantidad.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

@@ -8,6 +8,6 @@ namespace DomainModel.Interfaces
 {
     public interface IInformeMontoRepository
     {
-        void CalcularMontoProyecto(Guid idProyecto);
+        void Upsert(InformeMonto informe);
     }
 }

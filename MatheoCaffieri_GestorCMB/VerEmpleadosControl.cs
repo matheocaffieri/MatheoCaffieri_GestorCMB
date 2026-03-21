@@ -2,6 +2,7 @@
 using DomainModel;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.Language;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -37,20 +40,39 @@ namespace MatheoCaffieri_GestorCMB
 
         private void ObtenerEmpleadosItems()
         {
-            List<Empleado> empleados = ((IGenericRepository<Empleado>)new EmpleadoBL()).GetAll();
+            var empleados = ((IGenericRepository<Empleado>)new EmpleadoBL()).GetAll();
 
             empleadosLayoutPanel.Controls.Clear();
 
-            empleados.ForEach(e =>
+            foreach (var e in empleados)
             {
-                EmpleadosItemControl empleadosItemControl = new EmpleadosItemControl
+                var item = new EmpleadosItemControl();
+                item.Bind(e);
+
+                // Switch on/off
+                item.ActiveChanged += (emp, nuevoEstado) =>
                 {
-                    Info = e.Nombre + " " + e.Apellido + " | DNI: " + e.NroDocumento + " | $" + e.Sueldo + " | Proyectos activos: " + e.CantidadProyectosActivos
+                    if (emp == null || emp.IdEmpleado == Guid.Empty) return;
+                    new EmpleadoBL().Update(emp);
                 };
 
-                // Agregas el control al LayoutPanel
-                empleadosLayoutPanel.Controls.Add(empleadosItemControl);
-            });
+                // Click en el lápiz
+                item.EditRequested += (emp) =>
+                {
+                    if (emp == null || emp.IdEmpleado == Guid.Empty) return;
+
+                    using (var frm = new EditEmpleadoForm(_empleadoRepo, emp))
+                    {
+                        var owner = this.FindForm();
+                        var dr = (owner != null) ? frm.ShowDialog(owner) : frm.ShowDialog();
+
+                        if (dr == DialogResult.OK)
+                            ObtenerEmpleadosItems(); // recarga lista con datos actualizados
+                    }
+                };
+
+                empleadosLayoutPanel.Controls.Add(item);
+            }
         }
 
         private void VerEmpleadosControl_Load(object sender, EventArgs e)

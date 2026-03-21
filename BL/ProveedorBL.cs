@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Logs;
 using System;
@@ -39,11 +40,11 @@ namespace BL
         // --------- Validaciones ----------
         private static void Validate(DomainModel.Proveedor p, bool isUpdate = false)
         {
-            if (p == null) throw new ArgumentNullException(nameof(p));
+            if (p == null) throw new AppException("err_entity_null");
             if (isUpdate && p.IdProveedor == Guid.Empty)
-                throw new ArgumentException("IdProveedor requerido para actualizar.");
+                throw new AppException("err_proveedor_id_required");
             if (string.IsNullOrWhiteSpace(p.Descripcion))
-                throw new ArgumentException("La descripción (nombre del proveedor) es obligatoria.");
+                throw new AppException("err_proveedor_descripcion_required");
         }
 
         // ================= CRUD =================
@@ -93,9 +94,9 @@ namespace BL
 
         public void Delete(DomainModel.Proveedor entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
             if (entity.IdProveedor == Guid.Empty)
-                throw new ArgumentException("IdProveedor requerido para eliminar.");
+                throw new AppException("err_proveedor_id_delete");
 
             _uow.Begin();
             try
@@ -115,7 +116,7 @@ namespace BL
 
         public DomainModel.Proveedor GetById(Guid id)
         {
-            if (id == Guid.Empty) throw new ArgumentException("id requerido.", nameof(id));
+            if (id == Guid.Empty) throw new AppException("err_id_required");
 
             try
             {

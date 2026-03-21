@@ -2,6 +2,7 @@
 using DomainModel;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.Language;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -30,14 +31,18 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 var host = _mainForm ?? (this.FindForm() as MainForm);
                 if (host == null)
                 {
-                    MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        LanguageService.Current?.T("err_mainform_no_encontrado") ?? "No se encontró el MainForm para navegar.",
+                        LanguageService.Current?.T("cap_atencion") ?? "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -91,15 +96,30 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonGestionarProveedores_Click(object sender, EventArgs e)
         {
-            var host = _mainForm ?? (this.FindForm() as MainForm);
-            if (host == null)
+            // 1) Permisos: si no puede, mostrar y cortar
+            if (!SessionContext.Has("AGREGAR_PROVEEDORES")) // ajustá la key
             {
-                MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            host.addUserControl(new ProveedorControl());
+            // 2) Recién si tiene permiso, buscamos el MainForm
+            var host = _mainForm ?? (this.FindForm() as MainForm);
+
+            if (host == null)
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_mainform_no_encontrado") ?? "No se encontró el MainForm para navegar.",
+                    LanguageService.Current?.T("cap_atencion") ?? "Atención",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 3) Navegación
+            host.addUserControl(new ProveedorControl(/* pasá deps si corresponde */));
         }
 
         private void buttonVerInformesCompra_Click(object sender, EventArgs e)

@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Logs;
 using System;
@@ -15,8 +16,8 @@ namespace BL
 
         public void AgregarEmpleadoDetalleProyecto(Guid idProyecto, Guid idEmpleado, double valorGanancia)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
-            if (idEmpleado == Guid.Empty) throw new ArgumentException("idEmpleado requerido.", nameof(idEmpleado));
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
+            if (idEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
             using (var ctx = new GestorCMBEntities())
             using (var uow = new SqlUnitOfWork(ctx))
@@ -29,14 +30,14 @@ namespace BL
                 try
                 {
                     if (detRepo.Exists(idProyecto, idEmpleado))
-                        throw new InvalidOperationException("El empleado ya está agregado a este proyecto.");
+                        throw new AppException("err_empleado_ya_en_proyecto");
 
                     var emp = empRepo.GetById(idEmpleado);
-                    if (emp == null) throw new InvalidOperationException("Empleado no encontrado.");
-                    if (!emp.IsActive) throw new InvalidOperationException("El empleado está inactivo.");
+                    if (emp == null) throw new AppException("err_empleado_not_found");
+                    if (!emp.IsActive) throw new AppException("err_empleado_inactivo");
 
                     if (emp.CantidadProyectosActivos >= MAX_PROYECTOS_ACTIVOS)
-                        throw new InvalidOperationException("El empleado ya tiene 3 proyectos activos. No se puede agregar.");
+                        throw new AppException("err_empleado_max_proyectos");
 
                     var det = new DetalleProyectoEmpleado
                     {
@@ -66,8 +67,8 @@ namespace BL
 
         public void QuitarEmpleadoDelProyecto(Guid idProyecto, Guid idEmpleado)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
-            if (idEmpleado == Guid.Empty) throw new ArgumentException("idEmpleado requerido.", nameof(idEmpleado));
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
+            if (idEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
             using (var ctx = new GestorCMBEntities())
             using (var uow = new SqlUnitOfWork(ctx))
@@ -80,7 +81,7 @@ namespace BL
                 try
                 {
                     var det = detRepo.GetByProyectoEmpleado(idProyecto, idEmpleado);
-                    if (det == null) throw new InvalidOperationException("El empleado no está en este proyecto.");
+                    if (det == null) throw new AppException("err_empleado_no_en_proyecto");
 
                     detRepo.SetEstado(det.IdDetalleProyectoEmpleado, "0"); // "0" inactivo
 

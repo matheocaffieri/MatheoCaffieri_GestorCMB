@@ -1,6 +1,8 @@
 ﻿using BL;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
+using Services.Language;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -39,7 +41,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 Close();
                 return;
@@ -82,14 +86,18 @@ namespace MatheoCaffieri_GestorCMB
 
             if (string.IsNullOrWhiteSpace(descripcion) || string.IsNullOrWhiteSpace(ubicacion))
             {
-                MessageBox.Show("Complete Descripción y Ubicación.", "Validación",
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_descripcion_ubicacion") ?? "Complete Descripción y Ubicación.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (comboBoxCliente.SelectedValue == null || !(comboBoxCliente.SelectedValue is Guid idCliente) || idCliente == Guid.Empty)
             {
-                MessageBox.Show("Seleccione un cliente.", "Validación",
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_cliente_requerido") ?? "Seleccione un cliente.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -116,10 +124,15 @@ namespace MatheoCaffieri_GestorCMB
                 ProyectoGuardado = true;
                 Close();
             }
-            catch (Exception ex)
+            catch (AppException ex)
             {
-                MessageBox.Show("No se pudo agregar el proyecto:\n" + ex.Message,
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception)
+            {
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

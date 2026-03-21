@@ -1,6 +1,7 @@
 ﻿using BL.AccessBL;
 using BL.LoginBL;
 using Interfaces.LoginInterfaces;
+using Services.Language;
 using Services.RoleService;
 using Services.RoleService.Logic;
 using System;
@@ -49,7 +50,10 @@ namespace MatheoCaffieri_GestorCMB
         private bool Require(string permiso)
         {
             if (SessionContext.Has(permiso)) return true;
-            MessageBox.Show("No tenés permisos.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(
+                LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos.",
+                LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
 
@@ -73,7 +77,6 @@ namespace MatheoCaffieri_GestorCMB
 
             // Ajustes
             verLogsToolStripMenuItem.Tag = TipoPermiso.VER_LOGS.ToString();
-            configurarParámetrosToolStripMenuItem.Tag = TipoPermiso.CONFIGURAR_PARAMETROS.ToString();
             gestionarUsuariosToolStripMenuItem.Tag = TipoPermiso.GESTIONAR_USUARIOS.ToString();
 
             // Menú raíz sin permiso propio (se habilita si tiene algún hijo habilitado)
@@ -207,7 +210,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }

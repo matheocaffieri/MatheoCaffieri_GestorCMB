@@ -133,4 +133,303 @@
   <data name="c m b" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\c m b.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <!-- ===== Error strings (multilingual exception system) ===== -->
+  <data name="err_generic" xml:space="preserve">
+    <value>Ocurrió un error inesperado.</value>
+  </data>
+  <data name="err_db_generic" xml:space="preserve">
+    <value>Error al acceder a la base de datos.</value>
+  </data>
+  <data name="err_entity_null" xml:space="preserve">
+    <value>La entidad no puede ser nula.</value>
+  </data>
+  <data name="err_id_required" xml:space="preserve">
+    <value>El identificador es requerido.</value>
+  </data>
+  <data name="err_empleado_id_required" xml:space="preserve">
+    <value>IdEmpleado requerido.</value>
+  </data>
+  <data name="err_proyecto_id_required" xml:space="preserve">
+    <value>IdProyecto requerido.</value>
+  </data>
+  <data name="err_material_id_required" xml:space="preserve">
+    <value>IdMaterial requerido para actualizar.</value>
+  </data>
+  <data name="err_material_id_delete" xml:space="preserve">
+    <value>IdMaterial requerido para eliminar.</value>
+  </data>
+  <data name="err_material_descripcion_required" xml:space="preserve">
+    <value>La descripción del artículo es obligatoria.</value>
+  </data>
+  <data name="err_material_unidad_required" xml:space="preserve">
+    <value>La unidad es obligatoria.</value>
+  </data>
+  <data name="err_material_costo_negativo" xml:space="preserve">
+    <value>El costo por unidad no puede ser negativo.</value>
+  </data>
+  <data name="err_material_proveedor_required" xml:space="preserve">
+    <value>Debés seleccionar un proveedor.</value>
+  </data>
+  <data name="err_inventario_id_required" xml:space="preserve">
+    <value>IdMaterialInventario requerido para actualizar.</value>
+  </data>
+  <data name="err_inventario_id_delete" xml:space="preserve">
+    <value>IdMaterialInventario requerido para eliminar.</value>
+  </data>
+  <data name="err_inventario_material_required" xml:space="preserve">
+    <value>IdMaterial requerido.</value>
+  </data>
+  <data name="err_inventario_cantidad_negativa" xml:space="preserve">
+    <value>La cantidad no puede ser negativa.</value>
+  </data>
+  <data name="err_inventario_not_found" xml:space="preserve">
+    <value>Inventario no encontrado.</value>
+  </data>
+  <data name="err_proveedor_id_required" xml:space="preserve">
+    <value>IdProveedor requerido para actualizar.</value>
+  </data>
+  <data name="err_proveedor_id_delete" xml:space="preserve">
+    <value>IdProveedor requerido para eliminar.</value>
+  </data>
+  <data name="err_proveedor_descripcion_required" xml:space="preserve">
+    <value>La descripción (nombre del proveedor) es obligatoria.</value>
+  </data>
+  <data name="err_informe_id_required" xml:space="preserve">
+    <value>idInformeCompra requerido.</value>
+  </data>
+  <data name="err_informe_sin_faltantes" xml:space="preserve">
+    <value>Este proyecto no tiene materiales faltantes.</value>
+  </data>
+  <data name="err_informe_sin_materiales" xml:space="preserve">
+    <value>El informe no tiene materiales.</value>
+  </data>
+  <data name="err_informe_sin_faltantes_proyecto" xml:space="preserve">
+    <value>No se encontraron materiales faltantes para ese proyecto/informe.</value>
+  </data>
+  <data name="err_informe_material_no_existe" xml:space="preserve">
+    <value>No existe el material en Inventario/Material. Cargalo primero y volvé a aplicar la compra.</value>
+  </data>
+  <data name="err_empleado_ya_en_proyecto" xml:space="preserve">
+    <value>El empleado ya está agregado a este proyecto.</value>
+  </data>
+  <data name="err_empleado_not_found" xml:space="preserve">
+    <value>Empleado no encontrado.</value>
+  </data>
+  <data name="err_empleado_inactivo" xml:space="preserve">
+    <value>El empleado está inactivo.</value>
+  </data>
+  <data name="err_empleado_max_proyectos" xml:space="preserve">
+    <value>El empleado ya tiene 3 proyectos activos. No se puede agregar.</value>
+  </data>
+  <data name="err_empleado_no_en_proyecto" xml:space="preserve">
+    <value>El empleado no está en este proyecto.</value>
+  </data>
+  <data name="err_empleado_id_detalle_required" xml:space="preserve">
+    <value>IdDetalleProyectoEmpleado requerido.</value>
+  </data>
+  <data name="err_material_cantidad_invalida" xml:space="preserve">
+    <value>cantidadSolicitada debe ser mayor a 0.</value>
+  </data>
+  <data name="err_inventario_inconsistencia" xml:space="preserve">
+    <value>Inventario no encontrado para el material. Inconsistencia de datos.</value>
+  </data>
+  <data name="err_material_not_found_faltante" xml:space="preserve">
+    <value>Material no encontrado para generar faltante.</value>
+  </data>
+  <data name="err_descripcion_required" xml:space="preserve">
+    <value>descripcion requerida.</value>
+  </data>
+  <data name="err_tipo_material_required" xml:space="preserve">
+    <value>tipoMaterial requerido.</value>
+  </data>
+  <data name="err_tipo_unidad_required" xml:space="preserve">
+    <value>tipoUnidad requerido.</value>
+  </data>
+  <data name="err_detalle_informe_id_required" xml:space="preserve">
+    <value>idInformeCompra requerido.</value>
+  </data>
+  <!-- ===== UI strings (multilingual MessageBox / validation) ===== -->
+  <data name="val_descripcion_requerida" xml:space="preserve">
+    <value>La descripción es obligatoria.</value>
+  </data>
+  <data name="val_tipo_material_requerido" xml:space="preserve">
+    <value>Seleccioná el tipo de material.</value>
+  </data>
+  <data name="val_tipo_unidad_requerido" xml:space="preserve">
+    <value>Seleccioná el tipo de unidad.</value>
+  </data>
+  <data name="val_precio_invalido" xml:space="preserve">
+    <value>Ingresá un precio válido (número positivo).</value>
+  </data>
+  <data name="msg_material_agregado" xml:space="preserve">
+    <value>Material agregado correctamente.</value>
+  </data>
+  <data name="cap_validacion" xml:space="preserve">
+    <value>Validación</value>
+  </data>
+  <data name="cap_acceso_denegado" xml:space="preserve">
+    <value>Acceso denegado</value>
+  </data>
+  <data name="cap_aviso" xml:space="preserve">
+    <value>Aviso</value>
+  </data>
+  <data name="cap_ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="cap_atencion" xml:space="preserve">
+    <value>Atención</value>
+  </data>
+  <data name="cap_error_config" xml:space="preserve">
+    <value>Error de Configuración</value>
+  </data>
+  <data name="cap_error_critico" xml:space="preserve">
+    <value>Error Crítico</value>
+  </data>
+  <data name="cap_campos_vacios" xml:space="preserve">
+    <value>Campos Vacíos</value>
+  </data>
+  <data name="cap_usuario_inactivo" xml:space="preserve">
+    <value>Usuario inactivo</value>
+  </data>
+  <data name="cap_error_login" xml:space="preserve">
+    <value>Error de Login</value>
+  </data>
+  <data name="err_sin_permisos" xml:space="preserve">
+    <value>No tenés permisos para acceder a esta pantalla.</value>
+  </data>
+  <data name="val_campos_completos" xml:space="preserve">
+    <value>Complete todos los campos.</value>
+  </data>
+  <data name="val_dni_invalido" xml:space="preserve">
+    <value>El número de documento no es válido.</value>
+  </data>
+  <data name="val_sueldo_invalido" xml:space="preserve">
+    <value>El sueldo no es válido.</value>
+  </data>
+  <data name="val_nombre_requerido" xml:space="preserve">
+    <value>El nombre es obligatorio.</value>
+  </data>
+  <data name="val_apellido_requerido" xml:space="preserve">
+    <value>El apellido es obligatorio.</value>
+  </data>
+  <data name="val_descripcion_ubicacion" xml:space="preserve">
+    <value>Complete Descripción y Ubicación.</value>
+  </data>
+  <data name="val_cliente_requerido" xml:space="preserve">
+    <value>Seleccione un cliente.</value>
+  </data>
+  <data name="val_rol_requerido" xml:space="preserve">
+    <value>Elegí un rol de la lista.</value>
+  </data>
+  <data name="val_mail_requerido" xml:space="preserve">
+    <value>El mail es obligatorio.</value>
+  </data>
+  <data name="val_contrasena_requerida" xml:space="preserve">
+    <value>La contraseña es obligatoria.</value>
+  </data>
+  <data name="val_telefono_invalido" xml:space="preserve">
+    <value>El teléfono debe ser numérico.</value>
+  </data>
+  <data name="val_razon_social_requerida" xml:space="preserve">
+    <value>La razón social es obligatoria.</value>
+  </data>
+  <data name="val_usuario_requerido" xml:space="preserve">
+    <value>Seleccioná un usuario.</value>
+  </data>
+  <data name="val_permiso_requerido" xml:space="preserve">
+    <value>Elegí un permiso.</value>
+  </data>
+  <data name="val_nombre_rol_requerido" xml:space="preserve">
+    <value>El nombre del rol es obligatorio.</value>
+  </data>
+  <data name="val_login_campos_vacios" xml:space="preserve">
+    <value>Por favor, ingrese su mail y contraseña.</value>
+  </data>
+  <data name="err_mail_duplicado" xml:space="preserve">
+    <value>Ya existe un usuario con ese mail.</value>
+  </data>
+  <data name="err_mainform_no_encontrado" xml:space="preserve">
+    <value>No se encontró el MainForm para navegar.</value>
+  </data>
+  <data name="err_usuario_inactivo" xml:space="preserve">
+    <value>Este usuario no está activo.</value>
+  </data>
+  <data name="err_credenciales_incorrectas" xml:space="preserve">
+    <value>Mail o contraseña incorrectos.</value>
+  </data>
+  <data name="err_config_connection_string" xml:space="preserve">
+    <value>No se encontró la cadena de conexión en App.config.</value>
+  </data>
+  <data name="err_config_lectura" xml:space="preserve">
+    <value>Error al leer la configuración.</value>
+  </data>
+  <data name="err_init_inesperado" xml:space="preserve">
+    <value>Error inesperado durante la inicialización.</value>
+  </data>
+  <data name="err_proyecto_no_recibido" xml:space="preserve">
+    <value>No se recibió el proyecto.</value>
+  </data>
+  <data name="err_agregar_rol" xml:space="preserve">
+    <value>Error al agregar el rol.</value>
+  </data>
+  <data name="err_quitar_rol" xml:space="preserve">
+    <value>No se pudo quitar el rol.</value>
+  </data>
+  <data name="err_actualizar_usuario" xml:space="preserve">
+    <value>No se pudo actualizar el usuario.</value>
+  </data>
+  <data name="err_crear_permiso" xml:space="preserve">
+    <value>Error al crear el permiso.</value>
+  </data>
+  <data name="err_asignar_permiso" xml:space="preserve">
+    <value>Error al asignar el permiso al rol.</value>
+  </data>
+  <data name="err_actualizar_estado" xml:space="preserve">
+    <value>No se pudo actualizar el estado.</value>
+  </data>
+  <data name="err_actualizar_permisos" xml:space="preserve">
+    <value>No se pudo actualizar los permisos.</value>
+  </data>
+  <data name="err_crear_usuario" xml:space="preserve">
+    <value>Error al crear el usuario.</value>
+  </data>
+  <data name="err_crear_rol" xml:space="preserve">
+    <value>Error al crear el rol.</value>
+  </data>
+  <data name="err_cerrar_sesion" xml:space="preserve">
+    <value>No se pudo cerrar sesión.</value>
+  </data>
+  <data name="err_aumentar_cantidad" xml:space="preserve">
+    <value>No se pudo aumentar la cantidad.</value>
+  </data>
+  <data name="err_disminuir_cantidad" xml:space="preserve">
+    <value>No se pudo disminuir la cantidad.</value>
+  </data>
+  <data name="err_proyecto_sin_info" xml:space="preserve">
+    <value>No se ha asignado información del proyecto.</value>
+  </data>
+  <data name="msg_permiso_creado" xml:space="preserve">
+    <value>Permiso creado.</value>
+  </data>
+  <data name="msg_permiso_asignado" xml:space="preserve">
+    <value>Permiso asignado al rol.</value>
+  </data>
+  <data name="msg_permisos_actualizados" xml:space="preserve">
+    <value>Permisos actualizados.</value>
+  </data>
+  <data name="msg_usuario_creado" xml:space="preserve">
+    <value>Usuario creado correctamente.</value>
+  </data>
+  <data name="msg_usuario_actualizado" xml:space="preserve">
+    <value>Usuario actualizado.</value>
+  </data>
+  <data name="msg_rol_creado" xml:space="preserve">
+    <value>Rol creado correctamente.</value>
+  </data>
+  <data name="msg_compra_aplicada" xml:space="preserve">
+    <value>Compra aplicada.</value>
+  </data>
+  <data name="msg_informe_eliminado" xml:space="preserve">
+    <value>Informe eliminado.</value>
+  </data>
 </root>

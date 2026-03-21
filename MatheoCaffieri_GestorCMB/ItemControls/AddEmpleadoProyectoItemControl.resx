@@ -117,4 +117,85 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="labelInfoEmpleado.TabIndex" type="System.Int32, mscorlib">
+    <value>33</value>
+  </data>
+  <data name="&gt;&gt;buttonAgregarEmpleado.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="buttonAgregarEmpleado.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 38</value>
+  </data>
+  <data name="&gt;&gt;buttonAgregarEmpleado.Name" xml:space="preserve">
+    <value>buttonAgregarEmpleado</value>
+  </data>
+  <data name="buttonAgregarEmpleado.TabIndex" type="System.Int32, mscorlib">
+    <value>32</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>8, 16</value>
+  </data>
+  <data name="&gt;&gt;labelInfoEmpleado.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelInfoEmpleado.Text" xml:space="preserve">
+    <value>Nombre y apellido | 12345678 | $500.000 | Proyectos activos: N</value>
+  </data>
+  <data name="&gt;&gt;buttonAgregarEmpleado.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>AddEmpleadoProyectoItemControl</value>
+  </data>
+  <data name="buttonAgregarEmpleado.Location" type="System.Drawing.Point, System.Drawing">
+    <value>577, 17</value>
+  </data>
+  <data name="buttonAgregarEmpleado.Text" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>679, 74</value>
+  </data>
+  <data name="labelInfoEmpleado.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 23</value>
+  </data>
+  <data name="&gt;&gt;labelInfoEmpleado.Name" xml:space="preserve">
+    <value>labelInfoEmpleado</value>
+  </data>
+  <data name="&gt;&gt;labelInfoEmpleado.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="labelInfoEmpleado.Size" type="System.Drawing.Size, System.Drawing">
+    <value>560, 27</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="labelInfoEmpleado.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 8pt</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelInfoEmpleado.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="buttonAgregarEmpleado.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="&gt;&gt;labelInfoEmpleado.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;buttonAgregarEmpleado.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>en-US</value>
+  </metadata>
 </root>

@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel.Entities;
+using DomainModel.Exceptions;
 using Services.Logs;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,9 @@ namespace BL
             int cantidadSolicitada,
             double valorGanancia)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto inválido.", nameof(idProyecto));
-            if (idMaterial == Guid.Empty) throw new ArgumentException("idMaterial inválido.", nameof(idMaterial));
-            if (cantidadSolicitada <= 0) throw new ArgumentException("cantidadSolicitada debe ser > 0.", nameof(cantidadSolicitada));
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
+            if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
+            if (cantidadSolicitada <= 0) throw new AppException("err_material_cantidad_invalida");
 
             using (var ctx = new GestorCMBEntities())
             using (var uow = new SqlUnitOfWork(ctx))
@@ -48,7 +49,7 @@ namespace BL
 
                         // 2) Descontar inventario (sin negativo)
                         if (inv == null)
-                            throw new InvalidOperationException("Inventario no encontrado para el material. Inconsistencia de datos.");
+                            throw new AppException("err_inventario_inconsistencia");
 
                         inv.Cantidad = stock - cantidadAsignada; // puede quedar 0
                         invRepo.Update(inv);
@@ -58,7 +59,7 @@ namespace BL
                     if (cantidadFaltante > 0)
                     {
                         var mat = matRepo.GetById(idMaterial);
-                        if (mat == null) throw new InvalidOperationException("Material no encontrado para generar faltante.");
+                        if (mat == null) throw new AppException("err_material_not_found_faltante");
 
                         faltRepo.AddOrUpdate(
                             idProyecto,

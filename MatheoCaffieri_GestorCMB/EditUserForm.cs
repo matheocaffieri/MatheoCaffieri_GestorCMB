@@ -1,6 +1,8 @@
 ﻿using BL.AccessBL;
 using BL.LoginBL;
+using DomainModel.Exceptions;
 using DomainModel.Login;
+using Services.Language;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,13 +22,16 @@ namespace MatheoCaffieri_GestorCMB
         private readonly RolesServiceLogic _rolService;
         private readonly UsuarioService _usuarioService;
         private Usuario _usuario;
+        private readonly Guid _loggedUserId;
 
 
-        public EditUserForm(DomainModel.Login.Usuario usuario, RolesServiceLogic rolService /* inyectás como venías */)
+        public EditUserForm(Usuario usuario, RolesServiceLogic rolService, UsuarioService usuarioService, Guid loggedUserId)
         {
             InitializeComponent();
             _usuario = usuario ?? throw new ArgumentNullException(nameof(usuario));
             _rolService = rolService ?? throw new ArgumentNullException(nameof(rolService));
+            _usuarioService = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));
+            _loggedUserId = loggedUserId;
 
             textBoxMailEditUser.Text = _usuario.Mail;
             textBoxContraseñaEditUser.Text = _usuario.Contraseña;
@@ -36,11 +41,12 @@ namespace MatheoCaffieri_GestorCMB
 
             Shown += (s, e) =>
             {
-                // Si tu Usuario NO tiene .Id, usa el nombre correcto (p.ej. IdUsuario)
-                var usuarioId = _usuario.IdUsuario; // <-- CAMBIÁ esto si tu propiedad se llama distinto
+                var usuarioId = _usuario.IdUsuario;
                 CargarRolesGrid(usuarioId);
+                CargarComboRoles(usuarioId);
             };
         }
+
 
         private class RolOption
         {
@@ -177,7 +183,9 @@ namespace MatheoCaffieri_GestorCMB
             {
                 if (comboBoxPermisoEdit.SelectedIndex < 0)
                 {
-                    MessageBox.Show("Elegí un rol de la lista.", "Aviso",
+                    MessageBox.Show(
+                        LanguageService.Current?.T("val_rol_requerido") ?? "Elegí un rol de la lista.",
+                        LanguageService.Current?.T("cap_aviso") ?? "Aviso",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
@@ -201,9 +209,15 @@ namespace MatheoCaffieri_GestorCMB
                 CargarRolesGrid(usuarioId);
                 CargarComboRoles(usuarioId);
             }
+            catch (AppException ex)
+            {
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al agregar el rol: " + ex.Message,
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_agregar_rol") ?? "Error al agregar el rol.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -277,10 +291,16 @@ namespace MatheoCaffieri_GestorCMB
                 CargarRolesGrid(usuarioId);
                 CargarComboRoles(usuarioId); // si usás combo con “no asignados”
             }
+            catch (AppException ex)
+            {
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo quitar el rol: " + ex.Message,
-                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_quitar_rol") ?? "No se pudo quitar el rol.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -329,7 +349,76 @@ namespace MatheoCaffieri_GestorCMB
             return false;
         }
 
+        private void buttonEditarUser_Click(object sender, EventArgs e)
+        {
+            var mail = (textBoxMailEditUser.Text ?? "").Trim();
+            var pass = textBoxContraseñaEditUser.Text ?? "";
+            var telTxt = (textBoxTelEditUser.Text ?? "").Trim();
+            var idioma = comboBoxIdioma.SelectedValue?.ToString() ?? "es";
 
+            if (string.IsNullOrWhiteSpace(mail))
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_mail_requerido") ?? "Ingresá un mail.",
+                    LanguageService.Current?.T("cap_aviso") ?? "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
+            if (string.IsNullOrWhiteSpace(pass))
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_contrasena_requerida") ?? "Ingresá una contraseña.",
+                    LanguageService.Current?.T("cap_aviso") ?? "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (!int.TryParse(telTxt, out var tel))
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_telefono_invalido") ?? "Ingresá un teléfono válido.",
+                    LanguageService.Current?.T("cap_aviso") ?? "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            _usuario.Mail = mail;
+            _usuario.Contraseña = pass;
+            _usuario.Telefono = tel;
+            _usuario.Idioma = idioma;
+
+            try
+            {
+                _usuarioService.ActualizarUsuario(_usuario);
+
+                var cultureCode = idioma == "en" ? "en-US" : "es-AR";
+
+                if (_usuario.IdUsuario == _loggedUserId)
+                {
+                    Properties.Settings.Default.CultureCode = cultureCode;
+                    Properties.Settings.Default.Save();
+                    Application.Restart();
+                    return;
+                }
+
+                MessageBox.Show(
+                    LanguageService.Current?.T("msg_usuario_actualizado") ?? "Usuario actualizado.",
+                    LanguageService.Current?.T("cap_ok") ?? "OK",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Close();
+            }
+            catch (AppException ex)
+            {
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_actualizar_usuario") ?? "No se pudo actualizar el usuario.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

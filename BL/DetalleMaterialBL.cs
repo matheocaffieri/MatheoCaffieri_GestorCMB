@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Logs;
 using System;
@@ -34,8 +35,8 @@ namespace BL
 
         public void AddOrUpdate(Guid idProyecto, Guid idMaterial, int cantidad, double valorGanancia, DateTime fechaIngreso)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
-            if (idMaterial == Guid.Empty) throw new ArgumentException("idMaterial requerido.", nameof(idMaterial));
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
+            if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
             if (cantidad <= 0) return;
 
             LoggerLogic.Info($"[DetalleMaterialBL] AddOrUpdate START. idProyecto={idProyecto}, idMaterial={idMaterial}, cant={cantidad}");
@@ -58,7 +59,7 @@ namespace BL
 
         public List<DetalleProyectoMaterial> GetAll(Guid idProyecto)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
 
             try
             {

@@ -1,6 +1,8 @@
 ﻿using BL;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
+using Services.Language;
 using Services.RoleService;
 using System;
 using System.Drawing;
@@ -28,7 +30,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 Close();
                 return;
@@ -73,7 +77,9 @@ namespace MatheoCaffieri_GestorCMB
                 string.IsNullOrWhiteSpace(documentoStr) ||
                 string.IsNullOrWhiteSpace(sueldoStr))
             {
-                MessageBox.Show("Complete todos los campos.", "Validación",
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_campos_completos") ?? "Complete todos los campos.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -82,7 +88,9 @@ namespace MatheoCaffieri_GestorCMB
             if (!int.TryParse(documentoStr, NumberStyles.Integer, CultureInfo.CurrentCulture, out int documento) ||
                 documento < 0)
             {
-                MessageBox.Show("El número de documento no es válido.", "Validación",
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_dni_invalido") ?? "El número de documento no es válido.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -90,7 +98,9 @@ namespace MatheoCaffieri_GestorCMB
             if (!decimal.TryParse(sueldoStr, NumberStyles.Number, CultureInfo.CurrentCulture, out decimal sueldo) ||
                 sueldo < 0)
             {
-                MessageBox.Show("El sueldo no es válido.", "Validación",
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_sueldo_invalido") ?? "El sueldo no es válido.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -114,10 +124,15 @@ namespace MatheoCaffieri_GestorCMB
                 DialogResult = DialogResult.OK;
                 Close();
             }
-            catch (Exception ex)
+            catch (AppException ex)
             {
-                MessageBox.Show("Ocurrió un error al guardar el empleado:\n" + ex.Message,
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception)
+            {
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

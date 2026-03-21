@@ -1,4 +1,6 @@
-﻿using DomainModel.Login;
+﻿using DomainModel.Exceptions;
+using DomainModel.Login;
+using Services.Language;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -64,9 +66,15 @@ namespace MatheoCaffieri_GestorCMB
                     if (host != null)
                         host.Invoke(new Action(() => host.Close()));
                 }
+                catch (AppException ex)
+                {
+                    var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                    MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("No se pudo cerrar sesión: " + ex.Message,
+                    MessageBox.Show(
+                        LanguageService.Current?.T("err_cerrar_sesion") ?? "No se pudo cerrar sesión.",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

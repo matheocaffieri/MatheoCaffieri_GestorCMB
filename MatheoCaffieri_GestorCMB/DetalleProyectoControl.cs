@@ -1,6 +1,11 @@
 ﻿using BL;
+using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services;
+using Services.Language;
+using Services.RoleService;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,8 +15,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DomainModel;
-using Services;
 
 namespace MatheoCaffieri_GestorCMB
 {
@@ -32,6 +35,8 @@ namespace MatheoCaffieri_GestorCMB
             FechaInicio = proyecto.FechaInicio.ToString("dd/MM/yyyy") ?? "Sin fecha";
             EstadoProyecto = proyecto.Estado.ToString() ?? "Estado no disponible";
             UbicacionProyecto = proyecto.Ubicacion ?? "Ubicación desconocida";
+
+            buttonModificar.Click += buttonModificar_Click;
         }
 
         public Proyecto ProyectoData
@@ -163,61 +168,115 @@ namespace MatheoCaffieri_GestorCMB
 
 
 
+        private void RecalcularYActualizarTotales()
+        {
+            try
+            {
+                var informe = new InformeMontoBL().Recalcular(_proyecto.IdProyecto);
+                float utilidad = informe.MontoTotal * 0.20f;
+
+                TotalEmpleados  = $"${informe.TotalEmpleados:N0}";
+                TotalMateriales = $"${informe.TotalMateriales:N0}";
+                UtilidadEmpresa = $"${utilidad:N0}";
+            }
+            catch (Exception)
+            {
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void DetalleProyectoControl_Load(object sender, EventArgs e)
         {
-            if (_proyecto != null) // Aseguramos que el objeto proyecto no sea nulo
+            if (_proyecto != null)
             {
                 ObtenerDetallesEmpleadosItems(_proyecto.IdProyecto);
                 ObtenerDetallesMaterialesItems(_proyecto.IdProyecto);
                 ObtenerMaterialFaltanteItems(_proyecto.IdProyecto);
+                RecalcularYActualizarTotales();
 
                 if (_proyecto.MaterialFaltantes != null && flowLayoutPanelMatFal.Controls.Count > 0)
                 {
                     flowLayoutPanelMat.Size = new Size(flowLayoutPanelMat.Size.Width, flowLayoutPanelMat.Size.Height - 70);
                 }
-                
-
             }
-
-
         }
 
         private void linkLabelAgregarMat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            // suponiendo que tenés el proyecto cargado en una variable/campo
-            // ejemplo: _proyecto.IdProyecto
-            var frm = new AgregarMaterialProyectoForm(_proyecto.IdProyecto);
-            
+            // Permiso primero
+            if (!SessionContext.Has("AGREGAR_MATERIALES")) // ajustá key real
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            frm.MaterialesProyectoActualizados += (_, __) =>
+            EventHandler handler = (_, __) =>
             {
                 ObtenerDetallesMaterialesItems(_proyecto.IdProyecto);
                 ObtenerMaterialFaltanteItems(_proyecto.IdProyecto);
-                // si tenés el ajuste de layout, llamalo acá también
-                // AjustarLayoutFaltantes();
+                RecalcularYActualizarTotales();
+
                 if (flowLayoutPanelMatFal.Controls.Count > 0)
-                    flowLayoutPanelMat.Height -= 70; 
+                    flowLayoutPanelMat.Height = 70;
             };
 
-            
+            using (var frm = new AgregarMaterialProyectoForm(_proyecto.IdProyecto))
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
 
-            frm.ShowDialog();
+                frm.MaterialesProyectoActualizados += handler;
+                frm.ShowDialog(this);
+                frm.MaterialesProyectoActualizados -= handler;
+            }
 
-            ObtenerDetallesMaterialesItems(_proyecto.IdProyecto);
-            ObtenerMaterialFaltanteItems(_proyecto.IdProyecto);
+
+
         }
 
         private void linkLabelAgregarEmp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var frm = new AgregarEmpleadoProyectoForm(_proyecto.IdProyecto);
-            frm.ShowDialog();
+            // 1) Permiso
+            if (!SessionContext.Has("CARGAR_EMPLEADOS")) // ajustá la key real
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            ObtenerDetallesEmpleadosItems(_proyecto.IdProyecto);
-            
+            // 2) Abrir modal y refrescar si corresponde
+            using (var frm = new AgregarEmpleadoProyectoForm(_proyecto.IdProyecto))
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+                ObtenerDetallesEmpleadosItems(_proyecto.IdProyecto);
+                RecalcularYActualizarTotales();
+            }
         }
 
 
 
+
+        private void buttonModificar_Click(object sender, EventArgs e)
+        {
+            using (var frm = new EditProyectoForm(_proyecto))
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                if (frm.ShowDialog(this) == DialogResult.OK)
+                {
+                    // Refrescar labels con los nuevos datos
+                    DescripcionProyecto = _proyecto.Descripcion;
+                    UbicacionProyecto = _proyecto.Ubicacion;
+                    FechaInicio = _proyecto.FechaInicio.ToString("dd/MM/yyyy");
+                    EstadoProyecto = _proyecto.Estado.ToString();
+                }
+            }
+        }
 
         private void buttonGenerarInforme_Click(object sender, EventArgs e)
         {
@@ -230,10 +289,15 @@ namespace MatheoCaffieri_GestorCMB
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
-            catch (Exception ex)
+            catch (AppException ex)
             {
-                MessageBox.Show("No se pudo generar el informe.\n" + ex.Message,
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception)
+            {
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

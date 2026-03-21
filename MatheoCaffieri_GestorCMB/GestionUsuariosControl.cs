@@ -1,8 +1,11 @@
 ﻿using BL.AccessBL;
 using BL.LoginBL;
+using DomainModel.Exceptions;
 using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.Language;
+using Services.Language;
 using Services.LoginService;
 using Services.RoleService;
 using Services.RoleService.Logic;
@@ -51,7 +54,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 
@@ -122,10 +127,16 @@ namespace MatheoCaffieri_GestorCMB
                         _usuarioSrv.SetActivo(usr.IdUsuario, on);
                         usr.IsActive = on;
                     }
+                    catch (AppException ex)
+                    {
+                        ctrl.Activo = !on;
+                        var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                        MessageBox.Show(msg);
+                    }
                     catch (Exception ex)
                     {
-                        ctrl.Activo = !on; // revertir
-                        MessageBox.Show("No se pudo actualizar el estado: " + ex.Message);
+                        ctrl.Activo = !on;
+                        MessageBox.Show(LanguageService.Current?.T("err_actualizar_estado") ?? "No se pudo actualizar el estado.");
                     }
                 };
 
@@ -255,9 +266,11 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (Exception ex)
             {
-                // Revertir el cambio visual si falló el guardado
                 RevertCheck(e.Node, !e.Node.Checked);
-                MessageBox.Show("No se pudo actualizar permisos: " + ex.Message);
+                if (ex is AppException appEx)
+                    MessageBox.Show(LanguageService.Current?.T(appEx.MessageKey) ?? ex.Message);
+                else
+                    MessageBox.Show(LanguageService.Current?.T("err_actualizar_permisos") ?? "No se pudo actualizar los permisos.");
             }
         }
 
@@ -383,10 +396,10 @@ namespace MatheoCaffieri_GestorCMB
 
         private void btnGuardarPermisos_Click(object sender, EventArgs e)
         {
-            if (_usuarioActual == null) { MessageBox.Show("Seleccioná un usuario."); return; }
+            if (_usuarioActual == null) { MessageBox.Show(LanguageService.Current?.T("val_usuario_requerido") ?? "Seleccioná un usuario."); return; }
             var permisos = GetCheckedPermisosLeafs();
             _userPermsSrv.ReemplazarDirectos(_usuarioActual.IdUsuario, permisos);
-            MessageBox.Show("Permisos actualizados.");
+            MessageBox.Show(LanguageService.Current?.T("msg_permisos_actualizados") ?? "Permisos actualizados.");
         }
 
 
@@ -407,19 +420,28 @@ namespace MatheoCaffieri_GestorCMB
             // Validaciones básicas
             if (string.IsNullOrWhiteSpace(mail))
             {
-                MessageBox.Show("El mail es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_mail_requerido") ?? "El mail es obligatorio.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBox1?.Focus();
                 return;
             }
             if (string.IsNullOrWhiteSpace(passPlano))
             {
-                MessageBox.Show("La contraseña es obligatoria.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_contrasena_requerida") ?? "La contraseña es obligatoria.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBox2?.Focus();
                 return;
             }
             if (!string.IsNullOrWhiteSpace(telStr) && !int.TryParse(telStr, out _))
             {
-                MessageBox.Show("El teléfono debe ser numérico (sin espacios ni guiones).", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_telefono_invalido") ?? "El teléfono debe ser numérico (sin espacios ni guiones).",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBox4?.Focus();
                 return;
             }
@@ -429,7 +451,7 @@ namespace MatheoCaffieri_GestorCMB
 
                 var existente = _usuarioSrv.ObtenerPorMail(mail);
                 if (existente != null)
-                { MessageBox.Show("Ya existe un usuario con ese mail."); return; }
+                { MessageBox.Show(LanguageService.Current?.T("err_mail_duplicado") ?? "Ya existe un usuario con ese mail."); return; }
 
                 var nuevo = new Usuario
                 {
@@ -445,14 +467,19 @@ namespace MatheoCaffieri_GestorCMB
                 if (sel is Guid rolId && rolId != Guid.Empty)
                     _rolesSrv.AsignarUsuarioARol(rolId, nuevo.IdUsuario);
 
-                MessageBox.Show("Usuario creado correctamente.");
+                MessageBox.Show(LanguageService.Current?.T("msg_usuario_creado") ?? "Usuario creado correctamente.");
                 textBox1.Clear(); textBox2.Clear(); textBox4.Clear();
                 comboBoxRol.SelectedIndex = 0;
                 ObtenerUsuariosItems();
             }
+            catch (AppException ex)
+            {
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al crear usuario: " + ex.Message);
+                MessageBox.Show(LanguageService.Current?.T("err_crear_usuario") ?? "Error al crear el usuario.");
             }
         }
 
@@ -477,7 +504,10 @@ namespace MatheoCaffieri_GestorCMB
 
             if (string.IsNullOrWhiteSpace(nombreRol))
             {
-                MessageBox.Show("El nombre del rol es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_nombre_rol_requerido") ?? "El nombre del rol es obligatorio.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBox3?.Focus();
                 return;
             }
@@ -487,17 +517,25 @@ namespace MatheoCaffieri_GestorCMB
                 // Usa el servicio ya instanciado arriba
                 var idRol = _rolesSrv.CrearRol(nombreRol);
 
-                MessageBox.Show($"Rol '{nombreRol}' creado correctamente.\nID: {idRol}",
-                                "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    LanguageService.Current?.T("msg_rol_creado") ?? "Rol creado correctamente.",
+                    LanguageService.Current?.T("cap_ok") ?? "OK",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 textBox3.Clear();
 
                 
             }
+            catch (AppException ex)
+            {
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al crear el rol: " + ex.Message,
-                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_crear_rol") ?? "Error al crear el rol.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             CargarComboRoles();            // <- acá

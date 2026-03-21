@@ -1,4 +1,5 @@
-﻿using Services.Logs;
+﻿using Services.Language;
+using Services.Logs;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 Close();
                 return;

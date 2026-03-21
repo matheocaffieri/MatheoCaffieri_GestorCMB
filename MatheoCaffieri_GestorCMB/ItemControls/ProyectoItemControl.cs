@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DomainModel;
+using Services.Language;
 
 namespace MatheoCaffieri_GestorCMB.ItemControls
 {
@@ -74,13 +75,28 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             FechaInicio = proyecto.FechaInicio.ToString("dd/MM/yyyy") ?? "Sin fecha";
             EstadoProyecto = proyecto.Estado.ToString() ?? "Estado no disponible";
             UbicacionProyecto = proyecto.Ubicacion ?? "Ubicación desconocida";
+
+            switch (proyecto.Estado)
+            {
+                case EnumEstado.EnProceso:
+                    labelEstadoProyecto.ForeColor = Color.CornflowerBlue;
+                    break;
+                case EnumEstado.Suspendido:
+                    labelEstadoProyecto.ForeColor = Color.DarkOrange;
+                    break;
+                case EnumEstado.Finalizado:
+                    labelEstadoProyecto.ForeColor = Color.MediumSeaGreen;
+                    break;
+            }
         }
 
         private void linkLabelVerDetalles_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (_proyecto == null)
             {
-                MessageBox.Show("No se ha asignado información del proyecto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_proyecto_sin_info") ?? "No se ha asignado información del proyecto.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

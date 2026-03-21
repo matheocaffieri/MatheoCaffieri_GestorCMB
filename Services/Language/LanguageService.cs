@@ -13,10 +13,16 @@ namespace Services.Language
         private readonly ILanguageRepository _repo;
         private string _cultureCode;
 
+        /// <summary>
+        /// Singleton para acceso global desde UI (se setea en el constructor).
+        /// </summary>
+        public static ILanguageService Current { get; private set; }
+
         public LanguageService(ILanguageRepository repo, string initialCultureCode)
         {
             _repo = repo;
             SetCulture(string.IsNullOrEmpty(initialCultureCode) ? "es-AR" : initialCultureCode);
+            Current = this;
         }
 
         public void SetCulture(string cultureCode)

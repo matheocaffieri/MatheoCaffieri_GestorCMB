@@ -1,5 +1,6 @@
 ﻿using DAL;
 using DomainModel;
+using DomainModel.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace BL
     {
         public List<MaterialFaltante> GetMaterialesFaltantesDelInforme(Guid idInformeCompra)
         {
-            if (idInformeCompra == Guid.Empty) throw new ArgumentException("idInformeCompra requerido.", nameof(idInformeCompra));
+            if (idInformeCompra == Guid.Empty) throw new AppException("err_detalle_informe_id_required");
 
             using (var context = new GestorCMBEntities())
             {

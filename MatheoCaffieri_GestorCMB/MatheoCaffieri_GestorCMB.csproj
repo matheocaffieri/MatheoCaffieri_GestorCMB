@@ -105,6 +105,24 @@
     <Compile Include="DetalleProyectoControl.Designer.cs">
       <DependentUpon>DetalleProyectoControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditClienteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditClienteForm.Designer.cs">
+      <DependentUpon>EditClienteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditProyectoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditProyectoForm.Designer.cs">
+      <DependentUpon>EditProyectoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditEmpleadoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditEmpleadoForm.Designer.cs">
+      <DependentUpon>EditEmpleadoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditUserForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -254,14 +272,26 @@
     <Compile Include="VerProyectosControl.Designer.cs">
       <DependentUpon>VerProyectosControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AccesosForm.en-US.resx">
+      <DependentUpon>AccesosForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AccesosForm.resx">
       <DependentUpon>AccesosForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddEmpleadosForm.en-US.resx">
+      <DependentUpon>AddEmpleadosForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AddEmpleadosForm.resx">
       <DependentUpon>AddEmpleadosForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AddMaterialesForm.en-US.resx">
+      <DependentUpon>AddMaterialesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AddMaterialesForm.resx">
       <DependentUpon>AddMaterialesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddProyectosForm.en-US.resx">
+      <DependentUpon>AddProyectosForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AddProyectosForm.resx">
       <DependentUpon>AddProyectosForm.cs</DependentUpon>
@@ -272,23 +302,50 @@
     <EmbeddedResource Include="AgregarMaterialProyectoForm.resx">
       <DependentUpon>AgregarMaterialProyectoForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ClientesControl.en-US.resx">
+      <DependentUpon>ClientesControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ClientesControl.resx">
       <DependentUpon>ClientesControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DetalleProyectoControl.en-US.resx">
+      <DependentUpon>DetalleProyectoControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DetalleProyectoControl.resx">
       <DependentUpon>DetalleProyectoControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EditEmpleadoForm.resx">
+      <DependentUpon>EditEmpleadoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditUserForm.en-US.resx">
+      <DependentUpon>EditUserForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EditUserForm.resx">
       <DependentUpon>EditUserForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GestionUsuariosControl.en-US.resx">
+      <DependentUpon>GestionUsuariosControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GestionUsuariosControl.resx">
       <DependentUpon>GestionUsuariosControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="HomeControl.en-US.resx">
+      <DependentUpon>HomeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InformesDeCompraControl.en-US.resx">
+      <DependentUpon>InformesDeCompraControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InformesDeCompraControl.resx">
       <DependentUpon>InformesDeCompraControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ItemControls\AddEmpleadoProyectoItemControl.en-US.resx">
+      <DependentUpon>AddEmpleadoProyectoItemControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ItemControls\AddEmpleadoProyectoItemControl.resx">
       <DependentUpon>AddEmpleadoProyectoItemControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemControls\AddMaterialProyectoItemControl.en-US.resx">
+      <DependentUpon>AddMaterialProyectoItemControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ItemControls\AddMaterialProyectoItemControl.resx">
       <DependentUpon>AddMaterialProyectoItemControl.cs</DependentUpon>
@@ -305,6 +362,9 @@
     <EmbeddedResource Include="ItemControls\EmpleadosItemControl.resx">
       <DependentUpon>EmpleadosItemControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ItemControls\InformeCompraItemControl.en-US.resx">
+      <DependentUpon>InformeCompraItemControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ItemControls\InformeCompraItemControl.resx">
       <DependentUpon>InformeCompraItemControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -316,6 +376,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ItemControls\ProveedorItemControl.resx">
       <DependentUpon>ProveedorItemControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemControls\ProyectoItemControl.en-US.resx">
+      <DependentUpon>ProyectoItemControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ItemControls\ProyectoItemControl.resx">
       <DependentUpon>ProyectoItemControl.cs</DependentUpon>
@@ -329,6 +392,9 @@
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.en-US.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -340,22 +406,35 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.en-US.resx" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ProveedorControl.en-US.resx">
+      <DependentUpon>ProveedorControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProveedorControl.resx">
       <DependentUpon>ProveedorControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="VerEmpleadosControl.en-US.resx">
+      <DependentUpon>VerEmpleadosControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="VerEmpleadosControl.resx">
       <DependentUpon>VerEmpleadosControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VerInventarioControl.en-US.resx">
+      <DependentUpon>VerInventarioControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VerInventarioControl.resx">
       <DependentUpon>VerInventarioControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VerLogsForm.resx">
       <DependentUpon>VerLogsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VerProyectosControl.en-US.resx">
+      <DependentUpon>VerProyectosControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VerProyectosControl.resx">
       <DependentUpon>VerProyectosControl.cs</DependentUpon>

@@ -1,7 +1,9 @@
 ﻿using BL.AccessBL;
 using BL.LoginBL;
+using DomainModel.Exceptions;
 using DomainModel.Login;
 using Interfaces.LoginInterfaces;
+using Services.Language;
 using Services.LoginService;
 using System;
 using System.Collections.Generic;
@@ -40,7 +42,10 @@ namespace MatheoCaffieri_GestorCMB
 
                 if (string.IsNullOrEmpty(connectionStringUsers))
                 {
-                    MessageBox.Show("No se encontró la cadena de conexión 'UsersConnectionString' en App.config.", "Error de Configuración", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        LanguageService.Current?.T("err_config_connection_string") ?? "No se encontró la cadena de conexión en App.config.",
+                        LanguageService.Current?.T("cap_error_config") ?? "Error de Configuración",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     // Podrías deshabilitar el botón de login o cerrar la aplicación aquí
                     buttonLogin.Enabled = false;
                     return;
@@ -54,13 +59,19 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (ConfigurationErrorsException configEx)
             {
-                MessageBox.Show($"Error al leer la configuración: {configEx.Message}\nAsegúrate de que App.config está bien formado y contiene la cadena de conexión.", "Error de Configuración", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_config_lectura") ?? "Error al leer la configuración.",
+                    LanguageService.Current?.T("cap_error_config") ?? "Error de Configuración",
+                    MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 buttonLogin.Enabled = false; // Deshabilitar login si hay error de config
             }
             catch (Exception ex)
             {
                 // Captura cualquier otro error durante la inicialización
-                MessageBox.Show($"Error inesperado durante la inicialización: {ex.Message}", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_init_inesperado") ?? "Error inesperado durante la inicialización.",
+                    LanguageService.Current?.T("cap_error_critico") ?? "Error Crítico",
+                    MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 buttonLogin.Enabled = false; // Deshabilitar login
             }
         }
@@ -97,7 +108,10 @@ namespace MatheoCaffieri_GestorCMB
             // Validación básica de entrada
             if (string.IsNullOrWhiteSpace(mail) || string.IsNullOrWhiteSpace(password))
             {
-                MessageBox.Show("Por favor, ingrese su mail y contraseña.", "Campos Vacíos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_login_campos_vacios") ?? "Por favor, ingrese su mail y contraseña.",
+                    LanguageService.Current?.T("cap_campos_vacios") ?? "Campos Vacíos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -108,7 +122,9 @@ namespace MatheoCaffieri_GestorCMB
 
                 if (result == LoginResult.UsuarioInactivo)
                 {
-                    MessageBox.Show("Este usuario no está activo.", "Usuario inactivo",
+                    MessageBox.Show(
+                        LanguageService.Current?.T("err_usuario_inactivo") ?? "Este usuario no está activo.",
+                        LanguageService.Current?.T("cap_usuario_inactivo") ?? "Usuario inactivo",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     textPassword.Clear();
                     return;
@@ -116,7 +132,9 @@ namespace MatheoCaffieri_GestorCMB
 
                 if (result == LoginResult.CredencialesInvalidas)
                 {
-                    MessageBox.Show("Mail o contraseña incorrectos.", "Error de Login",
+                    MessageBox.Show(
+                        LanguageService.Current?.T("err_credenciales_incorrectas") ?? "Mail o contraseña incorrectos.",
+                        LanguageService.Current?.T("cap_error_login") ?? "Error de Login",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     textPassword.Clear();
                     return;
@@ -145,18 +163,39 @@ namespace MatheoCaffieri_GestorCMB
 
                 SessionContext.SetUsuario(usuarioLogueado.IdUsuario, permisos.Select(p => p.ToString()));
 
+
+                var idioma = usuarioLogueado.Idioma;
+                var cultureCode = idioma == "en" ? "en-US" : "es-AR";
+                Properties.Settings.Default.CultureCode = cultureCode;
+                Properties.Settings.Default.Save();
+
+                var repo = new MatheoCaffieri_GestorCMB.Localization.ResxLanguageRepository();
+                var lang = new Services.Language.LanguageService(repo, cultureCode);
+                lang.SetCulture(cultureCode);
+
+
                 MainForm mainForm = new MainForm(rolesService, usuarioService);
                 mainForm.Show();
 
                 this.Hide();
                 mainForm.FormClosed += (s, args) => this.Close();
             }
-            catch (Exception ex)
+            catch (AppException ex)
             {
-                MessageBox.Show($"Ocurrió un error inesperado: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+            catch (Exception)
+            {
+                var msg = LanguageService.Current?.T("err_generic") ?? "Ocurrió un error inesperado.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
 
+        }
+
+        private void buttonExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

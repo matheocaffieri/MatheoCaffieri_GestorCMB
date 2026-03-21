@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProyectoItemControl));
             this.labelNumProyecto = new System.Windows.Forms.Label();
             this.labelDescripcionProyecto = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -43,121 +44,66 @@
             // 
             // labelNumProyecto
             // 
-            this.labelNumProyecto.AutoSize = true;
-            this.labelNumProyecto.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNumProyecto.Location = new System.Drawing.Point(14, 11);
+            resources.ApplyResources(this.labelNumProyecto, "labelNumProyecto");
             this.labelNumProyecto.Name = "labelNumProyecto";
-            this.labelNumProyecto.Size = new System.Drawing.Size(119, 25);
-            this.labelNumProyecto.TabIndex = 30;
-            this.labelNumProyecto.Text = "Proyecto #N";
             // 
             // labelDescripcionProyecto
             // 
-            this.labelDescripcionProyecto.AutoSize = true;
-            this.labelDescripcionProyecto.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.labelDescripcionProyecto, "labelDescripcionProyecto");
             this.labelDescripcionProyecto.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.labelDescripcionProyecto.Location = new System.Drawing.Point(139, 11);
             this.labelDescripcionProyecto.Name = "labelDescripcionProyecto";
-            this.labelDescripcionProyecto.Size = new System.Drawing.Size(114, 25);
-            this.labelDescripcionProyecto.TabIndex = 31;
-            this.labelDescripcionProyecto.Text = "Descripcion";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(337, 15);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(83, 20);
-            this.label2.TabIndex = 32;
-            this.label2.Text = "ESTADO:";
             // 
             // labelEstadoProyecto
             // 
-            this.labelEstadoProyecto.AutoSize = true;
-            this.labelEstadoProyecto.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.labelEstadoProyecto, "labelEstadoProyecto");
             this.labelEstadoProyecto.ForeColor = System.Drawing.Color.Green;
-            this.labelEstadoProyecto.Location = new System.Drawing.Point(426, 15);
             this.labelEstadoProyecto.Name = "labelEstadoProyecto";
-            this.labelEstadoProyecto.Size = new System.Drawing.Size(94, 20);
-            this.labelEstadoProyecto.TabIndex = 33;
-            this.labelEstadoProyecto.Text = "En proceso";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(337, 41);
+            resources.ApplyResources(this.label4, "label4");
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(88, 20);
-            this.label4.TabIndex = 34;
-            this.label4.Text = "Ubicación:";
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(15, 41);
+            resources.ApplyResources(this.label5, "label5");
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(66, 20);
-            this.label5.TabIndex = 35;
-            this.label5.Text = "Cliente:";
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(15, 71);
+            resources.ApplyResources(this.label6, "label6");
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(127, 20);
-            this.label6.TabIndex = 36;
-            this.label6.Text = "Fecha de inicio:";
             // 
             // linkLabelVerDetalles
             // 
-            this.linkLabelVerDetalles.AutoSize = true;
-            this.linkLabelVerDetalles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelVerDetalles.Location = new System.Drawing.Point(538, 75);
+            resources.ApplyResources(this.linkLabelVerDetalles, "linkLabelVerDetalles");
             this.linkLabelVerDetalles.Name = "linkLabelVerDetalles";
-            this.linkLabelVerDetalles.Size = new System.Drawing.Size(84, 18);
-            this.linkLabelVerDetalles.TabIndex = 37;
             this.linkLabelVerDetalles.TabStop = true;
-            this.linkLabelVerDetalles.Text = "Ver detalles";
             this.linkLabelVerDetalles.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelVerDetalles_LinkClicked);
             // 
             // labelNombreCliente
             // 
-            this.labelNombreCliente.AutoSize = true;
-            this.labelNombreCliente.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNombreCliente.Location = new System.Drawing.Point(87, 41);
+            resources.ApplyResources(this.labelNombreCliente, "labelNombreCliente");
             this.labelNombreCliente.Name = "labelNombreCliente";
-            this.labelNombreCliente.Size = new System.Drawing.Size(74, 20);
-            this.labelNombreCliente.TabIndex = 38;
-            this.labelNombreCliente.Text = "Nombre";
             // 
             // labelFechaInicio
             // 
-            this.labelFechaInicio.AutoSize = true;
-            this.labelFechaInicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFechaInicio.Location = new System.Drawing.Point(148, 71);
+            resources.ApplyResources(this.labelFechaInicio, "labelFechaInicio");
             this.labelFechaInicio.Name = "labelFechaInicio";
-            this.labelFechaInicio.Size = new System.Drawing.Size(81, 20);
-            this.labelFechaInicio.TabIndex = 39;
-            this.labelFechaInicio.Text = "1/1/2025";
             // 
             // labelUbicacionProyecto
             // 
-            this.labelUbicacionProyecto.AutoSize = true;
-            this.labelUbicacionProyecto.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUbicacionProyecto.Location = new System.Drawing.Point(426, 41);
+            resources.ApplyResources(this.labelUbicacionProyecto, "labelUbicacionProyecto");
             this.labelUbicacionProyecto.Name = "labelUbicacionProyecto";
-            this.labelUbicacionProyecto.Size = new System.Drawing.Size(188, 20);
-            this.labelUbicacionProyecto.TabIndex = 40;
-            this.labelUbicacionProyecto.Text = "Dirección Falsa 1234";
             // 
             // ProyectoItemControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Controls.Add(this.labelUbicacionProyecto);
@@ -172,7 +118,6 @@
             this.Controls.Add(this.labelDescripcionProyecto);
             this.Controls.Add(this.labelNumProyecto);
             this.Name = "ProyectoItemControl";
-            this.Size = new System.Drawing.Size(646, 100);
             this.ResumeLayout(false);
             this.PerformLayout();
 

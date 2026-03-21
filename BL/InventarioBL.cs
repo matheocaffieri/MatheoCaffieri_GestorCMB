@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Logs;
 using System;
@@ -33,13 +34,13 @@ namespace BL
 
         private static void Validate(DomainModel.Inventario inv, bool isUpdate = false)
         {
-            if (inv == null) throw new ArgumentNullException(nameof(inv));
+            if (inv == null) throw new AppException("err_entity_null");
             if (isUpdate && inv.IdMaterialInventario == Guid.Empty)
-                throw new ArgumentException("IdMaterialInventario requerido para actualizar.");
+                throw new AppException("err_inventario_id_required");
             if (inv.IdMaterial == Guid.Empty)
-                throw new ArgumentException("IdMaterial requerido.");
+                throw new AppException("err_inventario_material_required");
             if (inv.Cantidad < 0)
-                throw new ArgumentException("La cantidad no puede ser negativa.");
+                throw new AppException("err_inventario_cantidad_negativa");
         }
 
         // ========= CRUD (WRITE => Begin/Commit) =========
@@ -93,9 +94,9 @@ namespace BL
 
         public void Delete(DomainModel.Inventario entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
             if (entity.IdMaterialInventario == Guid.Empty)
-                throw new ArgumentException("IdMaterialInventario requerido para eliminar.");
+                throw new AppException("err_inventario_id_delete");
 
             LoggerLogic.Info($"[InventarioBL] Delete START. InvId={entity.IdMaterialInventario}");
 
@@ -119,7 +120,7 @@ namespace BL
 
         public DomainModel.Inventario GetById(Guid id)
         {
-            if (id == Guid.Empty) throw new ArgumentException("id requerido.", nameof(id));
+            if (id == Guid.Empty) throw new AppException("err_id_required");
 
             try
             {
@@ -151,7 +152,7 @@ namespace BL
 
         public DomainModel.Inventario GetByMaterialId(Guid idMaterial)
         {
-            if (idMaterial == Guid.Empty) throw new ArgumentException("idMaterial requerido.", nameof(idMaterial));
+            if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
 
             try
             {
@@ -168,7 +169,7 @@ namespace BL
 
         public decimal GetCantidad(Guid idMaterial)
         {
-            if (idMaterial == Guid.Empty) throw new ArgumentException("idMaterial requerido.", nameof(idMaterial));
+            if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
 
             try
             {
@@ -185,7 +186,7 @@ namespace BL
 
         public int CambiarCantidad(Guid idInventario, int delta)
         {
-            if (idInventario == Guid.Empty) throw new ArgumentException("idInventario requerido.", nameof(idInventario));
+            if (idInventario == Guid.Empty) throw new AppException("err_id_required");
             if (delta == 0) return GetById(idInventario)?.Cantidad ?? 0;
 
             LoggerLogic.Info($"[InventarioBL] CambiarCantidad START. InvId={idInventario} Delta={delta}");
@@ -194,7 +195,7 @@ namespace BL
             try
             {
                 var inv = _repo.GetById(idInventario);
-                if (inv == null) throw new ArgumentException("Inventario no encontrado.", nameof(idInventario));
+                if (inv == null) throw new AppException("err_inventario_not_found");
 
                 var nuevaCantidad = inv.Cantidad + delta;
                 if (nuevaCantidad < 0)

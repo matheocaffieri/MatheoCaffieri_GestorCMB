@@ -117,4 +117,856 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="label4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;panel3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="labelEstado.Location" type="System.Drawing.Point, System.Drawing">
+    <value>763, 36</value>
+  </data>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;labelNomCliente.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="labelTotalEmpleados.Text" xml:space="preserve">
+    <value>$1000000</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelMatFal.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 21</value>
+  </data>
+  <data name="labelNomCliente.Location" type="System.Drawing.Point, System.Drawing">
+    <value>125, 71</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>345, 71</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelEmp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>185, 21</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Ubicación:</value>
+  </data>
+  <data name="label3.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 10pt</value>
+  </data>
+  <data name="labelNomCliente.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt</value>
+  </data>
+  <data name="&gt;&gt;buttonGenerarInforme.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="flowLayoutPanelEmp.Location" type="System.Drawing.Point, System.Drawing">
+    <value>101, 18</value>
+  </data>
+  <data name="&gt;&gt;labelFechaInicio.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="flowLayoutPanelEmp.TabIndex" type="System.Int32, mscorlib">
+    <value>60</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelEmp.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="labelUtilidadEmpresa.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelEstado.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;labelNumProyecto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelTotalEmpleados.TabIndex" type="System.Int32, mscorlib">
+    <value>64</value>
+  </data>
+  <data name="&gt;&gt;labelTotalEmpleados.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>503, 254</value>
+  </data>
+  <data name="label7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelMatFal.Type" xml:space="preserve">
+    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel2.Name" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="label6.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt</value>
+  </data>
+  <data name="&gt;&gt;panel2.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="labelNomCliente.Size" type="System.Drawing.Size, System.Drawing">
+    <value>131, 21</value>
+  </data>
+  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="panel3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>800, 2</value>
+  </data>
+  <data name="&gt;&gt;labelUbiProyecto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="linkLabelAgregarMat.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="flowLayoutPanelEmp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>393, 182</value>
+  </data>
+  <data name="label3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="labelUbiProyecto.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="labelTotalMateriales.Location" type="System.Drawing.Point, System.Drawing">
+    <value>279, 290</value>
+  </data>
+  <data name="&gt;&gt;labelFechaInicio.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="labelFechaInicio.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelUbiProyecto.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt</value>
+  </data>
+  <data name="&gt;&gt;buttonGenerarInforme.Name" xml:space="preserve">
+    <value>buttonGenerarInforme</value>
+  </data>
+  <data name="panel2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>500, 18</value>
+  </data>
+  <data name="labelFechaInicio.Size" type="System.Drawing.Size, System.Drawing">
+    <value>85, 20</value>
+  </data>
+  <data name="panel3.TabIndex" type="System.Int32, mscorlib">
+    <value>57</value>
+  </data>
+  <data name="labelUbiProyecto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>162, 21</value>
+  </data>
+  <data name="linkLabelAgregarMat.Size" type="System.Drawing.Size, System.Drawing">
+    <value>158, 17</value>
+  </data>
+  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1067, 441</value>
+  </data>
+  <data name="panel3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>101, 238</value>
+  </data>
+  <data name="&gt;&gt;label7.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="label2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;labelTotalMateriales.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="labelNomCliente.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;labelNomCliente.Name" xml:space="preserve">
+    <value>labelNomCliente</value>
+  </data>
+  <data name="labelFechaInicio.TabIndex" type="System.Int32, mscorlib">
+    <value>41</value>
+  </data>
+  <data name="&gt;&gt;linkLabelAgregarMat.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelNumProyecto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>32, 112</value>
+  </data>
+  <data name="&gt;&gt;panel3.Name" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="labelUbiProyecto.Text" xml:space="preserve">
+    <value>Dirección falsa 1234</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>DetalleProyectoControl</value>
+  </data>
+  <data name="labelTotalMateriales.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelNomCliente.TabIndex" type="System.Int32, mscorlib">
+    <value>33</value>
+  </data>
+  <data name="labelDescProyecto.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;labelEstado.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="labelUbiProyecto.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label5.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="buttonGenerarInforme.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="buttonGenerarInforme.Size" type="System.Drawing.Size, System.Drawing">
+    <value>197, 27</value>
+  </data>
+  <data name="label3.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelEstado.TabIndex" type="System.Int32, mscorlib">
+    <value>40</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelEmp.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="buttonGenerarInforme.TabIndex" type="System.Int32, mscorlib">
+    <value>37</value>
+  </data>
+  <data name="labelE.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 10pt</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelMat.Name" xml:space="preserve">
+    <value>flowLayoutPanelMat</value>
+  </data>
+  <data name="&gt;&gt;panel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelTotalEmpleados.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="labelTotalEmpleados.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 21</value>
+  </data>
+  <data name="labelUtilidadEmpresa.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt</value>
+  </data>
+  <data name="&gt;&gt;buttonModificar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelFechaInicio.Text" xml:space="preserve">
+    <value>01/01/2025</value>
+  </data>
+  <data name="labelTotalMateriales.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 21</value>
+  </data>
+  <data name="labelTotalMateriales.TabIndex" type="System.Int32, mscorlib">
+    <value>65</value>
+  </data>
+  <data name="label7.Text" xml:space="preserve">
+    <value>Materiales faltantes:</value>
+  </data>
+  <data name="label4.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt</value>
+  </data>
+  <data name="flowLayoutPanelMatFal.Location" type="System.Drawing.Point, System.Drawing">
+    <value>508, 140</value>
+  </data>
+  <data name="label4.TabIndex" type="System.Int32, mscorlib">
+    <value>42</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>89, 21</value>
+  </data>
+  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="labelDescProyecto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>228, 20</value>
+  </data>
+  <data name="&gt;&gt;labelE.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
+  </data>
+  <data name="&gt;&gt;labelEstado.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelUtilidadEmpresa.Name" xml:space="preserve">
+    <value>labelUtilidadEmpresa</value>
+  </data>
+  <data name="labelE.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="linkLabelAgregarEmp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>162, 17</value>
+  </data>
+  <data name="&gt;&gt;buttonModificar.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="label6.TabIndex" type="System.Int32, mscorlib">
+    <value>63</value>
+  </data>
+  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="linkLabelAgregarEmp.Text" xml:space="preserve">
+    <value>Agregar más empleados</value>
+  </data>
+  <data name="&gt;&gt;linkLabelAgregarMat.Name" xml:space="preserve">
+    <value>linkLabelAgregarMat</value>
+  </data>
+  <data name="buttonModificar.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="labelDescProyecto.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="label3.TabIndex" type="System.Int32, mscorlib">
+    <value>38</value>
+  </data>
+  <data name="labelUtilidadEmpresa.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 21</value>
+  </data>
+  <data name="&gt;&gt;buttonGenerarInforme.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="flowLayoutPanelMatFal.Size" type="System.Drawing.Size, System.Drawing">
+    <value>393, 57</value>
+  </data>
+  <data name="flowLayoutPanelMat.TabIndex" type="System.Int32, mscorlib">
+    <value>61</value>
+  </data>
+  <data name="panel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>3, 220</value>
+  </data>
+  <data name="&gt;&gt;labelUbiProyecto.Name" xml:space="preserve">
+    <value>labelUbiProyecto</value>
+  </data>
+  <data name="labelUtilidadEmpresa.Location" type="System.Drawing.Point, System.Drawing">
+    <value>740, 254</value>
+  </data>
+  <data name="linkLabelAgregarMat.Text" xml:space="preserve">
+    <value>Agregar más materiales</value>
+  </data>
+  <data name="&gt;&gt;labelUtilidadEmpresa.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label6.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="labelTotalMateriales.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="labelTotalEmpleados.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt</value>
+  </data>
+  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>8, 16</value>
+  </data>
+  <data name="labelNumProyecto.Text" xml:space="preserve">
+    <value>Proyecto #N</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelMat.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;labelTotalEmpleados.Name" xml:space="preserve">
+    <value>labelTotalEmpleados</value>
+  </data>
+  <data name="&gt;&gt;labelTotalMateriales.Name" xml:space="preserve">
+    <value>labelTotalMateriales</value>
+  </data>
+  <data name="&gt;&gt;labelNumProyecto.Name" xml:space="preserve">
+    <value>labelNumProyecto</value>
+  </data>
+  <data name="labelNumProyecto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>158, 31</value>
+  </data>
+  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="labelNumProyecto.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 18pt</value>
+  </data>
+  <data name="flowLayoutPanelMat.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="&gt;&gt;labelUtilidadEmpresa.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="flowLayoutPanelMatFal.TabIndex" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="labelDescProyecto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>147, 31</value>
+  </data>
+  <data name="label7.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>34</value>
+  </data>
+  <data name="&gt;&gt;label6.Name" xml:space="preserve">
+    <value>label6</value>
+  </data>
+  <data name="&gt;&gt;labelUbiProyecto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelFechaInicio.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelMat.Type" xml:space="preserve">
+    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelEstado.Text" xml:space="preserve">
+    <value>EN PROCESO</value>
+  </data>
+  <data name="&gt;&gt;linkLabelAgregarEmp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelE.TabIndex" type="System.Int32, mscorlib">
+    <value>39</value>
+  </data>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="labelE.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 20</value>
+  </data>
+  <data name="&gt;&gt;labelDescProyecto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelMat.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="buttonModificar.Text" xml:space="preserve">
+    <value>Modificar</value>
+  </data>
+  <data name="&gt;&gt;labelNumProyecto.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="buttonGenerarInforme.Text" xml:space="preserve">
+    <value>Generar informe de compra</value>
+  </data>
+  <data name="label6.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelMatFal.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="labelTotalMateriales.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt</value>
+  </data>
+  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1003, 326</value>
+  </data>
+  <data name="labelEstado.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;panel3.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>96, 254</value>
+  </data>
+  <data name="buttonModificar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>687, 71</value>
+  </data>
+  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="label7.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 8pt</value>
+  </data>
+  <data name="&gt;&gt;labelUtilidadEmpresa.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelEstado.Size" type="System.Drawing.Size, System.Drawing">
+    <value>97, 20</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 21</value>
+  </data>
+  <data name="&gt;&gt;labelEstado.Name" xml:space="preserve">
+    <value>labelEstado</value>
+  </data>
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;labelE.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabelAgregarEmp.Name" xml:space="preserve">
+    <value>linkLabelAgregarEmp</value>
+  </data>
+  <data name="buttonModificar.TabIndex" type="System.Int32, mscorlib">
+    <value>36</value>
+  </data>
+  <data name="labelUtilidadEmpresa.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="label5.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="flowLayoutPanelMat.Location" type="System.Drawing.Point, System.Drawing">
+    <value>508, 18</value>
+  </data>
+  <data name="flowLayoutPanelEmp.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="&gt;&gt;label5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label7.Location" type="System.Drawing.Point, System.Drawing">
+    <value>509, 117</value>
+  </data>
+  <data name="&gt;&gt;labelE.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="panel2.TabIndex" type="System.Int32, mscorlib">
+    <value>56</value>
+  </data>
+  <data name="&gt;&gt;label7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="buttonGenerarInforme.Location" type="System.Drawing.Point, System.Drawing">
+    <value>853, 71</value>
+  </data>
+  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+    <value>32</value>
+  </data>
+  <data name="labelUtilidadEmpresa.Text" xml:space="preserve">
+    <value>$1000000</value>
+  </data>
+  <data name="labelNomCliente.Text" xml:space="preserve">
+    <value>Nombre Cliente</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>36, 71</value>
+  </data>
+  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>96, 290</value>
+  </data>
+  <data name="linkLabelAgregarEmp.TabIndex" type="System.Int32, mscorlib">
+    <value>58</value>
+  </data>
+  <data name="linkLabelAgregarEmp.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 204</value>
+  </data>
+  <data name="&gt;&gt;labelTotalMateriales.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabelAgregarMat.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="panel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="labelE.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;labelDescProyecto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="linkLabelAgregarEmp.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="labelTotalEmpleados.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>693, 9</value>
+  </data>
+  <data name="linkLabelAgregarMat.TabIndex" type="System.Int32, mscorlib">
+    <value>59</value>
+  </data>
+  <data name="&gt;&gt;label7.Name" xml:space="preserve">
+    <value>label7</value>
+  </data>
+  <data name="labelNumProyecto.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelFechaInicio.Location" type="System.Drawing.Point, System.Drawing">
+    <value>839, 9</value>
+  </data>
+  <data name="flowLayoutPanelMatFal.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="&gt;&gt;label5.Name" xml:space="preserve">
+    <value>label5</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="&gt;&gt;labelNomCliente.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelDescProyecto.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;linkLabelAgregarEmp.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="label7.TabIndex" type="System.Int32, mscorlib">
+    <value>67</value>
+  </data>
+  <data name="buttonModificar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 27</value>
+  </data>
+  <data name="&gt;&gt;linkLabelAgregarEmp.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
+  </data>
+  <data name="labelUtilidadEmpresa.TabIndex" type="System.Int32, mscorlib">
+    <value>66</value>
+  </data>
+  <data name="&gt;&gt;linkLabelAgregarMat.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="labelDescProyecto.Text" xml:space="preserve">
+    <value>Descripcion</value>
+  </data>
+  <data name="&gt;&gt;labelDescProyecto.Name" xml:space="preserve">
+    <value>labelDescProyecto</value>
+  </data>
+  <data name="&gt;&gt;panel2.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;labelTotalEmpleados.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label4.Text" xml:space="preserve">
+    <value>Total empleados:</value>
+  </data>
+  <data name="label6.Text" xml:space="preserve">
+    <value>Utilidad de la empresa:</value>
+  </data>
+  <data name="labelUbiProyecto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>464, 71</value>
+  </data>
+  <data name="labelEstado.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 10pt</value>
+  </data>
+  <data name="&gt;&gt;labelEstado.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="label4.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt</value>
+  </data>
+  <data name="linkLabelAgregarEmp.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;buttonModificar.Name" xml:space="preserve">
+    <value>buttonModificar</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 20</value>
+  </data>
+  <data name="&gt;&gt;labelE.Name" xml:space="preserve">
+    <value>labelE</value>
+  </data>
+  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>135, 21</value>
+  </data>
+  <data name="panel3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="&gt;&gt;buttonGenerarInforme.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="labelUbiProyecto.TabIndex" type="System.Int32, mscorlib">
+    <value>35</value>
+  </data>
+  <data name="label1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="flowLayoutPanelEmp.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="flowLayoutPanelMat.Size" type="System.Drawing.Size, System.Drawing">
+    <value>393, 182</value>
+  </data>
+  <data name="labelNumProyecto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>25, 20</value>
+  </data>
+  <data name="labelTotalEmpleados.Location" type="System.Drawing.Point, System.Drawing">
+    <value>279, 254</value>
+  </data>
+  <data name="flowLayoutPanelMat.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="labelTotalMateriales.Text" xml:space="preserve">
+    <value>$1000000</value>
+  </data>
+  <data name="&gt;&gt;labelFechaInicio.Name" xml:space="preserve">
+    <value>labelFechaInicio</value>
+  </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Fecha de inicio:</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelEmp.Name" xml:space="preserve">
+    <value>flowLayoutPanelEmp</value>
+  </data>
+  <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>112, 16</value>
+  </data>
+  <data name="&gt;&gt;labelUbiProyecto.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="labelNumProyecto.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="label5.Text" xml:space="preserve">
+    <value>Total materiales:</value>
+  </data>
+  <data name="label5.TabIndex" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="&gt;&gt;labelFechaInicio.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;labelNomCliente.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label3.Name" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;labelTotalMateriales.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;panel3.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="labelE.Location" type="System.Drawing.Point, System.Drawing">
+    <value>693, 36</value>
+  </data>
+  <data name="labelDescProyecto.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 18pt</value>
+  </data>
+  <data name="labelFechaInicio.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 10pt</value>
+  </data>
+  <data name="&gt;&gt;buttonModificar.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="linkLabelAgregarMat.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelTotalEmpleados.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;flowLayoutPanelMatFal.Name" xml:space="preserve">
+    <value>flowLayoutPanelMatFal</value>
+  </data>
+  <data name="labelNomCliente.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="flowLayoutPanelMatFal.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;label6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelE.Text" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="labelDescProyecto.TabIndex" type="System.Int32, mscorlib">
+    <value>31</value>
+  </data>
+  <data name="label5.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt</value>
+  </data>
+  <data name="labelNumProyecto.TabIndex" type="System.Int32, mscorlib">
+    <value>30</value>
+  </data>
+  <data name="linkLabelAgregarMat.Location" type="System.Drawing.Point, System.Drawing">
+    <value>687, 204</value>
+  </data>
+  <data name="panel2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="&gt;&gt;label4.Name" xml:space="preserve">
+    <value>label4</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>en-US</value>
+  </metadata>
 </root>

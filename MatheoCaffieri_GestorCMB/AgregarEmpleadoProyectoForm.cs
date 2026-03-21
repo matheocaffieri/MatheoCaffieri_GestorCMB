@@ -1,7 +1,9 @@
 ﻿using BL;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.Language;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -21,7 +23,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 Close();
                 return;
@@ -40,10 +44,12 @@ namespace MatheoCaffieri_GestorCMB
         {
             gestionarEmpleadosDetalleLayoutPanel.Controls.Clear();
 
-            // Traer empleados (repo/BL que ya tengas para listar)
             var empleados = ((IGenericRepository<Empleado>)new EmpleadoBL()).GetAll();
 
-            // opcional: filtrar por nombre/apellido/dni
+            // ✅ SOLO ACTIVOS
+            empleados = empleados.Where(e => e.IsActive).ToList();
+
+            // opcional: filtrar por nombre/apellido/dni (pero siempre dentro de activos)
             if (!string.IsNullOrWhiteSpace(filtro))
             {
                 var f = filtro.Trim().ToLowerInvariant();
@@ -53,45 +59,40 @@ namespace MatheoCaffieri_GestorCMB
                     .ToList();
             }
 
-            // Solo activos (si querés)
-            // empleados = empleados.Where(e => e.IsActive).ToList();
-
             foreach (var emp in empleados)
             {
                 var item = new AddEmpleadoProyectoItemControl();
 
-                item.Bind(
-                    emp.IdEmpleado,
-                    emp.Nombre,
-                    emp.Apellido,
-                    emp.NroDocumento,
-                    (decimal)emp.Sueldo,
-                    emp.CantidadProyectosActivos
-                );
+                item.Bind(emp.IdEmpleado, emp.Nombre, emp.Apellido, emp.NroDocumento,
+                          (decimal)emp.Sueldo, emp.CantidadProyectosActivos);
 
                 item.AgregarClick += Item_AgregarEmpleadoClick;
 
                 gestionarEmpleadosDetalleLayoutPanel.Controls.Add(item);
             }
-
-
         }
 
         private void Item_AgregarEmpleadoClick(object sender, AgregarEmpleadoEventArgs e)
         {
             try
             {
+                var valorGanancia = (double)(e.Sueldo * 0.20m);
                 var svc = new ProyectoEmpleadoBL();
-                svc.AgregarEmpleadoDetalleProyecto(_idProyecto, e.IdEmpleado, valorGanancia: 0);
+                svc.AgregarEmpleadoDetalleProyecto(_idProyecto, e.IdEmpleado, valorGanancia);
 
                 // refrescar: para que cambie "Proyectos activos" y deshabilite si llegó a 3
                 CargarEmpleadosItems();
             }
-            catch (Exception ex)
+            catch (AppException ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // refresco también, por si el BL rechazó por cupo o duplicado
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CargarEmpleadosItems();
+            }
+            catch (Exception)
+            {
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 CargarEmpleadosItems();
             }
         }

@@ -2,6 +2,7 @@
 using DomainModel;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.Language;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
              
@@ -126,32 +129,40 @@ namespace MatheoCaffieri_GestorCMB
 
         private ClientesItemControl CrearItemCliente(Cliente cli)
         {
-            var item = new ClientesItemControl
-            {
-                IdCliente = cli.IdCliente,
-                RazonSocial = cli.RazonSocial,
-                Telefono = cli.Telefono.ToString(),
-                Mail = cli.Mail,
-                NombreContacto = cli.NombreContacto,
-                Dock = DockStyle.Top
-            };
+            var item = new ClientesItemControl { Dock = DockStyle.Top };
+            item.Bind(cli);
 
-            item.ModificarClick += (s, e) => EditarCliente(cli);
-            item.HabilitarClick += (s, e) => HabilitarCliente(cli);
+            item.EditRequested += EditarCliente;
+            item.ActiveChanged += ToggleActivoCliente;
 
             return item;
         }
 
         private void EditarCliente(Cliente cli)
         {
-            // Luego lo hacemos bien con un form de edición
-            MessageBox.Show($"Editar cliente: {cli.RazonSocial}");
+            using (var form = new EditClienteForm(_clienteRepo, cli))
+            {
+                if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    CargarListado(textBoxBuscar.Text);
+            }
         }
 
-        private void HabilitarCliente(Cliente cli)
+        private void ToggleActivoCliente(Cliente cli, bool nuevoEstado)
         {
-            // Cuando tengas campo Activo/Habilitado, lo actualizamos acá
-            MessageBox.Show($"Habilitar / deshabilitar cliente: {cli.RazonSocial}");
+            try
+            {
+                cli.IsActive = nuevoEstado;
+                _clienteRepo.Update(cli);
+            }
+            catch (Exception ex)
+            {
+                Services.Logs.LoggerLogic.Error($"[ClientesControl] Error al actualizar estado cliente {cli.IdCliente}: {ex.Message}");
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Revertir el switch visualmente
+                CargarListado(textBoxBuscar.Text);
+            }
         }
 
         private void buttonAddCliente_Click(object sender, EventArgs e)
@@ -164,7 +175,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (string.IsNullOrWhiteSpace(razonSocial))
             {
-                MessageBox.Show("La razón social es obligatoria.", "Validación",
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_razon_social_requerida") ?? "La razón social es obligatoria.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -173,7 +186,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!int.TryParse(telefono, out telefonoNum))
             {
-                MessageBox.Show("El teléfono debe ser numérico.", "Validación",
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_telefono_invalido") ?? "El teléfono debe ser numérico.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }

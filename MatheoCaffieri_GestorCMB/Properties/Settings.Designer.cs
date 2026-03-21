@@ -33,5 +33,17 @@ namespace MatheoCaffieri_GestorCMB.Properties {
                 return ((string)(this["ConnUsuarios"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("es-AR")]
+        public string CultureCode {
+            get {
+                return ((string)(this["CultureCode"]));
+            }
+            set {
+                this["CultureCode"] = value;
+            }
+        }
     }
 }

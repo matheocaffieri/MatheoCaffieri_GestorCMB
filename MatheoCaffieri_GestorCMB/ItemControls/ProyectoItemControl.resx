@@ -117,4 +117,354 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&gt;&gt;label6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="labelDescripcionProyecto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>139, 11</value>
+  </data>
+  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>337, 15</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="labelEstadoProyecto.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;labelNombreCliente.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="labelNombreCliente.Location" type="System.Drawing.Point, System.Drawing">
+    <value>87, 41</value>
+  </data>
+  <data name="&gt;&gt;labelUbicacionProyecto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="label4.Text" xml:space="preserve">
+    <value>Ubicación:</value>
+  </data>
+  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;labelUbicacionProyecto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelEstadoProyecto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="label5.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="label5.Text" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="label6.Text" xml:space="preserve">
+    <value>Fecha de inicio:</value>
+  </data>
+  <data name="labelDescripcionProyecto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 25</value>
+  </data>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
+  </data>
+  <data name="labelDescripcionProyecto.TabIndex" type="System.Int32, mscorlib">
+    <value>31</value>
+  </data>
+  <data name="labelEstadoProyecto.TabIndex" type="System.Int32, mscorlib">
+    <value>33</value>
+  </data>
+  <data name="labelDescripcionProyecto.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 12pt</value>
+  </data>
+  <data name="labelUbicacionProyecto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>426, 41</value>
+  </data>
+  <data name="linkLabelVerDetalles.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 18</value>
+  </data>
+  <data name="label6.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="&gt;&gt;labelDescripcionProyecto.Name" xml:space="preserve">
+    <value>labelDescripcionProyecto</value>
+  </data>
+  <data name="labelFechaInicio.Location" type="System.Drawing.Point, System.Drawing">
+    <value>148, 71</value>
+  </data>
+  <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 41</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 20</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>ESTADO:</value>
+  </data>
+  <data name="labelNombreCliente.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 20</value>
+  </data>
+  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>88, 20</value>
+  </data>
+  <data name="linkLabelVerDetalles.Location" type="System.Drawing.Point, System.Drawing">
+    <value>538, 75</value>
+  </data>
+  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>337, 41</value>
+  </data>
+  <data name="&gt;&gt;labelEstadoProyecto.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;labelUbicacionProyecto.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;labelNumProyecto.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="label2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabelVerDetalles.Name" xml:space="preserve">
+    <value>linkLabelVerDetalles</value>
+  </data>
+  <data name="&gt;&gt;labelFechaInicio.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label6.Name" xml:space="preserve">
+    <value>label6</value>
+  </data>
+  <data name="label4.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label4.TabIndex" type="System.Int32, mscorlib">
+    <value>34</value>
+  </data>
+  <data name="labelNumProyecto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>119, 25</value>
+  </data>
+  <data name="&gt;&gt;labelNumProyecto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;linkLabelVerDetalles.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;linkLabelVerDetalles.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="labelUbicacionProyecto.TabIndex" type="System.Int32, mscorlib">
+    <value>40</value>
+  </data>
+  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;label4.Name" xml:space="preserve">
+    <value>label4</value>
+  </data>
+  <data name="linkLabelVerDetalles.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="&gt;&gt;labelDescripcionProyecto.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;labelEstadoProyecto.Name" xml:space="preserve">
+    <value>labelEstadoProyecto</value>
+  </data>
+  <data name="label5.TabIndex" type="System.Int32, mscorlib">
+    <value>35</value>
+  </data>
+  <data name="&gt;&gt;labelNumProyecto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>646, 100</value>
+  </data>
+  <data name="&gt;&gt;labelNumProyecto.Name" xml:space="preserve">
+    <value>labelNumProyecto</value>
+  </data>
+  <data name="labelNumProyecto.TabIndex" type="System.Int32, mscorlib">
+    <value>30</value>
+  </data>
+  <data name="labelNombreCliente.TabIndex" type="System.Int32, mscorlib">
+    <value>38</value>
+  </data>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelEstadoProyecto.Text" xml:space="preserve">
+    <value>En proceso</value>
+  </data>
+  <data name="labelFechaInicio.TabIndex" type="System.Int32, mscorlib">
+    <value>39</value>
+  </data>
+  <data name="&gt;&gt;label5.Name" xml:space="preserve">
+    <value>label5</value>
+  </data>
+  <data name="labelNumProyecto.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 12pt</value>
+  </data>
+  <data name="labelUbicacionProyecto.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;labelNombreCliente.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="labelEstadoProyecto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>426, 15</value>
+  </data>
+  <data name="&gt;&gt;label4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelFechaInicio.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+    <value>32</value>
+  </data>
+  <data name="labelUbicacionProyecto.Text" xml:space="preserve">
+    <value>Dirección Falsa 1234</value>
+  </data>
+  <data name="labelDescripcionProyecto.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label6.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelFechaInicio.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt, style=Bold</value>
+  </data>
+  <data name="&gt;&gt;labelFechaInicio.Name" xml:space="preserve">
+    <value>labelFechaInicio</value>
+  </data>
+  <data name="labelEstadoProyecto.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="labelNombreCliente.Text" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="labelUbicacionProyecto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>188, 20</value>
+  </data>
+  <data name="label6.TabIndex" type="System.Int32, mscorlib">
+    <value>36</value>
+  </data>
+  <data name="labelNumProyecto.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelNombreCliente.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;label5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>ProyectoItemControl</value>
+  </data>
+  <data name="&gt;&gt;labelDescripcionProyecto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="linkLabelVerDetalles.TabIndex" type="System.Int32, mscorlib">
+    <value>37</value>
+  </data>
+  <data name="labelUbicacionProyecto.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt, style=Bold</value>
+  </data>
+  <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 71</value>
+  </data>
+  <data name="linkLabelVerDetalles.Text" xml:space="preserve">
+    <value>Ver detalles</value>
+  </data>
+  <data name="labelFechaInicio.Text" xml:space="preserve">
+    <value>1/1/2025</value>
+  </data>
+  <data name="label5.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;labelFechaInicio.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="labelEstadoProyecto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 20</value>
+  </data>
+  <data name="&gt;&gt;labelUbicacionProyecto.Name" xml:space="preserve">
+    <value>labelUbicacionProyecto</value>
+  </data>
+  <data name="&gt;&gt;labelEstadoProyecto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;labelNombreCliente.Name" xml:space="preserve">
+    <value>labelNombreCliente</value>
+  </data>
+  <data name="labelNumProyecto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>14, 11</value>
+  </data>
+  <data name="labelDescripcionProyecto.Text" xml:space="preserve">
+    <value>Descripcion</value>
+  </data>
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>127, 20</value>
+  </data>
+  <data name="labelNombreCliente.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt, style=Bold</value>
+  </data>
+  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>66, 20</value>
+  </data>
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>8, 16</value>
+  </data>
+  <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;labelFechaInicio.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="linkLabelVerDetalles.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelNumProyecto.Text" xml:space="preserve">
+    <value>Proyecto #N</value>
+  </data>
+  <data name="&gt;&gt;linkLabelVerDetalles.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelNombreCliente.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="label4.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="labelFechaInicio.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 20</value>
+  </data>
+  <data name="&gt;&gt;labelDescripcionProyecto.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>en-US</value>
+  </metadata>
 </root>

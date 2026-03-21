@@ -1,6 +1,8 @@
 ﻿using BL;
 using DomainModel;
+using DomainModel.Exceptions;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.Language;
 using Services.Logs;
 using Services.RoleService;
 using System;
@@ -29,14 +31,18 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 var host = _mainForm ?? (this.FindForm() as MainForm);
                 if (host == null)
                 {
-                    MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        LanguageService.Current?.T("err_mainform_no_encontrado") ?? "No se encontró el MainForm para navegar.",
+                        LanguageService.Current?.T("cap_atencion") ?? "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -137,14 +143,23 @@ namespace MatheoCaffieri_GestorCMB
                 var bl = new InformeDeCompraBL();
                 bl.ConfirmarCompraYAplicar(idProyecto, idInforme);
 
-                MessageBox.Show("Compra aplicada.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    LanguageService.Current?.T("msg_compra_aplicada") ?? "Compra aplicada.",
+                    LanguageService.Current?.T("cap_ok") ?? "OK",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarInformesItems(textBox1.Text);
+            }
+            catch (AppException ex)
+            {
+                LoggerLogic.Error("InformesDeCompraControl.AgregarCompra_FAIL", ex);
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 LoggerLogic.Error("InformesDeCompraControl.AgregarCompra_FAIL", ex);
-                MessageBox.Show("No se pudo aplicar la compra.\n" + ex.Message,
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -160,14 +175,23 @@ namespace MatheoCaffieri_GestorCMB
                 var bl = new InformeDeCompraBL();
                 bl.EliminarInforme(idInforme);
 
-                MessageBox.Show("Informe eliminado.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    LanguageService.Current?.T("msg_informe_eliminado") ?? "Informe eliminado.",
+                    LanguageService.Current?.T("cap_ok") ?? "OK",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarInformesItems(textBox1.Text);
+            }
+            catch (AppException ex)
+            {
+                LoggerLogic.Error("InformesDeCompraControl.EliminarInforme_FAIL", ex);
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 LoggerLogic.Error("InformesDeCompraControl.EliminarInforme_FAIL", ex);
-                MessageBox.Show("No se pudo eliminar el informe.\n" + ex.Message,
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -176,8 +200,10 @@ namespace MatheoCaffieri_GestorCMB
             var host = _mainForm ?? (this.FindForm() as MainForm);
             if (host == null)
             {
-                MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_mainform_no_encontrado") ?? "No se encontró el MainForm para navegar.",
+                    LanguageService.Current?.T("cap_atencion") ?? "Atención",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

@@ -1,6 +1,7 @@
 ﻿using DAL.ProjectRepo;
 using DAL;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace BL
     {
         public void Add(DomainModel.Proyecto entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
 
             using (var ctx = new DAL.GestorCMBEntities())
             using (var uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx))
@@ -38,7 +39,7 @@ namespace BL
 
         public void Update(DomainModel.Proyecto entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
 
             using (var ctx = new DAL.GestorCMBEntities())
             using (var uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx))
@@ -61,7 +62,7 @@ namespace BL
 
         public void Delete(DomainModel.Proyecto entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
 
             using (var ctx = new DAL.GestorCMBEntities())
             using (var uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx))
@@ -94,7 +95,7 @@ namespace BL
 
         public DomainModel.Proyecto GetById(Guid id)
         {
-            if (id == Guid.Empty) throw new ArgumentException("id requerido.", nameof(id));
+            if (id == Guid.Empty) throw new AppException("err_id_required");
 
             using (var ctx = new DAL.GestorCMBEntities())
             using (var uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx))

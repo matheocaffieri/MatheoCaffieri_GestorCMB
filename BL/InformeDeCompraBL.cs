@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
+using DomainModel.Exceptions;
 using Services.Logs;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace BL
         public Guid GenerarDesdeFaltantes(Guid idProyecto, bool unicoPorDia = true)
         {
             if (idProyecto == Guid.Empty)
-                throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
+                throw new AppException("err_proyecto_id_required");
 
             LoggerLogic.Info($"[InformeDeCompraBL] GenerarDesdeFaltantes START. idProyecto={idProyecto}, unicoPorDia={unicoPorDia}");
 
@@ -39,7 +40,7 @@ namespace BL
                     .ToList();
 
                 if (faltantesIds.Count == 0)
-                    throw new InvalidOperationException("Este proyecto no tiene materiales faltantes.");
+                    throw new AppException("err_informe_sin_faltantes");
 
                 InformeDeCompra informe = null;
 
@@ -116,7 +117,7 @@ namespace BL
         public void EliminarInforme(Guid idInformeCompra)
         {
             if (idInformeCompra == Guid.Empty)
-                throw new ArgumentException("idInformeCompra requerido.", nameof(idInformeCompra));
+                throw new AppException("err_informe_id_required");
 
             LoggerLogic.Info($"[InformeDeCompraBL] EliminarInforme START. idInforme={idInformeCompra}");
 
@@ -170,9 +171,9 @@ namespace BL
         public void ConfirmarCompraYAplicar(Guid idProyecto, Guid idInformeCompra)
         {
             if (idProyecto == Guid.Empty)
-                throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
+                throw new AppException("err_proyecto_id_required");
             if (idInformeCompra == Guid.Empty)
-                throw new ArgumentException("idInformeCompra requerido.", nameof(idInformeCompra));
+                throw new AppException("err_informe_id_required");
 
             LoggerLogic.Info($"[InformeDeCompraBL] ConfirmarCompraYAplicar START. idProyecto={idProyecto}, idInforme={idInformeCompra}");
 
@@ -194,7 +195,7 @@ namespace BL
                     .ToList();
 
                 if (idsFaltantes.Count == 0)
-                    throw new InvalidOperationException("El informe no tiene materiales.");
+                    throw new AppException("err_informe_sin_materiales");
 
                 // 2) traer faltantes (solo del proyecto) que están en el informe
                 var faltantes = db.Material_faltante
@@ -202,7 +203,7 @@ namespace BL
                     .ToList();
 
                 if (faltantes.Count == 0)
-                    throw new InvalidOperationException("No se encontraron materiales faltantes para ese proyecto/informe.");
+                    throw new AppException("err_informe_sin_faltantes_proyecto");
 
                 // 3) aplicar compra: sumar al detalle del proyecto
                 foreach (var f in faltantes)
@@ -218,11 +219,7 @@ namespace BL
 
                     if (idMaterial == Guid.Empty)
                     {
-                        throw new InvalidOperationException(
-                            $"No existe el material en Inventario/Material para: '{f.descripcionArticuloFaltante}' " +
-                            $"({f.tipoMaterialFaltante} / {f.tipoUnidadMaterialFaltante}). " +
-                            "Cargalo primero en Inventario/Material y volvé a aplicar la compra."
-                        );
+                        throw new AppException("err_informe_material_no_existe");
                     }
 
                     detMatRepo.AddOrUpdate(

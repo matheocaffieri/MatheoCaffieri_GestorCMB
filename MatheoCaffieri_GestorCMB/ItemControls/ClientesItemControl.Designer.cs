@@ -34,7 +34,7 @@
             this.labelNombreContacto = new System.Windows.Forms.Label();
             this.labelMailCliente = new System.Windows.Forms.Label();
             this.buttonModificarCliente = new System.Windows.Forms.Button();
-            this.buttonHabDesCliente = new System.Windows.Forms.Button();
+            this.SwitchHabilitarCliente = new MatheoCaffieri_GestorCMB.ItemControls.ToggleSwitch();
             this.SuspendLayout();
             // 
             // labelRazonSocial
@@ -94,29 +94,37 @@
             this.labelMailCliente.Text = "mail@mail.com.ar";
             // 
             // buttonModificarCliente
-            // 
-            this.buttonModificarCliente.Location = new System.Drawing.Point(362, 19);
+            //
+            this.buttonModificarCliente.BackColor = System.Drawing.Color.Transparent;
+            this.buttonModificarCliente.BackgroundImage = global::MatheoCaffieri_GestorCMB.Properties.Resources.edit_logo;
+            this.buttonModificarCliente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.buttonModificarCliente.FlatAppearance.BorderSize = 0;
+            this.buttonModificarCliente.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonModificarCliente.Location = new System.Drawing.Point(410, 20);
             this.buttonModificarCliente.Name = "buttonModificarCliente";
-            this.buttonModificarCliente.Size = new System.Drawing.Size(56, 37);
+            this.buttonModificarCliente.Size = new System.Drawing.Size(40, 37);
             this.buttonModificarCliente.TabIndex = 41;
-            this.buttonModificarCliente.Text = "Modificar";
-            this.buttonModificarCliente.UseVisualStyleBackColor = true;
-            // 
-            // buttonHabDesCliente
-            // 
-            this.buttonHabDesCliente.Location = new System.Drawing.Point(435, 19);
-            this.buttonHabDesCliente.Name = "buttonHabDesCliente";
-            this.buttonHabDesCliente.Size = new System.Drawing.Size(56, 37);
-            this.buttonHabDesCliente.TabIndex = 42;
-            this.buttonHabDesCliente.Text = "Habilitar";
-            this.buttonHabDesCliente.UseVisualStyleBackColor = true;
-            // 
+            this.buttonModificarCliente.UseVisualStyleBackColor = false;
+            //
+            // SwitchHabilitarCliente
+            //
+            this.SwitchHabilitarCliente.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.SwitchHabilitarCliente.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.SwitchHabilitarCliente.IsOn = false;
+            this.SwitchHabilitarCliente.Location = new System.Drawing.Point(462, 20);
+            this.SwitchHabilitarCliente.Name = "SwitchHabilitarCliente";
+            this.SwitchHabilitarCliente.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.SwitchHabilitarCliente.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(205)))), ((int)(((byte)(50)))));
+            this.SwitchHabilitarCliente.Size = new System.Drawing.Size(62, 36);
+            this.SwitchHabilitarCliente.SwitchColor = System.Drawing.Color.White;
+            this.SwitchHabilitarCliente.TabIndex = 42;
+            //
             // ClientesItemControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.Controls.Add(this.buttonHabDesCliente);
+            this.Controls.Add(this.SwitchHabilitarCliente);
             this.Controls.Add(this.buttonModificarCliente);
             this.Controls.Add(this.labelMailCliente);
             this.Controls.Add(this.labelNombreContacto);
@@ -124,7 +132,7 @@
             this.Controls.Add(this.labelTelefonoCliente);
             this.Controls.Add(this.labelRazonSocial);
             this.Name = "ClientesItemControl";
-            this.Size = new System.Drawing.Size(518, 80);
+            this.Size = new System.Drawing.Size(544, 80);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,6 +146,6 @@
         private System.Windows.Forms.Label labelNombreContacto;
         private System.Windows.Forms.Label labelMailCliente;
         private System.Windows.Forms.Button buttonModificarCliente;
-        private System.Windows.Forms.Button buttonHabDesCliente;
+        private ToggleSwitch SwitchHabilitarCliente;
     }
 }

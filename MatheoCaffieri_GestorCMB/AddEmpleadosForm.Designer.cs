@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddEmpleadosForm));
             this.textBoxDocumento = new System.Windows.Forms.TextBox();
             this.textBoxNombre = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -46,138 +47,84 @@
             // 
             // textBoxDocumento
             // 
-            this.textBoxDocumento.Location = new System.Drawing.Point(20, 197);
-            this.textBoxDocumento.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            resources.ApplyResources(this.textBoxDocumento, "textBoxDocumento");
             this.textBoxDocumento.Name = "textBoxDocumento";
-            this.textBoxDocumento.Size = new System.Drawing.Size(178, 20);
-            this.textBoxDocumento.TabIndex = 35;
             // 
             // textBoxNombre
             // 
-            this.textBoxNombre.Location = new System.Drawing.Point(20, 133);
-            this.textBoxNombre.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            resources.ApplyResources(this.textBoxNombre, "textBoxNombre");
             this.textBoxNombre.Name = "textBoxNombre";
-            this.textBoxNombre.Size = new System.Drawing.Size(130, 20);
-            this.textBoxNombre.TabIndex = 33;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(10, 54);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(201, 27);
-            this.label2.TabIndex = 32;
-            this.label2.Text = "Agregar empleados";
             // 
             // FormPanel
             // 
+            resources.ApplyResources(this.FormPanel, "FormPanel");
             this.FormPanel.BackColor = System.Drawing.Color.DodgerBlue;
             this.FormPanel.Controls.Add(this.buttonExitAE);
             this.FormPanel.Controls.Add(this.buttonExit);
-            this.FormPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.FormPanel.Location = new System.Drawing.Point(0, 0);
-            this.FormPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.FormPanel.Name = "FormPanel";
-            this.FormPanel.Size = new System.Drawing.Size(319, 26);
-            this.FormPanel.TabIndex = 31;
             this.FormPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormPanel_MouseDown);
             this.FormPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FormPanel_MouseMove);
             // 
             // buttonExitAE
             // 
-            this.buttonExitAE.Location = new System.Drawing.Point(289, 2);
-            this.buttonExitAE.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            resources.ApplyResources(this.buttonExitAE, "buttonExitAE");
             this.buttonExitAE.Name = "buttonExitAE";
-            this.buttonExitAE.Size = new System.Drawing.Size(21, 19);
-            this.buttonExitAE.TabIndex = 31;
-            this.buttonExitAE.Text = "X";
             this.buttonExitAE.UseVisualStyleBackColor = true;
             this.buttonExitAE.Click += new System.EventHandler(this.buttonExitAE_Click);
             // 
             // buttonExit
             // 
-            this.buttonExit.Location = new System.Drawing.Point(783, 2);
-            this.buttonExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            resources.ApplyResources(this.buttonExit, "buttonExit");
             this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(22, 19);
-            this.buttonExit.TabIndex = 0;
-            this.buttonExit.Text = "X";
             this.buttonExit.UseVisualStyleBackColor = true;
             // 
             // textBoxApellido
             // 
-            this.textBoxApellido.Location = new System.Drawing.Point(168, 133);
-            this.textBoxApellido.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            resources.ApplyResources(this.textBoxApellido, "textBoxApellido");
             this.textBoxApellido.Name = "textBoxApellido";
-            this.textBoxApellido.Size = new System.Drawing.Size(130, 20);
-            this.textBoxApellido.TabIndex = 39;
             // 
             // textBoxSueldo
             // 
-            this.textBoxSueldo.Location = new System.Drawing.Point(20, 260);
-            this.textBoxSueldo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            resources.ApplyResources(this.textBoxSueldo, "textBoxSueldo");
             this.textBoxSueldo.Name = "textBoxSueldo";
-            this.textBoxSueldo.Size = new System.Drawing.Size(178, 20);
-            this.textBoxSueldo.TabIndex = 40;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 110);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 13);
-            this.label1.TabIndex = 41;
-            this.label1.Text = "Nombre";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(166, 110);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            resources.ApplyResources(this.label3, "label3");
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(44, 13);
-            this.label3.TabIndex = 42;
-            this.label3.Text = "Apellido";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(18, 175);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            resources.ApplyResources(this.label4, "label4");
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(115, 13);
-            this.label4.TabIndex = 43;
-            this.label4.Text = "Número de documento";
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(18, 236);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            resources.ApplyResources(this.label5, "label5");
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(40, 13);
-            this.label5.TabIndex = 44;
-            this.label5.Text = "Sueldo";
             // 
             // buttonAgregar
             // 
-            this.buttonAgregar.Location = new System.Drawing.Point(198, 354);
-            this.buttonAgregar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            resources.ApplyResources(this.buttonAgregar, "buttonAgregar");
             this.buttonAgregar.Name = "buttonAgregar";
-            this.buttonAgregar.Size = new System.Drawing.Size(99, 28);
-            this.buttonAgregar.TabIndex = 45;
-            this.buttonAgregar.Text = "Agregar";
             this.buttonAgregar.UseVisualStyleBackColor = true;
             this.buttonAgregar.Click += new System.EventHandler(this.buttonAgregar_Click);
             // 
             // AddEmpleadosForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(319, 392);
             this.Controls.Add(this.buttonAgregar);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -190,9 +137,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.FormPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "AddEmpleadosForm";
-            this.Text = "AddEmpleadosForm";
             this.FormPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

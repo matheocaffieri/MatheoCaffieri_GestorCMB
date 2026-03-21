@@ -10,5 +10,8 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=VICTUS-TATE\SQLEXPRESS;Initial Catalog=GestorCMB_Users;Integrated Security=True;Encrypt=True;TrustServerCertificate=True</Value>
     </Setting>
+    <Setting Name="CultureCode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">es-AR</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

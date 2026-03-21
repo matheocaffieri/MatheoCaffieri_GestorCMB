@@ -117,4 +117,271 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&gt;&gt;buttonIncreaseQ.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="labelInfoCantidadInventario.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="labelInfoTipoMat.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 10pt</value>
+  </data>
+  <data name="&gt;&gt;buttonAgregarMaterial.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="labelInfoCantidadInventario.TabIndex" type="System.Int32, mscorlib">
+    <value>28</value>
+  </data>
+  <data name="labelInfoGeneralArticulo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>188, 23</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="buttonIncreaseQ.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="labelInfoDescArt.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 23</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelInfoCantidadInventario.Text" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="labelInfoCantidadInventario.Size" type="System.Drawing.Size, System.Drawing">
+    <value>41, 45</value>
+  </data>
+  <data name="buttonDecreaseQ.TabIndex" type="System.Int32, mscorlib">
+    <value>30</value>
+  </data>
+  <data name="panel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="&gt;&gt;labelInfoTipoMat.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelInfoGeneralArticulo.Name" xml:space="preserve">
+    <value>labelInfoGeneralArticulo</value>
+  </data>
+  <data name="buttonIncreaseQ.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="labelInfoCantidadInventario.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 20pt, style=Bold</value>
+  </data>
+  <data name="labelInfoDescArt.Location" type="System.Drawing.Point, System.Drawing">
+    <value>17, 20</value>
+  </data>
+  <data name="&gt;&gt;labelInfoGeneralArticulo.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;labelInfoCantidadInventario.Name" xml:space="preserve">
+    <value>labelInfoCantidadInventario</value>
+  </data>
+  <data name="&gt;&gt;labelInfoDescArt.Name" xml:space="preserve">
+    <value>labelInfoDescArt</value>
+  </data>
+  <data name="labelInfoDescArt.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="labelInfoCantidadInventario.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>464, 0</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="labelInfoCantidadInventario.Location" type="System.Drawing.Point, System.Drawing">
+    <value>89, 10</value>
+  </data>
+  <data name="labelInfoDescArt.TabIndex" type="System.Int32, mscorlib">
+    <value>27</value>
+  </data>
+  <data name="&gt;&gt;labelInfoCantidadInventario.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="buttonAgregarMaterial.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="labelInfoDescArt.Text" xml:space="preserve">
+    <value>Lampara fria</value>
+  </data>
+  <data name="buttonDecreaseQ.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="&gt;&gt;labelInfoTipoMat.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="buttonAgregarMaterial.TabIndex" type="System.Int32, mscorlib">
+    <value>31</value>
+  </data>
+  <data name="buttonDecreaseQ.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="&gt;&gt;labelInfoTipoMat.Name" xml:space="preserve">
+    <value>labelInfoTipoMat</value>
+  </data>
+  <data name="buttonAgregarMaterial.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 38</value>
+  </data>
+  <data name="&gt;&gt;buttonDecreaseQ.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelInfoDescArt.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;buttonIncreaseQ.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonAgregarMaterial.Name" xml:space="preserve">
+    <value>buttonAgregarMaterial</value>
+  </data>
+  <data name="buttonIncreaseQ.Location" type="System.Drawing.Point, System.Drawing">
+    <value>135, 2</value>
+  </data>
+  <data name="labelInfoTipoMat.Size" type="System.Drawing.Size, System.Drawing">
+    <value>79, 23</value>
+  </data>
+  <data name="&gt;&gt;buttonDecreaseQ.Name" xml:space="preserve">
+    <value>buttonDecreaseQ</value>
+  </data>
+  <data name="labelInfoGeneralArticulo.TabIndex" type="System.Int32, mscorlib">
+    <value>29</value>
+  </data>
+  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="buttonIncreaseQ.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="&gt;&gt;labelInfoDescArt.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonAgregarMaterial.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;labelInfoGeneralArticulo.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;labelInfoTipoMat.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;labelInfoDescArt.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;buttonAgregarMaterial.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="labelInfoGeneralArticulo.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 10pt</value>
+  </data>
+  <data name="buttonIncreaseQ.TabIndex" type="System.Int32, mscorlib">
+    <value>29</value>
+  </data>
+  <data name="buttonAgregarMaterial.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 16</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>8, 16</value>
+  </data>
+  <data name="labelInfoDescArt.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelInfoGeneralArticulo.Text" xml:space="preserve">
+    <value>| Luz y Deco | $10.000</value>
+  </data>
+  <data name="labelInfoGeneralArticulo.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelInfoTipoMat.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="buttonIncreaseQ.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 36</value>
+  </data>
+  <data name="labelInfoTipoMat.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelInfoTipoMat.Text" xml:space="preserve">
+    <value>Lampara</value>
+  </data>
+  <data name="&gt;&gt;buttonDecreaseQ.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="buttonDecreaseQ.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 36</value>
+  </data>
+  <data name="labelInfoDescArt.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 10pt</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>AddMaterialProyectoItemControl</value>
+  </data>
+  <data name="labelInfoGeneralArticulo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>221, 20</value>
+  </data>
+  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="buttonAgregarMaterial.Text" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
+  <data name="labelInfoTipoMat.Location" type="System.Drawing.Point, System.Drawing">
+    <value>136, 20</value>
+  </data>
+  <data name="&gt;&gt;buttonDecreaseQ.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;buttonIncreaseQ.Name" xml:space="preserve">
+    <value>buttonIncreaseQ</value>
+  </data>
+  <data name="&gt;&gt;labelInfoCantidadInventario.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
+    <value>30</value>
+  </data>
+  <data name="&gt;&gt;labelInfoCantidadInventario.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;labelInfoGeneralArticulo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelInfoGeneralArticulo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;buttonIncreaseQ.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="buttonDecreaseQ.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>679, 74</value>
+  </data>
+  <data name="buttonDecreaseQ.Location" type="System.Drawing.Point, System.Drawing">
+    <value>135, 36</value>
+  </data>
+  <data name="labelInfoTipoMat.TabIndex" type="System.Int32, mscorlib">
+    <value>28</value>
+  </data>
+  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>213, 74</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>en-US</value>
+  </metadata>
 </root>

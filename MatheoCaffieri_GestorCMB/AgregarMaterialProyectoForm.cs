@@ -1,7 +1,9 @@
 ﻿using BL;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.Language;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -33,7 +35,9 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 Close();
                 return;
@@ -82,7 +86,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             if (_idProyecto == Guid.Empty)
             {
-                MessageBox.Show("No se recibió el proyecto.");
+                MessageBox.Show(LanguageService.Current?.T("err_proyecto_no_recibido") ?? "No se recibió el proyecto.");
                 Close();
                 return;
             }
@@ -131,10 +135,15 @@ namespace MatheoCaffieri_GestorCMB
                     );
                 }
             }
-            catch (Exception ex)
+            catch (AppException ex)
             {
-                MessageBox.Show("No se pudo agregar el material al proyecto.\n" + ex.Message,
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception)
+            {
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

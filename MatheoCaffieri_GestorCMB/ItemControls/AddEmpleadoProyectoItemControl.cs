@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Services.Language;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
     public partial class AddEmpleadoProyectoItemControl : UserControl
     {
         private const int MAX_PROYECTOS_ACTIVOS = 3;
+        private decimal _sueldo;
 
         // === datos clave ===
         public Guid IdEmpleado { get; private set; }
@@ -38,6 +40,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         public void Bind(Guid idEmpleado, string nombre, string apellido, int dni, decimal sueldo, int proyectosActivos)
         {
             IdEmpleado = idEmpleado;
+            _sueldo = sueldo;
             ProyectosActivos = Math.Max(0, proyectosActivos);
 
             InfoEmpleado =
@@ -59,14 +62,13 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
 
             if (ProyectosActivos >= MAX_PROYECTOS_ACTIVOS)
             {
-                MessageBox.Show("El empleado ya tiene 3 proyectos activos. No se puede agregar.",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_empleado_max_proyectos") ?? "El empleado ya tiene 3 proyectos activos. No se puede agregar.",
                     "Límite alcanzado", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            AgregarClick?.Invoke(this, new AgregarEmpleadoEventArgs(IdEmpleado));
-
-
+            AgregarClick?.Invoke(this, new AgregarEmpleadoEventArgs(IdEmpleado, _sueldo));
         }
     }
 
@@ -74,6 +76,12 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
     public sealed class AgregarEmpleadoEventArgs : EventArgs
     {
         public Guid IdEmpleado { get; }
-        public AgregarEmpleadoEventArgs(Guid idEmpleado) => IdEmpleado = idEmpleado;
+        public decimal Sueldo { get; }
+
+        public AgregarEmpleadoEventArgs(Guid idEmpleado, decimal sueldo)
+        {
+            IdEmpleado = idEmpleado;
+            Sueldo = sueldo;
+        }
     }
 }

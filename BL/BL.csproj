@@ -63,6 +63,7 @@
     <Compile Include="DetalleMaterialBL.cs" />
     <Compile Include="EmpleadoBL.cs" />
     <Compile Include="InformeDeCompraBL.cs" />
+    <Compile Include="InformeMontoBL.cs" />
     <Compile Include="InventarioBL.cs" />
     <Compile Include="LoginBL\LoginService.cs" />
     <Compile Include="LoginBL\SessionManager.cs" />

@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Logs;
 using System;
@@ -36,7 +37,7 @@ namespace BL
 
         public List<DetalleProyectoEmpleado> GetAll(Guid idProyecto)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
             try
             {
                 return _repo.GetAll(idProyecto);
@@ -50,8 +51,8 @@ namespace BL
 
         public bool Exists(Guid idProyecto, Guid idEmpleado)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
-            if (idEmpleado == Guid.Empty) throw new ArgumentException("idEmpleado requerido.", nameof(idEmpleado));
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
+            if (idEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
             try
             {
@@ -66,8 +67,8 @@ namespace BL
 
         public DetalleProyectoEmpleado GetByProyectoEmpleado(Guid idProyecto, Guid idEmpleado)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
-            if (idEmpleado == Guid.Empty) throw new ArgumentException("idEmpleado requerido.", nameof(idEmpleado));
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
+            if (idEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
             try
             {
@@ -85,9 +86,9 @@ namespace BL
         // estado varchar: "1" activo, "0" inactivo
         public void Add(DetalleProyectoEmpleado detalle, string estado = "1")
         {
-            if (detalle == null) throw new ArgumentNullException(nameof(detalle));
-            if (detalle.IdProyecto == Guid.Empty) throw new ArgumentException("IdProyecto requerido.", nameof(detalle));
-            if (detalle.IdEmpleado == Guid.Empty) throw new ArgumentException("IdEmpleado requerido.", nameof(detalle));
+            if (detalle == null) throw new AppException("err_entity_null");
+            if (detalle.IdProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
+            if (detalle.IdEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
             LoggerLogic.Info($"[DetalleEmpleadoBL] Add START. idProyecto={detalle.IdProyecto}, idEmpleado={detalle.IdEmpleado}");
 
@@ -109,9 +110,9 @@ namespace BL
 
         public void Update(DetalleProyectoEmpleado detalle)
         {
-            if (detalle == null) throw new ArgumentNullException(nameof(detalle));
+            if (detalle == null) throw new AppException("err_entity_null");
             if (detalle.IdDetalleProyectoEmpleado == Guid.Empty)
-                throw new ArgumentException("IdDetalleProyectoEmpleado requerido.", nameof(detalle));
+                throw new AppException("err_empleado_id_detalle_required");
 
             LoggerLogic.Info($"[DetalleEmpleadoBL] Update START. idDetalle={detalle.IdDetalleProyectoEmpleado}");
 
@@ -134,7 +135,7 @@ namespace BL
         public void SetEstado(Guid idDetalleEmpleado, string estado)
         {
             if (idDetalleEmpleado == Guid.Empty)
-                throw new ArgumentException("idDetalleEmpleado requerido.", nameof(idDetalleEmpleado));
+                throw new AppException("err_empleado_id_detalle_required");
 
             LoggerLogic.Info($"[DetalleEmpleadoBL] SetEstado START. idDetalle={idDetalleEmpleado}, estado={estado}");
 

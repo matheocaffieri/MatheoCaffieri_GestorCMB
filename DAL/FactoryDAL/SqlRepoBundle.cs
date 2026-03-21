@@ -30,6 +30,7 @@ namespace DAL.FactoryDAL
             Usuarios = new DAL.LoginDAL.UsuarioRepository(uowLogin);
 
             Empleados = new EmpleadoRepository(uowEf);
+            InformesMonto = new InformeMontoRepository(uowEf);
             Inventario = new InventarioRepository(uowEf);
             Materiales = new MaterialRepository(uowEf);
             MaterialesFaltantes = new MaterialFaltanteRepository(uowEf);

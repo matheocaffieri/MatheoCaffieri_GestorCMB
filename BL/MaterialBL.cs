@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Logs;
 using Services.Logs.Strategy;
@@ -35,17 +36,17 @@ namespace BL
 
         private static void Validate(DomainModel.Material m, bool isUpdate = false)
         {
-            if (m == null) throw new ArgumentNullException(nameof(m));
+            if (m == null) throw new AppException("err_entity_null");
             if (isUpdate && m.IdMaterial == Guid.Empty)
-                throw new ArgumentException("IdMaterial requerido para actualizar.");
+                throw new AppException("err_material_id_required");
             if (string.IsNullOrWhiteSpace(m.DescripcionArticulo))
-                throw new ArgumentException("La descripción del artículo es obligatoria.");
+                throw new AppException("err_material_descripcion_required");
             if (string.IsNullOrWhiteSpace(m.TipoUnidad))
-                throw new ArgumentException("La unidad es obligatoria.");
+                throw new AppException("err_material_unidad_required");
             if (m.CostoPorUnidad < 0)
-                throw new ArgumentException("El costo por unidad no puede ser negativo.");
+                throw new AppException("err_material_costo_negativo");
             if (m.IdProveedor == Guid.Empty)
-                throw new ArgumentException("Debés seleccionar un proveedor.");
+                throw new AppException("err_material_proveedor_required");
         }
 
         // ================= CRUD =================
@@ -110,9 +111,9 @@ namespace BL
 
         public void Delete(DomainModel.Material entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
             if (entity.IdMaterial == Guid.Empty)
-                throw new ArgumentException("IdMaterial requerido para eliminar.");
+                throw new AppException("err_material_id_delete");
 
             LoggerLogic.Info($"[MaterialBL] Delete START. MaterialId={entity.IdMaterial}");
 
@@ -143,7 +144,7 @@ namespace BL
 
         public DomainModel.Material GetById(Guid id)
         {
-            if (id == Guid.Empty) throw new ArgumentException("id requerido.", nameof(id));
+            if (id == Guid.Empty) throw new AppException("err_id_required");
 
             try
             {

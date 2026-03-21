@@ -1,6 +1,8 @@
 ﻿using BL;
 using BL.AccessBL;
 using BL.LoginBL;
+using DomainModel.Exceptions;
+using Services.Language;
 using Services.Logs;
 using System;
 using System.Collections.Generic;
@@ -31,11 +33,20 @@ namespace MatheoCaffieri_GestorCMB
                 e.SetObserved();
             };
 
+            try
+            {
+                var cultureCode = string.IsNullOrWhiteSpace(Properties.Settings.Default.CultureCode) ? "es-AR" : Properties.Settings.Default.CultureCode;
+                var repo = new MatheoCaffieri_GestorCMB.Localization.ResxLanguageRepository();
+                var lang = new Services.Language.LanguageService(repo, cultureCode);
+                lang.SetCulture(cultureCode);
+            }
+            catch
+            {
+            }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // 1) Connection string desde App.config
             var cs = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"]?.ConnectionString;
             if (string.IsNullOrWhiteSpace(cs))
             {
@@ -45,7 +56,6 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
-            // 2) Inicialización de DB (si aplica)
             try
             {
                 var dbManager = new DatabaseManager();
@@ -55,21 +65,11 @@ namespace MatheoCaffieri_GestorCMB
             {
                 MessageBox.Show($"Error al inicializar la base de datos: {ex.Message}",
                                 "Inicio", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // Podés abortar si querés: return;
             }
 
-            // 3) Construir servicios con CS (ajustá según tus constructores reales)
-            // Si tus servicios aceptan (string cs):
-            var rolesService = AccessServicesFactory.CreateRolesService(cs);     // RolesServiceLogic
+            var rolesService = AccessServicesFactory.CreateRolesService(cs);
             var usuarioService = new UsuarioService(cs);
 
-            // --- Alternativa si tus servicios aceptan repositorios ---
-            // var usuarioRepo = new UsuarioAccesoRepository(cs);
-            // var rolesRepo   = new RolesRepository(cs);
-            // var rolesService   = new RolesService(rolesRepo);
-            // var usuarioService = new UsuarioService(usuarioRepo);
-
-            // 4) Correr la app con el MainForm que recibe servicios
             Application.Run(new LoginForm());
         }
 
@@ -77,12 +77,16 @@ namespace MatheoCaffieri_GestorCMB
         {
             try
             {
-                // 1) Log
                 LogHelper.Error("Excepción no controlada", ex);
 
-                // 2) UI
+                string msg;
+                if (ex is AppException appEx)
+                    msg = LanguageService.Current?.T(appEx.MessageKey) ?? appEx.Message;
+                else
+                    msg = LanguageService.Current?.T("err_generic") ?? "Ocurrió un error inesperado.";
+
                 MessageBox.Show(
-                    "Ocurrió un error inesperado.\n\n" +
+                    msg + "\n\n" +
                     "Se registró en el log. Abrí el visor de logs para ver el detalle.",
                     "Error",
                     MessageBoxButtons.OK,
@@ -91,10 +95,7 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch
             {
-                // Último recurso: evitar loop/crash por fallos al loguear
             }
         }
-
-
     }
 }

@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Logs;
 using System;
@@ -33,10 +34,10 @@ namespace BL
 
         public void AddOrUpdate(Guid idProyecto, string descripcion, string tipoMaterial, string tipoUnidad, int cantidad)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
-            if (string.IsNullOrWhiteSpace(descripcion)) throw new ArgumentException("descripcion requerida.", nameof(descripcion));
-            if (string.IsNullOrWhiteSpace(tipoMaterial)) throw new ArgumentException("tipoMaterial requerido.", nameof(tipoMaterial));
-            if (string.IsNullOrWhiteSpace(tipoUnidad)) throw new ArgumentException("tipoUnidad requerido.", nameof(tipoUnidad));
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
+            if (string.IsNullOrWhiteSpace(descripcion)) throw new AppException("err_descripcion_required");
+            if (string.IsNullOrWhiteSpace(tipoMaterial)) throw new AppException("err_tipo_material_required");
+            if (string.IsNullOrWhiteSpace(tipoUnidad)) throw new AppException("err_tipo_unidad_required");
             if (cantidad <= 0) return;
 
             // normalización "mínimo cambio" (evita duplicados por espacios/caso)
@@ -64,7 +65,7 @@ namespace BL
 
         public List<MaterialFaltante> GetAll(Guid idProyecto)
         {
-            if (idProyecto == Guid.Empty) throw new ArgumentException("idProyecto requerido.", nameof(idProyecto));
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
 
             try
             {

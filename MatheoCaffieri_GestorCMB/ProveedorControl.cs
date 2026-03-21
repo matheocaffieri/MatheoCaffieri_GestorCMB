@@ -2,6 +2,7 @@
 using DomainModel;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
+using Services.Language;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -35,14 +36,18 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!SessionContext.Has(REQUIRED))
             {
-                MessageBox.Show("No tenés permisos para acceder a esta pantalla.", "Acceso denegado",
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 var host = _mainForm ?? (this.FindForm() as MainForm);
                 if (host == null)
                 {
-                    MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        LanguageService.Current?.T("err_mainform_no_encontrado") ?? "No se encontró el MainForm para navegar.",
+                        LanguageService.Current?.T("cap_atencion") ?? "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -98,8 +103,10 @@ namespace MatheoCaffieri_GestorCMB
 
             if (string.IsNullOrWhiteSpace(descripcion))
             {
-                MessageBox.Show("La descripción es obligatoria.", "Validación",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_descripcion_requerida") ?? "La descripción es obligatoria.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -110,8 +117,10 @@ namespace MatheoCaffieri_GestorCMB
                     telefono = telParsed;
                 else
                 {
-                    MessageBox.Show("El teléfono debe ser numérico.", "Validación",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        LanguageService.Current?.T("val_telefono_invalido") ?? "El teléfono debe ser numérico.",
+                        LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
             }
@@ -139,8 +148,10 @@ namespace MatheoCaffieri_GestorCMB
             var host = _mainForm ?? (this.FindForm() as MainForm);
             if (host == null)
             {
-                MessageBox.Show("No se encontró el MainForm para navegar.", "Atención",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_mainform_no_encontrado") ?? "No se encontró el MainForm para navegar.",
+                    LanguageService.Current?.T("cap_atencion") ?? "Atención",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Logs;
 using System;
@@ -32,7 +33,7 @@ namespace BL
 
         public void Add(DomainModel.Cliente entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
 
             LoggerLogic.Info($"[ClienteBL] Add START. Id={entity.IdCliente}");
 
@@ -54,7 +55,7 @@ namespace BL
 
         public void Update(DomainModel.Cliente entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
 
             LoggerLogic.Info($"[ClienteBL] Update START. Id={entity.IdCliente}");
 
@@ -76,7 +77,7 @@ namespace BL
 
         public void Delete(DomainModel.Cliente entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
 
             LoggerLogic.Info($"[ClienteBL] Delete START. Id={entity.IdCliente}");
 
@@ -112,7 +113,7 @@ namespace BL
 
         public DomainModel.Cliente GetById(Guid id)
         {
-            if (id == Guid.Empty) throw new ArgumentException("id requerido.", nameof(id));
+            if (id == Guid.Empty) throw new AppException("err_id_required");
 
             try
             {

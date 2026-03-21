@@ -1,6 +1,8 @@
 ﻿using BL;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
+using Services.Language;
 using Services.Logs;
 using System;
 using System.Collections.Generic;
@@ -70,11 +72,18 @@ namespace MatheoCaffieri_GestorCMB
                 CargarProveedores();
                 textBoxDescripcion.Focus();
             }
+            catch (AppException ex)
+            {
+                LoggerLogic.Error("[AddMaterialesForm] Error iniciando", ex);
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+            }
             catch (Exception ex)
             {
                 LoggerLogic.Error("[AddMaterialesForm] Error iniciando", ex);
-                MessageBox.Show("No se pudo abrir el formulario de alta.", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
             }
         }
@@ -116,11 +125,17 @@ namespace MatheoCaffieri_GestorCMB
                 DialogResult = DialogResult.OK;
                 Close();
             }
+            catch (AppException ex)
+            {
+                LoggerLogic.Error("[AddMaterialesForm] Error al guardar material", ex);
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
                 LoggerLogic.Error("[AddMaterialesForm] Error al guardar material", ex);
-                MessageBox.Show("No se pudo guardar el material.\n" + ex.Message,
-                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -131,27 +146,27 @@ namespace MatheoCaffieri_GestorCMB
             var desc = textBoxDescripcion.Text.Trim();
             if (string.IsNullOrWhiteSpace(desc))
             {
-                Warn("La descripción es obligatoria.", textBoxDescripcion);
+                Warn(LanguageService.Current?.T("val_descripcion_requerida") ?? "La descripción es obligatoria.", textBoxDescripcion);
                 return false;
             }
 
             var tipoMat = comboBoxMaterial.SelectedItem?.ToString();
             if (string.IsNullOrWhiteSpace(tipoMat))
             {
-                Warn("Seleccioná el tipo de material.", comboBoxMaterial);
+                Warn(LanguageService.Current?.T("val_tipo_material_requerido") ?? "Seleccioná el tipo de material.", comboBoxMaterial);
                 return false;
             }
 
             var tipoUni = comboBoxUnidad.SelectedItem?.ToString();
             if (string.IsNullOrWhiteSpace(tipoUni))
             {
-                Warn("Seleccioná el tipo de unidad.", comboBoxUnidad);
+                Warn(LanguageService.Current?.T("val_tipo_unidad_requerido") ?? "Seleccioná el tipo de unidad.", comboBoxUnidad);
                 return false;
             }
 
             if (!TryParseDecimal(textBoxPrecio.Text, out var precio) || precio < 0)
             {
-                Warn("Ingresá un precio válido (número positivo).", textBoxPrecio);
+                Warn(LanguageService.Current?.T("val_precio_invalido") ?? "Ingresá un precio válido (número positivo).", textBoxPrecio);
                 return false;
             }
 
@@ -188,7 +203,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private static void Warn(string msg, Control focus)
         {
-            MessageBox.Show(msg, "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(msg, LanguageService.Current?.T("cap_validacion") ?? "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             focus.Focus();
         }
 
@@ -235,22 +250,26 @@ namespace MatheoCaffieri_GestorCMB
                 LoggerLogic.Info(
                     $"[AddMaterialesForm] Material agregado: {mat.DescripcionArticulo} ({mat.IdMaterial})");
 
-                MessageBox.Show("Material agregado correctamente.",
-                                "Información",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+                MessageBox.Show(
+                    LanguageService.Current?.T("msg_material_agregado") ?? "Material agregado correctamente.",
+                    "OK",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
                 DialogResult = DialogResult.OK;
                 Close();
             }
+            catch (AppException ex)
+            {
+                LoggerLogic.Error("[AddMaterialesForm] Error al guardar material", ex);
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
                 LoggerLogic.Error("[AddMaterialesForm] Error al guardar material", ex);
-
-                MessageBox.Show("No se pudo guardar el material.\n" + ex.Message,
-                                "Error",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

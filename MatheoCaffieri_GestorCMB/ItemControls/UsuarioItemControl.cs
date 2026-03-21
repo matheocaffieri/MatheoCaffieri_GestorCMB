@@ -1,5 +1,6 @@
 ﻿using BL.LoginBL;
 using DomainModel.Login;
+using Services.RoleService.Logic;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -15,6 +16,9 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         private readonly UsuarioService _usuarioService;
 
         private Usuario _usuario;
+
+        public Guid LoggedUserId { get; set; }
+
         public Usuario Usuario
         {
             get => _usuario;
@@ -24,7 +28,6 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         public event EventHandler<bool> ActivoChanged;
         public event EventHandler<Usuario> UsuarioEditado;
 
-        // === SOLO diseñador ===
         public UsuarioItemControl()
         {
             InitializeComponent();
@@ -35,7 +38,6 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             }
         }
 
-        // === Runtime ===
         public UsuarioItemControl(RolesServiceLogic rolService, UsuarioService usuarioService)
         {
             InitializeComponent();
@@ -43,7 +45,6 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             _rolService = rolService ?? throw new ArgumentNullException(nameof(rolService));
             _usuarioService = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));
 
-            // Suscribimos UNA sola vez
             SwitchHabilitarUsuario.ToggleChanged += (s, ev) =>
                 ActivoChanged?.Invoke(this, SwitchHabilitarUsuario.IsOn);
         }
@@ -56,7 +57,6 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             Tag = u;
         }
 
-        // --- Propiedades de UI ---
         public bool Activo
         {
             get => SwitchHabilitarUsuario.IsOn;
@@ -83,14 +83,12 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             set => labelInfoMailUsuario.Text = value ?? string.Empty;
         }
 
-        // --- Eventos ---
-
         private void buttonEditarUsuario_Click(object sender, EventArgs e)
         {
             var u = Usuario ?? Tag as Usuario;
             if (u == null) return;
 
-            using (var frm = new EditUserForm(u, _rolService))
+            using (var frm = new EditUserForm(u, _rolService, _usuarioService, LoggedUserId))
             {
                 if (frm.ShowDialog() == DialogResult.OK)
                 {

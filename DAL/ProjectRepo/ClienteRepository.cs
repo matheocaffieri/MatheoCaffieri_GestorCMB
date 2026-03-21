@@ -29,7 +29,8 @@ namespace DAL.ProjectRepo
                 RazonSocial = c.razonSocial,
                 Telefono = c.telefono,
                 Mail = c.mail,
-                NombreContacto = c.nombreContacto
+                NombreContacto = c.nombreContacto,
+                IsActive = c.isActive
             };
 
         public ClienteRepository(IUnitOfWork uow)
@@ -46,6 +47,7 @@ namespace DAL.ProjectRepo
             dst.telefono = src.Telefono;
             dst.mail = src.Mail;
             dst.nombreContacto = src.NombreContacto;
+            dst.isActive = src.IsActive;
         }
 
         public void Add(DomainModel.Cliente entity)

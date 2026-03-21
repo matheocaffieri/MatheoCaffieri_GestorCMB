@@ -2,6 +2,7 @@
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Logs;
 using System;
@@ -34,7 +35,7 @@ namespace BL
 
         public void Add(DomainModel.Empleado entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
 
             if (entity.IdEmpleado == Guid.Empty)
                 entity.IdEmpleado = Guid.NewGuid();
@@ -59,8 +60,8 @@ namespace BL
 
         public void Update(DomainModel.Empleado entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
-            if (entity.IdEmpleado == Guid.Empty) throw new ArgumentException("IdEmpleado requerido.", nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
+            if (entity.IdEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
             LoggerLogic.Info($"[EmpleadoBL] Update START. Id={entity.IdEmpleado}");
 
@@ -82,8 +83,8 @@ namespace BL
 
         public void Delete(DomainModel.Empleado entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
-            if (entity.IdEmpleado == Guid.Empty) throw new ArgumentException("IdEmpleado requerido.", nameof(entity));
+            if (entity == null) throw new AppException("err_entity_null");
+            if (entity.IdEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
             LoggerLogic.Info($"[EmpleadoBL] Delete START. Id={entity.IdEmpleado}");
 
@@ -120,7 +121,7 @@ namespace BL
 
         DomainModel.Empleado IGenericRepository<DomainModel.Empleado>.GetById(Guid id)
         {
-            if (id == Guid.Empty) throw new ArgumentException("id requerido.", nameof(id));
+            if (id == Guid.Empty) throw new AppException("err_id_required");
             try
             {
                 return _repo.GetById(id);
