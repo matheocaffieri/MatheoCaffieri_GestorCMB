@@ -28,10 +28,23 @@ namespace MatheoCaffieri_GestorCMB
         public event EventHandler MaterialesProyectoActualizados;
 
 
+        private System.Drawing.Point _mouseLocation;
+
         public AgregarMaterialProyectoForm(Guid idProyecto)
         {
             InitializeComponent();
             _idProyecto = idProyecto;
+
+            FormPanel.MouseDown += (s, e) => { _mouseLocation = new System.Drawing.Point(-e.X, -e.Y); };
+            FormPanel.MouseMove += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    var pos = MousePosition;
+                    pos.Offset(_mouseLocation.X, _mouseLocation.Y);
+                    Location = pos;
+                }
+            };
 
             if (!SessionContext.Has(REQUIRED))
             {

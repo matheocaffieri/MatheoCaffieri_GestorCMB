@@ -27,9 +27,22 @@ namespace MatheoCaffieri_GestorCMB
         private readonly RolesServiceLogic _rolesSrv;
 
 
+        private System.Drawing.Point _mouseLocation;
+
         public AccesosForm()
         {
             InitializeComponent();
+
+            FormPanel.MouseDown += (s, e) => { _mouseLocation = new System.Drawing.Point(-e.X, -e.Y); };
+            FormPanel.MouseMove += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    var pos = MousePosition;
+                    pos.Offset(_mouseLocation.X, _mouseLocation.Y);
+                    Location = pos;
+                }
+            };
 
             var cs = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"].ConnectionString;
             _accesoSrv = AccessServicesFactory.CreateAccesoService(cs);

@@ -167,7 +167,15 @@ namespace MatheoCaffieri_GestorCMB
 
         private void CargarListado(string filtro = "")
         {
-            List<Proyecto> proyectos = ((IGenericRepository<Proyecto>)new ProyectoBL()).GetAll();
+            List<Proyecto> todos = ((IGenericRepository<Proyecto>)new ProyectoBL()).GetAll();
+
+            // Numerar por orden de creación (estable, no cambia con filtros ni orden de vista)
+            var numeros = todos
+                .OrderBy(p => p.FechaInicio)
+                .Select((p, i) => new { p.IdProyecto, Numero = i + 1 })
+                .ToDictionary(x => x.IdProyecto, x => x.Numero);
+
+            List<Proyecto> proyectos = todos;
 
             if (!string.IsNullOrWhiteSpace(filtro))
             {
@@ -187,13 +195,17 @@ namespace MatheoCaffieri_GestorCMB
             else if (_ordenActual == Orden.ClienteAZ)
                 proyectos = proyectos.OrderBy(p => p.Cliente != null ? p.Cliente.RazonSocial : "").ToList();
             else
-                proyectos = proyectos.OrderByDescending(p => p.FechaInicio).ToList(); // MasRecientes por defecto
+                proyectos = proyectos.OrderByDescending(p => p.FechaInicio).ToList();
 
             proyectoItemPanel.SuspendLayout();
             proyectoItemPanel.Controls.Clear();
 
             foreach (var p in proyectos)
-                proyectoItemPanel.Controls.Add(new ProyectoItemControl(mainForm, p));
+            {
+                var item = new ProyectoItemControl(mainForm, p);
+                item.NumProyecto = $"Proyecto #{numeros[p.IdProyecto]}";
+                proyectoItemPanel.Controls.Add(item);
+            }
 
             proyectoItemPanel.ResumeLayout();
         }

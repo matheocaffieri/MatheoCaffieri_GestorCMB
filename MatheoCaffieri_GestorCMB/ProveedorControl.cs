@@ -62,42 +62,72 @@ namespace MatheoCaffieri_GestorCMB
 
             this.Load += ProveedorControl_Load;
             buttonAddProveedor.Click += buttonAddProveedor_Click;
+            buttonSearchClientes.Click += buttonSearchClientes_Click;
+            textBox1.TextChanged += textBox1_TextChanged;
+            textBox1.KeyDown += textBox1_KeyDown;
         }
 
         private readonly IGenericRepository<Proveedor> _proveedorRepo;
 
 
-        private void ObtenerProveedoresItems()
+        private void CargarListado(string filtro = "")
         {
-            // Traemos los proveedores desde la BL
             List<Proveedor> proveedores = _proveedorRepo.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                filtro = filtro.Trim().ToLower();
+
+                proveedores = proveedores
+                    .Where(p =>
+                        (!string.IsNullOrEmpty(p.Descripcion) && p.Descripcion.ToLower().Contains(filtro)) ||
+                        p.Telefono.ToString().Contains(filtro)
+                    )
+                    .ToList();
+            }
 
             proveedorLayoutPanel.SuspendLayout();
             proveedorLayoutPanel.Controls.Clear();
 
-            proveedores.ForEach(proveedor =>
+            foreach (var proveedor in proveedores)
             {
-                var proveedorItemControl = new ProveedorItemControl
-                {
-                    Descripcion = proveedor.Descripcion,
-                    Telefono = proveedor.Telefono.ToString()
-                    // proveedorItemControl.IsActive = proveedor.IsActive;  // si tenés este campo
-                };
-
-                proveedorLayoutPanel.Controls.Add(proveedorItemControl);
-            });
+                var item = new ProveedorItemControl();
+                item.Bind(proveedor);
+                item.EditRequested += EditarProveedor;
+                item.ActiveChanged += ToggleActivoProveedor;
+                proveedorLayoutPanel.Controls.Add(item);
+            }
 
             proveedorLayoutPanel.ResumeLayout();
         }
 
         private void ProveedorControl_Load(object sender, EventArgs e)
         {
-            ObtenerProveedoresItems();
+            if (!DesignMode)
+                CargarListado();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            CargarListado(textBox1.Text);
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                CargarListado(textBox1.Text);
+            }
+        }
+
+        private void buttonSearchClientes_Click(object sender, EventArgs e)
+        {
+            CargarListado(textBox1.Text);
         }
 
         private void buttonAddProveedor_Click(object sender, EventArgs e)
         {
-            // Usá los nombres reales de tus TextBox
             string descripcion = textBoxDescripcion.Text.Trim();
             string telefonoStr = textBoxTelefono.Text.Trim();
 
@@ -129,18 +159,42 @@ namespace MatheoCaffieri_GestorCMB
             {
                 Descripcion = descripcion,
                 Telefono = (int)telefono
-                // IsActive = true;  // si tu entidad tiene este campo
             };
 
             _proveedorRepo.Add(nuevoProveedor);
 
-            // Refrescamos el listado
-            ObtenerProveedoresItems();
-
-            // Limpiamos el formulario
             textBoxDescripcion.Clear();
             textBoxTelefono.Clear();
             textBoxDescripcion.Focus();
+
+            CargarListado(textBox1.Text);
+        }
+
+        private void ToggleActivoProveedor(Proveedor proveedor, bool nuevoEstado)
+        {
+            try
+            {
+                proveedor.IsActive = nuevoEstado;
+                _proveedorRepo.Update(proveedor);
+            }
+            catch (Exception ex)
+            {
+                Services.Logs.LoggerLogic.Error($"[ProveedorControl] Error al actualizar estado proveedor {proveedor.IdProveedor}: {ex.Message}");
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CargarListado(textBox1.Text);
+            }
+        }
+
+        private void EditarProveedor(DomainModel.Proveedor proveedor)
+        {
+            using (var frm = new EditProveedorForm(_proveedorRepo, proveedor))
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                if (frm.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
+                    CargarListado(textBox1.Text);
+            }
         }
 
         private void buttonBack_Click(object sender, EventArgs e)

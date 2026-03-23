@@ -21,7 +21,7 @@ namespace BL
             var materiales = new DetalleMaterialBL().GetAll(idProyecto);
 
             float totalEmp = empleados.Sum(e => e.Empleado.Sueldo + e.ValorGanancia);
-            float totalMat = materiales.Sum(m => m.Material.CostoPorUnidad * m.Cantidad + m.ValorGanancia);
+            float totalMat = materiales.Sum(m => (m.Material.CostoPorUnidad + m.ValorGanancia) * m.Cantidad);
             float montoTotal = totalEmp + totalMat;
 
             var informe = new InformeMonto

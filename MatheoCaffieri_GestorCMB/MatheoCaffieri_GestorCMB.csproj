@@ -105,6 +105,12 @@
     <Compile Include="DetalleProyectoControl.Designer.cs">
       <DependentUpon>DetalleProyectoControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditProveedorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditProveedorForm.Designer.cs">
+      <DependentUpon>EditProveedorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditClienteForm.cs">
       <SubType>Form</SubType>
     </Compile>

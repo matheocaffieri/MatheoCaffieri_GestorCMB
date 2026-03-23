@@ -21,9 +21,22 @@ namespace MatheoCaffieri_GestorCMB
         private readonly Empleado _empleado;
 
         // Constructor para edición
+        private System.Drawing.Point _mouseLocation;
+
         public EditEmpleadoForm(IGenericRepository<Empleado> repo, Empleado empleado)
         {
             InitializeComponent();
+
+            FormPanel.MouseDown += (s, e) => { _mouseLocation = new System.Drawing.Point(-e.X, -e.Y); };
+            FormPanel.MouseMove += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    var pos = MousePosition;
+                    pos.Offset(_mouseLocation.X, _mouseLocation.Y);
+                    Location = pos;
+                }
+            };
 
             _repo = repo ?? throw new ArgumentNullException(nameof(repo));
             _empleado = empleado ?? throw new ArgumentNullException(nameof(empleado));

@@ -66,6 +66,8 @@
             // 
             resources.ApplyResources(this.button4, "button4");
             this.button4.BackColor = System.Drawing.Color.LightCoral;
+            this.button4.BackgroundImage = global::MatheoCaffieri_GestorCMB.Properties.Resources.cliente;
+            this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button4.Name = "button4";
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
@@ -74,6 +76,8 @@
             // 
             resources.ApplyResources(this.button3, "button3");
             this.button3.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.button3.BackgroundImage = global::MatheoCaffieri_GestorCMB.Properties.Resources.personal;
+            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button3.Name = "button3";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -82,14 +86,18 @@
             // 
             resources.ApplyResources(this.button2, "button2");
             this.button2.BackColor = System.Drawing.Color.NavajoWhite;
+            this.button2.BackgroundImage = global::MatheoCaffieri_GestorCMB.Properties.Resources.inventario;
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button2.Name = "button2";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // butMainProyectos
-            // 
+            //
             resources.ApplyResources(this.butMainProyectos, "butMainProyectos");
             this.butMainProyectos.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.butMainProyectos.BackgroundImage = global::MatheoCaffieri_GestorCMB.Properties.Resources.proyecto;
+            this.butMainProyectos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.butMainProyectos.Name = "butMainProyectos";
             this.butMainProyectos.UseVisualStyleBackColor = false;
             this.butMainProyectos.Click += new System.EventHandler(this.butMainProyectos_Click);

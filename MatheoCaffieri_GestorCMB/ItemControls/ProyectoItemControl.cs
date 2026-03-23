@@ -69,7 +69,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
 
 
             // Cargar datos del proyecto en la interfaz
-            NumProyecto = "Proyecto #" + proyecto.IdProyecto;
+            NumProyecto = "Proyecto #";
             DescripcionProyecto = proyecto.Descripcion;
             NombreCliente = proyecto.Cliente?.NombreContacto ?? "Cliente desconocido";
             FechaInicio = proyecto.FechaInicio.ToString("dd/MM/yyyy") ?? "Sin fecha";

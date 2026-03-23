@@ -25,9 +25,23 @@ namespace MatheoCaffieri_GestorCMB
         private readonly Guid _loggedUserId;
 
 
+        private System.Drawing.Point _mouseLocation;
+
         public EditUserForm(Usuario usuario, RolesServiceLogic rolService, UsuarioService usuarioService, Guid loggedUserId)
         {
             InitializeComponent();
+
+            FormPanel.MouseDown += (s, e) => { _mouseLocation = new System.Drawing.Point(-e.X, -e.Y); };
+            FormPanel.MouseMove += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    var pos = MousePosition;
+                    pos.Offset(_mouseLocation.X, _mouseLocation.Y);
+                    Location = pos;
+                }
+            };
+
             _usuario = usuario ?? throw new ArgumentNullException(nameof(usuario));
             _rolService = rolService ?? throw new ArgumentNullException(nameof(rolService));
             _usuarioService = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));

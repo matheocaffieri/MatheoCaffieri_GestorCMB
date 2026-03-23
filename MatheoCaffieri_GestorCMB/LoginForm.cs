@@ -29,9 +29,39 @@ namespace MatheoCaffieri_GestorCMB
 
 
         // Constructor (ejemplo de inicialización)
+        private System.Drawing.Point _mouseLocation;
+
         public LoginForm()
         {
             InitializeComponent();
+
+            this.MouseDown += (s, e) => { _mouseLocation = new System.Drawing.Point(-e.X, -e.Y); };
+            this.MouseMove += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    var pos = MousePosition;
+                    pos.Offset(_mouseLocation.X, _mouseLocation.Y);
+                    Location = pos;
+                }
+            };
+            panel1.MouseDown += (s, e) => { _mouseLocation = new System.Drawing.Point(-e.X, -e.Y); };
+            panel1.MouseMove += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    var pos = MousePosition;
+                    pos.Offset(_mouseLocation.X, _mouseLocation.Y);
+                    Location = pos;
+                }
+            };
+
+            this.KeyPreview = true;
+            this.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                    buttonLogin_Click(s, e);
+            };
 
             try
             {

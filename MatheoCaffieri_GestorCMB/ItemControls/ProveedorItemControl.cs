@@ -1,32 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DomainModel;
+using System;
 using System.Windows.Forms;
 
 namespace MatheoCaffieri_GestorCMB.ItemControls
 {
     public partial class ProveedorItemControl : UserControl
     {
+        public Proveedor Proveedor { get; private set; }
+
+        public event Action<Proveedor> EditRequested;
+        public event Action<Proveedor, bool> ActiveChanged;
+
         public ProveedorItemControl()
         {
             InitializeComponent();
+
+            SwitchHabilitarProveedor.ToggleChanged += (_, __) =>
+            {
+                if (Proveedor == null) return;
+                bool nuevoEstado = SwitchHabilitarProveedor.IsOn;
+                Proveedor.IsActive = nuevoEstado;
+                ActiveChanged?.Invoke(Proveedor, nuevoEstado);
+            };
         }
 
-        public string Descripcion
+        public void Bind(Proveedor p)
         {
-            get => labelDescripcionProveedor.Text; 
-            set => labelDescripcionProveedor.Text = value; 
+            Proveedor = p;
+            labelDescripcionProveedor.Text = p.Descripcion;
+            labelTelefonoProveedor.Text = p.Telefono.ToString();
+            SwitchHabilitarProveedor.IsOn = p.IsActive;
+
+            buttonEditarProveedor.Click -= buttonEditarProveedor_Click;
+            buttonEditarProveedor.Click += buttonEditarProveedor_Click;
         }
 
-        public string Telefono
+        private void buttonEditarProveedor_Click(object sender, EventArgs e)
         {
-            get => labelTelefonoProveedor.Text;
-            set => labelTelefonoProveedor.Text = value;
+            EditRequested?.Invoke(Proveedor);
         }
     }
 }

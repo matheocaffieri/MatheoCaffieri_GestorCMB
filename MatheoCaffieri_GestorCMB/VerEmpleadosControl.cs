@@ -21,11 +21,11 @@ namespace MatheoCaffieri_GestorCMB
 
         private const string REQUIRED = "VER_EMPLEADOS";
 
+        private readonly IGenericRepository<Empleado> _empleadoRepo = new EmpleadoBL();
 
         public VerEmpleadosControl()
         {
             InitializeComponent();
-
 
             if (!SessionContext.Has(REQUIRED))
             {
@@ -36,57 +36,117 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
+            WireEvents();
         }
 
-        private void ObtenerEmpleadosItems()
+        private void WireEvents()
         {
-            var empleados = ((IGenericRepository<Empleado>)new EmpleadoBL()).GetAll();
+            if (buttonSearchEmpleado != null)
+                buttonSearchEmpleado.Click += buttonSearchEmpleado_Click;
 
+            if (textBox1 != null)
+            {
+                textBox1.TextChanged += textBox1_TextChanged;
+                textBox1.KeyDown += textBox1_KeyDown;
+            }
+        }
+
+        private void CargarListado(string filtro = "")
+        {
+            List<Empleado> empleados = _empleadoRepo.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                filtro = filtro.Trim().ToLower();
+
+                empleados = empleados
+                    .Where(e =>
+                        (!string.IsNullOrEmpty(e.Nombre) && e.Nombre.ToLower().Contains(filtro)) ||
+                        (!string.IsNullOrEmpty(e.Apellido) && e.Apellido.ToLower().Contains(filtro)) ||
+                        e.NroDocumento.ToString().Contains(filtro) ||
+                        e.Sueldo.ToString().Contains(filtro)
+                    )
+                    .ToList();
+            }
+
+            empleadosLayoutPanel.SuspendLayout();
             empleadosLayoutPanel.Controls.Clear();
 
-            foreach (var e in empleados)
+            foreach (var emp in empleados)
             {
-                var item = new EmpleadosItemControl();
-                item.Bind(e);
-
-                // Switch on/off
-                item.ActiveChanged += (emp, nuevoEstado) =>
-                {
-                    if (emp == null || emp.IdEmpleado == Guid.Empty) return;
-                    new EmpleadoBL().Update(emp);
-                };
-
-                // Click en el lápiz
-                item.EditRequested += (emp) =>
-                {
-                    if (emp == null || emp.IdEmpleado == Guid.Empty) return;
-
-                    using (var frm = new EditEmpleadoForm(_empleadoRepo, emp))
-                    {
-                        var owner = this.FindForm();
-                        var dr = (owner != null) ? frm.ShowDialog(owner) : frm.ShowDialog();
-
-                        if (dr == DialogResult.OK)
-                            ObtenerEmpleadosItems(); // recarga lista con datos actualizados
-                    }
-                };
-
+                var item = CrearItemEmpleado(emp);
                 empleadosLayoutPanel.Controls.Add(item);
             }
+
+            empleadosLayoutPanel.ResumeLayout();
+        }
+
+        private EmpleadosItemControl CrearItemEmpleado(Empleado emp)
+        {
+            var item = new EmpleadosItemControl();
+            item.Bind(emp);
+
+            item.ActiveChanged += (e, nuevoEstado) =>
+            {
+                if (e == null || e.IdEmpleado == Guid.Empty) return;
+                try
+                {
+                    _empleadoRepo.Update(e);
+                }
+                catch (Exception ex)
+                {
+                    Services.Logs.LoggerLogic.Error($"[VerEmpleadosControl] Error al actualizar estado: {ex.Message}");
+                    MessageBox.Show(
+                        LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    CargarListado(textBox1.Text);
+                }
+            };
+
+            item.EditRequested += (e) =>
+            {
+                if (e == null || e.IdEmpleado == Guid.Empty) return;
+
+                using (var frm = new EditEmpleadoForm(_empleadoRepo, e))
+                {
+                    var owner = this.FindForm();
+                    var dr = (owner != null) ? frm.ShowDialog(owner) : frm.ShowDialog();
+
+                    if (dr == DialogResult.OK)
+                        CargarListado(textBox1.Text);
+                }
+            };
+
+            return item;
         }
 
         private void VerEmpleadosControl_Load(object sender, EventArgs e)
         {
-            ObtenerEmpleadosItems();
+            if (!DesignMode)
+                CargarListado();
         }
 
-        private readonly IGenericRepository<Empleado> _empleadoRepo = new EmpleadoBL();
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            CargarListado(textBox1.Text);
+        }
 
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                CargarListado(textBox1.Text);
+            }
+        }
+
+        private void buttonSearchEmpleado_Click(object sender, EventArgs e)
+        {
+            CargarListado(textBox1.Text);
+        }
 
         private void buttonAgregarEmpleado_Click(object sender, EventArgs e)
         {
-
-            // Pasás el mismo repo al form
             using (var addEmpleadosForm = new AddEmpleadosForm(_empleadoRepo))
             {
                 var owner = this.FindForm();
@@ -95,10 +155,7 @@ namespace MatheoCaffieri_GestorCMB
                     : addEmpleadosForm.ShowDialog();
 
                 if (dr == DialogResult.OK)
-                {
-                    // Se agregó correctamente: recargás la lista
-                    ObtenerEmpleadosItems();
-                }
+                    CargarListado(textBox1.Text);
             }
         }
     }
