@@ -80,8 +80,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="RoleService\Logic\AccesoService.cs" />
+    <Compile Include="RoleService\Logic\ParametrosService.cs" />
     <Compile Include="RoleService\Logic\RolesService.cs" />
     <Compile Include="RoleService\Logic\UsuarioPermisosService.cs" />
+    <Compile Include="RoleService\ParametrosContext.cs" />
     <Compile Include="RoleService\RolCompuesto.cs" />
     <Compile Include="RoleService\SessionContext.cs" />
     <Compile Include="Tools\NodoPermRol.cs" />

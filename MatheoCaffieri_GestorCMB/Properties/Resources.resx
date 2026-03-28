@@ -145,6 +145,10 @@
   <data name="cliente" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cliente.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <!-- ===== Configurar Parámetros ===== -->
+  <data name="msg_parametros_guardados" xml:space="preserve">
+    <value>Parámetros guardados correctamente.</value>
+  </data>
   <!-- ===== Error strings (multilingual exception system) ===== -->
   <data name="err_generic" xml:space="preserve">
     <value>Ocurrió un error inesperado.</value>

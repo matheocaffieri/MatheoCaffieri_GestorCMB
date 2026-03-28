@@ -17,6 +17,7 @@ using Services.RoleService;                 // SessionContext
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RolesServiceLogic = Services.RoleService.Logic.RolesService;
+using Services.RoleService.Logic;
 
 
 namespace MatheoCaffieri_GestorCMB
@@ -193,6 +194,10 @@ namespace MatheoCaffieri_GestorCMB
 
                 SessionContext.SetUsuario(usuarioLogueado.IdUsuario, permisos.Select(p => p.ToString()));
 
+                // Cargar parámetros globales de la empresa
+                var parametrosService = AccessServicesFactory.CreateParametrosService(connectionStringUsers);
+                Services.RoleService.ParametrosContext.Cargar(parametrosService.Obtener());
+
 
                 var idioma = usuarioLogueado.Idioma;
                 var cultureCode = idioma == "en" ? "en-US" : "es-AR";
@@ -204,7 +209,7 @@ namespace MatheoCaffieri_GestorCMB
                 lang.SetCulture(cultureCode);
 
 
-                MainForm mainForm = new MainForm(rolesService, usuarioService);
+                MainForm mainForm = new MainForm(rolesService, usuarioService, parametrosService);
                 mainForm.Show();
 
                 this.Hide();

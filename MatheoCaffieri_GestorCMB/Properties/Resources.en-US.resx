@@ -58,6 +58,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <!-- ===== Configure Parameters ===== -->
+  <data name="msg_parametros_guardados" xml:space="preserve">
+    <value>Parameters saved successfully.</value>
+  </data>
   <!-- ===== Error strings (multilingual exception system) ===== -->
   <data name="err_generic" xml:space="preserve">
     <value>An unexpected error occurred.</value>

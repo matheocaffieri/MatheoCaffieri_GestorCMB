@@ -173,7 +173,7 @@ namespace MatheoCaffieri_GestorCMB
             try
             {
                 var informe = new InformeMontoBL().Recalcular(_proyecto.IdProyecto);
-                float utilidad = informe.MontoTotal * 1.10f;
+                float utilidad = informe.MontoTotal * (1f + (float)ParametrosContext.UtilidadEmpresa);
 
                 TotalEmpleados  = $"${informe.TotalEmpleados:N0}";
                 TotalMateriales = $"${informe.TotalMateriales:N0}";

@@ -57,6 +57,7 @@
     <Compile Include="AccessDAL\AccesoRepository.cs" />
     <Compile Include="AccessDAL\DALBase.cs" />
     <Compile Include="AccessDAL\FamiliaRepository.cs" />
+    <Compile Include="AccessDAL\ParametrosRepository.cs" />
     <Compile Include="AccessDAL\UsuarioAccesoRepository.cs" />
     <Compile Include="Cliente.cs">
       <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>

@@ -184,6 +184,12 @@
   <data name="gestionarUsuariosToolStripMenuItem.Text" xml:space="preserve">
     <value>Manage users</value>
   </data>
+  <data name="configurarParametrosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="configurarParametrosToolStripMenuItem.Text" xml:space="preserve">
+    <value>Configure Parameters</value>
+  </data>
   <data name="ajustesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>61, 20</value>
   </data>

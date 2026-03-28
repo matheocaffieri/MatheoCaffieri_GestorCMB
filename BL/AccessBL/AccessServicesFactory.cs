@@ -25,5 +25,11 @@ namespace BL.AccessBL
             IAccesoRepository accRepo = new AccesoRepository(cs);
             return new UsuarioPermisosService(uaRepo, accRepo);
         }
+
+        public static ParametrosService CreateParametrosService(string cs)
+        {
+            IParametrosRepository repo = new ParametrosRepository(cs);
+            return new ParametrosService(repo);
+        }
     }
 }

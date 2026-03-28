@@ -89,7 +89,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             try
             {
-                var valorGanancia = (double)(e.Sueldo * 0.20m);
+                var valorGanancia = (double)(e.Sueldo * ParametrosContext.MargenEmpleados);
                 var svc = new ProyectoEmpleadoBL();
                 svc.AgregarEmpleadoDetalleProyecto(_idProyecto, e.IdEmpleado, valorGanancia);
 

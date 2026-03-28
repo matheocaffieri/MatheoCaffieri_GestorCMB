@@ -5,6 +5,7 @@ using Services.Language;
 using Services.RoleService;
 using Services.RoleService.Logic;
 using System;
+using ParametrosServiceLogic = Services.RoleService.Logic.ParametrosService;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,6 +25,7 @@ namespace MatheoCaffieri_GestorCMB
         public Point mouseLocation;
         private readonly RolesServiceLogic _rolesService;
         private readonly UsuarioService _usuarioService;
+        private readonly ParametrosServiceLogic _parametrosService;
 
         public MainForm()
         {
@@ -33,11 +35,12 @@ namespace MatheoCaffieri_GestorCMB
         }
 
         // Runtime: pasás servicios acá (HomeControl sigue sin params)
-        public MainForm(RolesService rolesService, UsuarioService usuarioService)
+        public MainForm(RolesService rolesService, UsuarioService usuarioService, ParametrosServiceLogic parametrosService)
         {
             InitializeComponent();
             _rolesService = rolesService ?? throw new ArgumentNullException(nameof(rolesService));
             _usuarioService = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));
+            _parametrosService = parametrosService ?? throw new ArgumentNullException(nameof(parametrosService));
 
 
             SetupMenuPermissionTags();
@@ -78,6 +81,7 @@ namespace MatheoCaffieri_GestorCMB
             // Ajustes
             verLogsToolStripMenuItem.Tag = TipoPermiso.VER_LOGS.ToString();
             gestionarUsuariosToolStripMenuItem.Tag = TipoPermiso.GESTIONAR_USUARIOS.ToString();
+            configurarParametrosToolStripMenuItem.Tag = TipoPermiso.CONFIGURAR_PARAMETROS.ToString();
 
             // Menú raíz sin permiso propio (se habilita si tiene algún hijo habilitado)
             homeToolStripMenuItem.Tag = null;
@@ -294,12 +298,21 @@ namespace MatheoCaffieri_GestorCMB
         {
             if (!Require(TipoPermiso.GESTIONAR_USUARIOS.ToString()))
                 return;
-            
+
             if (_rolesService is null || _usuarioService is null)
                 throw new InvalidOperationException("MainForm fue creado sin servicios. Usá MainForm(RolesService, UsuarioService).");
 
             var gestionUsuariosControl = new GestionUsuariosControl(_rolesService, _usuarioService);
             addUserControl(gestionUsuariosControl);
+        }
+
+        private void configurarParametrosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!Require(TipoPermiso.CONFIGURAR_PARAMETROS.ToString()))
+                return;
+
+            var control = new ConfigurarParametrosControl(_parametrosService);
+            addUserControl(control);
         }
     }
 }

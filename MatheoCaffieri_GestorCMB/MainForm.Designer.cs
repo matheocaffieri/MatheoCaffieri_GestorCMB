@@ -48,6 +48,7 @@
             this.ajustesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verLogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gestionarUsuariosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configurarParametrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.FormPanel.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -175,7 +176,8 @@
             resources.ApplyResources(this.ajustesToolStripMenuItem, "ajustesToolStripMenuItem");
             this.ajustesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.verLogsToolStripMenuItem,
-            this.gestionarUsuariosToolStripMenuItem});
+            this.gestionarUsuariosToolStripMenuItem,
+            this.configurarParametrosToolStripMenuItem});
             this.ajustesToolStripMenuItem.Name = "ajustesToolStripMenuItem";
             // 
             // verLogsToolStripMenuItem
@@ -189,6 +191,12 @@
             resources.ApplyResources(this.gestionarUsuariosToolStripMenuItem, "gestionarUsuariosToolStripMenuItem");
             this.gestionarUsuariosToolStripMenuItem.Name = "gestionarUsuariosToolStripMenuItem";
             this.gestionarUsuariosToolStripMenuItem.Click += new System.EventHandler(this.gestionarUsuariosToolStripMenuItem_Click);
+            //
+            // configurarParametrosToolStripMenuItem
+            //
+            this.configurarParametrosToolStripMenuItem.Name = "configurarParametrosToolStripMenuItem";
+            this.configurarParametrosToolStripMenuItem.Text = "Configurar Parámetros";
+            this.configurarParametrosToolStripMenuItem.Click += new System.EventHandler(this.configurarParametrosToolStripMenuItem_Click);
             // 
             // MainPanel
             // 
@@ -237,6 +245,7 @@
         private System.Windows.Forms.Panel MainPanel;
         private System.Windows.Forms.ToolStripMenuItem agregarProveedoresToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gestionarUsuariosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem configurarParametrosToolStripMenuItem;
     }
 }
 

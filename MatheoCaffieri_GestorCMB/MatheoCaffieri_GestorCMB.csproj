@@ -135,6 +135,12 @@
     <Compile Include="EditUserForm.Designer.cs">
       <DependentUpon>EditUserForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigurarParametrosControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigurarParametrosControl.Designer.cs">
+      <DependentUpon>ConfigurarParametrosControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GestionUsuariosControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -328,6 +334,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EditUserForm.resx">
       <DependentUpon>EditUserForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurarParametrosControl.en-US.resx">
+      <DependentUpon>ConfigurarParametrosControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurarParametrosControl.resx">
+      <DependentUpon>ConfigurarParametrosControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GestionUsuariosControl.en-US.resx">
       <DependentUpon>GestionUsuariosControl.cs</DependentUpon>

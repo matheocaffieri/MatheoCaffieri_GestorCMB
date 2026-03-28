@@ -112,7 +112,10 @@ namespace MatheoCaffieri_GestorCMB
         {
             try
             {
-                double valorGanancia = 0;
+                var material = ((IGenericRepository<Material>)new MaterialBL()).GetById(e.IdMaterial);
+                double valorGanancia = material != null
+                    ? (double)((decimal)material.CostoPorUnidad * ParametrosContext.MargenMateriales)
+                    : 0;
 
                 var svc = new ProyectoMaterialBL();
                 var r = svc.AgregarMaterialDetalleProyectoDesdeInventario(
