@@ -7,7 +7,8 @@
       "Bash(cmd /c \"cd /d \"\"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\"\" && \"\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\"\" MatheoCaffieri_GestorCMB.sln /p:Configuration=Debug /t:Build /v:minimal 2>&1\")",
       "Bash(\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB.sln\" /p:Configuration=Debug /v:minimal)",
       "Bash(powershell -Command \"& 'C:\\\\\\\\Program Files\\\\\\\\Microsoft Visual Studio\\\\\\\\2022\\\\\\\\Community\\\\\\\\MSBuild\\\\\\\\Current\\\\\\\\Bin\\\\\\\\MSBuild.exe' 'C:\\\\\\\\Users\\\\\\\\mcaff\\\\\\\\source\\\\\\\\repos\\\\\\\\MatheoCaffieri_GestorCMB\\\\\\\\MatheoCaffieri_GestorCMB.sln' /p:Configuration=Debug /v:minimal 2>&1 | Select-Object -Last 50\")",
-      "Bash(powershell -Command \"& 'C:\\\\\\\\Program Files\\\\\\\\Microsoft Visual Studio\\\\\\\\2022\\\\\\\\Community\\\\\\\\MSBuild\\\\\\\\Current\\\\\\\\Bin\\\\\\\\MSBuild.exe' 'C:\\\\\\\\Users\\\\\\\\mcaff\\\\\\\\source\\\\\\\\repos\\\\\\\\MatheoCaffieri_GestorCMB\\\\\\\\MatheoCaffieri_GestorCMB.sln' /p:Configuration=Debug /v:minimal 2>&1 | Select-Object -Last 15\")"
+      "Bash(powershell -Command \"& 'C:\\\\\\\\Program Files\\\\\\\\Microsoft Visual Studio\\\\\\\\2022\\\\\\\\Community\\\\\\\\MSBuild\\\\\\\\Current\\\\\\\\Bin\\\\\\\\MSBuild.exe' 'C:\\\\\\\\Users\\\\\\\\mcaff\\\\\\\\source\\\\\\\\repos\\\\\\\\MatheoCaffieri_GestorCMB\\\\\\\\MatheoCaffieri_GestorCMB.sln' /p:Configuration=Debug /v:minimal 2>&1 | Select-Object -Last 15\")",
+      "Bash(find C:UsersmcaffsourcereposMatheoCaffieri_GestorCMB -name LogHelper.cs -o -name *Logger*.cs)"
     ]
   }
 }

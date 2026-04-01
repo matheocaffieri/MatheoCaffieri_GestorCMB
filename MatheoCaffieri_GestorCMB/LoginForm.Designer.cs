@@ -75,6 +75,7 @@
             this.textPassword.Location = new System.Drawing.Point(269, 153);
             this.textPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textPassword.Name = "textPassword";
+            this.textPassword.PasswordChar = '●';
             this.textPassword.Size = new System.Drawing.Size(368, 22);
             this.textPassword.TabIndex = 2;
             // 
@@ -98,6 +99,7 @@
             this.buttonForgotPassword.TabIndex = 4;
             this.buttonForgotPassword.Text = "¿Olvidó su contraseña?";
             this.buttonForgotPassword.UseVisualStyleBackColor = true;
+            this.buttonForgotPassword.Click += new System.EventHandler(this.buttonForgotPassword_Click);
             // 
             // label1
             // 

@@ -234,6 +234,9 @@
       <DependentUpon>UsuarioItemControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Localization\ResxLanguageRepository.cs" />
+    <Compile Include="ForgotPasswordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>

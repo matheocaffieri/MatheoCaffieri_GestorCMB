@@ -412,6 +412,9 @@
   <data name="err_crear_rol" xml:space="preserve">
     <value>Error al crear el rol.</value>
   </data>
+  <data name="err_admin_protegido" xml:space="preserve">
+    <value>El rol Administrador no puede ser modificado.</value>
+  </data>
   <data name="err_cerrar_sesion" xml:space="preserve">
     <value>No se pudo cerrar sesión.</value>
   </data>

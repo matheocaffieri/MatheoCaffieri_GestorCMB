@@ -1,5 +1,6 @@
 ﻿using DomainModel.LoginDALInterfaces; // IUsuarioRepository
 using DomainModel.Login;
+using DomainModel.Exceptions;
 using Interfaces;                 // IFamiliaRepository
 using Interfaces.LoginInterfaces; // IAccesoRepository
 using System;
@@ -10,6 +11,12 @@ namespace Services.RoleService.Logic
 {
     public class RolesService
     {
+        public static readonly Guid AdminRoleId =
+            new Guid("b1a2f3e4-c5d6-4a7b-8e9f-100000000001");
+
+        public static readonly Guid AdminUserId =
+            new Guid("C2C73905-2849-49D9-83C1-76913DC1A175");
+
         private readonly IFamiliaRepository _famRepo;
         private readonly IAccesoRepository _accRepo;
 
@@ -44,7 +51,13 @@ namespace Services.RoleService.Logic
         public Guid CrearRol(string nombre) => _famRepo.Create(nombre);
 
         public void AsignarPermisoARol(Guid idRol, Guid idAcceso) => _famRepo.AddAcceso(idRol, idAcceso);
-        public void QuitarPermisoDeRol(Guid idRol, Guid idAcceso) => _famRepo.RemoveAcceso(idRol, idAcceso);
+
+        public void QuitarPermisoDeRol(Guid idRol, Guid idAcceso)
+        {
+            if (idRol == AdminRoleId)
+                throw new AppException("err_admin_protegido");
+            _famRepo.RemoveAcceso(idRol, idAcceso);
+        }
 
         public List<Usuario> UsuariosDelRol(Guid idRol) => _famRepo.GetUsuarios(idRol);
 
@@ -61,8 +74,30 @@ namespace Services.RoleService.Logic
         public IEnumerable<TipoPermiso> ObtenerPermisosDeRol(Guid rolId)
             => _famRepo.GetAccesos(rolId).Select(a => a.DataKey).ToList();
 
+        public void EnsureAdminExists()
+        {
+            _famRepo.EnsureExists(AdminRoleId, "Administrador");
+
+            var catalogo = _accRepo.GetAll().ToDictionary(a => a.DataKey);
+            var actuales = new HashSet<TipoPermiso>(
+                _famRepo.GetAccesos(AdminRoleId).Select(a => a.DataKey));
+
+            foreach (TipoPermiso p in Enum.GetValues(typeof(TipoPermiso)))
+            {
+                if (!catalogo.TryGetValue(p, out var acc))
+                    acc = _accRepo.Create(p.ToString().Replace('_', ' '), p);
+
+                if (!actuales.Contains(p))
+                    _famRepo.AddAcceso(AdminRoleId, acc.Id);
+            }
+
+            _famRepo.AddUsuario(AdminRoleId, AdminUserId);
+        }
+
         public void ReemplazarPermisosDeRol(Guid rolId, IEnumerable<TipoPermiso> nuevos)
         {
+            if (rolId == AdminRoleId)
+                throw new AppException("err_admin_protegido");
             var target = new HashSet<TipoPermiso>(nuevos ?? Enumerable.Empty<TipoPermiso>());
 
             var actuales = _famRepo.GetAccesos(rolId);

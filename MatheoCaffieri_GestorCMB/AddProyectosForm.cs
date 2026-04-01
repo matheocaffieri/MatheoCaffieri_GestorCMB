@@ -53,8 +53,6 @@ namespace MatheoCaffieri_GestorCMB
             _proyectoRepo = proyectoRepo ?? throw new ArgumentNullException(nameof(proyectoRepo));
             _clienteRepo = clienteRepo ?? throw new ArgumentNullException(nameof(clienteRepo));
 
-            // No está en el diseñador
-            buttonAddProyecto.Click += buttonAddProyecto_Click;
             Load += AddProyectosForm_Load;
         }
 

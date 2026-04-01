@@ -174,6 +174,15 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonVerInformesCompra_Click(object sender, EventArgs e)
         {
+            if (!SessionContext.Has("CONSULTAR_INFORMES_COMPRA"))
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var host = _mainForm ?? (this.FindForm() as MainForm);
             if (host == null) return;
 

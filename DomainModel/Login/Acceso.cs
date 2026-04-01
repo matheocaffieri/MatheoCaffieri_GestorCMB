@@ -13,6 +13,13 @@ namespace DomainModel.Login
         public Guid Id { get; private set; } = Guid.NewGuid();
         public TipoPermiso DataKey { get; private set; }
 
+        public Acceso(Guid id, string nombre, TipoPermiso dataKey)
+        {
+            Id = id;
+            Nombre = nombre;
+            DataKey = dataKey;
+        }
+
         public Acceso(string nombre, TipoPermiso dataKey)
         {
             Nombre = nombre;

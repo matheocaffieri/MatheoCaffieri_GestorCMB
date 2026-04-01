@@ -37,8 +37,7 @@ namespace MatheoCaffieri_GestorCMB
             {
                 var cultureCode = string.IsNullOrWhiteSpace(Properties.Settings.Default.CultureCode) ? "es-AR" : Properties.Settings.Default.CultureCode;
                 var repo = new MatheoCaffieri_GestorCMB.Localization.ResxLanguageRepository();
-                var lang = new Services.Language.LanguageService(repo, cultureCode);
-                lang.SetCulture(cultureCode);
+                Services.Language.LanguageService.Initialize(repo, cultureCode);
             }
             catch
             {

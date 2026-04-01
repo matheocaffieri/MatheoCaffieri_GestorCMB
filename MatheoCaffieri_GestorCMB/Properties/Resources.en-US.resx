@@ -325,6 +325,9 @@
   <data name="err_crear_rol" xml:space="preserve">
     <value>Error creating the role.</value>
   </data>
+  <data name="err_admin_protegido" xml:space="preserve">
+    <value>The Administrator role cannot be modified.</value>
+  </data>
   <data name="err_cerrar_sesion" xml:space="preserve">
     <value>Could not sign out.</value>
   </data>

@@ -30,8 +30,7 @@ namespace DAL.AccessDAL
                         var keyStr = rd.GetString(2);
                         var tipo = (TipoPermiso)Enum.Parse(typeof(TipoPermiso), keyStr, true);
 
-                        var acc = new Acceso(nombre, tipo);
-                        typeof(Acceso).GetProperty("Id").SetValue(acc, id);
+                        var acc = new Acceso(id, nombre, tipo);
                         list.Add(acc);
                     }
                 }
@@ -54,8 +53,7 @@ namespace DAL.AccessDAL
                 cmd.ExecuteNonQuery();
             }
 
-            var acc = new Acceso(nombre, dataKey);
-            typeof(Acceso).GetProperty("Id").SetValue(acc, id);
+            var acc = new Acceso(id, nombre, dataKey);
             return acc;
         }
 

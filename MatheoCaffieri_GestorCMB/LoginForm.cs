@@ -87,6 +87,9 @@ namespace MatheoCaffieri_GestorCMB
 
                 // 3. Crear la instancia del LoginService, pasando la conexión y el hasher
                 _loginService = new LoginService(connectionStringUsers);
+
+                // 4. Garantizar que el rol Admin exista con todos los permisos
+                AccessServicesFactory.CreateRolesService(connectionStringUsers).EnsureAdminExists();
             }
             catch (ConfigurationErrorsException configEx)
             {
@@ -205,8 +208,7 @@ namespace MatheoCaffieri_GestorCMB
                 Properties.Settings.Default.Save();
 
                 var repo = new MatheoCaffieri_GestorCMB.Localization.ResxLanguageRepository();
-                var lang = new Services.Language.LanguageService(repo, cultureCode);
-                lang.SetCulture(cultureCode);
+                Services.Language.LanguageService.Initialize(repo, cultureCode);
 
 
                 MainForm mainForm = new MainForm(rolesService, usuarioService, parametrosService);
@@ -226,6 +228,12 @@ namespace MatheoCaffieri_GestorCMB
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
 
+        }
+
+        private void buttonForgotPassword_Click(object sender, EventArgs e)
+        {
+            using (var form = new ForgotPasswordForm(connectionStringUsers))
+                form.ShowDialog(this);
         }
 
         private void buttonExit_Click(object sender, EventArgs e)

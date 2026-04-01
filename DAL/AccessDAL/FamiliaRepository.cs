@@ -46,6 +46,20 @@ namespace DAL.AccessDAL
             return id;
         }
 
+        public void EnsureExists(Guid id, string nombre)
+        {
+            using (var cn = new SqlConnection(_cs))
+            using (var cmd = new SqlCommand(
+                @"IF NOT EXISTS (SELECT 1 FROM Familia WHERE idFamilia = @id)
+                  INSERT INTO Familia (idFamilia, nombre) VALUES (@id, @n)", cn))
+            {
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@n", nombre);
+                cn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         public List<Acceso> GetAccesos(Guid idFamilia)
         {
             var list = new List<Acceso>();
@@ -70,8 +84,7 @@ namespace DAL.AccessDAL
                         var keyStr = rd.GetString(2);
                         var tipo = (TipoPermiso)Enum.Parse(typeof(TipoPermiso), keyStr, true);
 
-                        var acc = new Acceso(nombre, tipo);
-                        typeof(Acceso).GetProperty("Id")?.SetValue(acc, id);
+                        var acc = new Acceso(id, nombre, tipo);
                         list.Add(acc);
                     }
                 }

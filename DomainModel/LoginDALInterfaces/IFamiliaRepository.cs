@@ -11,6 +11,7 @@ namespace DomainModel.LoginDALInterfaces
     {
         List<(Guid Id, string Nombre)> GetAll();
         Guid Create(string nombre);
+        void EnsureExists(Guid id, string nombre);
 
         List<Acceso> GetAccesos(Guid idFamilia);
         void AddAcceso(Guid idFamilia, Guid idAcceso);
