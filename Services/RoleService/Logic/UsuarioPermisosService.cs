@@ -1,11 +1,9 @@
-﻿using DomainModel.Login;
-using Interfaces;                 // IUsuarioAccesoRepository
-using Interfaces.LoginInterfaces; // IAccesoRepository
+using DomainModel.Login;
+using Interfaces.LoginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using DomainModel.LoginDALInterfaces;
-
 
 namespace Services.RoleService.Logic
 {
@@ -29,7 +27,7 @@ namespace Services.RoleService.Logic
 
             var ids = _accRepo.GetAll()
                 .Where(a => target.Contains(a.DataKey))
-                .Select(a => a.Id) // getter público
+                .Select(a => a.Id)
                 .ToList();
 
             _uaRepo.ReplaceDirectos(idUsuario, ids);

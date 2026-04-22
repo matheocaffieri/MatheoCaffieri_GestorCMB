@@ -114,6 +114,7 @@
             this.labelInfoCantidadFaltante.AutoEllipsis = true;
             this.labelInfoCantidadFaltante.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInfoCantidadFaltante.ForeColor = System.Drawing.Color.Firebrick;
+            this.labelInfoCantidadFaltante.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInfoCantidadFaltante.Location = new System.Drawing.Point(374, 10);
             this.labelInfoCantidadFaltante.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInfoCantidadFaltante.Name = "labelInfoCantidadFaltante";

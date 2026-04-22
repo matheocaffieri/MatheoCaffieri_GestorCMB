@@ -21,7 +21,7 @@ namespace MatheoCaffieri_GestorCMB
         private MainForm mainForm;
         private const string REQUIRED = "VER_PROYECTOS";
 
-        private enum Orden { MasRecientes, MasAntiguos, DescripcionAZ, ClienteAZ }
+        private enum Orden { MasRecientes, MasAntiguos, DescripcionAZ, ClienteAZ, MasFaltantes }
         private Orden _ordenActual = Orden.MasRecientes;
         private EnumEstado? _estadoFiltro = null;
 
@@ -29,6 +29,7 @@ namespace MatheoCaffieri_GestorCMB
         private RadioButton _rbMasAntiguos;
         private RadioButton _rbDescripcion;
         private RadioButton _rbCliente;
+        private RadioButton _rbMasFaltantes;
 
         public VerProyectosControl(MainForm mainForm)
         {
@@ -69,6 +70,8 @@ namespace MatheoCaffieri_GestorCMB
                     BuscarConFiltro();
                 }
             };
+
+            proyectoItemPanel.Resize += (_, __) => AjustarAnchoItems();
         }
 
         private void BuscarConFiltro()
@@ -79,6 +82,16 @@ namespace MatheoCaffieri_GestorCMB
         }
 
         private LinkLabel _linkLimpiar;
+
+        private void AjustarAnchoItems()
+        {
+            int panelWidth = proyectoItemPanel.ClientSize.Width;
+            if (panelWidth <= 0) return;
+            int columnas = panelWidth >= 1400 ? 3 : panelWidth >= 900 ? 2 : 1;
+            int itemWidth = (panelWidth / columnas) - 6;
+            foreach (Control c in proyectoItemPanel.Controls)
+                c.Width = itemWidth;
+        }
 
         private void InicializarBuscador()
         {
@@ -102,26 +115,28 @@ namespace MatheoCaffieri_GestorCMB
 
         private void InicializarFiltros()
         {
-            _rbMasRecientes = CrearRadio("Más recientes", 40, true);
-            _rbMasAntiguos  = CrearRadio("Más antiguos",  70, false);
-            _rbDescripcion  = CrearRadio("Descripción A-Z", 110, false);
-            _rbCliente      = CrearRadio("Cliente A-Z",  140, false);
+            _rbMasRecientes  = CrearRadio("Más recientes",    40,  true);
+            _rbMasAntiguos   = CrearRadio("Más antiguos",     70,  false);
+            _rbDescripcion   = CrearRadio("Descripción A-Z",  100, false);
+            _rbCliente       = CrearRadio("Cliente A-Z",      130, false);
+            _rbMasFaltantes  = CrearRadio("Más faltantes",    160, false);
 
-            _rbMasRecientes.CheckedChanged += (_, __) => { if (_rbMasRecientes.Checked) { _ordenActual = Orden.MasRecientes;  CargarListado(textBox1.Text); } };
-            _rbMasAntiguos .CheckedChanged += (_, __) => { if (_rbMasAntiguos.Checked)  { _ordenActual = Orden.MasAntiguos;   CargarListado(textBox1.Text); } };
-            _rbDescripcion .CheckedChanged += (_, __) => { if (_rbDescripcion.Checked)  { _ordenActual = Orden.DescripcionAZ; CargarListado(textBox1.Text); } };
-            _rbCliente     .CheckedChanged += (_, __) => { if (_rbCliente.Checked)      { _ordenActual = Orden.ClienteAZ;     CargarListado(textBox1.Text); } };
+            _rbMasRecientes .CheckedChanged += (_, __) => { if (_rbMasRecientes.Checked)  { _ordenActual = Orden.MasRecientes;  CargarListado(textBox1.Text); } };
+            _rbMasAntiguos  .CheckedChanged += (_, __) => { if (_rbMasAntiguos.Checked)   { _ordenActual = Orden.MasAntiguos;   CargarListado(textBox1.Text); } };
+            _rbDescripcion  .CheckedChanged += (_, __) => { if (_rbDescripcion.Checked)   { _ordenActual = Orden.DescripcionAZ; CargarListado(textBox1.Text); } };
+            _rbCliente      .CheckedChanged += (_, __) => { if (_rbCliente.Checked)       { _ordenActual = Orden.ClienteAZ;     CargarListado(textBox1.Text); } };
+            _rbMasFaltantes .CheckedChanged += (_, __) => { if (_rbMasFaltantes.Checked)  { _ordenActual = Orden.MasFaltantes;  CargarListado(textBox1.Text); } };
 
             panel5.Controls.Add(_rbMasRecientes);
             panel5.Controls.Add(_rbMasAntiguos);
             panel5.Controls.Add(_rbDescripcion);
             panel5.Controls.Add(_rbCliente);
+            panel5.Controls.Add(_rbMasFaltantes);
 
-            // Separador de estado
             var separador = new Label
             {
                 Text = "Estado",
-                Location = new Point(12, 185),
+                Location = new Point(12, 195),
                 AutoSize = true,
                 Font = new Font("Microsoft YaHei UI", 9f, FontStyle.Bold),
                 ForeColor = Color.DimGray
@@ -130,7 +145,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var comboEstado = new ComboBox
             {
-                Location = new Point(12, 208),
+                Location = new Point(12, 218),
                 Width = 140,
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 Font = new Font("Microsoft YaHei UI", 9f)
@@ -169,11 +184,17 @@ namespace MatheoCaffieri_GestorCMB
         {
             List<Proyecto> todos = ((IGenericRepository<Proyecto>)new ProyectoBL()).GetAll();
 
-            // Numerar por orden de creación (estable, no cambia con filtros ni orden de vista)
             var numeros = todos
                 .OrderBy(p => p.FechaInicio)
                 .Select((p, i) => new { p.IdProyecto, Numero = i + 1 })
                 .ToDictionary(x => x.IdProyecto, x => x.Numero);
+
+            var faltantes = new Dictionary<Guid, int>();
+            foreach (var p in todos)
+            {
+                try { faltantes[p.IdProyecto] = new MaterialFaltanteBL().GetAll(p.IdProyecto).Count; }
+                catch { faltantes[p.IdProyecto] = 0; }
+            }
 
             List<Proyecto> proyectos = todos;
 
@@ -194,6 +215,8 @@ namespace MatheoCaffieri_GestorCMB
                 proyectos = proyectos.OrderBy(p => p.Descripcion).ToList();
             else if (_ordenActual == Orden.ClienteAZ)
                 proyectos = proyectos.OrderBy(p => p.Cliente != null ? p.Cliente.RazonSocial : "").ToList();
+            else if (_ordenActual == Orden.MasFaltantes)
+                proyectos = proyectos.OrderByDescending(p => faltantes.TryGetValue(p.IdProyecto, out var c) ? c : 0).ToList();
             else
                 proyectos = proyectos.OrderByDescending(p => p.FechaInicio).ToList();
 
@@ -204,10 +227,13 @@ namespace MatheoCaffieri_GestorCMB
             {
                 var item = new ProyectoItemControl(mainForm, p);
                 item.NumProyecto = $"Proyecto #{numeros[p.IdProyecto]}";
+                if (faltantes.TryGetValue(p.IdProyecto, out var cnt))
+                    item.SetFaltantesCount(cnt);
                 proyectoItemPanel.Controls.Add(item);
             }
 
             proyectoItemPanel.ResumeLayout();
+            AjustarAnchoItems();
         }
 
         private void ObtenerProyectosItems() => CargarListado();

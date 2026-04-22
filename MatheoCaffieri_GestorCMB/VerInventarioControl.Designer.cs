@@ -63,6 +63,7 @@
             // MaterialesItemPanel
             // 
             resources.ApplyResources(this.MaterialesItemPanel, "MaterialesItemPanel");
+            this.MaterialesItemPanel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             this.MaterialesItemPanel.Name = "MaterialesItemPanel";
             // 
             // buttonAgregarMaterial

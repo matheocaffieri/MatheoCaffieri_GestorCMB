@@ -44,6 +44,7 @@
             // panel5
             // 
             resources.ApplyResources(this.panel5, "panel5");
+            this.panel5.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             this.panel5.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.panel5.Controls.Add(this.label3);
             this.panel5.Name = "panel5";
@@ -90,6 +91,7 @@
             // proyectoItemPanel
             // 
             resources.ApplyResources(this.proyectoItemPanel, "proyectoItemPanel");
+            this.proyectoItemPanel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             this.proyectoItemPanel.Name = "proyectoItemPanel";
             // 
             // VerProyectosControl

@@ -59,12 +59,25 @@ namespace MatheoCaffieri_GestorCMB
 
 
             _proveedorRepo = proveedorRepo ?? throw new ArgumentNullException(nameof(proveedorRepo));
+            buttonBack.Text = "<<";
 
             this.Load += ProveedorControl_Load;
             buttonAddProveedor.Click += buttonAddProveedor_Click;
             buttonSearchClientes.Click += buttonSearchClientes_Click;
             textBox1.TextChanged += textBox1_TextChanged;
             textBox1.KeyDown += textBox1_KeyDown;
+
+            proveedorLayoutPanel.Resize += (_, __) => AjustarAnchoItems();
+        }
+
+        private void AjustarAnchoItems()
+        {
+            int w = proveedorLayoutPanel.ClientSize.Width;
+            if (w <= 0) return;
+            int cols   = w >= 1400 ? 3 : w >= 700 ? 2 : 1;
+            int itemW  = (w / cols) - 6;
+            foreach (Control c in proveedorLayoutPanel.Controls)
+                c.Width = itemW;
         }
 
         private readonly IGenericRepository<Proveedor> _proveedorRepo;
@@ -99,6 +112,7 @@ namespace MatheoCaffieri_GestorCMB
             }
 
             proveedorLayoutPanel.ResumeLayout();
+            AjustarAnchoItems();
         }
 
         private void ProveedorControl_Load(object sender, EventArgs e)

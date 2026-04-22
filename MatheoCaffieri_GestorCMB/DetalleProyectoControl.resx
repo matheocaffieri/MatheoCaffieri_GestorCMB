@@ -394,7 +394,7 @@
     <value>65</value>
   </data>
   <data name="label7.Text" xml:space="preserve">
-    <value>Materiales faltantes:</value>
+    <value>Faltante</value>
   </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -403,7 +403,7 @@
     <value>Microsoft YaHei UI, 12pt</value>
   </data>
   <data name="flowLayoutPanelMatFal.Location" type="System.Drawing.Point, System.Drawing">
-    <value>508, 140</value>
+    <value>508, 152</value>
   </data>
   <data name="label4.TabIndex" type="System.Int32, mscorlib">
     <value>42</value>

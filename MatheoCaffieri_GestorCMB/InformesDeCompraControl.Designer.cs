@@ -62,6 +62,7 @@
             // informeLayoutPanel
             // 
             resources.ApplyResources(this.informeLayoutPanel, "informeLayoutPanel");
+            this.informeLayoutPanel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             this.informeLayoutPanel.Name = "informeLayoutPanel";
             // 
             // InformesDeCompraControl

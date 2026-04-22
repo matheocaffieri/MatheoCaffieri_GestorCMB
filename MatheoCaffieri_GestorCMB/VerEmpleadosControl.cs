@@ -126,6 +126,18 @@ namespace MatheoCaffieri_GestorCMB
                 CargarListado();
         }
 
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (Width <= 0) return;
+
+            const int rightMargin = 30;
+
+            buttonAgregarEmpleado.Left = Width - buttonAgregarEmpleado.Width - rightMargin;
+            buttonSearchEmpleado.Left  = Width - buttonSearchEmpleado.Width  - rightMargin;
+            textBox1.Width = buttonSearchEmpleado.Left - textBox1.Left - 4;
+        }
+
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             CargarListado(textBox1.Text);

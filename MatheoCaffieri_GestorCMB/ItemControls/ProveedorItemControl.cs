@@ -24,6 +24,16 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             };
         }
 
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (this.Width < 200) return;
+
+            SwitchHabilitarProveedor.Left  = this.Width - SwitchHabilitarProveedor.Width - 8;
+            buttonEditarProveedor.Left     = SwitchHabilitarProveedor.Left - buttonEditarProveedor.Width - 4;
+            labelDescripcionProveedor.Width = labelTelefonoProveedor.Left - labelDescripcionProveedor.Left - 8;
+        }
+
         public void Bind(Proveedor p)
         {
             Proveedor = p;

@@ -130,26 +130,89 @@ namespace MatheoCaffieri_GestorCMB
 
 
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            MaximizedBounds = Screen.FromHandle(Handle).WorkingArea;
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_NCHITTEST = 0x84;
+            const int HTLEFT = 10;
+            const int HTRIGHT = 11;
+            const int HTTOP = 12;
+            const int HTTOPLEFT = 13;
+            const int HTTOPRIGHT = 14;
+            const int HTBOTTOM = 15;
+            const int HTBOTTOMLEFT = 16;
+            const int HTBOTTOMRIGHT = 17;
+            const int borderWidth = 6;
+
+            if (m.Msg == WM_NCHITTEST && WindowState != FormWindowState.Maximized)
+            {
+                base.WndProc(ref m);
+                short screenX = (short)(m.LParam.ToInt32() & 0xFFFF);
+                short screenY = (short)(m.LParam.ToInt32() >> 16);
+                Point cursor = PointToClient(new Point(screenX, screenY));
+
+                bool left   = cursor.X < borderWidth;
+                bool right  = cursor.X >= ClientSize.Width - borderWidth;
+                bool top    = cursor.Y < borderWidth;
+                bool bottom = cursor.Y >= ClientSize.Height - borderWidth;
+
+                if      (top    && left)  m.Result = (IntPtr)HTTOPLEFT;
+                else if (top    && right) m.Result = (IntPtr)HTTOPRIGHT;
+                else if (bottom && left)  m.Result = (IntPtr)HTBOTTOMLEFT;
+                else if (bottom && right) m.Result = (IntPtr)HTBOTTOMRIGHT;
+                else if (left)            m.Result = (IntPtr)HTLEFT;
+                else if (right)           m.Result = (IntPtr)HTRIGHT;
+                else if (top)             m.Result = (IntPtr)HTTOP;
+                else if (bottom)          m.Result = (IntPtr)HTBOTTOM;
+                return;
+            }
+            base.WndProc(ref m);
+        }
+
         private void buttonExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        
-        private void MainForm_MouseMove(object sender, MouseEventArgs e)
+        private void buttonMinimize_Click(object sender, EventArgs e)
         {
-
+            WindowState = FormWindowState.Minimized;
         }
 
-        
+        private void buttonMaximize_Click(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Maximized)
+            {
+                WindowState = FormWindowState.Normal;
+                buttonMaximize.Text = "□";
+            }
+            else
+            {
+                MaximizedBounds = Screen.FromHandle(Handle).WorkingArea;
+                WindowState = FormWindowState.Maximized;
+                buttonMaximize.Text = "❐";
+            }
+        }
+
+        private void FormPanel_DoubleClick(object sender, EventArgs e)
+        {
+            buttonMaximize_Click(sender, e);
+        }
+
+        private void MainForm_MouseMove(object sender, MouseEventArgs e)
+        {
+        }
+
         private void MainForm_MouseUp(object sender, MouseEventArgs e)
         {
         }
 
-        
         private void MainForm_MouseDown(object sender, MouseEventArgs e)
         {
-
         }
 
         private void FormPanel_MouseDown(object sender, MouseEventArgs e)
@@ -159,7 +222,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void FormPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && WindowState != FormWindowState.Maximized)
             {
                 Point mousePosition = MousePosition;
                 mousePosition.Offset(mouseLocation.X, mouseLocation.Y);

@@ -49,107 +49,123 @@
             this.comboBoxIdioma = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
+            //
             // panel2
-            // 
+            //
             resources.ApplyResources(this.panel2, "panel2");
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left)));
             this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel2.Name = "panel2";
-            // 
+            //
             // UsuariosLayoutPanel
-            // 
+            //
             resources.ApplyResources(this.UsuariosLayoutPanel, "UsuariosLayoutPanel");
+            this.UsuariosLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left)));
             this.UsuariosLayoutPanel.Name = "UsuariosLayoutPanel";
-            // 
+            //
             // textBox1
-            // 
+            //
             resources.ApplyResources(this.textBox1, "textBox1");
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.textBox1.Name = "textBox1";
-            // 
+            //
             // textBox2
-            // 
+            //
             resources.ApplyResources(this.textBox2, "textBox2");
+            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.textBox2.Name = "textBox2";
-            // 
+            //
             // comboBoxRol
-            // 
+            //
             resources.ApplyResources(this.comboBoxRol, "comboBoxRol");
+            this.comboBoxRol.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.comboBoxRol.FormattingEnabled = true;
             this.comboBoxRol.Name = "comboBoxRol";
-            // 
+            //
             // buttonAgregarUser
-            // 
+            //
             resources.ApplyResources(this.buttonAgregarUser, "buttonAgregarUser");
             this.buttonAgregarUser.Name = "buttonAgregarUser";
             this.buttonAgregarUser.UseVisualStyleBackColor = true;
             this.buttonAgregarUser.Click += new System.EventHandler(this.buttonAgregarUser_Click);
-            // 
+            //
             // label2
-            // 
+            //
             resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            // 
+            //
             // textBox3
-            // 
+            //
             resources.ApplyResources(this.textBox3, "textBox3");
+            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.textBox3.Name = "textBox3";
-            // 
+            //
             // buttonAgregarRol
-            // 
+            //
             resources.ApplyResources(this.buttonAgregarRol, "buttonAgregarRol");
+            this.buttonAgregarRol.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonAgregarRol.Name = "buttonAgregarRol";
             this.buttonAgregarRol.UseVisualStyleBackColor = true;
             this.buttonAgregarRol.Click += new System.EventHandler(this.buttonAgregarRol_Click);
-            // 
+            //
             // label3
-            // 
+            //
             resources.ApplyResources(this.label3, "label3");
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.Name = "label3";
-            // 
+            //
             // label1
-            // 
+            //
             resources.ApplyResources(this.label1, "label1");
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.Name = "label1";
-            // 
+            //
             // label4
-            // 
+            //
             resources.ApplyResources(this.label4, "label4");
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.Name = "label4";
-            // 
+            //
             // label5
-            // 
+            //
             resources.ApplyResources(this.label5, "label5");
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label5.Name = "label5";
-            // 
+            //
             // label6
-            // 
+            //
             resources.ApplyResources(this.label6, "label6");
             this.label6.Name = "label6";
-            // 
+            //
             // treeViewRoles
-            // 
+            //
             resources.ApplyResources(this.treeViewRoles, "treeViewRoles");
+            this.treeViewRoles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.treeViewRoles.Name = "treeViewRoles";
-            // 
+            //
             // label7
-            // 
+            //
             resources.ApplyResources(this.label7, "label7");
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label7.Name = "label7";
-            // 
+            //
             // textBox4
-            // 
+            //
             resources.ApplyResources(this.textBox4, "textBox4");
+            this.textBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.textBox4.Name = "textBox4";
-            // 
+            //
             // comboBoxIdioma
-            // 
+            //
             resources.ApplyResources(this.comboBoxIdioma, "comboBoxIdioma");
+            this.comboBoxIdioma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.comboBoxIdioma.FormattingEnabled = true;
             this.comboBoxIdioma.Name = "comboBoxIdioma";
-            // 
+            //
             // label8
-            // 
+            //
             resources.ApplyResources(this.label8, "label8");
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label8.Name = "label8";
             // 
             // GestionUsuariosControl

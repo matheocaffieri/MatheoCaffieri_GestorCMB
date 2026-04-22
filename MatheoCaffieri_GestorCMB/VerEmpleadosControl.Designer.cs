@@ -70,6 +70,7 @@
             // empleadosLayoutPanel
             // 
             resources.ApplyResources(this.empleadosLayoutPanel, "empleadosLayoutPanel");
+            this.empleadosLayoutPanel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             this.empleadosLayoutPanel.Name = "empleadosLayoutPanel";
             // 
             // buttonSearchEmpleado

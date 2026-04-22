@@ -1,4 +1,4 @@
-﻿using DomainModel.Login;
+using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,6 @@
 ﻿using DomainModel.LoginDALInterfaces; // IUsuarioRepository
 using DomainModel.Login;
 using DomainModel.Exceptions;
-using Interfaces;                 // IFamiliaRepository
 using Interfaces.LoginInterfaces; // IAccesoRepository
 using System;
 using System.Collections.Generic;

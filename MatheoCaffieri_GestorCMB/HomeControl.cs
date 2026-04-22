@@ -19,6 +19,10 @@ namespace MatheoCaffieri_GestorCMB
     public partial class HomeControl : UserControl
     {
         private MainForm mainForm;
+        private Panel _contentPanel;
+        private const int DesignWidth  = 800;
+        private const int DesignHeight = 358;
+        private Dictionary<Control, (Point Loc, Size Size, Font Font)> _originals;
 
         public HomeControl(MainForm mainForm)
         {
@@ -38,6 +42,63 @@ namespace MatheoCaffieri_GestorCMB
             // Aseguro el handler por si no lo agregaste desde el diseñador
             linkLabelUser.DoubleClick -= linkLabelUser_DoubleClick;
             linkLabelUser.DoubleClick += linkLabelUser_DoubleClick;
+
+            WrapContentInPanel();
+        }
+
+        private void WrapContentInPanel()
+        {
+            _contentPanel = new Panel { Size = new Size(DesignWidth, DesignHeight) };
+
+            foreach (var c in Controls.Cast<Control>().ToList())
+                _contentPanel.Controls.Add(c);
+
+            Controls.Add(_contentPanel);
+            CenterContentPanel();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            CenterContentPanel();
+        }
+
+        private void SnapOriginals()
+        {
+            if (_originals != null) return;
+            _originals = new Dictionary<Control, (Point, Size, Font)>();
+            foreach (Control c in _contentPanel.Controls)
+                _originals[c] = (c.Location, c.Size, c.Font);
+        }
+
+        private void CenterContentPanel()
+        {
+            if (_contentPanel == null) return;
+            SnapOriginals();
+
+            float scaleW = (float)Width  / DesignWidth;
+            float scaleH = (float)Height / DesignHeight;
+            float scale  = Math.Min(scaleW, scaleH) * 0.82f;
+            scale = Math.Max(scale, 1.0f);
+            scale = Math.Min(scale, 2.4f);
+
+            int panelW = (int)(DesignWidth  * scale);
+            int panelH = (int)(DesignHeight * scale);
+            _contentPanel.Size = new Size(panelW, panelH);
+
+            foreach (var kv in _originals)
+            {
+                var c    = kv.Key;
+                var orig = kv.Value;
+                c.Location = new Point((int)(orig.Loc.X  * scale), (int)(orig.Loc.Y    * scale));
+                c.Size     = new Size( (int)(orig.Size.Width * scale), (int)(orig.Size.Height * scale));
+                c.Font     = new Font(orig.Font.FontFamily, orig.Font.Size * scale, orig.Font.Style);
+            }
+
+            _contentPanel.Location = new Point(
+                Math.Max(0, (Width  - panelW) / 2),
+                Math.Max(0, (Height - panelH) / 2)
+            );
         }
 
 
@@ -101,7 +162,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void button4_Click(object sender, EventArgs e)
         {
-            ClientesControl clientesControl = new ClientesControl();
+            ClientesControl clientesControl = new ClientesControl(mainForm);
             mainForm.addUserControl(clientesControl);
         }
 

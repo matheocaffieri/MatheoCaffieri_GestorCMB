@@ -178,7 +178,7 @@
     <value>0, 0</value>
   </data>
   <data name="buttonExit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 23</value>
+    <value>28, 22</value>
   </data>
   <data name="&gt;&gt;MainPanel.Parent" xml:space="preserve">
     <value>$this</value>
@@ -274,7 +274,7 @@
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="buttonExit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1044, 3</value>
+    <value>1042, 5</value>
   </data>
   <data name="agregarMaterialesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>235, 22</value>

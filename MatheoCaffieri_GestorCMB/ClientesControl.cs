@@ -23,13 +23,10 @@ namespace MatheoCaffieri_GestorCMB
 
 
         // ctor por defecto -> usa BL real
-        public ClientesControl() : this(new ClienteBL())
-        {
-            // acá no va InitializeComponent
-        }
+        public ClientesControl(MainForm mainForm) : this(mainForm, new ClienteBL()) { }
 
         // ctor inyectable (para tests)
-        public ClientesControl(IGenericRepository<Cliente> clienteRepo)
+        public ClientesControl(MainForm mainForm, IGenericRepository<Cliente> clienteRepo)
         {
             InitializeComponent();
 
@@ -39,33 +36,15 @@ namespace MatheoCaffieri_GestorCMB
                     LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
                     LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-             
                 return;
             }
 
-
-
+            _mainForm = mainForm;
             _clienteRepo = clienteRepo ?? throw new ArgumentNullException(nameof(clienteRepo));
-
-            WireEvents();
         }
 
         private readonly IGenericRepository<Cliente> _clienteRepo;
-
-        private void WireEvents()
-        {
-            // NO enganchar Load ni TextChanged acá: ya están en el Designer
-
-            if (buttonSearchClientes != null)
-                buttonSearchClientes.Click += buttonSearchClientes_Click;
-
-            if (textBoxBuscar != null)
-                textBoxBuscar.KeyDown += textBoxBuscar_KeyDown;
-
-            if (buttonAddCliente != null)
-                buttonAddCliente.Click += buttonAddCliente_Click;
-        }
+        private readonly MainForm _mainForm;
 
 
 
@@ -238,7 +217,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-
+            _mainForm?.addUserControl(new HomeControl(_mainForm));
         }
     }
 }

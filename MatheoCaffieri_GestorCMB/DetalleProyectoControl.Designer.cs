@@ -62,6 +62,7 @@
             // panel1
             // 
             resources.ApplyResources(this.panel1, "panel1");
+            this.panel1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             this.panel1.BackColor = System.Drawing.SystemColors.HighlightText;
             this.panel1.Controls.Add(this.labelUtilidadEmpresa);
             this.panel1.Controls.Add(this.labelTotalMateriales);
@@ -82,77 +83,92 @@
             // labelUtilidadEmpresa
             // 
             resources.ApplyResources(this.labelUtilidadEmpresa, "labelUtilidadEmpresa");
+            this.labelUtilidadEmpresa.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             this.labelUtilidadEmpresa.Name = "labelUtilidadEmpresa";
-            // 
+            //
             // labelTotalMateriales
-            // 
+            //
             resources.ApplyResources(this.labelTotalMateriales, "labelTotalMateriales");
+            this.labelTotalMateriales.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             this.labelTotalMateriales.Name = "labelTotalMateriales";
-            // 
+            //
             // labelTotalEmpleados
-            // 
+            //
             resources.ApplyResources(this.labelTotalEmpleados, "labelTotalEmpleados");
+            this.labelTotalEmpleados.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             this.labelTotalEmpleados.Name = "labelTotalEmpleados";
-            // 
+            //
             // label6
-            // 
+            //
             resources.ApplyResources(this.label6, "label6");
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             this.label6.Name = "label6";
-            // 
+            //
             // label5
-            // 
+            //
             resources.ApplyResources(this.label5, "label5");
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             this.label5.Name = "label5";
-            // 
+            //
             // label4
-            // 
+            //
             resources.ApplyResources(this.label4, "label4");
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             this.label4.Name = "label4";
-            // 
+            //
             // flowLayoutPanelMat
-            // 
+            //
             resources.ApplyResources(this.flowLayoutPanelMat, "flowLayoutPanelMat");
+            this.flowLayoutPanelMat.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             this.flowLayoutPanelMat.Name = "flowLayoutPanelMat";
-            // 
+            //
             // flowLayoutPanelEmp
-            // 
+            //
             resources.ApplyResources(this.flowLayoutPanelEmp, "flowLayoutPanelEmp");
+            this.flowLayoutPanelEmp.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             this.flowLayoutPanelEmp.Name = "flowLayoutPanelEmp";
-            // 
+            //
             // linkLabelAgregarMat
-            // 
+            //
             resources.ApplyResources(this.linkLabelAgregarMat, "linkLabelAgregarMat");
+            this.linkLabelAgregarMat.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             this.linkLabelAgregarMat.Name = "linkLabelAgregarMat";
             this.linkLabelAgregarMat.TabStop = true;
             this.linkLabelAgregarMat.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelAgregarMat_LinkClicked);
-            // 
+            //
             // linkLabelAgregarEmp
-            // 
+            //
             resources.ApplyResources(this.linkLabelAgregarEmp, "linkLabelAgregarEmp");
+            this.linkLabelAgregarEmp.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             this.linkLabelAgregarEmp.Name = "linkLabelAgregarEmp";
             this.linkLabelAgregarEmp.TabStop = true;
             this.linkLabelAgregarEmp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelAgregarEmp_LinkClicked);
-            // 
-            // panel3
-            // 
+            //
+            // panel3 (separador horizontal)
+            //
             resources.ApplyResources(this.panel3, "panel3");
+            this.panel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             this.panel3.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel3.Name = "panel3";
-            // 
-            // panel2
-            // 
+            //
+            // panel2 (separador vertical)
+            //
             resources.ApplyResources(this.panel2, "panel2");
+            this.panel2.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom;
             this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel2.Name = "panel2";
-            // 
+            //
             // label7
-            // 
+            //
             resources.ApplyResources(this.label7, "label7");
+            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             this.label7.Name = "label7";
-            // 
+            this.label7.Visible = false;
+            //
             // flowLayoutPanelMatFal
-            // 
+            //
             resources.ApplyResources(this.flowLayoutPanelMatFal, "flowLayoutPanelMatFal");
+            this.flowLayoutPanelMatFal.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             this.flowLayoutPanelMatFal.Name = "flowLayoutPanelMatFal";
             // 
             // labelNumProyecto
@@ -218,9 +234,9 @@
             // 
             resources.ApplyResources(this.labelFechaInicio, "labelFechaInicio");
             this.labelFechaInicio.Name = "labelFechaInicio";
-            // 
+            //
             // DetalleProyectoControl
-            // 
+            //
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.labelFechaInicio);

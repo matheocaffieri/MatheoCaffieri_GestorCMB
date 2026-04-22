@@ -1,4 +1,4 @@
-﻿using BL;
+using BL;
 using DomainModel;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
@@ -51,6 +51,38 @@ namespace MatheoCaffieri_GestorCMB
             }
 
             WireEvents();
+            AjustarHeader();
+        }
+
+        private void AjustarHeader()
+        {
+            // Sin Anchor automático — posicionamos manualmente en cada resize
+            buttonVerInformesCompra.Anchor    = AnchorStyles.Top | AnchorStyles.Left;
+            buttonGestionarProveedores.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            buttonAgregarMaterial.Anchor      = AnchorStyles.Top | AnchorStyles.Left;
+
+            this.Resize += (_, __) => ReposicionarBotonesHeader();
+            ReposicionarBotonesHeader();
+        }
+
+        private void ReposicionarBotonesHeader()
+        {
+            int w = this.ClientSize.Width;
+            if (w <= 0) return;
+
+            // Fila 1 (título): "Gestionar proveedores" al borde, "Ver informes" a su izquierda
+            buttonGestionarProveedores.Location = new Point(
+                w - buttonGestionarProveedores.Width - 8,
+                buttonGestionarProveedores.Top);
+
+            buttonVerInformesCompra.Location = new Point(
+                buttonGestionarProveedores.Left - buttonVerInformesCompra.Width - 8,
+                buttonVerInformesCompra.Top);
+
+            // Fila 2 (búsqueda): "Agregar material" al borde derecho
+            buttonAgregarMaterial.Location = new Point(
+                w - buttonAgregarMaterial.Width - 8,
+                buttonAgregarMaterial.Top);
         }
 
         private void WireEvents()
@@ -146,8 +178,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonGestionarProveedores_Click(object sender, EventArgs e)
         {
-            // 1) Permisos: si no puede, mostrar y cortar
-            if (!SessionContext.Has("AGREGAR_PROVEEDORES")) // ajustá la key
+            if (!SessionContext.Has("AGREGAR_PROVEEDORES"))
             {
                 MessageBox.Show(
                     LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
@@ -156,7 +187,6 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
-            // 2) Recién si tiene permiso, buscamos el MainForm
             var host = _mainForm ?? (this.FindForm() as MainForm);
 
             if (host == null)
@@ -168,8 +198,7 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
-            // 3) Navegación
-            host.addUserControl(new ProveedorControl(/* pasá deps si corresponde */));
+            host.addUserControl(new ProveedorControl());
         }
 
         private void buttonVerInformesCompra_Click(object sender, EventArgs e)

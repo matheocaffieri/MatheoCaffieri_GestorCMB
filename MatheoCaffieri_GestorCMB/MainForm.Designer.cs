@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.FormPanel = new System.Windows.Forms.Panel();
             this.buttonExit = new System.Windows.Forms.Button();
+            this.buttonMaximize = new System.Windows.Forms.Button();
+            this.buttonMinimize = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.homeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,17 +61,41 @@
             // 
             resources.ApplyResources(this.FormPanel, "FormPanel");
             this.FormPanel.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.FormPanel.Controls.Add(this.buttonMinimize);
+            this.FormPanel.Controls.Add(this.buttonMaximize);
             this.FormPanel.Controls.Add(this.buttonExit);
             this.FormPanel.Name = "FormPanel";
             this.FormPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormPanel_MouseDown);
             this.FormPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FormPanel_MouseMove);
-            // 
+            this.FormPanel.DoubleClick += new System.EventHandler(this.FormPanel_DoubleClick);
+            //
             // buttonExit
-            // 
+            //
             resources.ApplyResources(this.buttonExit, "buttonExit");
+            this.buttonExit.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
+            //
+            // buttonMaximize
+            //
+            this.buttonMaximize.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            this.buttonMaximize.Location = new System.Drawing.Point(1012, 5);
+            this.buttonMaximize.Size = new System.Drawing.Size(28, 22);
+            this.buttonMaximize.Name = "buttonMaximize";
+            this.buttonMaximize.Text = "□";
+            this.buttonMaximize.UseVisualStyleBackColor = true;
+            this.buttonMaximize.Click += new System.EventHandler(this.buttonMaximize_Click);
+            //
+            // buttonMinimize
+            //
+            this.buttonMinimize.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            this.buttonMinimize.Location = new System.Drawing.Point(982, 5);
+            this.buttonMinimize.Size = new System.Drawing.Size(28, 22);
+            this.buttonMinimize.Name = "buttonMinimize";
+            this.buttonMinimize.Text = "─";
+            this.buttonMinimize.UseVisualStyleBackColor = true;
+            this.buttonMinimize.Click += new System.EventHandler(this.buttonMinimize_Click);
             // 
             // panel2
             // 
@@ -197,23 +223,26 @@
             this.configurarParametrosToolStripMenuItem.Name = "configurarParametrosToolStripMenuItem";
             this.configurarParametrosToolStripMenuItem.Text = "Configurar Parámetros";
             this.configurarParametrosToolStripMenuItem.Click += new System.EventHandler(this.configurarParametrosToolStripMenuItem_Click);
-            // 
+            //
             // MainPanel
-            // 
+            //
             resources.ApplyResources(this.MainPanel, "MainPanel");
             this.MainPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainPanel.Name = "MainPanel";
-            // 
+            //
             // MainForm
-            // 
+            //
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.MinimumSize = new System.Drawing.Size(1082, 518);
             this.Controls.Add(this.MainPanel);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.FormPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormPanel.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
@@ -242,6 +271,8 @@
         private System.Windows.Forms.ToolStripMenuItem ajustesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem verLogsToolStripMenuItem;
         private System.Windows.Forms.Button buttonExit;
+        private System.Windows.Forms.Button buttonMaximize;
+        private System.Windows.Forms.Button buttonMinimize;
         private System.Windows.Forms.Panel MainPanel;
         private System.Windows.Forms.ToolStripMenuItem agregarProveedoresToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gestionarUsuariosToolStripMenuItem;

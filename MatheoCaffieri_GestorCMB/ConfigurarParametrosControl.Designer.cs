@@ -55,6 +55,9 @@ namespace MatheoCaffieri_GestorCMB
             this.groupBoxParametros.Controls.Add(this.numUtilidadEmpresa);
             this.groupBoxParametros.Controls.Add(this.labelPorcentUtilidad);
             resources.ApplyResources(this.groupBoxParametros, "groupBoxParametros");
+            this.groupBoxParametros.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right));
             this.groupBoxParametros.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.groupBoxParametros.Location = new System.Drawing.Point(30, 70);
             this.groupBoxParametros.Name = "groupBoxParametros";
@@ -142,6 +145,7 @@ namespace MatheoCaffieri_GestorCMB
             // buttonGuardar
             //
             resources.ApplyResources(this.buttonGuardar, "buttonGuardar");
+            this.buttonGuardar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonGuardar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.buttonGuardar.Location = new System.Drawing.Point(30, 290);
             this.buttonGuardar.Name = "buttonGuardar";
@@ -151,6 +155,8 @@ namespace MatheoCaffieri_GestorCMB
             //
             // labelStatus
             //
+            this.labelStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.labelStatus.ForeColor = System.Drawing.Color.DarkGreen;
             this.labelStatus.Location = new System.Drawing.Point(165, 298);
             this.labelStatus.Name = "labelStatus";

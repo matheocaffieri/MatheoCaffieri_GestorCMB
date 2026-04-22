@@ -8,7 +8,15 @@
       "Bash(\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB.sln\" /p:Configuration=Debug /v:minimal)",
       "Bash(powershell -Command \"& 'C:\\\\\\\\Program Files\\\\\\\\Microsoft Visual Studio\\\\\\\\2022\\\\\\\\Community\\\\\\\\MSBuild\\\\\\\\Current\\\\\\\\Bin\\\\\\\\MSBuild.exe' 'C:\\\\\\\\Users\\\\\\\\mcaff\\\\\\\\source\\\\\\\\repos\\\\\\\\MatheoCaffieri_GestorCMB\\\\\\\\MatheoCaffieri_GestorCMB.sln' /p:Configuration=Debug /v:minimal 2>&1 | Select-Object -Last 50\")",
       "Bash(powershell -Command \"& 'C:\\\\\\\\Program Files\\\\\\\\Microsoft Visual Studio\\\\\\\\2022\\\\\\\\Community\\\\\\\\MSBuild\\\\\\\\Current\\\\\\\\Bin\\\\\\\\MSBuild.exe' 'C:\\\\\\\\Users\\\\\\\\mcaff\\\\\\\\source\\\\\\\\repos\\\\\\\\MatheoCaffieri_GestorCMB\\\\\\\\MatheoCaffieri_GestorCMB.sln' /p:Configuration=Debug /v:minimal 2>&1 | Select-Object -Last 15\")",
-      "Bash(find C:UsersmcaffsourcereposMatheoCaffieri_GestorCMB -name LogHelper.cs -o -name *Logger*.cs)"
+      "Bash(find C:UsersmcaffsourcereposMatheoCaffieri_GestorCMB -name LogHelper.cs -o -name *Logger*.cs)",
+      "Bash(grep -E \"\\\\.cs$|\\\\.Designer\\\\.cs$\")",
+      "Bash(grep -A 1 '$this.ClientSize\\\\|FormPanel.Size\\\\|MainPanel' C:/Users/mcaff/source/repos/MatheoCaffieri_GestorCMB/MatheoCaffieri_GestorCMB/MainForm.resx)",
+      "Bash(dotnet build:*)",
+      "Bash(\"C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe\" \"C:/Users/mcaff/source/repos/MatheoCaffieri_GestorCMB/MatheoCaffieri_GestorCMB/MatheoCaffieri_GestorCMB.csproj\" /t:Build /p:Configuration=Debug /v:minimal)",
+      "Bash(cmd /c '\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB.csproj\" /t:Build /p:Configuration=Debug /v:minimal 2>&1')",
+      "Bash(cmd /c \"\\\\\"C:\\\\\\\\Program Files\\\\\\\\Microsoft Visual Studio\\\\\\\\2022\\\\\\\\Community\\\\\\\\MSBuild\\\\\\\\Current\\\\\\\\Bin\\\\\\\\MSBuild.exe\\\\\" \\\\\"C:\\\\\\\\Users\\\\\\\\mcaff\\\\\\\\source\\\\\\\\repos\\\\\\\\MatheoCaffieri_GestorCMB\\\\\\\\MatheoCaffieri_GestorCMB\\\\\\\\MatheoCaffieri_GestorCMB.csproj\\\\\" /t:Build /p:Configuration=Debug /v:minimal\")",
+      "Bash(powershell:*)",
+      "Bash(grep \"\\\\.cs$\")"
     ]
   }
 }
