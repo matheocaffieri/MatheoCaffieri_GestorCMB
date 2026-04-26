@@ -65,6 +65,7 @@
           <Property Name="idInformeCompra" Type="uniqueidentifier" Nullable="false" />
           <Property Name="idProyecto" Type="uniqueidentifier" Nullable="false" />
           <Property Name="fechaRealizacion" Type="date" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="Informe_monto">
           <Key>
@@ -405,6 +406,7 @@
           <Property Name="idInformeCompra" Type="Guid" Nullable="false" />
           <Property Name="idProyecto" Type="Guid" Nullable="false" />
           <Property Name="fechaRealizacion" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Detalle_informe_material_faltante" Relationship="Self.FK_Detalle_informe_material_faltante_Informe_compra" FromRole="Informe_compra" ToRole="Detalle_informe_material_faltante" />
           <NavigationProperty Name="Proyecto" Relationship="Self.FK_Informe_compra_Proyecto" FromRole="Informe_compra" ToRole="Proyecto" />
         </EntityType>
@@ -759,6 +761,7 @@
                 <ScalarProperty Name="idInformeCompra" ColumnName="idInformeCompra" />
                 <ScalarProperty Name="idProyecto" ColumnName="idProyecto" />
                 <ScalarProperty Name="fechaRealizacion" ColumnName="fechaRealizacion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

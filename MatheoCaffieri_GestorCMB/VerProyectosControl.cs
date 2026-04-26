@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -87,8 +88,8 @@ namespace MatheoCaffieri_GestorCMB
         {
             int panelWidth = proyectoItemPanel.ClientSize.Width;
             if (panelWidth <= 0) return;
-            int columnas = panelWidth >= 1400 ? 3 : panelWidth >= 900 ? 2 : 1;
-            int itemWidth = (panelWidth / columnas) - 6;
+            int columnas  = panelWidth >= 1400 ? 3 : panelWidth >= 900 ? 2 : 1;
+            int itemWidth = (panelWidth / columnas) - 10;
             foreach (Control c in proyectoItemPanel.Controls)
                 c.Width = itemWidth;
         }
@@ -242,7 +243,72 @@ namespace MatheoCaffieri_GestorCMB
 
         private void VerProyectosControl_Load(object sender, EventArgs e)
         {
+            AplicarEstilo();
             CargarListado();
+        }
+
+        // ── Visual styling ─────────────────────────────────────────────────────
+
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
+
+        private void AplicarEstilo()
+        {
+            BackColor = Color.FromArgb(245, 246, 250);
+            proyectoItemPanel.BackColor = Color.Transparent;
+            proyectoItemPanel.Padding   = new Padding(4, 8, 4, 8);
+
+            label1.Font      = new Font("Microsoft YaHei UI", 22f);
+            label1.ForeColor = Color.FromArgb(30, 30, 30);
+
+            panel4.BackColor = Color.White;
+            AgregarBordeRedondeado(panel4);
+            label2.Font      = new Font("Microsoft YaHei UI", 9.5f, FontStyle.Bold);
+            label2.ForeColor = Color.FromArgb(55, 55, 65);
+
+            panel5.BackColor = Color.White;
+            AgregarBordeRedondeado(panel5);
+            label3.Font      = new Font("Microsoft YaHei UI", 9.5f, FontStyle.Bold);
+            label3.ForeColor = Color.FromArgb(55, 55, 65);
+
+            textBox1.Font        = new Font("Microsoft YaHei UI", 9.5f);
+            textBox1.BorderStyle = BorderStyle.FixedSingle;
+            SendMessage(textBox1.Handle, 0x1501, 1, "Buscar...");
+
+            button1.Text     = "›";
+            button1.Font     = new Font("Microsoft YaHei UI", 16f, FontStyle.Bold);
+            button1.BackColor = Color.FromArgb(76, 175, 80);
+            button1.ForeColor = Color.White;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.FlatAppearance.BorderSize             = 0;
+            button1.FlatAppearance.MouseOverBackColor     = Color.FromArgb(56, 142, 60);
+            button1.Cursor   = Cursors.Hand;
+
+            foreach (var rb in new[] { _rbMasRecientes, _rbMasAntiguos, _rbDescripcion, _rbCliente, _rbMasFaltantes })
+                if (rb != null) rb.Font = new Font("Microsoft YaHei UI", 8.5f);
+        }
+
+        private static void AgregarBordeRedondeado(Panel panel)
+        {
+            panel.Paint += (s, ev) =>
+            {
+                var p = (Panel)s;
+                ev.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                using (var path = MakeRoundRectPath(new Rectangle(0, 0, p.Width - 1, p.Height - 1), 8))
+                using (var pen  = new Pen(Color.FromArgb(218, 218, 225)))
+                    ev.Graphics.DrawPath(pen, path);
+            };
+        }
+
+        private static GraphicsPath MakeRoundRectPath(Rectangle r, int radius)
+        {
+            var path = new GraphicsPath();
+            path.AddArc(r.X,                  r.Y,                   radius * 2, radius * 2, 180, 90);
+            path.AddArc(r.Right - radius * 2, r.Y,                   radius * 2, radius * 2, 270, 90);
+            path.AddArc(r.Right - radius * 2, r.Bottom - radius * 2, radius * 2, radius * 2,   0, 90);
+            path.AddArc(r.X,                  r.Bottom - radius * 2, radius * 2, radius * 2,  90, 90);
+            path.CloseFigure();
+            return path;
         }
     }
 }

@@ -23,6 +23,7 @@ namespace DAL
         public System.Guid idInformeCompra { get; set; }
         public System.Guid idProyecto { get; set; }
         public System.DateTime fechaRealizacion { get; set; }
+        public string estado { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Detalle_informe_material_faltante> Detalle_informe_material_faltante { get; set; }

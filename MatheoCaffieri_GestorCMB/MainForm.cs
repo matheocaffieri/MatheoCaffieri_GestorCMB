@@ -66,17 +66,17 @@ namespace MatheoCaffieri_GestorCMB
         {
             // Proyectos
             verProyectosToolStripMenuItem.Tag = TipoPermiso.VER_PROYECTOS.ToString();
-            agregarProyectosToolStripMenuItem.Tag = TipoPermiso.AGREGAR_PROYECTOS.ToString();
+            agregarProyectosToolStripMenuItem.Tag = TipoPermiso.GESTIONAR_PROYECTOS.ToString();
 
             // Inventario
             verInventarioToolStripMenuItem.Tag = TipoPermiso.VER_INVENTARIO.ToString();
-            agregarMaterialesToolStripMenuItem.Tag = TipoPermiso.AGREGAR_MATERIALES.ToString();
-            consultarInfToolStripMenuItem.Tag = TipoPermiso.CONSULTAR_INFORMES_COMPRA.ToString();
-            agregarProveedoresToolStripMenuItem.Tag = TipoPermiso.AGREGAR_PROVEEDORES.ToString();
+            agregarMaterialesToolStripMenuItem.Tag = TipoPermiso.GESTIONAR_MATERIALES.ToString();
+            consultarInfToolStripMenuItem.Tag = TipoPermiso.VER_INFORMES_COMPRA.ToString();
+            agregarProveedoresToolStripMenuItem.Tag = TipoPermiso.GESTIONAR_PROVEEDORES.ToString();
 
             // Personal
             verEmpleadosToolStripMenuItem.Tag = TipoPermiso.VER_EMPLEADOS.ToString();
-            cargarEmpleadosToolStripMenuItem.Tag = TipoPermiso.CARGAR_EMPLEADOS.ToString();
+            cargarEmpleadosToolStripMenuItem.Tag = TipoPermiso.GESTIONAR_EMPLEADOS.ToString();
 
             // Ajustes
             verLogsToolStripMenuItem.Tag = TipoPermiso.VER_LOGS.ToString();
@@ -273,7 +273,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void agregarProyectosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            const string REQUIRED = "AGREGAR_PROYECTOS";
+            const string REQUIRED = "GESTIONAR_PROYECTOS";
 
             if (!SessionContext.Has(REQUIRED))
             {
@@ -295,7 +295,7 @@ namespace MatheoCaffieri_GestorCMB
                 ver?.Refrescar();
             };
 
-            addProyectosForm.Show();
+            addProyectosForm.Show(this);
         }
 
         private static T FindControl<T>(Control parent) where T : Control
@@ -314,25 +314,25 @@ namespace MatheoCaffieri_GestorCMB
 
         private void cargarEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!Require(TipoPermiso.CARGAR_EMPLEADOS.ToString()))
+            if (!Require(TipoPermiso.GESTIONAR_EMPLEADOS.ToString()))
                 return;
 
             AddEmpleadosForm addEmpleadosForm = new AddEmpleadosForm();
-            addEmpleadosForm.Show();
+            addEmpleadosForm.Show(this);
         }
 
         private void agregarMaterialesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!Require(TipoPermiso.AGREGAR_MATERIALES.ToString()))
+            if (!Require(TipoPermiso.GESTIONAR_MATERIALES.ToString()))
                 return;
 
             AddMaterialesForm addMaterialesForm = new AddMaterialesForm();
-            addMaterialesForm.Show();
+            addMaterialesForm.Show(this);
         }
 
         private void agregarProveedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!Require(TipoPermiso.AGREGAR_PROVEEDORES.ToString()))
+            if (!Require(TipoPermiso.GESTIONAR_PROVEEDORES.ToString()))
                 return;
 
             ProveedorControl proveedorControl = new ProveedorControl();
@@ -341,7 +341,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void consultarInfToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!Require(TipoPermiso.CONSULTAR_INFORMES_COMPRA.ToString()))
+            if (!Require(TipoPermiso.VER_INFORMES_COMPRA.ToString()))
                 return;
 
             InformesDeCompraControl informesDeCompraControl = new InformesDeCompraControl();
@@ -354,7 +354,7 @@ namespace MatheoCaffieri_GestorCMB
                 return;
 
             VerLogsForm verLogsForm = new VerLogsForm();
-            verLogsForm.Show();
+            verLogsForm.Show(this);
         }
 
         private void gestionarUsuariosToolStripMenuItem_Click(object sender, EventArgs e)

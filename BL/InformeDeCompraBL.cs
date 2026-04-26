@@ -1,8 +1,9 @@
-﻿using DAL;
+using DAL;
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
 using DomainModel.Exceptions;
+using Services.Historial;
 using Services.Logs;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,6 @@ namespace BL
 
             try
             {
-                // SIEMPRE usar uow.Context (mismo contexto dentro de la transacción)
                 var db = uow.Context;
 
                 var faltantesIds = db.Material_faltante
@@ -56,7 +56,8 @@ namespace BL
                     {
                         IdInformeCompra = Guid.NewGuid(),
                         IdProyecto = idProyecto,
-                        FechaRealizacion = DateTime.Today
+                        FechaRealizacion = DateTime.Today,
+                        Estado = "pendiente"
                     };
                     informeRepo.Add(informe);
                 }
@@ -100,7 +101,6 @@ namespace BL
                 var uow = new SqlUnitOfWork(ctx);
                 var repo = new InformeDeCompraRepository(uow);
 
-                // lectura: sin Begin/Commit
                 var list = repo.GetAll();
 
                 uow.Dispose();
@@ -110,6 +110,27 @@ namespace BL
             catch (Exception ex)
             {
                 LoggerLogic.Error($"[InformeDeCompraBL] GetAll ERROR. {ex.Message}");
+                throw;
+            }
+        }
+
+        public List<InformeDeCompra> GetHistorial()
+        {
+            try
+            {
+                var ctx = new GestorCMBEntities();
+                var uow = new SqlUnitOfWork(ctx);
+                var repo = new InformeDeCompraRepository(uow);
+
+                var list = repo.GetHistorial();
+
+                uow.Dispose();
+                ctx.Dispose();
+                return list;
+            }
+            catch (Exception ex)
+            {
+                LoggerLogic.Error($"[InformeDeCompraBL] GetHistorial ERROR. {ex.Message}");
                 throw;
             }
         }
@@ -126,27 +147,15 @@ namespace BL
             uow.Begin();
 
             var infRepo = new InformeDeCompraRepository(uow);
-            var detRepo = new DetalleInformeMaterialFaltanteRepository(uow);
 
             try
             {
-                var db = uow.Context;
-
-                // borrar detalle del informe (todas las filas del informe)
-                var detallesIds = db.Detalle_informe_material_faltante
-                    .Where(d => d.idInformeCompra == idInformeCompra)
-                    .Select(d => d.idDetalleMaterialFaltante)
-                    .ToList();
-
-                foreach (var idDet in detallesIds)
-                {
-                    var dom = detRepo.GetById(idDet);
-                    if (dom != null) detRepo.Delete(dom);
-                }
-
-                // borrar informe
                 var inf = infRepo.GetById(idInformeCompra);
-                if (inf != null) infRepo.Delete(inf);
+                if (inf != null)
+                {
+                    inf.Estado = "cancelado";
+                    infRepo.Update(inf);
+                }
 
                 uow.Commit();
                 LoggerLogic.Info($"[InformeDeCompraBL] EliminarInforme OK. idInforme={idInformeCompra}");
@@ -164,10 +173,6 @@ namespace BL
             }
         }
 
-        // Regla:
-        // - agrega los materiales al detalle del proyecto
-        // - borra detalle + informe
-        // - borra materiales faltantes (los que estaban en el informe)
         public void ConfirmarCompraYAplicar(Guid idProyecto, Guid idInformeCompra)
         {
             if (idProyecto == Guid.Empty)
@@ -231,16 +236,25 @@ namespace BL
                     );
                 }
 
-                // 4) borrar detalle del informe
+                // 4) guardar snapshot y borrar detalle del informe
+                var snapshot = faltantes.Select(f => new MaterialFaltante
+                {
+                    CantidadFaltante               = (int)f.cantidadFaltante,
+                    DescripcionArticuloFaltante    = f.descripcionArticuloFaltante,
+                    TipoMaterialFaltante           = f.tipoMaterialFaltante,
+                    TipoUnidadMaterialFaltante     = f.tipoUnidadMaterialFaltante
+                }).ToList();
+                SnapshotService.Guardar(idInformeCompra, snapshot);
+
                 var detInfRows = db.Detalle_informe_material_faltante
                     .Where(d => d.idInformeCompra == idInformeCompra)
                     .ToList();
                 db.Detalle_informe_material_faltante.RemoveRange(detInfRows);
 
-                // 5) borrar informe
+                // 5) marcar informe como finalizado (no se borra)
                 var infRow = db.Informe_compra.FirstOrDefault(i => i.idInformeCompra == idInformeCompra);
                 if (infRow != null)
-                    db.Informe_compra.Remove(infRow);
+                    infRow.estado = "finalizado";
 
                 // 6) borrar Material_faltante (los del informe)
                 var mfRows = db.Material_faltante

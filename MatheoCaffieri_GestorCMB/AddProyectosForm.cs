@@ -23,7 +23,7 @@ namespace MatheoCaffieri_GestorCMB
         private readonly IGenericRepository<Proyecto> _proyectoRepo;
         private readonly IGenericRepository<Cliente> _clienteRepo;
 
-        private const string REQUIRED = "AGREGAR_PROYECTOS";
+        private const string REQUIRED = "GESTIONAR_PROYECTOS";
 
 
         public bool ProyectoGuardado { get; private set; } = false;

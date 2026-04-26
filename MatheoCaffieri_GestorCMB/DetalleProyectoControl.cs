@@ -363,7 +363,7 @@ namespace MatheoCaffieri_GestorCMB
         private void linkLabelAgregarMat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // Permiso primero
-            if (!SessionContext.Has("AGREGAR_MATERIALES")) // ajustá key real
+            if (!SessionContext.Has("GESTIONAR_MATERIALES")) // ajustá key real
             {
                 MessageBox.Show(
                     LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
@@ -398,7 +398,7 @@ namespace MatheoCaffieri_GestorCMB
         private void linkLabelAgregarEmp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // 1) Permiso
-            if (!SessionContext.Has("CARGAR_EMPLEADOS")) // ajustá la key real
+            if (!SessionContext.Has("GESTIONAR_EMPLEADOS")) // ajustá la key real
             {
                 MessageBox.Show(
                     LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",

@@ -50,8 +50,9 @@ namespace MatheoCaffieri_GestorCMB
             textBoxDocumento.Text = _empleado.NroDocumento.ToString();
             textBoxSueldo.Text = _empleado.Sueldo.ToString(CultureInfo.CurrentCulture);
 
-            // Hook botón guardar/editar (si no lo tenés en Designer)
-            buttonEditar.Click += buttonEditar_Click;
+            buttonEditar.Click  += buttonEditar_Click;
+            buttonExitAE.Click  += (s, ev) => Close();
+            buttonExit.Click    += (s, ev) => Close();
         }
 
       

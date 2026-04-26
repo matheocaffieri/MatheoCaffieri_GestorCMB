@@ -21,7 +21,7 @@ namespace MatheoCaffieri_GestorCMB
     {
         private readonly Guid _idProyecto;
 
-        private const string REQUIRED = "AGREGAR_MATERIALES";
+        private const string REQUIRED = "GESTIONAR_MATERIALES";
 
 
 

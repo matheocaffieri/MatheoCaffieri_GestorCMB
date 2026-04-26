@@ -15,7 +15,7 @@ namespace MatheoCaffieri_GestorCMB
     public partial class AgregarEmpleadoProyectoForm : Form
     {
         private readonly Guid _idProyecto;
-        private const string REQUIRED = "CARGAR_EMPLEADOS";
+        private const string REQUIRED = "GESTIONAR_EMPLEADOS";
 
         private System.Drawing.Point _mouseLocation;
 

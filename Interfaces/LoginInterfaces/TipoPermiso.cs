@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,17 +8,27 @@ namespace Interfaces.LoginInterfaces
 {
     public enum TipoPermiso
     {
+        // Proyectos
         VER_PROYECTOS,
-        AGREGAR_PROYECTOS,
+        GESTIONAR_PROYECTOS,
+        // Inventario / Materiales
         VER_INVENTARIO,
-        AGREGAR_MATERIALES,
-        CONSULTAR_INFORMES_COMPRA,
-        AGREGAR_PROVEEDORES,
+        GESTIONAR_MATERIALES,
+        // Empleados
         VER_EMPLEADOS,
-        CARGAR_EMPLEADOS,
+        GESTIONAR_EMPLEADOS,
+        // Clientes
+        VER_CLIENTES,
+        GESTIONAR_CLIENTES,
+        // Proveedores
+        VER_PROVEEDORES,
+        GESTIONAR_PROVEEDORES,
+        // Informes de compra
+        VER_INFORMES_COMPRA,
+        GESTIONAR_INFORMES_COMPRA,
+        // Sistema
         VER_LOGS,
         CONFIGURAR_PARAMETROS,
         GESTIONAR_USUARIOS,
-        GESTIONAR_CLIENTES
     }
 }

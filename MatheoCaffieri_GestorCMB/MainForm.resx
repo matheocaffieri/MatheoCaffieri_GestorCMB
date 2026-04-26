@@ -220,7 +220,7 @@
     <value>cargarEmpleadosToolStripMenuItem</value>
   </data>
   <data name="consultarInfToolStripMenuItem.Text" xml:space="preserve">
-    <value>Consultar informes de compra</value>
+    <value>Informe de compra</value>
   </data>
   <data name="homeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 20</value>
@@ -346,7 +346,7 @@
     <value>gestionarUsuariosToolStripMenuItem</value>
   </data>
   <data name="agregarProveedoresToolStripMenuItem.Text" xml:space="preserve">
-    <value>Agregar proveedores</value>
+    <value>Proveedores</value>
   </data>
   <data name="&gt;&gt;menuStrip1.ZOrder" xml:space="preserve">
     <value>0</value>

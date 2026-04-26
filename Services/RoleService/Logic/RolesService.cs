@@ -10,8 +10,11 @@ namespace Services.RoleService.Logic
 {
     public class RolesService
     {
-        public static readonly Guid AdminRoleId =
-            new Guid("b1a2f3e4-c5d6-4a7b-8e9f-100000000001");
+        public static readonly Guid AdminRoleId        = new Guid("b1a2f3e4-c5d6-4a7b-8e9f-100000000001");
+        public static readonly Guid JefeDeObraRoleId   = new Guid("b1a2f3e4-c5d6-4a7b-8e9f-100000000002");
+        public static readonly Guid OperarioRoleId     = new Guid("b1a2f3e4-c5d6-4a7b-8e9f-100000000003");
+        public static readonly Guid CompradorRoleId    = new Guid("b1a2f3e4-c5d6-4a7b-8e9f-100000000004");
+        public static readonly Guid GerenteRoleId      = new Guid("b1a2f3e4-c5d6-4a7b-8e9f-100000000005");
 
         public static readonly Guid AdminUserId =
             new Guid("C2C73905-2849-49D9-83C1-76913DC1A175");
@@ -91,6 +94,70 @@ namespace Services.RoleService.Logic
             }
 
             _famRepo.AddUsuario(AdminRoleId, AdminUserId);
+
+            EnsureRolesPredefinidosExist();
+        }
+
+        public void EnsureRolesPredefinidosExist()
+        {
+            var catalogo = _accRepo.GetAll().ToDictionary(a => a.DataKey);
+
+            // Crea el Acceso si no existe y retorna su Id
+            Guid AccId(TipoPermiso p)
+            {
+                if (!catalogo.TryGetValue(p, out var acc))
+                {
+                    acc = _accRepo.Create(p.ToString().Replace('_', ' '), p);
+                    catalogo[p] = acc;
+                }
+                return acc.Id;
+            }
+
+            void SeedRol(Guid rolId, string nombre, TipoPermiso[] permisos)
+            {
+                _famRepo.EnsureExists(rolId, nombre);
+                var actuales = new HashSet<TipoPermiso>(
+                    _famRepo.GetAccesos(rolId).Select(a => a.DataKey));
+                foreach (var p in permisos)
+                    if (!actuales.Contains(p))
+                        _famRepo.AddAcceso(rolId, AccId(p));
+            }
+
+            SeedRol(OperarioRoleId, "Operario", new[]
+            {
+                TipoPermiso.VER_PROYECTOS,
+                TipoPermiso.VER_INVENTARIO,
+                TipoPermiso.VER_EMPLEADOS,
+            });
+
+            SeedRol(JefeDeObraRoleId, "Jefe de obra", new[]
+            {
+                TipoPermiso.VER_PROYECTOS,    TipoPermiso.GESTIONAR_PROYECTOS,
+                TipoPermiso.VER_INVENTARIO,   TipoPermiso.GESTIONAR_MATERIALES,
+                TipoPermiso.VER_EMPLEADOS,
+                TipoPermiso.VER_CLIENTES,
+                TipoPermiso.VER_PROVEEDORES,
+                TipoPermiso.VER_INFORMES_COMPRA, TipoPermiso.GESTIONAR_INFORMES_COMPRA,
+            });
+
+            SeedRol(CompradorRoleId, "Comprador", new[]
+            {
+                TipoPermiso.VER_PROYECTOS,
+                TipoPermiso.VER_INVENTARIO,   TipoPermiso.GESTIONAR_MATERIALES,
+                TipoPermiso.VER_PROVEEDORES,  TipoPermiso.GESTIONAR_PROVEEDORES,
+                TipoPermiso.VER_INFORMES_COMPRA, TipoPermiso.GESTIONAR_INFORMES_COMPRA,
+            });
+
+            SeedRol(GerenteRoleId, "Gerente", new[]
+            {
+                TipoPermiso.VER_PROYECTOS,    TipoPermiso.GESTIONAR_PROYECTOS,
+                TipoPermiso.VER_INVENTARIO,   TipoPermiso.GESTIONAR_MATERIALES,
+                TipoPermiso.VER_EMPLEADOS,    TipoPermiso.GESTIONAR_EMPLEADOS,
+                TipoPermiso.VER_CLIENTES,     TipoPermiso.GESTIONAR_CLIENTES,
+                TipoPermiso.VER_PROVEEDORES,  TipoPermiso.GESTIONAR_PROVEEDORES,
+                TipoPermiso.VER_INFORMES_COMPRA, TipoPermiso.GESTIONAR_INFORMES_COMPRA,
+                TipoPermiso.GESTIONAR_USUARIOS,
+            });
         }
 
         public void ReemplazarPermisosDeRol(Guid rolId, IEnumerable<TipoPermiso> nuevos)

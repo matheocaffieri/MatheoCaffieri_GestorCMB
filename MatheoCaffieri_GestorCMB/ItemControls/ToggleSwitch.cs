@@ -15,7 +15,6 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
     {
         // Fields
         private bool isOn;
-        private int radius = 15;
         private int switchPadding = 3;
         private int switchX; // Posición del botón
         private Timer animationTimer; // Timer para la animación
@@ -87,6 +86,8 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.Clear(Parent.BackColor);
 
+            int radius = (Height - 1) / 2;
+
             // Dibujar el fondo del switch
             var toggleColor = IsOn ? OnColor : OffColor;
             var switchRect = new Rectangle(0, 0, Width - 1, Height - 1);
@@ -102,7 +103,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             int switchSize = Height - switchPadding * 2;
             var buttonRect = new Rectangle(switchX, switchPadding, switchSize, switchSize);
 
-            using (var buttonPath = CreateRoundedRectanglePath(buttonRect, radius - 3))
+            using (var buttonPath = CreateRoundedRectanglePath(buttonRect, (switchSize - 1) / 2))
             {
                 e.Graphics.FillPath(new SolidBrush(SwitchColor), buttonPath);
                 using (var pen = new Pen(BorderColor, 1))

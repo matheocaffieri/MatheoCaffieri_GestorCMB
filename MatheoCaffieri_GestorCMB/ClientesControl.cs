@@ -19,7 +19,7 @@ namespace MatheoCaffieri_GestorCMB
     public partial class ClientesControl : UserControl
     {
 
-        private const string REQUIRED = "GESTIONAR_CLIENTES";
+        private const string REQUIRED = "VER_CLIENTES";
 
 
         // ctor por defecto -> usa BL real

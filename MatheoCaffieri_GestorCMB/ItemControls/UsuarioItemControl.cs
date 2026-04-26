@@ -3,6 +3,7 @@ using DomainModel.Login;
 using Services.RoleService.Logic;
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 // Alias para evitar conflictos con otros RolesService viejos
@@ -42,11 +43,24 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         {
             InitializeComponent();
 
-            _rolService = rolService ?? throw new ArgumentNullException(nameof(rolService));
+            _rolService     = rolService     ?? throw new ArgumentNullException(nameof(rolService));
             _usuarioService = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));
+
+            this.BackColor = Color.FromArgb(250, 250, 252);
 
             SwitchHabilitarUsuario.ToggleChanged += (s, ev) =>
                 ActivoChanged?.Invoke(this, SwitchHabilitarUsuario.IsOn);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (Width < 80) return;
+
+            int switchRight = Width - 6;
+            SwitchHabilitarUsuario.Left = switchRight - SwitchHabilitarUsuario.Width;
+            buttonEditarUsuario.Left    = SwitchHabilitarUsuario.Left - buttonEditarUsuario.Width - 6;
+            labelInfoMailUsuario.Width  = buttonEditarUsuario.Left - labelInfoMailUsuario.Left - 6;
         }
 
         public void SetUsuario(Usuario u)

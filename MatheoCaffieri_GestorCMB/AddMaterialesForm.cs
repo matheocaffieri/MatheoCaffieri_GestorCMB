@@ -21,6 +21,8 @@ namespace MatheoCaffieri_GestorCMB
     {
         private readonly IMaterialRepository _matBL;
         private readonly IGenericRepository<Proveedor> _provBL;
+        private readonly Material _editTarget;
+        private bool IsEditMode => _editTarget != null;
 
         public Point mouseLocation;
 
@@ -28,6 +30,12 @@ namespace MatheoCaffieri_GestorCMB
         public AddMaterialesForm() : this(new MaterialBL(), new ProveedorBL())
         {
             // acá NO va InitializeComponent ni WireEvents
+        }
+
+        // ctor edición
+        public AddMaterialesForm(Material materialToEdit) : this(new MaterialBL(), new ProveedorBL())
+        {
+            _editTarget = materialToEdit ?? throw new ArgumentNullException(nameof(materialToEdit));
         }
 
         public AddMaterialesForm(IMaterialRepository materialBL, IGenericRepository<Proveedor> proveedorBL)
@@ -70,6 +78,17 @@ namespace MatheoCaffieri_GestorCMB
             {
                 CargarCombosFijos();
                 CargarProveedores();
+
+                if (IsEditMode)
+                {
+                    buttonAgregar.Text            = "Guardar";
+                    textBoxDescripcion.Text        = _editTarget.DescripcionArticulo;
+                    textBoxPrecio.Text             = _editTarget.CostoPorUnidad.ToString(System.Globalization.CultureInfo.CurrentCulture);
+                    comboBoxMaterial.SelectedItem  = _editTarget.TipoMaterial;
+                    comboBoxUnidad.SelectedItem    = _editTarget.TipoUnidad;
+                    comboBoxProveedor.SelectedValue = _editTarget.IdProveedor;
+                }
+
                 textBoxDescripcion.Focus();
             }
             catch (AppException ex)
@@ -245,16 +264,17 @@ namespace MatheoCaffieri_GestorCMB
 
             try
             {
-                _matBL.Add(mat);
-
-                LoggerLogic.Info(
-                    $"[AddMaterialesForm] Material agregado: {mat.DescripcionArticulo} ({mat.IdMaterial})");
-
-                MessageBox.Show(
-                    LanguageService.Current?.T("msg_material_agregado") ?? "Material agregado correctamente.",
-                    "OK",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                if (IsEditMode)
+                {
+                    mat.IdMaterial = _editTarget.IdMaterial;
+                    _matBL.Update(mat);
+                    LoggerLogic.Info($"[AddMaterialesForm] Material editado: {mat.DescripcionArticulo} ({mat.IdMaterial})");
+                }
+                else
+                {
+                    _matBL.Add(mat);
+                    LoggerLogic.Info($"[AddMaterialesForm] Material agregado: {mat.DescripcionArticulo} ({mat.IdMaterial})");
+                }
 
                 DialogResult = DialogResult.OK;
                 Close();

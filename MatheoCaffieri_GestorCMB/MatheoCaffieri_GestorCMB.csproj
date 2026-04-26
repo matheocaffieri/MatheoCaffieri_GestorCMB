@@ -152,6 +152,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="HistorialInformesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="HistorialInformesControl.Designer.cs">
+      <DependentUpon>HistorialInformesControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="InformesDeCompraControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -193,6 +199,12 @@
     </Compile>
     <Compile Include="ItemControls\EmpleadosItemControl.Designer.cs">
       <DependentUpon>EmpleadosItemControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ItemControls\HistorialInformeItemControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ItemControls\HistorialInformeItemControl.Designer.cs">
+      <DependentUpon>HistorialInformeItemControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ItemControls\InformeCompraItemControl.cs">
       <SubType>UserControl</SubType>

@@ -1,4 +1,4 @@
-﻿using BL;
+using BL;
 using DomainModel;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
@@ -6,12 +6,8 @@ using Services.Language;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MatheoCaffieri_GestorCMB
@@ -22,14 +18,10 @@ namespace MatheoCaffieri_GestorCMB
         {
         }
 
-
-        private const string REQUIRED = "AGREGAR_PROVEEDORES";
-
+        private const string REQUIRED = "GESTIONAR_PROVEEDORES";
 
         private readonly MainForm _mainForm;
 
-
-        // ctor para inyección de dependencias (tests, etc.)
         public ProveedorControl(IGenericRepository<Proveedor> proveedorRepo)
         {
             InitializeComponent();
@@ -55,33 +47,291 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
-
-
-
             _proveedorRepo = proveedorRepo ?? throw new ArgumentNullException(nameof(proveedorRepo));
-            buttonBack.Text = "<<";
-
-            this.Load += ProveedorControl_Load;
-            buttonAddProveedor.Click += buttonAddProveedor_Click;
-            buttonSearchClientes.Click += buttonSearchClientes_Click;
-            textBox1.TextChanged += textBox1_TextChanged;
-            textBox1.KeyDown += textBox1_KeyDown;
-
-            proveedorLayoutPanel.Resize += (_, __) => AjustarAnchoItems();
-        }
-
-        private void AjustarAnchoItems()
-        {
-            int w = proveedorLayoutPanel.ClientSize.Width;
-            if (w <= 0) return;
-            int cols   = w >= 1400 ? 3 : w >= 700 ? 2 : 1;
-            int itemW  = (w / cols) - 6;
-            foreach (Control c in proveedorLayoutPanel.Controls)
-                c.Width = itemW;
         }
 
         private readonly IGenericRepository<Proveedor> _proveedorRepo;
+        private Label _lblCount;
+        private Panel _scrollArea;
 
+        // ══════════════════════════════════════════════════════════
+        // LOAD
+        // ══════════════════════════════════════════════════════════
+
+        private void ProveedorControl_Load(object sender, EventArgs e)
+        {
+            if (DesignMode || _proveedorRepo == null) return;
+            BuildUI();
+            BeginInvoke((Action)(() => CargarListado()));
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // BUILD UI
+        // ══════════════════════════════════════════════════════════
+
+        private void BuildUI()
+        {
+            this.Controls.Clear();
+            this.BackColor      = Color.White;
+            this.DoubleBuffered = true;
+
+            // ── HEADER ────────────────────────────────────────────
+            var header = new Panel
+            {
+                Dock      = DockStyle.Top,
+                Height    = 58,
+                BackColor = Color.White,
+            };
+
+            var btnBack = MakeNavBtn("← Volver");
+            btnBack.Location  = new Point(16, 15);
+            btnBack.Click    += buttonBack_Click;
+
+            var lblTitle = new Label
+            {
+                Text      = "Proveedores",
+                Font      = new Font("Microsoft YaHei UI", 15f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(22, 22, 28),
+                AutoSize  = true,
+                Location  = new Point(btnBack.Right + 16, 16),
+                BackColor = Color.Transparent,
+            };
+
+            header.Controls.Add(btnBack);
+            header.Controls.Add(lblTitle);
+
+            // ── CONTENT ───────────────────────────────────────────
+            var contentPanel = new Panel
+            {
+                Dock      = DockStyle.Fill,
+                BackColor = Color.White,
+            };
+
+            // ── SIDEBAR (formulario de alta) ───────────────────────
+            var sidebar = new Panel
+            {
+                Dock      = DockStyle.Left,
+                Width     = 244,
+                BackColor = Color.White,
+            };
+
+            var lblDesc = new Label
+            {
+                Text      = "Descripción",
+                Font      = new Font("Microsoft YaHei UI", 8.5f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(80, 80, 90),
+                AutoSize  = true,
+                Location  = new Point(16, 20),
+                BackColor = Color.Transparent,
+            };
+
+            var newTxDesc = new TextBox
+            {
+                Font        = new Font("Microsoft YaHei UI", 9f),
+                BorderStyle = BorderStyle.FixedSingle,
+                Location    = new Point(16, 42),
+                Width       = 210,
+            };
+
+            var lblTel = new Label
+            {
+                Text      = "Teléfono",
+                Font      = new Font("Microsoft YaHei UI", 8.5f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(80, 80, 90),
+                AutoSize  = true,
+                Location  = new Point(16, 80),
+                BackColor = Color.Transparent,
+            };
+
+            var newTxTel = new TextBox
+            {
+                Font        = new Font("Microsoft YaHei UI", 9f),
+                BorderStyle = BorderStyle.FixedSingle,
+                Location    = new Point(16, 102),
+                Width       = 210,
+            };
+
+            var newAddBtn = new Button
+            {
+                Text      = "+ Agregar",
+                Location  = new Point(16, 146),
+                Height    = 30,
+                Width     = 210,
+                BackColor = Color.FromArgb(76, 175, 80),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font      = new Font("Microsoft YaHei UI", 9f, FontStyle.Bold),
+                Cursor    = Cursors.Hand,
+            };
+            newAddBtn.FlatAppearance.BorderSize             = 0;
+            newAddBtn.FlatAppearance.MouseOverBackColor     = Color.FromArgb(56, 155, 60);
+
+            sidebar.Controls.Add(lblDesc);
+            sidebar.Controls.Add(newTxDesc);
+            sidebar.Controls.Add(lblTel);
+            sidebar.Controls.Add(newTxTel);
+            sidebar.Controls.Add(newAddBtn);
+
+            // ── DIVIDER ───────────────────────────────────────────
+            var divider = new Panel
+            {
+                Dock      = DockStyle.Left,
+                Width     = 1,
+                BackColor = Color.FromArgb(230, 230, 236),
+            };
+
+            // ── RIGHT ─────────────────────────────────────────────
+            var rightPanel = new Panel
+            {
+                Dock      = DockStyle.Fill,
+                BackColor = Color.White,
+            };
+
+            var sectionBar = new Panel
+            {
+                Dock      = DockStyle.Top,
+                Height    = 40,
+                BackColor = Color.White,
+            };
+
+            var lblSec = new Label
+            {
+                Text      = "Lista",
+                Font      = new Font("Microsoft YaHei UI", 10f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(48, 48, 58),
+                AutoSize  = true,
+                Location  = new Point(20, 10),
+                BackColor = Color.Transparent,
+            };
+
+            _lblCount = new Label
+            {
+                Text      = "",
+                Font      = new Font("Microsoft YaHei UI", 8.5f),
+                ForeColor = Color.FromArgb(155, 155, 168),
+                AutoSize  = true,
+                Location  = new Point(60, 12),
+                BackColor = Color.Transparent,
+            };
+
+            var newSearch = new TextBox
+            {
+                Font        = new Font("Microsoft YaHei UI", 9f),
+                BorderStyle = BorderStyle.FixedSingle,
+                Width       = 200,
+            };
+
+            var newSearchBtn = new Button
+            {
+                Text      = "Buscar",
+                Height    = 28,
+                Width     = 70,
+                BackColor = Color.White,
+                ForeColor = Color.FromArgb(70, 100, 160),
+                FlatStyle = FlatStyle.Flat,
+                Font      = new Font("Microsoft YaHei UI", 8.5f),
+                Cursor    = Cursors.Hand,
+            };
+            newSearchBtn.FlatAppearance.BorderColor = Color.FromArgb(190, 210, 240);
+            newSearchBtn.FlatAppearance.BorderSize  = 1;
+
+            sectionBar.Controls.Add(_lblCount);
+            sectionBar.Controls.Add(lblSec);
+            sectionBar.Controls.Add(newSearch);
+            sectionBar.Controls.Add(newSearchBtn);
+
+            sectionBar.Resize += (s, ev) =>
+            {
+                var p = (Panel)s;
+                if (p.Width < 100) return;
+                newSearchBtn.Location = new Point(p.Width - newSearchBtn.Width - 20, (p.Height - newSearchBtn.Height) / 2);
+                newSearch.Location    = new Point(newSearchBtn.Left - newSearch.Width - 6, (p.Height - newSearch.Height) / 2 + 1);
+                _lblCount.Location    = new Point(lblSec.Right + 6, 12);
+            };
+
+            var sepH = new Panel
+            {
+                Dock      = DockStyle.Top,
+                Height    = 1,
+                BackColor = Color.FromArgb(230, 230, 236),
+            };
+
+            _scrollArea = new Panel
+            {
+                Dock       = DockStyle.Fill,
+                AutoScroll = true,
+                BackColor  = Color.FromArgb(247, 248, 250),
+                Padding    = new Padding(16, 14, 16, 14),
+            };
+
+            var newGrid = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents  = false,
+                AutoSize      = true,
+                AutoSizeMode  = AutoSizeMode.GrowAndShrink,
+                BackColor     = Color.Transparent,
+            };
+
+            _scrollArea.Controls.Add(newGrid);
+            _scrollArea.Resize += (s, ev) =>
+            {
+                var p = (Panel)s;
+                int w = Math.Max(1, p.ClientSize.Width - newGrid.Margin.Horizontal);
+                newGrid.Width = w;
+                foreach (ProveedorItemControl c in newGrid.Controls.OfType<ProveedorItemControl>())
+                    c.Width = w;
+            };
+
+            rightPanel.Controls.Add(_scrollArea);
+            rightPanel.Controls.Add(sepH);
+            rightPanel.Controls.Add(sectionBar);
+
+            contentPanel.Controls.Add(rightPanel);
+            contentPanel.Controls.Add(divider);
+            contentPanel.Controls.Add(sidebar);
+
+            // Reasignar campos del Designer
+            textBoxDescripcion   = newTxDesc;
+            textBoxTelefono      = newTxTel;
+            buttonAddProveedor   = newAddBtn;
+            textBox1             = newSearch;
+            buttonSearchClientes = newSearchBtn;
+            proveedorLayoutPanel = newGrid;
+
+            // ── ASSEMBLE ──────────────────────────────────────────
+            this.Controls.Add(contentPanel);
+            this.Controls.Add(header);
+
+            newAddBtn.Click       += buttonAddProveedor_Click;
+            newSearchBtn.Click    += buttonSearchClientes_Click;
+            newSearch.TextChanged += textBox1_TextChanged;
+            newSearch.KeyDown     += textBox1_KeyDown;
+        }
+
+        private static Button MakeNavBtn(string text)
+        {
+            var btn = new Button
+            {
+                Text      = text,
+                Height    = 28,
+                AutoSize  = false,
+                BackColor = Color.White,
+                ForeColor = Color.FromArgb(70, 100, 160),
+                FlatStyle = FlatStyle.Flat,
+                Font      = new Font("Microsoft YaHei UI", 8.5f),
+                Cursor    = Cursors.Hand,
+            };
+            btn.FlatAppearance.BorderColor            = Color.FromArgb(190, 210, 240);
+            btn.FlatAppearance.BorderSize             = 1;
+            btn.FlatAppearance.MouseOverBackColor     = Color.FromArgb(240, 245, 255);
+            btn.Width = TextRenderer.MeasureText(text, btn.Font).Width + 24;
+            return btn;
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // LISTADO
+        // ══════════════════════════════════════════════════════════
 
         private void CargarListado(string filtro = "")
         {
@@ -90,7 +340,6 @@ namespace MatheoCaffieri_GestorCMB
             if (!string.IsNullOrWhiteSpace(filtro))
             {
                 filtro = filtro.Trim().ToLower();
-
                 proveedores = proveedores
                     .Where(p =>
                         (!string.IsNullOrEmpty(p.Descripcion) && p.Descripcion.ToLower().Contains(filtro)) ||
@@ -99,12 +348,16 @@ namespace MatheoCaffieri_GestorCMB
                     .ToList();
             }
 
+            if (_lblCount != null)
+                _lblCount.Text = $"({proveedores.Count})";
+
             proveedorLayoutPanel.SuspendLayout();
             proveedorLayoutPanel.Controls.Clear();
 
+            int cardW = CardWidth();
             foreach (var proveedor in proveedores)
             {
-                var item = new ProveedorItemControl();
+                var item = new ProveedorItemControl { Width = cardW };
                 item.Bind(proveedor);
                 item.EditRequested += EditarProveedor;
                 item.ActiveChanged += ToggleActivoProveedor;
@@ -112,33 +365,38 @@ namespace MatheoCaffieri_GestorCMB
             }
 
             proveedorLayoutPanel.ResumeLayout();
-            AjustarAnchoItems();
         }
 
-        private void ProveedorControl_Load(object sender, EventArgs e)
+        private int CardWidth()
         {
-            if (!DesignMode)
-                CargarListado();
+            if (_scrollArea == null) return 500;
+            int avail = _scrollArea.ClientSize.Width - 32;
+            return Math.Max(200, avail);
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        protected override void OnResize(EventArgs e)
         {
-            CargarListado(textBox1.Text);
+            base.OnResize(e);
+            if (proveedorLayoutPanel == null) return;
+            int w = CardWidth();
+            foreach (ProveedorItemControl c in proveedorLayoutPanel.Controls.OfType<ProveedorItemControl>())
+                c.Width = w;
         }
+
+        // ══════════════════════════════════════════════════════════
+        // EVENTOS
+        // ══════════════════════════════════════════════════════════
+
+        private void textBox1_TextChanged(object sender, EventArgs e) => CargarListado(textBox1.Text);
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                CargarListado(textBox1.Text);
-            }
-        }
-
-        private void buttonSearchClientes_Click(object sender, EventArgs e)
-        {
+            if (e.KeyCode != Keys.Enter) return;
+            e.SuppressKeyPress = true;
             CargarListado(textBox1.Text);
         }
+
+        private void buttonSearchClientes_Click(object sender, EventArgs e) => CargarListado(textBox1.Text);
 
         private void buttonAddProveedor_Click(object sender, EventArgs e)
         {
@@ -172,7 +430,7 @@ namespace MatheoCaffieri_GestorCMB
             var nuevoProveedor = new Proveedor
             {
                 Descripcion = descripcion,
-                Telefono = (int)telefono
+                Telefono    = (int)telefono,
             };
 
             _proveedorRepo.Add(nuevoProveedor);
@@ -206,7 +464,7 @@ namespace MatheoCaffieri_GestorCMB
             using (var frm = new EditProveedorForm(_proveedorRepo, proveedor))
             {
                 frm.StartPosition = FormStartPosition.CenterParent;
-                if (frm.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
+                if (frm.ShowDialog(this) == DialogResult.OK)
                     CargarListado(textBox1.Text);
             }
         }

@@ -16,7 +16,23 @@
       "Bash(cmd /c '\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB.csproj\" /t:Build /p:Configuration=Debug /v:minimal 2>&1')",
       "Bash(cmd /c \"\\\\\"C:\\\\\\\\Program Files\\\\\\\\Microsoft Visual Studio\\\\\\\\2022\\\\\\\\Community\\\\\\\\MSBuild\\\\\\\\Current\\\\\\\\Bin\\\\\\\\MSBuild.exe\\\\\" \\\\\"C:\\\\\\\\Users\\\\\\\\mcaff\\\\\\\\source\\\\\\\\repos\\\\\\\\MatheoCaffieri_GestorCMB\\\\\\\\MatheoCaffieri_GestorCMB\\\\\\\\MatheoCaffieri_GestorCMB.csproj\\\\\" /t:Build /p:Configuration=Debug /v:minimal\")",
       "Bash(powershell:*)",
-      "Bash(grep \"\\\\.cs$\")"
+      "Bash(grep \"\\\\.cs$\")",
+      "Bash(sed -i 's/private const string REQUIRED = \"CARGAR_EMPLEADOS\";/private const string REQUIRED = \"GESTIONAR_EMPLEADOS\";/g' AddEmpleadosForm.cs AgregarEmpleadoProyectoForm.cs)",
+      "Bash(sed -i 's/private const string REQUIRED = \"AGREGAR_PROYECTOS\";/private const string REQUIRED = \"GESTIONAR_PROYECTOS\";/g' AddProyectosForm.cs)",
+      "Bash(sed -i 's/private const string REQUIRED = \"AGREGAR_MATERIALES\";/private const string REQUIRED = \"GESTIONAR_MATERIALES\";/g' AgregarMaterialProyectoForm.cs)",
+      "Bash(sed -i 's/private const string REQUIRED = \"CONSULTAR_INFORMES_COMPRA\";/private const string REQUIRED = \"VER_INFORMES_COMPRA\";/g' InformesDeCompraControl.cs)",
+      "Bash(sed -i 's/private const string REQUIRED = \"AGREGAR_PROVEEDORES\";/private const string REQUIRED = \"GESTIONAR_PROVEEDORES\";/g' ProveedorControl.cs)",
+      "Bash(sed -i 's/TipoPermiso\\\\.AGREGAR_PROYECTOS/TipoPermiso.GESTIONAR_PROYECTOS/g; s/TipoPermiso\\\\.AGREGAR_MATERIALES/TipoPermiso.GESTIONAR_MATERIALES/g; s/TipoPermiso\\\\.CONSULTAR_INFORMES_COMPRA/TipoPermiso.VER_INFORMES_COMPRA/g; s/TipoPermiso\\\\.AGREGAR_PROVEEDORES/TipoPermiso.GESTIONAR_PROVEEDORES/g; s/TipoPermiso\\\\.CARGAR_EMPLEADOS/TipoPermiso.GESTIONAR_EMPLEADOS/g; s/\"AGREGAR_PROYECTOS\"/\"GESTIONAR_PROYECTOS\"/g' MainForm.cs)",
+      "Bash(sed -i 's/TipoPermiso\\\\.GESTIONAR_CLIENTES/TipoPermiso.VER_CLIENTES/g' HomeControl.cs)",
+      "Bash(sed -i 's/\"AGREGAR_MATERIALES\"/\"GESTIONAR_MATERIALES\"/g; s/\"CARGAR_EMPLEADOS\"/\"GESTIONAR_EMPLEADOS\"/g' DetalleProyectoControl.cs)",
+      "Bash(sed -i 's/\"AGREGAR_PROVEEDORES\"/\"GESTIONAR_PROVEEDORES\"/g; s/\"CONSULTAR_INFORMES_COMPRA\"/\"VER_INFORMES_COMPRA\"/g' VerInventarioControl.cs)",
+      "Bash(where nuget *)",
+      "Bash(where nuget.exe)",
+      "Bash(curl -L \"https://www.nuget.org/api/v2/package/BCrypt.Net-Next/4.0.3\" -o \"C:/Users/mcaff/source/repos/MatheoCaffieri_GestorCMB/packages/bcrypt.nupkg\")",
+      "Bash(mkdir -p \"C:/Users/mcaff/source/repos/MatheoCaffieri_GestorCMB/packages/BCrypt.Net-Next.4.0.3\")",
+      "Bash(unzip -o bcrypt.nupkg -d BCrypt.Net-Next.4.0.3)",
+      "Bash(rm bcrypt.nupkg)",
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe\" MatheoCaffieri_GestorCMB.sln /p:Configuration=Debug /t:Build /v:minimal /nologo)"
     ]
   }
 }

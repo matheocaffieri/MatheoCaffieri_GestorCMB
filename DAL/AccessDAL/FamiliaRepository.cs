@@ -79,13 +79,14 @@ namespace DAL.AccessDAL
                 {
                     while (rd.Read())
                     {
-                        var id = rd.GetGuid(0);
+                        var id     = rd.GetGuid(0);
                         var nombre = rd.GetString(1);
                         var keyStr = rd.GetString(2);
-                        var tipo = (TipoPermiso)Enum.Parse(typeof(TipoPermiso), keyStr, true);
 
-                        var acc = new Acceso(id, nombre, tipo);
-                        list.Add(acc);
+                        if (!Enum.TryParse(keyStr, true, out TipoPermiso tipo))
+                            continue;
+
+                        list.Add(new Acceso(id, nombre, tipo));
                     }
                 }
             }

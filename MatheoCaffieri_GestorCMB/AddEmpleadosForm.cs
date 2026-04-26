@@ -13,7 +13,7 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class AddEmpleadosForm : Form
     {
-        private const string REQUIRED = "CARGAR_EMPLEADOS";
+        private const string REQUIRED = "GESTIONAR_EMPLEADOS";
 
         private readonly IGenericRepository<Empleado> _empleadoRepo;
 

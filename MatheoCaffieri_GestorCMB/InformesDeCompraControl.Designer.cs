@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InformesDeCompraControl));
             this.buttonBack = new System.Windows.Forms.Button();
+            this.buttonHistorial = new System.Windows.Forms.Button();
             this.buttonSearchClientes = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -42,9 +43,19 @@
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.UseVisualStyleBackColor = true;
             this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
-            // 
+            //
+            // buttonHistorial
+            //
+            this.buttonHistorial.Location = new System.Drawing.Point(84, 74);
+            this.buttonHistorial.Name = "buttonHistorial";
+            this.buttonHistorial.Size = new System.Drawing.Size(130, 30);
+            this.buttonHistorial.TabIndex = 40;
+            this.buttonHistorial.Text = "Historial";
+            this.buttonHistorial.UseVisualStyleBackColor = true;
+            this.buttonHistorial.Click += new System.EventHandler(this.buttonHistorial_Click);
+            //
             // buttonSearchClientes
-            // 
+            //
             resources.ApplyResources(this.buttonSearchClientes, "buttonSearchClientes");
             this.buttonSearchClientes.Name = "buttonSearchClientes";
             this.buttonSearchClientes.UseVisualStyleBackColor = true;
@@ -71,6 +82,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.informeLayoutPanel);
             this.Controls.Add(this.buttonBack);
+            this.Controls.Add(this.buttonHistorial);
             this.Controls.Add(this.buttonSearchClientes);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
@@ -84,6 +96,7 @@
         #endregion
 
         private System.Windows.Forms.Button buttonBack;
+        private System.Windows.Forms.Button buttonHistorial;
         private System.Windows.Forms.Button buttonSearchClientes;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label2;

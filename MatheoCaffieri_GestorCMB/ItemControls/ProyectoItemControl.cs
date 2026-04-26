@@ -90,6 +90,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
 
             InicializarEllipsisYTooltips();
             InicializarBadge();
+            EstilarCard();
         }
 
         private void InicializarEllipsisYTooltips()
@@ -128,7 +129,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
                 using (var brush = new SolidBrush(Color.Crimson))
                     g.FillEllipse(brush, bounds.X, bounds.Y, bounds.Width, bounds.Height);
                 var text = _faltantesCount > 99 ? "99+" : $"{_faltantesCount}";
-                using (var font = new Font("Microsoft YaHei UI", 7.5f, FontStyle.Bold))
+                using (var font = new Font("Microsoft YaHei UI", 7f, FontStyle.Bold))
                 using (var textBrush = new SolidBrush(Color.White))
                 {
                     var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
@@ -142,13 +143,49 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
 
         private ToolTip _tipBadge;
 
+        private void EstilarCard()
+        {
+            BackColor = Color.White;
+            Margin    = new Padding(4, 4, 4, 4);
+            Cursor    = Cursors.Hand;
+
+            foreach (Control c in Controls)
+                if (c is Label) c.BackColor = Color.Transparent;
+
+            Resize += (s, e) =>
+            {
+                if (Width > 10 && Height > 10)
+                    using (var path = MakeCardPath(new Rectangle(1, 1, Width - 2, Height - 2), 10))
+                        Region = new Region(path);
+            };
+
+            Paint += (s, e) =>
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                using (var path = MakeCardPath(new Rectangle(0, 0, Width - 1, Height - 1), 10))
+                using (var pen  = new Pen(Color.FromArgb(218, 218, 225)))
+                    e.Graphics.DrawPath(pen, path);
+            };
+        }
+
+        private static GraphicsPath MakeCardPath(Rectangle r, int radius)
+        {
+            var path = new GraphicsPath();
+            path.AddArc(r.X,                  r.Y,                   radius * 2, radius * 2, 180, 90);
+            path.AddArc(r.Right - radius * 2, r.Y,                   radius * 2, radius * 2, 270, 90);
+            path.AddArc(r.Right - radius * 2, r.Bottom - radius * 2, radius * 2, radius * 2,   0, 90);
+            path.AddArc(r.X,                  r.Bottom - radius * 2, radius * 2, radius * 2,  90, 90);
+            path.CloseFigure();
+            return path;
+        }
+
         public void SetFaltantesCount(int count)
         {
             _faltantesCount = count;
             if (count > 0)
             {
-                // ancho: "!1"→30, "!12"→36, "!99+"→44
-                _badgeFaltantes.Width  = count > 99 ? 44 : count > 9 ? 36 : 30;
+                // 1 dígito → círculo perfecto; 2 dígitos → píldora ancha; 99+ → más ancha
+                _badgeFaltantes.Width  = count > 99 ? 34 : count > 9 ? 28 : 22;
                 _badgeFaltantes.Height = 22;
                 _badgeFaltantes.Visible = true;
                 _badgeFaltantes.BringToFront();

@@ -11,5 +11,6 @@ namespace DomainModel.Interfaces
     {
         List<InformeDeCompra> GetByProyecto(Guid idProyecto);
         bool ExistsForProyectoOnDate(Guid idProyecto, DateTime fecha);
+        List<InformeDeCompra> GetHistorial();
     }
 }

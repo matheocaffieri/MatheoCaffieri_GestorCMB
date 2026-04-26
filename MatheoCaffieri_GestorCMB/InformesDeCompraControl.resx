@@ -119,7 +119,7 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="informeLayoutPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>91, 100</value>
+    <value>91, 115</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
     <value>4</value>
@@ -131,7 +131,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="buttonSearchClientes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>69, 42</value>
+    <value>135, 42</value>
   </data>
   <data name="&gt;&gt;informeLayoutPanel.Parent" xml:space="preserve">
     <value>$this</value>
@@ -181,10 +181,10 @@
     <value>True</value>
   </data>
   <data name="textBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>540, 26</value>
+    <value>545, 26</value>
   </data>
   <data name="textBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>409, 34</value>
+    <value>340, 31</value>
   </data>
   <data name="buttonSearchClientes.Text" xml:space="preserve">
     <value>Search</value>
@@ -217,7 +217,7 @@
     <value>2</value>
   </data>
   <data name="buttonSearchClientes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>967, 31</value>
+    <value>893, 18</value>
   </data>
   <data name="&gt;&gt;buttonBack.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -232,7 +232,7 @@
     <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="informeLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>973, 338</value>
+    <value>973, 323</value>
   </data>
   <data name="buttonBack.TabIndex" type="System.Int32, mscorlib">
     <value>37</value>

@@ -1,18 +1,13 @@
-﻿using DAL.FactoryDAL;
+using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Entities;
 using DomainModel.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.Entity;
-using System.Data.Entity.Core.EntityClient;
-using System.Data.Entity.Infrastructure;
-using System.Data.SqlClient;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using InformeCompraEf = DAL.Informe_compra;
 
 
@@ -28,7 +23,8 @@ namespace DAL.ProjectRepo
             {
                 IdInformeCompra = x.idInformeCompra,
                 IdProyecto = x.idProyecto,
-                FechaRealizacion = x.fechaRealizacion
+                FechaRealizacion = x.fechaRealizacion,
+                Estado = x.estado
             };
 
         public InformeDeCompraRepository(IUnitOfWork uow)
@@ -43,6 +39,7 @@ namespace DAL.ProjectRepo
             dst.idInformeCompra = src.IdInformeCompra;
             dst.idProyecto = src.IdProyecto;
             dst.fechaRealizacion = src.FechaRealizacion;
+            dst.estado = src.Estado;
         }
 
         public void Add(InformeDeCompra entity)
@@ -90,6 +87,16 @@ namespace DAL.ProjectRepo
         public List<InformeDeCompra> GetAll()
         {
             return _set.AsNoTracking()
+                       .Where(x => x.estado == "pendiente")
+                       .OrderByDescending(x => x.fechaRealizacion)
+                       .Select(ToDomainExpr)
+                       .ToList();
+        }
+
+        public List<InformeDeCompra> GetHistorial()
+        {
+            return _set.AsNoTracking()
+                       .Where(x => x.estado == "cancelado" || x.estado == "finalizado")
                        .OrderByDescending(x => x.fechaRealizacion)
                        .Select(ToDomainExpr)
                        .ToList();
@@ -98,7 +105,7 @@ namespace DAL.ProjectRepo
         public List<InformeDeCompra> GetByProyecto(Guid idProyecto)
         {
             return _set.AsNoTracking()
-                       .Where(x => x.idProyecto == idProyecto)
+                       .Where(x => x.idProyecto == idProyecto && x.estado == "pendiente")
                        .OrderByDescending(x => x.fechaRealizacion)
                        .Select(ToDomainExpr)
                        .ToList();
@@ -110,6 +117,7 @@ namespace DAL.ProjectRepo
 
             return _set.AsNoTracking()
                        .Any(x => x.idProyecto == idProyecto &&
+                                 x.estado == "pendiente" &&
                                  DbFunctions.TruncateTime(x.fechaRealizacion) == d);
         }
     }

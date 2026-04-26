@@ -11,6 +11,7 @@ namespace DomainModel
         public Guid IdInformeCompra { get; set; }
         public Guid IdProyecto { get; set; }
         public DateTime FechaRealizacion { get; set; }
+        public string Estado { get; set; }
         public Proyecto Proyecto { get; set; }
     }
 }
