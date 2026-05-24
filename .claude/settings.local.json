@@ -32,7 +32,16 @@
       "Bash(mkdir -p \"C:/Users/mcaff/source/repos/MatheoCaffieri_GestorCMB/packages/BCrypt.Net-Next.4.0.3\")",
       "Bash(unzip -o bcrypt.nupkg -d BCrypt.Net-Next.4.0.3)",
       "Bash(rm bcrypt.nupkg)",
-      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe\" MatheoCaffieri_GestorCMB.sln /p:Configuration=Debug /t:Build /v:minimal /nologo)"
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe\" MatheoCaffieri_GestorCMB.sln /p:Configuration=Debug /t:Build /v:minimal /nologo)",
+      "Bash(Get-ChildItem *)",
+      "Bash(Select-Object FullName)",
+      "Bash(ConvertTo-Csv -NoTypeInformation)",
+      "Bash(Out-String)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\" -Recurse -Force | Where-Object { !$_.PSIsContainer } | ForEach-Object { $_.FullName })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\" | Where-Object { $_.PSIsContainer } | Select-Object -ExpandProperty Name)",
+      "Bash(dir C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB *)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(xargs wc -l)"
     ]
   }
 }

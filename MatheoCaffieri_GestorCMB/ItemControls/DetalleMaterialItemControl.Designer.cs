@@ -132,14 +132,14 @@
             this.labelInfoCosto.Location = new System.Drawing.Point(255, 10);
             this.labelInfoCosto.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInfoCosto.Name = "labelInfoCosto";
-            this.labelInfoCosto.Size = new System.Drawing.Size(50, 17);
+            this.labelInfoCosto.Size = new System.Drawing.Size(75, 17);
             this.labelInfoCosto.TabIndex = 43;
             this.labelInfoCosto.Text = "$10000";
             //
             // label5
             //
             this.label5.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(310, 10);
+            this.label5.Location = new System.Drawing.Point(335, 10);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(8, 17);
@@ -151,10 +151,10 @@
             this.labelInfoValorGananciaMat.AutoEllipsis = true;
             this.labelInfoValorGananciaMat.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInfoValorGananciaMat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelInfoValorGananciaMat.Location = new System.Drawing.Point(323, 10);
+            this.labelInfoValorGananciaMat.Location = new System.Drawing.Point(348, 10);
             this.labelInfoValorGananciaMat.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInfoValorGananciaMat.Name = "labelInfoValorGananciaMat";
-            this.labelInfoValorGananciaMat.Size = new System.Drawing.Size(50, 17);
+            this.labelInfoValorGananciaMat.Size = new System.Drawing.Size(60, 17);
             this.labelInfoValorGananciaMat.TabIndex = 45;
             this.labelInfoValorGananciaMat.Text = "$12000";
             //
@@ -175,7 +175,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelInfoDescripcionArticulo);
             this.Name = "DetalleMaterialItemControl";
-            this.Size = new System.Drawing.Size(380, 37);
+            this.Size = new System.Drawing.Size(420, 37);
             this.ResumeLayout(false);
 
         }

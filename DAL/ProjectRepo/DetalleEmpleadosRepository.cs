@@ -52,7 +52,7 @@ namespace DAL.ProjectRepo
         public List<DetalleProyectoEmpleado> GetAll(Guid idProyecto)
         {
             return _set.AsNoTracking()
-                       .Where(d => d.idProyecto == idProyecto)
+                       .Where(d => d.idProyecto == idProyecto && d.estado == "1")
                        .Select(ToDomainExpr)
                        .ToList();
         }

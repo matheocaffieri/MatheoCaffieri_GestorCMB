@@ -12,9 +12,13 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
 {
     public partial class DetalleEmpleadoItemControl : UserControl
     {
+        public Guid IdEmpleado { get; set; }
+
         public DetalleEmpleadoItemControl()
         {
             InitializeComponent();
+            foreach (Control c in Controls)
+                c.DoubleClick += (s, e) => OnDoubleClick(e);
         }
 
         public string InfoNombreApellido

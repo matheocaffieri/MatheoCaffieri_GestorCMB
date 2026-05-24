@@ -88,5 +88,44 @@ namespace BL
                 }
             }
         }
+
+        public void QuitarMaterialDelProyecto(Guid idProyecto, Guid idMaterial)
+        {
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
+            if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
+
+            using (var ctx = new GestorCMBEntities())
+            using (var uow = new SqlUnitOfWork(ctx))
+            {
+                uow.Begin();
+
+                var detRepo = new DetalleMaterialesRepository(uow);
+                var invRepo = new InventarioRepository(uow);
+
+                try
+                {
+                    int cantidad = detRepo.Delete(idProyecto, idMaterial);
+
+                    if (cantidad > 0)
+                    {
+                        var inv = invRepo.GetByMaterialId(idMaterial);
+                        if (inv != null)
+                        {
+                            inv.Cantidad += cantidad;
+                            invRepo.Update(inv);
+                        }
+                    }
+
+                    uow.Commit();
+                    LoggerLogic.Info($"[ProyectoMaterialBL] Material quitado del proyecto. Proy={idProyecto} Mat={idMaterial} Cantidad={cantidad}");
+                }
+                catch (Exception ex)
+                {
+                    uow.Rollback();
+                    LoggerLogic.Error($"[ProyectoMaterialBL] Error al quitar material. Proy={idProyecto} Mat={idMaterial}", ex);
+                    throw;
+                }
+            }
+        }
     }
 }

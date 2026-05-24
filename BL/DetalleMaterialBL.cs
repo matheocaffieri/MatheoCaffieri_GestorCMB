@@ -71,5 +71,25 @@ namespace BL
                 throw;
             }
         }
+
+        public int Delete(Guid idProyecto, Guid idMaterial)
+        {
+            if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
+            if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
+
+            _uow.Begin();
+            try
+            {
+                int cantidad = _repo.Delete(idProyecto, idMaterial);
+                _uow.Commit();
+                return cantidad;
+            }
+            catch (Exception ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Error($"[DetalleMaterialBL] Delete ERROR. idProyecto={idProyecto}, idMaterial={idMaterial}. {ex.Message}");
+                throw;
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
 
 namespace MatheoCaffieri_GestorCMB
 {
@@ -22,6 +23,10 @@ namespace MatheoCaffieri_GestorCMB
     {
         private MainForm mainForm;
         private Proyecto _proyecto;
+        private Label _labelFechaCierreStatic;
+        private Label _labelFechaCierre;
+        private Panel _headerPanel;
+        private LinkLabel _linkVerAnalisis;
 
         public DetalleProyectoControl(MainForm mainForm, Proyecto proyecto)
         {
@@ -34,10 +39,71 @@ namespace MatheoCaffieri_GestorCMB
             DescripcionProyecto = proyecto.Descripcion;
             NombreCliente = proyecto.Cliente?.NombreContacto ?? "Cliente desconocido";
             FechaInicio = proyecto.FechaInicio.ToString("dd/MM/yyyy") ?? "Sin fecha";
-            EstadoProyecto = proyecto.Estado.ToString() ?? "Estado no disponible";
+            AplicarEstado(proyecto.Estado);
             UbicacionProyecto = proyecto.Ubicacion ?? "Ubicación desconocida";
 
             buttonModificar.Click += buttonModificar_Click;
+
+            buttonGenerarInforme.FlatStyle = FlatStyle.Flat;
+            buttonGenerarInforme.BackColor = Color.DodgerBlue;
+            buttonGenerarInforme.ForeColor = Color.White;
+            buttonGenerarInforme.FlatAppearance.BorderSize = 0;
+            buttonGenerarInforme.FlatAppearance.MouseOverBackColor = Color.FromArgb(25, 118, 210);
+            buttonGenerarInforme.Cursor = Cursors.Hand;
+
+            InicializarHeader(proyecto);
+
+            this.Resize += (_, __) =>
+            {
+                AjustarHeaderEstadoYFecha();
+                ActualizarHeaderPanelBounds();
+                ResetearScrolls();
+            };
+            AjustarHeaderEstadoYFecha();
+            ActualizarHeaderPanelBounds();
+        }
+
+        private void InicializarHeader(Proyecto proyecto)
+        {
+            labelNumProyecto.Visible = false;
+
+            labelDescProyecto.Location = new Point(25, 20);
+            labelDescProyecto.ForeColor = Color.FromArgb(25, 25, 25);
+
+            _labelFechaCierreStatic = new Label
+            {
+                Text = "Fecha de cierre:",
+                Font = new Font("Microsoft YaHei UI", 10f),
+                ForeColor = Color.FromArgb(70, 70, 70),
+                AutoSize = true
+            };
+
+            _labelFechaCierre = new Label
+            {
+                Text = proyecto.FechaFin.ToString("dd/MM/yyyy"),
+                Font = new Font("Microsoft YaHei UI", 10f),
+                ForeColor = Color.FromArgb(25, 25, 25),
+                AutoSize = true
+            };
+
+            AjustarHeaderEstadoYFecha();
+            EstablecerHeaderPanel();
+            ActualizarHeaderPanelBounds();
+        }
+
+        private void AjustarHeaderEstadoYFecha()
+        {
+            if (_labelFechaCierreStatic == null || _labelFechaCierre == null)
+                return;
+
+            // Fechas (cierre debajo de inicio)
+            _labelFechaCierreStatic.Location = new Point(label3.Left, label3.Bottom + 8);
+            _labelFechaCierre.Location = new Point(labelFechaInicio.Left, _labelFechaCierreStatic.Top);
+
+            // Estado arriba de Ubicación (misma columna izquierda)
+            int estadoY = Math.Max(0, label1.Top - 26); // label1 = "Ubicación:"
+            labelE.Location = new Point(label1.Left, estadoY);
+            labelEstado.Location = new Point(labelE.Right + 6, estadoY);
         }
 
         public Proyecto ProyectoData
@@ -100,6 +166,31 @@ namespace MatheoCaffieri_GestorCMB
             set => labelUtilidadEmpresa.Text = value ?? "0";
         }
 
+        private void AplicarEstado(EnumEstado estado)
+        {
+            EstadoProyecto = FormatEstado(estado);
+            switch (estado)
+            {
+                case EnumEstado.EnProceso: labelEstado.ForeColor = Color.CornflowerBlue; break;
+                case EnumEstado.Suspendido: labelEstado.ForeColor = Color.DarkOrange; break;
+                case EnumEstado.Finalizado: labelEstado.ForeColor = Color.MediumSeaGreen; break;
+                default: labelEstado.ForeColor = SystemColors.ControlText; break;
+            }
+
+            AjustarHeaderEstadoYFecha();
+        }
+
+        private static string FormatEstado(EnumEstado estado)
+        {
+            switch (estado)
+            {
+                case EnumEstado.EnProceso:  return "En proceso";
+                case EnumEstado.Suspendido: return "Suspendido";
+                case EnumEstado.Finalizado: return "Finalizado";
+                default:                    return estado.ToString();
+            }
+        }
+
         private void ObtenerDetallesEmpleadosItems(Guid idProyecto)
         {
             IDetalleGeneric<DetalleProyectoEmpleado> detalleRepo = new DetalleEmpleadoBL();
@@ -114,13 +205,18 @@ namespace MatheoCaffieri_GestorCMB
 
             detalleEmpleados.ForEach(e =>
             {
-                flowLayoutPanelEmp.Controls.Add(new DetalleEmpleadoItemControl
+                var item = new DetalleEmpleadoItemControl
                 {
+                    IdEmpleado           = e.Empleado.IdEmpleado,
                     InfoNombreApellido   = $"{e.Empleado.Nombre} {e.Empleado.Apellido}",
                     InfoNroDocumento     = $"{e.Empleado.NroDocumento}",
                     InfoSueldo           = $"${e.Empleado.Sueldo:N0}",
                     InfoValorGananciaEmp = $"${e.ValorGanancia:N0}"
-                });
+                };
+                item.DoubleClick += (s, ev) => EliminarEmpleadoDelProyecto(
+                    e.Empleado.IdEmpleado,
+                    $"{e.Empleado.Nombre} {e.Empleado.Apellido}");
+                flowLayoutPanelEmp.Controls.Add(item);
             });
             flowLayoutPanelEmp.ResumeLayout(true);
         }
@@ -140,15 +236,20 @@ namespace MatheoCaffieri_GestorCMB
 
             detalleMateriales.ForEach(e =>
             {
-                flowLayoutPanelMat.Controls.Add(new DetalleMaterialItemControl
+                var item = new DetalleMaterialItemControl
                 {
+                    IdMaterial              = e.Material.IdMaterial,
                     InfoDescripcionArticulo = $"{e.Material.DescripcionArticulo}",
                     InfoTipoArticulo        = $"{e.Material.TipoMaterial}",
                     InfoTipoUnidad          = $"{e.Material.TipoUnidad}",
                     InfoCantidad            = $"{e.Cantidad}",
                     InfoCosto               = $"${e.Material.CostoPorUnidad:N0}",
                     InfoValorGananciaMat    = $"${e.ValorGanancia:N0}"
-                });
+                };
+                item.DoubleClick += (s, ev) => EliminarMaterialDelProyecto(
+                    e.Material.IdMaterial,
+                    e.Material.DescripcionArticulo);
+                flowLayoutPanelMat.Controls.Add(item);
             });
             flowLayoutPanelMat.ResumeLayout(true);
         }
@@ -192,8 +293,6 @@ namespace MatheoCaffieri_GestorCMB
 
 
 
-
-
         private void RecalcularYActualizarTotales()
         {
             try
@@ -204,6 +303,7 @@ namespace MatheoCaffieri_GestorCMB
                 TotalEmpleados  = $"${informe.TotalEmpleados:N0}";
                 TotalMateriales = $"${informe.TotalMateriales:N0}";
                 UtilidadEmpresa = $"${utilidad:N0}";
+                labelUtilidadEmpresa.ForeColor = Color.MediumSeaGreen;
             }
             catch (Exception)
             {
@@ -215,54 +315,64 @@ namespace MatheoCaffieri_GestorCMB
         private void UpdateLayout()
         {
             if (panel1.ClientSize.Width == 0 || panel1.ClientSize.Height == 0) return;
+
+            // Freeze flow panels FIRST — before any size/width changes — so no intermediate
+            // layout runs while items are still at stale widths (which can corrupt AutoScrollPosition).
+            flowLayoutPanelEmp.SuspendLayout();
+            flowLayoutPanelMat.SuspendLayout();
+            flowLayoutPanelEmp.AutoScrollPosition = Point.Empty;
+            flowLayoutPanelMat.AutoScrollPosition = Point.Empty;
+
             panel1.SuspendLayout();
 
             const int hMargin = 6;
             const int vMargin = 4;
-            const int minH    = 37;
+            const int minH = 37;
 
-            // ── Horizontal ──────────────────────────────────────────────
-            // panel2 sin anchor Left/Right → centrado automáticamente
-            int sepLeft  = (panel1.ClientSize.Width - panel2.Width) / 2;
+            int sepLeft = (panel1.ClientSize.Width - panel2.Width) / 2;
             int sepRight = sepLeft + panel2.Width;
-            int empX     = flowLayoutPanelEmp.Left;
+            int empX = flowLayoutPanelEmp.Left;
             int empWidth = Math.Max(80, sepLeft - empX - hMargin);
-            int matX     = sepRight + hMargin;
+            int matX = sepRight + hMargin;
             int matWidth = Math.Max(80, panel1.ClientSize.Width - matX - hMargin);
 
             flowLayoutPanelEmp.Width = empWidth;
-            flowLayoutPanelMat.Left  = matX;
+            flowLayoutPanelMat.Left = matX;
             flowLayoutPanelMat.Width = matWidth;
 
-            // ── Vertical ────────────────────────────────────────────────
-            // panel3 (Anchor=Bottom) da el límite inferior duro
             int bottomBound = panel3.Top - vMargin;
-            int linkH       = linkLabelAgregarEmp.Height + vMargin * 2;
-            int empTop      = flowLayoutPanelEmp.Top;
-            int matTop      = flowLayoutPanelMat.Top;
+            int linkH = linkLabelAgregarEmp.Height + vMargin * 2;
+            int empTop = flowLayoutPanelEmp.Top;
+            int matTop = flowLayoutPanelMat.Top;
 
-            // Columna empleados
             int empContentH = Math.Max(minH, GetFlowHeight(flowLayoutPanelEmp));
-            int empAvailH   = Math.Max(minH, bottomBound - empTop - linkH);
-            flowLayoutPanelEmp.Height  = Math.Min(empContentH, empAvailH);
-            linkLabelAgregarEmp.Left   = empX;
-            linkLabelAgregarEmp.Top    = Math.Min(
+            int empAvailH = Math.Max(minH, bottomBound - empTop - linkH);
+            flowLayoutPanelEmp.Height = Math.Min(empContentH, empAvailH);
+            linkLabelAgregarEmp.Left = empX;
+            linkLabelAgregarEmp.Top = Math.Min(
                 flowLayoutPanelEmp.Bottom + vMargin,
                 bottomBound - linkLabelAgregarEmp.Height);
 
-            // Columna derecha: materiales + faltantes unificados en flowLayoutPanelMat
             int matContentH = Math.Max(minH, GetFlowHeight(flowLayoutPanelMat));
-            int matAvailH   = Math.Max(minH, bottomBound - matTop - linkH);
-            flowLayoutPanelMat.Height   = Math.Min(matContentH, matAvailH);
-            linkLabelAgregarMat.Left    = matX;
-            linkLabelAgregarMat.Top     = Math.Min(
+            int matAvailH = Math.Max(minH, bottomBound - matTop - linkH);
+            flowLayoutPanelMat.Height = Math.Min(matContentH, matAvailH);
+            linkLabelAgregarMat.Left = matX;
+            linkLabelAgregarMat.Top = Math.Min(
                 flowLayoutPanelMat.Bottom + vMargin,
                 bottomBound - linkLabelAgregarMat.Height);
 
-            // ── Hijos ───────────────────────────────────────────────────
             ResizeFlowChildren(flowLayoutPanelEmp, empWidth);
             ResizeFlowChildren(flowLayoutPanelMat, matWidth);
+
+            // Resume with one clean layout pass now that all widths are correct.
+            flowLayoutPanelEmp.ResumeLayout(true);
+            flowLayoutPanelMat.ResumeLayout(true);
+            flowLayoutPanelEmp.AutoScrollPosition = Point.Empty;
+            flowLayoutPanelMat.AutoScrollPosition = Point.Empty;
+
             panel1.ResumeLayout(true);
+
+            ResetearScrolls();
         }
 
         private int GetFlowHeight(System.Windows.Forms.FlowLayoutPanel panel)
@@ -273,16 +383,23 @@ namespace MatheoCaffieri_GestorCMB
             return h;
         }
 
-        private void ResizeFlowChildren(System.Windows.Forms.FlowLayoutPanel panel, int targetWidth)
+        private void ResizeFlowChildren(FlowLayoutPanel panel, int panelWidth)
         {
-            // Si el contenido va a desbordar verticalmente, el scrollbar ocupa ~17px de ancho.
-            // Reducimos el ancho de los hijos para que no aparezca scrollbar horizontal.
+            if (panel == null) return;
+
+            // Use the explicitly passed panelWidth (not panel.ClientSize.Width) to avoid
+            // stale scrollbar state from reducing ClientSize incorrectly before layout runs.
             bool willOverflow = panel.AutoScroll && GetFlowHeight(panel) > panel.Height;
-            int w = willOverflow
-                ? Math.Max(1, targetWidth - System.Windows.Forms.SystemInformation.VerticalScrollBarWidth)
-                : targetWidth;
-            foreach (System.Windows.Forms.Control c in panel.Controls)
+            int w = panelWidth - panel.Padding.Left - panel.Padding.Right;
+            if (willOverflow)
+                w -= SystemInformation.VerticalScrollBarWidth;
+            w = Math.Max(1, w);
+
+            foreach (Control c in panel.Controls)
+            {
+                c.Margin = new Padding(0, c.Margin.Top, 0, c.Margin.Bottom);
                 c.Width = w;
+            }
         }
 
         private Label MakeSectionTitle(string text)
@@ -333,7 +450,7 @@ namespace MatheoCaffieri_GestorCMB
             {
                 Text      = "Faltante",
                 Font      = new System.Drawing.Font("Microsoft YaHei UI", 8F),
-                ForeColor = System.Drawing.Color.FromArgb(80, 80, 80),
+                ForeColor = System.Drawing.Color.DarkOrange,
                 AutoSize  = false,
                 Size      = new System.Drawing.Size(100, 18),
                 Margin    = new System.Windows.Forms.Padding(0, 6, 0, 2),
@@ -343,7 +460,14 @@ namespace MatheoCaffieri_GestorCMB
 
         private void DetalleProyectoControl_Load(object sender, EventArgs e)
         {
-            panel1.SizeChanged += (_, __) => UpdateLayout();
+            panel1.SizeChanged += (_, __) => BeginInvoke(new Action(UpdateLayout));
+
+            this.ParentChanged += (_, __) =>
+            {
+                var form = this.FindForm();
+                if (form != null)
+                    form.ResizeEnd += (s2, e2) => { if (IsHandleCreated) BeginInvoke(new Action(UpdateLayout)); };
+            };
 
             if (_proyecto != null)
             {
@@ -354,73 +478,76 @@ namespace MatheoCaffieri_GestorCMB
             }
 
             UpdateLayout();
-            // Resetear scroll para que siempre arranquen desde arriba
-            flowLayoutPanelEmp.AutoScrollPosition    = Point.Empty;
-            flowLayoutPanelMat.AutoScrollPosition    = Point.Empty;
+            flowLayoutPanelEmp.AutoScrollPosition = Point.Empty;
+            flowLayoutPanelMat.AutoScrollPosition = Point.Empty;
             flowLayoutPanelMatFal.AutoScrollPosition = Point.Empty;
+
+            InicializarLinkAnalisis();
+            ActualizarHeaderPanelBounds();
         }
 
-        private void linkLabelAgregarMat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void InicializarLinkAnalisis()
         {
-            // Permiso primero
-            if (!SessionContext.Has("GESTIONAR_MATERIALES")) // ajustá key real
+            _linkVerAnalisis = new LinkLabel
             {
-                MessageBox.Show(
-                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
-                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            EventHandler handler = (_, __) =>
+                Text      = "Ver análisis",
+                AutoSize  = true,
+                Font      = new Font("Segoe UI", 9f),
+                Anchor    = AnchorStyles.Bottom | AnchorStyles.Right,
+                Cursor    = Cursors.Hand
+            };
+            _linkVerAnalisis.LinkClicked += (_, __) =>
             {
-                ObtenerDetallesMaterialesItems(_proyecto.IdProyecto);
-                ObtenerMaterialFaltanteItems(_proyecto.IdProyecto);
-                RecalcularYActualizarTotales();
-                UpdateLayout();
-                flowLayoutPanelMat.AutoScrollPosition    = Point.Empty;
-                flowLayoutPanelMatFal.AutoScrollPosition = Point.Empty;
+                using (var frm = new AnalisisProyectoForm(_proyecto.IdProyecto, _proyecto.Descripcion))
+                {
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.ShowDialog(this);
+                }
             };
 
-            using (var frm = new AgregarMaterialProyectoForm(_proyecto.IdProyecto))
-            {
-                frm.StartPosition = FormStartPosition.CenterParent;
+            panel1.Controls.Add(_linkVerAnalisis);
 
-                frm.MaterialesProyectoActualizados += handler;
-                frm.ShowDialog(this);
-                frm.MaterialesProyectoActualizados -= handler;
-            }
-
-
-
+            // Posicionar alineado verticalmente con labelTotalMateriales,
+            // pegado al margen derecho del panel.
+            _linkVerAnalisis.Location = new Point(
+                panel1.ClientSize.Width - _linkVerAnalisis.Width - 16,
+                labelTotalMateriales.Top
+            );
         }
 
-        private void linkLabelAgregarEmp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void ConfigurarPanelDetalle()
         {
-            // 1) Permiso
-            if (!SessionContext.Has("GESTIONAR_EMPLEADOS")) // ajustá la key real
-            {
-                MessageBox.Show(
-                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
-                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            panel1.BackColor = Color.FromArgb(241, 243, 247);
+            panel1.Padding = new Padding(12);
 
-            // 2) Abrir modal y refrescar si corresponde
-            using (var frm = new AgregarEmpleadoProyectoForm(_proyecto.IdProyecto))
+            panel1.Paint += (s, e) =>
             {
-                frm.StartPosition = FormStartPosition.CenterParent;
-                frm.ShowDialog(this);
-                ObtenerDetallesEmpleadosItems(_proyecto.IdProyecto);
-                RecalcularYActualizarTotales();
-                UpdateLayout();
-                flowLayoutPanelEmp.AutoScrollPosition = Point.Empty;
-            }
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                using (var path = MakeCardPath(new Rectangle(0, 0, panel1.Width - 1, panel1.Height - 1), 12))
+                using (var pen = new Pen(Color.FromArgb(220, 223, 230)))
+                    e.Graphics.DrawPath(pen, path);
+            };
+
+            panel1.Resize += (s, e) =>
+            {
+                if (panel1.Width > 4 && panel1.Height > 4)
+                {
+                    using (var path = MakeCardPath(new Rectangle(0, 0, panel1.Width - 1, panel1.Height - 1), 12))
+                        panel1.Region = new Region(path);
+                }
+            };
         }
 
-
-
+        private static GraphicsPath MakeCardPath(Rectangle r, int radius)
+        {
+            var path = new GraphicsPath();
+            path.AddArc(r.X, r.Y, radius * 2, radius * 2, 180, 90);
+            path.AddArc(r.Right - radius * 2, r.Y, radius * 2, radius * 2, 270, 90);
+            path.AddArc(r.Right - radius * 2, r.Bottom - radius * 2, radius * 2, radius * 2, 0, 90);
+            path.AddArc(r.X, r.Bottom - radius * 2, radius * 2, radius * 2, 90, 90);
+            path.CloseFigure();
+            return path;
+        }
 
         private void buttonModificar_Click(object sender, EventArgs e)
         {
@@ -429,11 +556,15 @@ namespace MatheoCaffieri_GestorCMB
                 frm.StartPosition = FormStartPosition.CenterParent;
                 if (frm.ShowDialog(this) == DialogResult.OK)
                 {
-                    // Refrescar labels con los nuevos datos
                     DescripcionProyecto = _proyecto.Descripcion;
                     UbicacionProyecto = _proyecto.Ubicacion;
                     FechaInicio = _proyecto.FechaInicio.ToString("dd/MM/yyyy");
-                    EstadoProyecto = _proyecto.Estado.ToString();
+                    AplicarEstado(_proyecto.Estado);
+
+                    if (_labelFechaCierre != null)
+                        _labelFechaCierre.Text = _proyecto.FechaFin.ToString("dd/MM/yyyy");
+
+                    AjustarHeaderEstadoYFecha();
                 }
             }
         }
@@ -459,6 +590,245 @@ namespace MatheoCaffieri_GestorCMB
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void EstablecerHeaderPanel()
+        {
+            const int panX = 12, panY = 4;
+            int panH     = Math.Max(1, panel1.Top - panY - 4);
+            var bgColor  = Color.FromArgb(245, 245, 245);
+
+            _headerPanel = new RoundedPanel
+            {
+                BackColor = bgColor,
+                Location  = new Point(panX, panY),
+                Size      = new Size(Math.Max(1, this.Width - panX * 2), panH),
+                Anchor    = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
+            };
+
+            Control[] headerControls =
+            {
+                labelNumProyecto, labelDescProyecto,
+                label2, labelNomCliente,
+                label1, labelUbiProyecto,
+                buttonModificar, buttonGenerarInforme,
+                label3, labelFechaInicio,
+                labelE, labelEstado,
+                _labelFechaCierreStatic, _labelFechaCierre,
+            };
+
+            foreach (var ctrl in headerControls)
+            {
+                if (ctrl == null) continue;
+                if (ctrl is Label lbl)
+                    lbl.BackColor = bgColor;
+                ctrl.Location = new Point(ctrl.Left - panX, ctrl.Top - panY);
+                _headerPanel.Controls.Add(ctrl); // WinForms auto-remueve del padre anterior
+            }
+
+            this.Controls.Add(_headerPanel);
+        }
+
+        private sealed class RoundedPanel : Panel
+        {
+            private const int Radius = 10;
+
+            public RoundedPanel()
+            {
+                SetStyle(
+                    ControlStyles.UserPaint |
+                    ControlStyles.AllPaintingInWmPaint |
+                    ControlStyles.OptimizedDoubleBuffer |
+                    ControlStyles.ResizeRedraw,
+                    true);
+            }
+
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                using (var path = BuildPath(ClientRectangle, Radius))
+                using (var brush = new SolidBrush(BackColor))
+                    e.Graphics.FillPath(brush, path);
+            }
+
+            private static System.Drawing.Drawing2D.GraphicsPath BuildPath(Rectangle r, int rad)
+            {
+                int d = rad * 2;
+                var gp = new System.Drawing.Drawing2D.GraphicsPath();
+                gp.AddArc(r.X,         r.Y,          d, d, 180, 90);
+                gp.AddArc(r.Right - d, r.Y,          d, d, 270, 90);
+                gp.AddArc(r.Right - d, r.Bottom - d, d, d,   0, 90);
+                gp.AddArc(r.X,         r.Bottom - d, d, d,  90, 90);
+                gp.CloseFigure();
+                return gp;
+            }
+        }
+
+        private void linkLabelAgregarMat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (!SessionContext.Has("GESTIONAR_MATERIALES"))
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            EventHandler handler = (_, __) =>
+            {
+                ObtenerDetallesMaterialesItems(_proyecto.IdProyecto);
+                ObtenerMaterialFaltanteItems(_proyecto.IdProyecto);
+                RecalcularYActualizarTotales();
+                UpdateLayout();
+                flowLayoutPanelMat.AutoScrollPosition = Point.Empty;
+                flowLayoutPanelMatFal.AutoScrollPosition = Point.Empty;
+            };
+
+            using (var frm = new AgregarMaterialProyectoForm(_proyecto.IdProyecto))
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+
+                frm.MaterialesProyectoActualizados += handler;
+                frm.ShowDialog(this);
+                frm.MaterialesProyectoActualizados -= handler;
+            }
+        }
+
+        private void linkLabelAgregarEmp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (!SessionContext.Has("GESTIONAR_EMPLEADOS"))
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (var frm = new AgregarEmpleadoProyectoForm(_proyecto.IdProyecto))
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+                ObtenerDetallesEmpleadosItems(_proyecto.IdProyecto);
+                RecalcularYActualizarTotales();
+                UpdateLayout();
+                flowLayoutPanelEmp.AutoScrollPosition = Point.Empty;
+            }
+        }
+
+        private void ActualizarHeaderPanelBounds()
+        {
+            if (_headerPanel == null)
+                return;
+
+            const int panX = 12;
+            const int panY = 4;
+            int panH = Math.Max(1, panel1.Top - panY - 4);
+
+            _headerPanel.Location = new Point(panX, panY);
+            _headerPanel.Size = new Size(Math.Max(1, this.Width - panX * 2), panH);
+        }
+
+        private void EliminarEmpleadoDelProyecto(Guid idEmpleado, string nombreCompleto)
+        {
+            if (!SessionContext.Has("GESTIONAR_EMPLEADOS"))
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var respuesta = MessageBox.Show(
+                $"¿Querés eliminar a {nombreCompleto} del proyecto?",
+                "Eliminar empleado",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (respuesta != DialogResult.Yes) return;
+
+            try
+            {
+                new ProyectoEmpleadoBL().QuitarEmpleadoDelProyecto(_proyecto.IdProyecto, idEmpleado);
+                ObtenerDetallesEmpleadosItems(_proyecto.IdProyecto);
+                RecalcularYActualizarTotales();
+                UpdateLayout();
+                flowLayoutPanelEmp.AutoScrollPosition = Point.Empty;
+            }
+            catch (AppException ex)
+            {
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception)
+            {
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void EliminarMaterialDelProyecto(Guid idMaterial, string descripcion)
+        {
+            if (!SessionContext.Has("GESTIONAR_MATERIALES"))
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_sin_permisos") ?? "No tenés permisos para acceder a esta pantalla.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var respuesta = MessageBox.Show(
+                $"¿Querés eliminar \"{descripcion}\" del proyecto?",
+                "Eliminar material",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (respuesta != DialogResult.Yes) return;
+
+            try
+            {
+                new ProyectoMaterialBL().QuitarMaterialDelProyecto(_proyecto.IdProyecto, idMaterial);
+                ObtenerDetallesMaterialesItems(_proyecto.IdProyecto);
+                ObtenerMaterialFaltanteItems(_proyecto.IdProyecto);
+                RecalcularYActualizarTotales();
+                UpdateLayout();
+                flowLayoutPanelMat.AutoScrollPosition = Point.Empty;
+            }
+            catch (AppException ex)
+            {
+                var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception)
+            {
+                var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ResetearScrolls()
+        {
+            if (!IsHandleCreated) return;
+
+            BeginInvoke(new Action(() =>
+            {
+                ResetFlow(flowLayoutPanelEmp);
+                ResetFlow(flowLayoutPanelMat);
+                ResetFlow(flowLayoutPanelMatFal);
+            }));
+        }
+
+        private static void ResetFlow(FlowLayoutPanel panel)
+        {
+            if (panel == null) return;
+
+            panel.AutoScrollPosition = Point.Empty;
+
+            if (panel.Controls.Count > 0)
+                panel.ScrollControlIntoView(panel.Controls[0]);
         }
     }
 }

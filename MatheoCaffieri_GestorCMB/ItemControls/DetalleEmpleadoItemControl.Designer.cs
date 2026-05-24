@@ -66,7 +66,7 @@
             this.labelInfoSueldo.Location = new System.Drawing.Point(230, 10);
             this.labelInfoSueldo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInfoSueldo.Name = "labelInfoSueldo";
-            this.labelInfoSueldo.Size = new System.Drawing.Size(63, 17);
+            this.labelInfoSueldo.Size = new System.Drawing.Size(85, 17);
             this.labelInfoSueldo.TabIndex = 33;
             this.labelInfoSueldo.Text = "$500000";
             // 
@@ -75,10 +75,10 @@
             this.labelInfoValorGananciaEmp.AutoEllipsis = true;
             this.labelInfoValorGananciaEmp.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInfoValorGananciaEmp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelInfoValorGananciaEmp.Location = new System.Drawing.Point(314, 10);
+            this.labelInfoValorGananciaEmp.Location = new System.Drawing.Point(331, 10);
             this.labelInfoValorGananciaEmp.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInfoValorGananciaEmp.Name = "labelInfoValorGananciaEmp";
-            this.labelInfoValorGananciaEmp.Size = new System.Drawing.Size(63, 17);
+            this.labelInfoValorGananciaEmp.Size = new System.Drawing.Size(70, 17);
             this.labelInfoValorGananciaEmp.TabIndex = 34;
             this.labelInfoValorGananciaEmp.Text = "$100000";
             // 
@@ -105,7 +105,7 @@
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(296, 10);
+            this.label3.Location = new System.Drawing.Point(318, 10);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(10, 17);
@@ -125,7 +125,7 @@
             this.Controls.Add(this.labelInfoNroDocumento);
             this.Controls.Add(this.labelInfoNombreApellido);
             this.Name = "DetalleEmpleadoItemControl";
-            this.Size = new System.Drawing.Size(393, 37);
+            this.Size = new System.Drawing.Size(415, 37);
             this.ResumeLayout(false);
 
         }

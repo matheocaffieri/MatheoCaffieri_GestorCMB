@@ -9,5 +9,6 @@ namespace DomainModel.Interfaces
     public interface IDetalleMaterialesRepository : IDetalleGeneric<DetalleProyectoMaterial>
     {
         void AddOrUpdate(Guid idProyecto, Guid idMaterial, int cantidad, double valorGanancia, DateTime fechaIngreso);
+        int Delete(Guid idProyecto, Guid idMaterial);
     }
 }

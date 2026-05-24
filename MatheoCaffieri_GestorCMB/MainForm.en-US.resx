@@ -122,19 +122,19 @@
     <value>180, 22</value>
   </data>
   <data name="verProyectosToolStripMenuItem.Text" xml:space="preserve">
-    <value>View proyects</value>
+    <value>View projects</value>
   </data>
   <data name="agregarProyectosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>180, 22</value>
   </data>
   <data name="agregarProyectosToolStripMenuItem.Text" xml:space="preserve">
-    <value>Add proyect</value>
+    <value>Add project</value>
   </data>
   <data name="proyectosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>64, 20</value>
   </data>
   <data name="proyectosToolStripMenuItem.Text" xml:space="preserve">
-    <value>Proyects</value>
+    <value>Projects</value>
   </data>
   <data name="verInventarioToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>198, 22</value>

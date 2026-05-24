@@ -122,12 +122,12 @@
     <value>154, 25</value>
   </data>
   <data name="label2.Text" xml:space="preserve">
-    <value>Search proyects</value>
+    <value>Search projects</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
     <value>423, 70</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
-    <value>Check proyects</value>
+    <value>View projects</value>
   </data>
 </root>

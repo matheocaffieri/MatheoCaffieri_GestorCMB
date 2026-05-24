@@ -213,18 +213,25 @@ namespace BL
                 // 3) aplicar compra: sumar al detalle del proyecto
                 foreach (var f in faltantes)
                 {
+                    var descLow = (f.descripcionArticuloFaltante ?? "").Trim().ToLowerInvariant();
+                    var tipoLow = (f.tipoMaterialFaltante        ?? "").Trim().ToLowerInvariant();
+                    var unidLow = (f.tipoUnidadMaterialFaltante  ?? "").Trim().ToLowerInvariant();
+
+                    // Traemos candidatos por descripción (la más discriminante) y filtramos en memoria.
                     var idMaterial = db.Material
+                        .Where(m => m.descripcionArticulo == f.descripcionArticuloFaltante)
+                        .AsEnumerable()
                         .Where(m =>
-                            m.descripcionArticulo == f.descripcionArticuloFaltante &&
-                            m.tipoMaterial == f.tipoMaterialFaltante &&
-                            m.tipoUnidad == f.tipoUnidadMaterialFaltante
-                        )
+                            (m.descripcionArticulo ?? "").Trim().ToLowerInvariant() == descLow &&
+                            (m.tipoMaterial        ?? "").Trim().ToLowerInvariant() == tipoLow &&
+                            (m.tipoUnidad          ?? "").Trim().ToLowerInvariant() == unidLow)
                         .Select(m => m.idMaterial)
                         .FirstOrDefault();
 
                     if (idMaterial == Guid.Empty)
                     {
-                        throw new AppException("err_informe_material_no_existe");
+                        LoggerLogic.Warn($"[InformeDeCompraBL] Material no encontrado en inventario, se omite. Desc='{f.descripcionArticuloFaltante}'");
+                        continue;
                     }
 
                     detMatRepo.AddOrUpdate(
@@ -236,7 +243,7 @@ namespace BL
                     );
                 }
 
-                // 4) guardar snapshot y borrar detalle del informe
+                // 4) guardar snapshot
                 var snapshot = faltantes.Select(f => new MaterialFaltante
                 {
                     CantidadFaltante               = (int)f.cantidadFaltante,
@@ -246,17 +253,21 @@ namespace BL
                 }).ToList();
                 SnapshotService.Guardar(idInformeCompra, snapshot);
 
-                var detInfRows = db.Detalle_informe_material_faltante
-                    .Where(d => d.idInformeCompra == idInformeCompra)
+                // 5) borrar TODOS los Detalle_informe que referencien estos faltantes
+                //    (puede haber informes viejos pendientes del mismo proyecto apuntando a los mismos IDs)
+                var detInfTodos = db.Detalle_informe_material_faltante
+                    .Where(d => idsFaltantes.Contains(d.idMaterialFaltante))
                     .ToList();
-                db.Detalle_informe_material_faltante.RemoveRange(detInfRows);
+                db.Detalle_informe_material_faltante.RemoveRange(detInfTodos);
 
-                // 5) marcar informe como finalizado (no se borra)
-                var infRow = db.Informe_compra.FirstOrDefault(i => i.idInformeCompra == idInformeCompra);
-                if (infRow != null)
-                    infRow.estado = "finalizado";
+                // 6) marcar el informe actual como finalizado; cancelar los informes viejos huérfanos
+                var todosInformes = db.Informe_compra
+                    .Where(i => i.idProyecto == idProyecto && i.estado == "pendiente")
+                    .ToList();
+                foreach (var inf in todosInformes)
+                    inf.estado = inf.idInformeCompra == idInformeCompra ? "finalizado" : "cancelado";
 
-                // 6) borrar Material_faltante (los del informe)
+                // 7) borrar Material_faltante — ahora sin referencias pendientes
                 var mfRows = db.Material_faltante
                     .Where(m => idsFaltantes.Contains(m.idMaterialFaltante))
                     .ToList();

@@ -89,5 +89,16 @@ namespace DAL.ProjectRepo
 
             // NO SaveChanges (lo hace el UoW)
         }
+
+        public int Delete(Guid idProyecto, Guid idMaterial)
+        {
+            var row = _set.FirstOrDefault(d => d.idProyecto == idProyecto && d.idMaterial == idMaterial);
+            if (row == null) return 0;
+
+            int cantidad = row.cantidad;
+            _set.Remove(row);
+            return cantidad;
+            // NO SaveChanges (lo hace el UoW)
+        }
     }
 }
