@@ -41,7 +41,18 @@
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\" | Where-Object { $_.PSIsContainer } | Select-Object -ExpandProperty Name)",
       "Bash(dir C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB *)",
       "Bash(Format-Table -AutoSize)",
-      "Bash(xargs wc -l)"
+      "Bash(xargs wc -l)",
+      "Bash(where msbuild *)",
+      "Bash(\"C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual Studio\\\\Installer\\\\vswhere.exe\" -latest -requires Microsoft.Component.MSBuild -find MSBuild\\\\**\\\\Bin\\\\MSBuild.exe)",
+      "Bash(C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual Studio\\\\Installer\\\\vswhere.exe *)",
+      "Bash(dir \"C:\\\\Program Files\\\\Microsoft Visual Studio\")",
+      "Bash(dir \"C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual Studio\")",
+      "Bash(dir C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022 *)",
+      "Bash(\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB.csproj\" /t:Build /p:Configuration=Debug /m /v:m /nologo)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB.csproj\" -t:Build -p:Configuration=Debug -m -v:m -nologo 2>&1 | Select-Object -Last 60)",
+      "PowerShell(New-Item *)",
+      "Bash(Select-Object -First 1)",
+      "Bash(grep -E \"\\\\.cs$\")"
     ]
   }
 }

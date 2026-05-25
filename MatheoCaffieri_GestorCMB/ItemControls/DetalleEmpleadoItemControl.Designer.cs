@@ -47,6 +47,7 @@
             this.labelInfoNombreApellido.Size = new System.Drawing.Size(118, 17);
             this.labelInfoNombreApellido.TabIndex = 31;
             this.labelInfoNombreApellido.Text = "Nombre y apellido";
+            this.labelInfoNombreApellido.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelInfoNroDocumento
             // 
@@ -58,6 +59,7 @@
             this.labelInfoNroDocumento.Size = new System.Drawing.Size(70, 17);
             this.labelInfoNroDocumento.TabIndex = 32;
             this.labelInfoNroDocumento.Text = "12345678";
+            this.labelInfoNroDocumento.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // labelInfoSueldo
             // 
@@ -69,18 +71,19 @@
             this.labelInfoSueldo.Size = new System.Drawing.Size(85, 17);
             this.labelInfoSueldo.TabIndex = 33;
             this.labelInfoSueldo.Text = "$500000";
+            this.labelInfoSueldo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // labelInfoValorGananciaEmp
             // 
             this.labelInfoValorGananciaEmp.AutoEllipsis = true;
             this.labelInfoValorGananciaEmp.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInfoValorGananciaEmp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInfoValorGananciaEmp.Location = new System.Drawing.Point(331, 10);
             this.labelInfoValorGananciaEmp.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInfoValorGananciaEmp.Name = "labelInfoValorGananciaEmp";
             this.labelInfoValorGananciaEmp.Size = new System.Drawing.Size(70, 17);
             this.labelInfoValorGananciaEmp.TabIndex = 34;
             this.labelInfoValorGananciaEmp.Text = "$100000";
+            this.labelInfoValorGananciaEmp.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label1
             // 
@@ -91,6 +94,7 @@
             this.label1.Size = new System.Drawing.Size(10, 17);
             this.label1.TabIndex = 35;
             this.label1.Text = "|";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
@@ -101,6 +105,7 @@
             this.label2.Size = new System.Drawing.Size(10, 17);
             this.label2.TabIndex = 36;
             this.label2.Text = "|";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
@@ -111,6 +116,7 @@
             this.label3.Size = new System.Drawing.Size(10, 17);
             this.label3.TabIndex = 37;
             this.label3.Text = "|";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // DetalleEmpleadoItemControl
             // 

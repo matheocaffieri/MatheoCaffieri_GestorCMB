@@ -51,6 +51,7 @@
             this.labelInfoDescripcionArticulo.Size = new System.Drawing.Size(70, 17);
             this.labelInfoDescripcionArticulo.TabIndex = 32;
             this.labelInfoDescripcionArticulo.Text = "DescripcionArticulo";
+            this.labelInfoDescripcionArticulo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // label1
             //
@@ -61,6 +62,7 @@
             this.label1.Size = new System.Drawing.Size(8, 17);
             this.label1.TabIndex = 36;
             this.label1.Text = "|";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //
             // labelInfoTipoArt
             //
@@ -72,6 +74,7 @@
             this.labelInfoTipoArt.Size = new System.Drawing.Size(40, 17);
             this.labelInfoTipoArt.TabIndex = 37;
             this.labelInfoTipoArt.Text = "TipoArt";
+            this.labelInfoTipoArt.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // label2
             //
@@ -82,6 +85,7 @@
             this.label2.Size = new System.Drawing.Size(8, 17);
             this.label2.TabIndex = 38;
             this.label2.Text = "|";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //
             // labelInfoTipoUnidad
             //
@@ -93,6 +97,7 @@
             this.labelInfoTipoUnidad.Size = new System.Drawing.Size(40, 17);
             this.labelInfoTipoUnidad.TabIndex = 39;
             this.labelInfoTipoUnidad.Text = "Unidad";
+            this.labelInfoTipoUnidad.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //
             // label3
             //
@@ -103,6 +108,7 @@
             this.label3.Size = new System.Drawing.Size(8, 17);
             this.label3.TabIndex = 40;
             this.label3.Text = "|";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //
             // labelInfoCantidad
             //
@@ -114,6 +120,7 @@
             this.labelInfoCantidad.Size = new System.Drawing.Size(30, 17);
             this.labelInfoCantidad.TabIndex = 41;
             this.labelInfoCantidad.Text = "10";
+            this.labelInfoCantidad.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //
             // label4
             //
@@ -124,6 +131,7 @@
             this.label4.Size = new System.Drawing.Size(8, 17);
             this.label4.TabIndex = 42;
             this.label4.Text = "|";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //
             // labelInfoCosto
             //
@@ -135,6 +143,7 @@
             this.labelInfoCosto.Size = new System.Drawing.Size(75, 17);
             this.labelInfoCosto.TabIndex = 43;
             this.labelInfoCosto.Text = "$10000";
+            this.labelInfoCosto.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //
             // label5
             //
@@ -145,18 +154,19 @@
             this.label5.Size = new System.Drawing.Size(8, 17);
             this.label5.TabIndex = 44;
             this.label5.Text = "|";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //
             // labelInfoValorGananciaMat
             //
             this.labelInfoValorGananciaMat.AutoEllipsis = true;
             this.labelInfoValorGananciaMat.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInfoValorGananciaMat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInfoValorGananciaMat.Location = new System.Drawing.Point(348, 10);
             this.labelInfoValorGananciaMat.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInfoValorGananciaMat.Name = "labelInfoValorGananciaMat";
             this.labelInfoValorGananciaMat.Size = new System.Drawing.Size(60, 17);
             this.labelInfoValorGananciaMat.TabIndex = 45;
             this.labelInfoValorGananciaMat.Text = "$12000";
+            this.labelInfoValorGananciaMat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //
             // DetalleMaterialItemControl
             //

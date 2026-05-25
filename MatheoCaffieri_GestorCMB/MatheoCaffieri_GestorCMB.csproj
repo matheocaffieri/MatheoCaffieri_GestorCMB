@@ -189,11 +189,23 @@
     <Compile Include="ItemControls\ClientesItemControl.Designer.cs">
       <DependentUpon>ClientesItemControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ItemControls\DetalleEmpleadoHeaderControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ItemControls\DetalleEmpleadoHeaderControl.Designer.cs">
+      <DependentUpon>DetalleEmpleadoHeaderControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ItemControls\DetalleEmpleadoItemControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ItemControls\DetalleEmpleadoItemControl.Designer.cs">
       <DependentUpon>DetalleEmpleadoItemControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ItemControls\DetalleMaterialHeaderControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ItemControls\DetalleMaterialHeaderControl.Designer.cs">
+      <DependentUpon>DetalleMaterialHeaderControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ItemControls\DetalleMaterialItemControl.cs">
       <SubType>UserControl</SubType>
@@ -201,6 +213,13 @@
     <Compile Include="ItemControls\DetalleMaterialItemControl.Designer.cs">
       <DependentUpon>DetalleMaterialItemControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ItemControls\MaterialFaltanteHeaderControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ItemControls\MaterialFaltanteHeaderControl.Designer.cs">
+      <DependentUpon>MaterialFaltanteHeaderControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ItemControls\MultiColumnRowLayout.cs" />
     <Compile Include="ItemControls\EmpleadosItemControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

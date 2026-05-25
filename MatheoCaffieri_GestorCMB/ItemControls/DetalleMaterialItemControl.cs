@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,8 +17,38 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         public DetalleMaterialItemControl()
         {
             InitializeComponent();
+            DoubleBuffered = true;
             foreach (Control c in Controls)
                 c.DoubleClick += (s, e) => OnDoubleClick(e);
+            ApplyLayout();
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            ApplyLayout();
+        }
+
+        private void ApplyLayout()
+        {
+            SuspendLayout();
+            MultiColumnRowLayout.Layout(
+                new List<MultiColumnRowLayout.ColumnSpec>
+                {
+                    new MultiColumnRowLayout.ColumnSpec { Label = labelInfoDescripcionArticulo, MinWidth = 70, Weight = 24, Align = ContentAlignment.MiddleLeft   },
+                    new MultiColumnRowLayout.ColumnSpec { Label = labelInfoTipoArt,             MinWidth = 60, Weight = 18, Align = ContentAlignment.MiddleLeft   },
+                    new MultiColumnRowLayout.ColumnSpec { Label = labelInfoTipoUnidad,          MinWidth = 40, Weight = 10, Align = ContentAlignment.MiddleCenter },
+                    new MultiColumnRowLayout.ColumnSpec { Label = labelInfoCantidad,            MinWidth = 35, Weight = 8,  Align = ContentAlignment.MiddleRight  },
+                    new MultiColumnRowLayout.ColumnSpec { Label = labelInfoCosto,               MinWidth = 70, Weight = 20, Align = ContentAlignment.MiddleRight  },
+                    new MultiColumnRowLayout.ColumnSpec { Label = labelInfoValorGananciaMat,    MinWidth = 65, Weight = 20, Align = ContentAlignment.MiddleRight  },
+                },
+                new List<Label> { label1, label2, label3, label4, label5 },
+                totalWidth: ClientSize.Width,
+                paddingX:   4,
+                sepWidth:   8,
+                rowY:       10,
+                rowHeight:  17);
+            ResumeLayout(false);
         }
 
         public string InfoDescripcionArticulo

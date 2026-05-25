@@ -48,10 +48,10 @@
             this.labelInfoDescripcionArtFalt.Size = new System.Drawing.Size(139, 17);
             this.labelInfoDescripcionArtFalt.TabIndex = 32;
             this.labelInfoDescripcionArtFalt.Text = "DescripcionArtFaltante";
+            this.labelInfoDescripcionArtFalt.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label1
             // 
-            this.label1.AutoEllipsis = true;
             this.label1.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Firebrick;
             this.label1.Location = new System.Drawing.Point(151, 10);
@@ -60,6 +60,7 @@
             this.label1.Size = new System.Drawing.Size(10, 17);
             this.label1.TabIndex = 33;
             this.label1.Text = "|";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelInfoTipoArtFalt
             // 
@@ -72,10 +73,10 @@
             this.labelInfoTipoArtFalt.Size = new System.Drawing.Size(101, 17);
             this.labelInfoTipoArtFalt.TabIndex = 34;
             this.labelInfoTipoArtFalt.Text = "TipoArtFaltante";
+            this.labelInfoTipoArtFalt.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label2
             // 
-            this.label2.AutoEllipsis = true;
             this.label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Firebrick;
             this.label2.Location = new System.Drawing.Point(278, 10);
@@ -84,6 +85,7 @@
             this.label2.Size = new System.Drawing.Size(10, 17);
             this.label2.TabIndex = 35;
             this.label2.Text = "|";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelInfoUnidadFalt
             // 
@@ -96,10 +98,10 @@
             this.labelInfoUnidadFalt.Size = new System.Drawing.Size(52, 17);
             this.labelInfoUnidadFalt.TabIndex = 36;
             this.labelInfoUnidadFalt.Text = "Unidad";
+            this.labelInfoUnidadFalt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
-            this.label3.AutoEllipsis = true;
             this.label3.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Firebrick;
             this.label3.Location = new System.Drawing.Point(356, 10);
@@ -108,19 +110,20 @@
             this.label3.Size = new System.Drawing.Size(10, 17);
             this.label3.TabIndex = 37;
             this.label3.Text = "|";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelInfoCantidadFaltante
             // 
             this.labelInfoCantidadFaltante.AutoEllipsis = true;
             this.labelInfoCantidadFaltante.Font = new System.Drawing.Font("Microsoft YaHei UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInfoCantidadFaltante.ForeColor = System.Drawing.Color.Firebrick;
-            this.labelInfoCantidadFaltante.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInfoCantidadFaltante.Location = new System.Drawing.Point(374, 10);
             this.labelInfoCantidadFaltante.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInfoCantidadFaltante.Name = "labelInfoCantidadFaltante";
             this.labelInfoCantidadFaltante.Size = new System.Drawing.Size(32, 17);
             this.labelInfoCantidadFaltante.TabIndex = 38;
             this.labelInfoCantidadFaltante.Text = "10";
+            this.labelInfoCantidadFaltante.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MaterialFaltanteItemControl
             // 

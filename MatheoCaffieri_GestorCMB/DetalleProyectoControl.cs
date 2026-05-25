@@ -199,8 +199,7 @@ namespace MatheoCaffieri_GestorCMB
             flowLayoutPanelEmp.SuspendLayout();
             flowLayoutPanelEmp.Controls.Clear();
             flowLayoutPanelEmp.Controls.Add(MakeSectionTitle("Empleados"));
-            flowLayoutPanelEmp.Controls.Add(MakeColumnHeader(
-                "Nombre               |  Documento  |  Sueldo    |  Ganancia"));
+            flowLayoutPanelEmp.Controls.Add(new DetalleEmpleadoHeaderControl());
             flowLayoutPanelEmp.Controls.Add(MakeSeparator());
 
             detalleEmpleados.ForEach(e =>
@@ -230,8 +229,7 @@ namespace MatheoCaffieri_GestorCMB
             flowLayoutPanelMat.SuspendLayout();
             flowLayoutPanelMat.Controls.Clear();
             flowLayoutPanelMat.Controls.Add(MakeSectionTitle("Materiales"));
-            flowLayoutPanelMat.Controls.Add(MakeColumnHeader(
-                "Descripción  |  Categoría  |  Unidad  |  Cant.  |  Precio/U  |  Ganancia/U"));
+            flowLayoutPanelMat.Controls.Add(new DetalleMaterialHeaderControl());
             flowLayoutPanelMat.Controls.Add(MakeSeparator());
 
             detalleMateriales.ForEach(e =>
@@ -267,9 +265,7 @@ namespace MatheoCaffieri_GestorCMB
             {
                 flowLayoutPanelMat.SuspendLayout();
                 flowLayoutPanelMat.Controls.Add(MakeFaltanteDivider());
-                flowLayoutPanelMat.Controls.Add(MakeColumnHeader(
-                    "Descripción           |  Categoría           |  Unidad  |  Cant. faltante",
-                    compact: true));
+                flowLayoutPanelMat.Controls.Add(new MaterialFaltanteHeaderControl());
                 flowLayoutPanelMat.Controls.Add(MakeSeparator());
 
                 detalleMaterialesFaltantes.ForEach(e =>
@@ -412,22 +408,6 @@ namespace MatheoCaffieri_GestorCMB
                 AutoSize  = false,
                 Size      = new System.Drawing.Size(100, 37),
                 Margin    = new System.Windows.Forms.Padding(0, 2, 0, 4),
-                BackColor = System.Drawing.Color.Transparent,
-            };
-        }
-
-        private Label MakeColumnHeader(string text, bool compact = false)
-        {
-            return new Label
-            {
-                Text      = text,
-                Font      = new System.Drawing.Font("Microsoft YaHei UI", 7F),
-                ForeColor = System.Drawing.Color.Gray,
-                AutoSize  = false,
-                Size      = new System.Drawing.Size(100, compact ? 13 : 16),
-                Margin    = compact
-                    ? new System.Windows.Forms.Padding(0, 1, 0, 1)
-                    : new System.Windows.Forms.Padding(0, 2, 0, 2),
                 BackColor = System.Drawing.Color.Transparent,
             };
         }
