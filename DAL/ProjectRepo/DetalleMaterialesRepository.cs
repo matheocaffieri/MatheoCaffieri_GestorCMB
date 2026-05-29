@@ -12,12 +12,13 @@ using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Interfaces;
 
-// Aliases EF (ajusta namespaces si difieren)
+// Aliases EF para evitar choque de nombres con DomainModel.*
 using DetMatEf = DAL.Detalle_proyecto_material;
 using MatEf = DAL.Material;
 
 namespace DAL.ProjectRepo
 {
+    // Los métodos de escritura NO llaman a SaveChanges: la persistencia la dispara el UnitOfWork al Commit.
     public class DetalleMaterialesRepository : IDetalleMaterialesRepository
     {
         private readonly GestorCMBEntities _context;
@@ -86,8 +87,6 @@ namespace DAL.ProjectRepo
                 row.fechaIngresoMaterial = fechaIngreso;
                 _context.Entry(row).State = EntityState.Modified;
             }
-
-            // NO SaveChanges (lo hace el UoW)
         }
 
         public int Delete(Guid idProyecto, Guid idMaterial)
@@ -98,7 +97,6 @@ namespace DAL.ProjectRepo
             int cantidad = row.cantidad;
             _set.Remove(row);
             return cantidad;
-            // NO SaveChanges (lo hace el UoW)
         }
     }
 }

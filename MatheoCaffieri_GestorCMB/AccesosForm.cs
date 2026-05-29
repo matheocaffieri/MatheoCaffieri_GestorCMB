@@ -2,6 +2,7 @@
 using DomainModel.Exceptions;
 using Interfaces.LoginInterfaces;
 using Services.Language;
+using Services.Logs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -67,15 +68,12 @@ namespace MatheoCaffieri_GestorCMB
 
         private void CargarRoles()
         {
-            var roles = _rolesSrv.ListarRoles(); // RolCompuesto con Id seteado en BL
+            var roles = _rolesSrv.ListarRoles();
             comboBoxRol.DisplayMember = "Nombre";
-            comboBoxRol.ValueMember = "Id";        // Guid (getter público)
+            comboBoxRol.ValueMember = "Id";
             comboBoxRol.DataSource = roles;
         }
 
-       
-
-        // (opcional) si tenés un botón “Cerrar”
         private void buttonExitAE_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -86,6 +84,7 @@ namespace MatheoCaffieri_GestorCMB
             var nombre = (textBoxNombrePermiso.Text ?? "").Trim();
             if (string.IsNullOrWhiteSpace(nombre))
             {
+                LoggerLogic.Warn("[AccesosForm] Validación: nombre de permiso vacío.");
                 MessageBox.Show(LanguageService.Current?.T("val_nombre_requerido") ?? "El nombre es obligatorio.");
                 textBoxNombrePermiso.Focus();
                 return;
@@ -95,18 +94,21 @@ namespace MatheoCaffieri_GestorCMB
             {
                 var key = (TipoPermiso)comboBoxAcceso.SelectedItem;
                 _accesoSrv.Crear(nombre, key);
+                LoggerLogic.Info($"[AccesosForm] Permiso creado: '{nombre}' ({key})");
 
                 MessageBox.Show(LanguageService.Current?.T("msg_permiso_creado") ?? "Permiso creado.");
                 textBoxNombrePermiso.Clear();
-                CargarAccesos(); // refresca el combo de “Seleccionar permiso”
+                CargarAccesos();
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[AccesosForm] Validación al crear permiso: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
+                LoggerLogic.Error("[AccesosForm] Falla al crear permiso.", ex);
                 MessageBox.Show(LanguageService.Current?.T("err_crear_permiso") ?? "Error al crear el permiso.");
             }
         }
@@ -114,23 +116,32 @@ namespace MatheoCaffieri_GestorCMB
         private void buttonAsignarPermiso_Click_1(object sender, EventArgs e)
         {
             if (!(comboBoxPermiso.SelectedValue is Guid permisoId))
-            { MessageBox.Show(LanguageService.Current?.T("val_permiso_requerido") ?? "Elegí un permiso."); return; }
+            {
+                LoggerLogic.Warn("[AccesosForm] Validación: permiso no seleccionado al asignar.");
+                MessageBox.Show(LanguageService.Current?.T("val_permiso_requerido") ?? "Elegí un permiso."); return;
+            }
 
             if (!(comboBoxRol.SelectedValue is Guid rolId))
-            { MessageBox.Show(LanguageService.Current?.T("val_rol_requerido") ?? "Elegí un rol."); return; }
+            {
+                LoggerLogic.Warn("[AccesosForm] Validación: rol no seleccionado al asignar permiso.");
+                MessageBox.Show(LanguageService.Current?.T("val_rol_requerido") ?? "Elegí un rol."); return;
+            }
 
             try
             {
                 _rolesSrv.AsignarPermisoARol(rolId, permisoId);
+                LoggerLogic.Info($"[AccesosForm] Permiso asignado al rol. Rol={rolId} Permiso={permisoId}");
                 MessageBox.Show(LanguageService.Current?.T("msg_permiso_asignado") ?? "Permiso asignado al rol.");
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[AccesosForm] Validación al asignar permiso: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
+                LoggerLogic.Error("[AccesosForm] Falla al asignar permiso al rol.", ex);
                 MessageBox.Show(LanguageService.Current?.T("err_asignar_permiso") ?? "Error al asignar el permiso al rol.");
             }
         }

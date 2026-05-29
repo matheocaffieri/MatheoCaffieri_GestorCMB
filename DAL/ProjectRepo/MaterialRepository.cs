@@ -11,7 +11,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
-// Aliases a las entidades EF (ajusta namespaces si difieren)
+// Aliases EF para evitar choque de nombres con DomainModel.*
 using MaterialEf = DAL.Material;
 using ProveedorEf = DAL.Proveedor;
 
@@ -31,7 +31,7 @@ namespace DAL.ProjectRepo
                 DescripcionArticulo = m.descripcionArticulo,
                 TipoMaterial = m.tipoMaterial,
                 TipoUnidad = m.tipoUnidad,
-                CostoPorUnidad = (float)m.costoPorUnidad, // DB: float -> dominio: float
+                CostoPorUnidad = (float)m.costoPorUnidad,
                 IdProveedor = m.idProveedor,
 
                 Proveedor = new DomainModel.Proveedor
@@ -56,8 +56,9 @@ namespace DAL.ProjectRepo
             dst.descripcionArticulo = src.DescripcionArticulo;
             dst.tipoMaterial = src.TipoMaterial;
             dst.tipoUnidad = src.TipoUnidad;
-            dst.costoPorUnidad = src.CostoPorUnidad; // ambos son float
-            dst.idProveedor = src.IdProveedor;    // link por FK, sin tocar navegación
+            dst.costoPorUnidad = src.CostoPorUnidad;
+            // Link por FK: no tocamos la propiedad de navegación Proveedor para no arrastrar el grafo.
+            dst.idProveedor = src.IdProveedor;
         }
 
         // ===== CRUD =====

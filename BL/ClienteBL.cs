@@ -15,16 +15,15 @@ namespace BL
         private readonly IClienteRepository _repo;
         private readonly IUnitOfWork _uow;
 
-        // Opción 1: constructor por defecto (como venías usando)
         public ClienteBL()
         {
-            var ctx = new GestorCMBEntities();   // usa config (name=GestorCMBEntities)
-            _uow = new SqlUnitOfWork(ctx);       // ahora recibe Context
+            var ctx = new GestorCMBEntities();
+            _uow = new SqlUnitOfWork(ctx);
 
             _repo = new ClienteRepository(_uow);
         }
 
-        // Opción 2: inyección (útil para tests o si armás factories)
+        // DI / tests
         public ClienteBL(IUnitOfWork uow, IClienteRepository repo)
         {
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
@@ -35,20 +34,23 @@ namespace BL
         {
             if (entity == null) throw new AppException("err_entity_null");
 
-            LoggerLogic.Info($"[ClienteBL] Add START. Id={entity.IdCliente}");
-
             _uow.Begin();
             try
             {
-                _repo.Add(entity);   // queda pendiente en el context
-                _uow.Commit();       // hace SaveChanges + Commit (según tu SqlUnitOfWork)
-
-                LoggerLogic.Info($"[ClienteBL] Add OK. Id={entity.IdCliente}");
+                _repo.Add(entity);
+                _uow.Commit();
+                LoggerLogic.Info($"[ClienteBL] Cliente agregado. Id={entity.IdCliente}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[ClienteBL] Validación al agregar cliente: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[ClienteBL] Add ERROR. Id={entity.IdCliente}. {ex.Message}");
+                LoggerLogic.Error($"[ClienteBL] Falla al agregar cliente. Id={entity.IdCliente}", ex);
                 throw;
             }
         }
@@ -57,20 +59,23 @@ namespace BL
         {
             if (entity == null) throw new AppException("err_entity_null");
 
-            LoggerLogic.Info($"[ClienteBL] Update START. Id={entity.IdCliente}");
-
             _uow.Begin();
             try
             {
                 _repo.Update(entity);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[ClienteBL] Update OK. Id={entity.IdCliente}");
+                LoggerLogic.Info($"[ClienteBL] Cliente actualizado. Id={entity.IdCliente}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[ClienteBL] Validación al actualizar cliente: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[ClienteBL] Update ERROR. Id={entity.IdCliente}. {ex.Message}");
+                LoggerLogic.Error($"[ClienteBL] Falla al actualizar cliente. Id={entity.IdCliente}", ex);
                 throw;
             }
         }
@@ -79,51 +84,33 @@ namespace BL
         {
             if (entity == null) throw new AppException("err_entity_null");
 
-            LoggerLogic.Info($"[ClienteBL] Delete START. Id={entity.IdCliente}");
-
             _uow.Begin();
             try
             {
                 _repo.Delete(entity);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[ClienteBL] Delete OK. Id={entity.IdCliente}");
+                LoggerLogic.Info($"[ClienteBL] Cliente eliminado. Id={entity.IdCliente}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[ClienteBL] Validación al eliminar cliente: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[ClienteBL] Delete ERROR. Id={entity.IdCliente}. {ex.Message}");
+                LoggerLogic.Error($"[ClienteBL] Falla al eliminar cliente. Id={entity.IdCliente}", ex);
                 throw;
             }
         }
 
-        public List<DomainModel.Cliente> GetAll()
-        {
-            // Lectura: no hace falta Begin/Commit
-            try
-            {
-                return _repo.GetAll();
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[ClienteBL] GetAll ERROR. {ex.Message}");
-                throw;
-            }
-        }
+        public List<DomainModel.Cliente> GetAll() => _repo.GetAll();
 
         public DomainModel.Cliente GetById(Guid id)
         {
             if (id == Guid.Empty) throw new AppException("err_id_required");
-
-            try
-            {
-                return _repo.GetById(id);
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[ClienteBL] GetById ERROR. Id={id}. {ex.Message}");
-                throw;
-            }
+            return _repo.GetById(id);
         }
     }
 }

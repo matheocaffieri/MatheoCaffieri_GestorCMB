@@ -16,6 +16,7 @@ using DetEmpEf = DAL.Detalle_proyecto_empleado;
 
 namespace DAL.ProjectRepo
 {
+    // Los métodos de escritura NO llaman a SaveChanges: la persistencia la dispara el UnitOfWork al Commit.
     public class DetalleEmpleadosRepository : IDetalleEmpleadosRepository
     {
         private readonly GestorCMBEntities _context;
@@ -80,8 +81,7 @@ namespace DAL.ProjectRepo
             };
 
             _set.Add(nuevo);
-            detalle.IdDetalleProyectoEmpleado = newId; // ya lo tenés
-            // NO SaveChanges
+            detalle.IdDetalleProyectoEmpleado = newId;
         }
 
         public DetalleProyectoEmpleado GetByProyectoEmpleado(Guid idProyecto, Guid idEmpleado)
@@ -103,8 +103,6 @@ namespace DAL.ProjectRepo
 
             row.fechaIngresoEmpleado = detalle.FechaIngresoEmpleado;
             row.valorGanancia = detalle.ValorGanancia;
-
-            // NO SaveChanges
         }
 
         public void SetEstado(Guid idDetalleEmpleado, string estado)
@@ -116,7 +114,6 @@ namespace DAL.ProjectRepo
             if (row == null) throw new InvalidOperationException("No existe el detalle de empleado.");
 
             row.estado = string.IsNullOrWhiteSpace(estado) ? "0" : estado;
-            // NO SaveChanges
         }
     }
 }

@@ -12,7 +12,7 @@ using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Interfaces;
 
-// Aliases a entidades EF (ajusta namespaces si difieren)
+// Aliases a entidades EF para evitar choque de nombres con DomainModel.*
 using InventarioEf = DAL.Inventario;
 using MaterialEf = DAL.Material;
 using ProveedorEf = DAL.Proveedor;
@@ -60,14 +60,12 @@ namespace DAL.ProjectRepo
         // ===== Map Dominio -> EF (para altas/ediciones) =====
         private static void MapToEf(DomainModel.Inventario src, InventarioEf dst)
         {
-            // Claves / campos propios de Inventario
             dst.idMaterialInventario = src.IdMaterialInventario;
             dst.cantidad = src.Cantidad;
             dst.idMaterial = src.IdMaterial;
 
-            // Nota: NO tocamos Material/Proveedor acá.
-            // Si querés permitir actualizar Material/Proveedor desde acá,
-            // deberíamos mapear entidades relacionadas y sus estados por separado.
+            // Importante: este método no mapea Material/Proveedor. Para actualizar entidades
+            // relacionadas hay que tocarlas explícitamente desde su propio repositorio.
         }
 
         // ===== CRUD =====
@@ -78,9 +76,6 @@ namespace DAL.ProjectRepo
 
             var ef = new InventarioEf();
             MapToEf(entity, ef);
-
-            // Adjuntar solo la FK del material (evitamos traer todo el material)
-            // Si EF ya conoce Material por id, basta con setear idMaterial como arriba.
             _set.Add(ef);
         }
 
@@ -107,8 +102,6 @@ namespace DAL.ProjectRepo
 
         public DomainModel.Inventario GetById(Guid id)
         {
-            // Incluimos Material y Proveedor SOLO para que la proyección tenga los campos.
-            // Como proyectamos con Expression, EF genera un SELECT con los JOINs necesarios.
             return _set.AsNoTracking()
                        .Where(inv => inv.idMaterialInventario == id)
                        .Select(ToDomainExpr)
@@ -117,7 +110,6 @@ namespace DAL.ProjectRepo
 
         public List<DomainModel.Inventario> GetAll()
         {
-            // Igual que en EmpleadoRepository: proyección pura (traducible a SQL).
             return _set.AsNoTracking()
                        .Select(ToDomainExpr)
                        .ToList();

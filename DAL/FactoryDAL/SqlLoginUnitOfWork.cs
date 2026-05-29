@@ -15,7 +15,6 @@ namespace DAL.FactoryDAL
         private readonly SqlConnection _cn;
         private SqlTransaction _tx;
 
-        // ✅ Match exacto
         public DbConnection Connection => _cn;
         public DbTransaction Transaction => _tx;
 

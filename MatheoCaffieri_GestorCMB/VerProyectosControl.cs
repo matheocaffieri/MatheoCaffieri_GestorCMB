@@ -98,7 +98,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             _linkLimpiar = new LinkLabel
             {
-                Text = "✕ Limpiar",
+                Text = LanguageService.Current?.T("lnk_limpiar") ?? "✕ Limpiar",
                 AutoSize = true,
                 Location = new Point(155, 16),
                 Font = new Font("Microsoft YaHei UI", 8f),
@@ -116,11 +116,11 @@ namespace MatheoCaffieri_GestorCMB
 
         private void InicializarFiltros()
         {
-            _rbMasRecientes  = CrearRadio("Más recientes",    40,  true);
-            _rbMasAntiguos   = CrearRadio("Más antiguos",     70,  false);
-            _rbDescripcion   = CrearRadio("Descripción A-Z",  100, false);
-            _rbCliente       = CrearRadio("Cliente A-Z",      130, false);
-            _rbMasFaltantes  = CrearRadio("Más faltantes",    160, false);
+            _rbMasRecientes  = CrearRadio(LanguageService.Current?.T("val_orden_mas_recientes")   ?? "Más recientes",    40,  true);
+            _rbMasAntiguos   = CrearRadio(LanguageService.Current?.T("val_orden_mas_antiguos")    ?? "Más antiguos",     70,  false);
+            _rbDescripcion   = CrearRadio(LanguageService.Current?.T("val_orden_descripcion_az")  ?? "Descripción A-Z",  100, false);
+            _rbCliente       = CrearRadio(LanguageService.Current?.T("val_orden_cliente_az")      ?? "Cliente A-Z",      130, false);
+            _rbMasFaltantes  = CrearRadio(LanguageService.Current?.T("val_orden_mas_faltantes")   ?? "Más faltantes",    160, false);
 
             _rbMasRecientes .CheckedChanged += (_, __) => { if (_rbMasRecientes.Checked)  { _ordenActual = Orden.MasRecientes;  CargarListado(textBox1.Text); } };
             _rbMasAntiguos  .CheckedChanged += (_, __) => { if (_rbMasAntiguos.Checked)   { _ordenActual = Orden.MasAntiguos;   CargarListado(textBox1.Text); } };
@@ -136,7 +136,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var separador = new Label
             {
-                Text = "Estado",
+                Text = LanguageService.Current?.T("hdr_estado") ?? "Estado",
                 Location = new Point(12, 195),
                 AutoSize = true,
                 Font = new Font("Microsoft YaHei UI", 9f, FontStyle.Bold),
@@ -151,10 +151,10 @@ namespace MatheoCaffieri_GestorCMB
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 Font = new Font("Microsoft YaHei UI", 9f)
             };
-            comboEstado.Items.Add("Todos");
-            comboEstado.Items.Add("En proceso");
-            comboEstado.Items.Add("Suspendido");
-            comboEstado.Items.Add("Finalizado");
+            comboEstado.Items.Add(LanguageService.Current?.T("val_estado_todos")       ?? "Todos");
+            comboEstado.Items.Add(LanguageService.Current?.T("val_estado_en_proceso")  ?? "En proceso");
+            comboEstado.Items.Add(LanguageService.Current?.T("val_estado_suspendido")  ?? "Suspendido");
+            comboEstado.Items.Add(LanguageService.Current?.T("val_estado_finalizado")  ?? "Finalizado");
             comboEstado.SelectedIndex = 0;
 
             comboEstado.SelectedIndexChanged += (_, __) =>
@@ -227,7 +227,9 @@ namespace MatheoCaffieri_GestorCMB
             foreach (var p in proyectos)
             {
                 var item = new ProyectoItemControl(mainForm, p);
-                item.NumProyecto = $"Proyecto #{numeros[p.IdProyecto]}";
+                item.NumProyecto = string.Format(
+                    LanguageService.Current?.T("txt_proyecto_num_fmt") ?? "Proyecto #{0}",
+                    numeros[p.IdProyecto]);
                 if (faltantes.TryGetValue(p.IdProyecto, out var cnt))
                     item.SetFaltantesCount(cnt);
                 proyectoItemPanel.Controls.Add(item);
@@ -273,7 +275,7 @@ namespace MatheoCaffieri_GestorCMB
 
             textBox1.Font        = new Font("Microsoft YaHei UI", 9.5f);
             textBox1.BorderStyle = BorderStyle.FixedSingle;
-            SendMessage(textBox1.Handle, 0x1501, 1, "Buscar...");
+            SendMessage(textBox1.Handle, 0x1501, 1, LanguageService.Current?.T("txt_buscar_placeholder") ?? "Buscar...");
 
             button1.Text     = "›";
             button1.Font     = new Font("Microsoft YaHei UI", 16f, FontStyle.Bold);

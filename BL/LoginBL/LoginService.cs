@@ -2,6 +2,7 @@
 using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using Services.LoginService;
+using Services.Logs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL.FactoryDAL;
 using DomainModel.LoginDALInterfaces;
-using DomainModel.Interfaces;    
+using DomainModel.Interfaces;
 
 namespace BL.LoginBL
 {
@@ -18,14 +19,13 @@ namespace BL.LoginBL
         private readonly IUsuarioRepository _usuarioRepo;
         private readonly IPasswordHasher _hasher;
 
-        // ✅ DI
         public LoginService(IUsuarioRepository usuarioRepo, IPasswordHasher hasher)
         {
             _usuarioRepo = usuarioRepo ?? throw new ArgumentNullException(nameof(usuarioRepo));
             _hasher = hasher ?? throw new ArgumentNullException(nameof(hasher));
         }
 
-        // ✅ Legacy: recibe "nombre de CS" o "CS directa" (LOGIN), usa SqlLoginUnitOfWork
+        // Recibe "nombre de CS" definido en App.config o una cadena de conexión literal (LOGIN).
         public LoginService(string connectionStringUsers)
             : this(
                 new UsuarioRepository(new SqlLoginUnitOfWork(connectionStringUsers)),
@@ -41,19 +41,32 @@ namespace BL.LoginBL
             usuario = null;
 
             if (string.IsNullOrWhiteSpace(mail) || string.IsNullOrWhiteSpace(password))
+            {
+                LoggerLogic.Warn($"[Login] Intento de login con campos vacíos. Mail='{mail}'");
                 return LoginResult.CredencialesInvalidas;
+            }
 
             var user = _usuarioRepo.FindByEmail(mail);
             if (user == null)
+            {
+                LoggerLogic.Warn($"[Login] Credenciales inválidas: mail no encontrado ('{mail}').");
                 return LoginResult.CredencialesInvalidas;
+            }
 
             if (!user.IsActive)
+            {
+                LoggerLogic.Warn($"[Login] Intento de login con usuario inactivo. Mail='{mail}' Id={user.IdUsuario}");
                 return LoginResult.UsuarioInactivo;
+            }
 
             if (!_hasher.Verify(user.Contraseña, password))
+            {
+                LoggerLogic.Warn($"[Login] Credenciales inválidas: contraseña incorrecta. Mail='{mail}'");
                 return LoginResult.CredencialesInvalidas;
+            }
 
             usuario = user;
+            LoggerLogic.Info($"[Login] Sesión iniciada. Mail='{mail}' Id={user.IdUsuario}");
             return LoginResult.Ok;
         }
 

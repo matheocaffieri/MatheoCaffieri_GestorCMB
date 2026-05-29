@@ -3,6 +3,7 @@ using DomainModel;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
+using Services.Logs;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace MatheoCaffieri_GestorCMB
     public partial class VerInventarioControl : UserControl
     {
         private readonly IGenericRepository<Inventario> _invRepo = new InventarioBL();
+        private readonly InformeDeCompraBL _informesBL = new InformeDeCompraBL();
         private readonly MainForm _mainForm;
 
         private const string REQUIRED = "VER_INVENTARIO";
@@ -70,7 +72,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var lblTitle = new Label
             {
-                Text      = "Inventario",
+                Text      = LanguageService.Current?.T("hdr_inventario") ?? "Inventario",
                 Font      = new Font("Microsoft YaHei UI", 15f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(22, 22, 28),
                 AutoSize  = true,
@@ -78,10 +80,10 @@ namespace MatheoCaffieri_GestorCMB
                 BackColor = Color.Transparent,
             };
 
-            var newInformes = MakeNavBtn("Informe de compra");
+            var newInformes = MakeNavBtn(LanguageService.Current?.T("btn_informe_compra") ?? "Informe de compra");
             newInformes.Click += buttonVerInformesCompra_Click;
 
-            var newProveedores = MakeNavBtn("Proveedores");
+            var newProveedores = MakeNavBtn(LanguageService.Current?.T("btn_proveedores") ?? "Proveedores");
             newProveedores.Click += buttonGestionarProveedores_Click;
 
             header.Controls.Add(lblTitle);
@@ -106,7 +108,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var lblSec = new Label
             {
-                Text      = "Materiales",
+                Text      = LanguageService.Current?.T("hdr_materiales") ?? "Materiales",
                 Font      = new Font("Microsoft YaHei UI", 10f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(48, 48, 58),
                 AutoSize  = true,
@@ -133,7 +135,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var newAddBtn = new Button
             {
-                Text      = "+ Agregar material",
+                Text      = LanguageService.Current?.T("btn_agregar_material") ?? "+ Agregar material",
                 Height    = 28,
                 Width     = 148,
                 BackColor = Color.FromArgb(76, 175, 80),
@@ -257,6 +259,17 @@ namespace MatheoCaffieri_GestorCMB
             if (_lblCount != null)
                 _lblCount.Text = $"({materiales.Count})";
 
+            HashSet<Guid> materialesConPendiente;
+            try
+            {
+                materialesConPendiente = _informesBL.GetMaterialesConInformesPendientes();
+            }
+            catch (Exception ex)
+            {
+                LoggerLogic.Warn($"[VerInventarioControl] No se pudo cargar el set de informes pendientes: {ex.Message}");
+                materialesConPendiente = new HashSet<Guid>();
+            }
+
             MaterialesItemPanel.SuspendLayout();
             MaterialesItemPanel.Controls.Clear();
 
@@ -265,6 +278,8 @@ namespace MatheoCaffieri_GestorCMB
             {
                 var item = new InventarioItemControl { Width = cardW };
                 item.Bind(mat);
+                item.SetInformePendiente(mat.Material != null && materialesConPendiente.Contains(mat.Material.IdMaterial));
+                item.InformePendienteClicked += buttonVerInformesCompra_Click;
                 item.EditRequested += (s, inv) =>
                 {
                     using (var form = new AddMaterialesForm(inv.Material))

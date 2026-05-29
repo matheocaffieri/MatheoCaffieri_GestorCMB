@@ -26,7 +26,7 @@ namespace BL
             _repo = new EmpleadoRepository(_uow);
         }
 
-        // (Opcional) ctor para DI/tests
+        // DI / tests
         public EmpleadoBL(IUnitOfWork uow, IEmpleadoRepository repo)
         {
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
@@ -40,20 +40,23 @@ namespace BL
             if (entity.IdEmpleado == Guid.Empty)
                 entity.IdEmpleado = Guid.NewGuid();
 
-            LoggerLogic.Info($"[EmpleadoBL] Add START. Id={entity.IdEmpleado}");
-
             _uow.Begin();
             try
             {
-                _repo.Add(entity);  // pendiente commit
+                _repo.Add(entity);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[EmpleadoBL] Add OK. Id={entity.IdEmpleado}");
+                LoggerLogic.Info($"[EmpleadoBL] Empleado agregado. Id={entity.IdEmpleado}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[EmpleadoBL] Validación al agregar empleado: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[EmpleadoBL] Add ERROR. Id={entity.IdEmpleado}. {ex.Message}");
+                LoggerLogic.Error($"[EmpleadoBL] Falla al agregar empleado. Id={entity.IdEmpleado}", ex);
                 throw;
             }
         }
@@ -63,20 +66,23 @@ namespace BL
             if (entity == null) throw new AppException("err_entity_null");
             if (entity.IdEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
-            LoggerLogic.Info($"[EmpleadoBL] Update START. Id={entity.IdEmpleado}");
-
             _uow.Begin();
             try
             {
                 _repo.Update(entity);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[EmpleadoBL] Update OK. Id={entity.IdEmpleado}");
+                LoggerLogic.Info($"[EmpleadoBL] Empleado actualizado. Id={entity.IdEmpleado}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[EmpleadoBL] Validación al actualizar empleado: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[EmpleadoBL] Update ERROR. Id={entity.IdEmpleado}. {ex.Message}");
+                LoggerLogic.Error($"[EmpleadoBL] Falla al actualizar empleado. Id={entity.IdEmpleado}", ex);
                 throw;
             }
         }
@@ -86,51 +92,35 @@ namespace BL
             if (entity == null) throw new AppException("err_entity_null");
             if (entity.IdEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
-            LoggerLogic.Info($"[EmpleadoBL] Delete START. Id={entity.IdEmpleado}");
-
             _uow.Begin();
             try
             {
                 _repo.Delete(entity);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[EmpleadoBL] Delete OK. Id={entity.IdEmpleado}");
+                LoggerLogic.Info($"[EmpleadoBL] Empleado eliminado. Id={entity.IdEmpleado}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[EmpleadoBL] Validación al eliminar empleado: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[EmpleadoBL] Delete ERROR. Id={entity.IdEmpleado}. {ex.Message}");
+                LoggerLogic.Error($"[EmpleadoBL] Falla al eliminar empleado. Id={entity.IdEmpleado}", ex);
                 throw;
             }
         }
 
-        // ===== Lecturas (sin transacción) =====
+        // ===== Lecturas (sin transacción ni log) =====
 
-        List<DomainModel.Empleado> IGenericRepository<DomainModel.Empleado>.GetAll()
-        {
-            try
-            {
-                return _repo.GetAll();
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[EmpleadoBL] GetAll ERROR. {ex.Message}");
-                throw;
-            }
-        }
+        List<DomainModel.Empleado> IGenericRepository<DomainModel.Empleado>.GetAll() => _repo.GetAll();
 
         DomainModel.Empleado IGenericRepository<DomainModel.Empleado>.GetById(Guid id)
         {
             if (id == Guid.Empty) throw new AppException("err_id_required");
-            try
-            {
-                return _repo.GetById(id);
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[EmpleadoBL] GetById ERROR. Id={id}. {ex.Message}");
-                throw;
-            }
+            return _repo.GetById(id);
         }
     }
 }

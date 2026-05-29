@@ -1,7 +1,6 @@
 ﻿using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Interfaces;
-using Services.Logs;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -12,11 +11,12 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 
-// Alias a la entidad EF (ajustá el namespace si difiere)
+// Alias a la entidad EF para evitar choque de nombres con DomainModel.Cliente.
 using ClienteEf = DAL.Cliente;
 
 namespace DAL.ProjectRepo
 {
+    // Los métodos de escritura NO llaman a SaveChanges: la persistencia la dispara el UnitOfWork al Commit.
     public class ClienteRepository : IClienteRepository
     {
         private readonly GestorCMBEntities _context;
@@ -58,9 +58,6 @@ namespace DAL.ProjectRepo
             MapToEf(entity, ef);
 
             _set.Add(ef);
-
-            LoggerLogic.Info($"[ClienteRepository] Add en contexto (pendiente Commit). Id={entity.IdCliente}");
-            // NO SaveChanges
         }
 
         public void Update(DomainModel.Cliente entity)
@@ -72,9 +69,6 @@ namespace DAL.ProjectRepo
 
             MapToEf(entity, ef);
             _context.Entry(ef).State = EntityState.Modified;
-
-            LoggerLogic.Info($"[ClienteRepository] Update en contexto (pendiente Commit). Id={entity.IdCliente}");
-            // NO SaveChanges
         }
 
         public void Delete(DomainModel.Cliente entity)
@@ -85,9 +79,6 @@ namespace DAL.ProjectRepo
             if (ef == null) return;
 
             _set.Remove(ef);
-
-            LoggerLogic.Info($"[ClienteRepository] Delete en contexto (pendiente Commit). Id={entity.IdCliente}");
-            // NO SaveChanges
         }
 
         public DomainModel.Cliente GetById(Guid id)

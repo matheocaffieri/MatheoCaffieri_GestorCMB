@@ -364,4 +364,566 @@
   <data name="msg_informe_eliminado" xml:space="preserve">
     <value>Report deleted.</value>
   </data>
+  <!-- ===== Captions ===== -->
+  <data name="cap_error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="cap_confirmar" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="cap_confirmar_eliminacion" xml:space="preserve">
+    <value>Confirm deletion</value>
+  </data>
+  <data name="cap_cerrar_sesion" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="cap_eliminar_empleado" xml:space="preserve">
+    <value>Remove employee</value>
+  </data>
+  <data name="cap_eliminar_material" xml:space="preserve">
+    <value>Remove material</value>
+  </data>
+  <data name="cap_campo_requerido" xml:space="preserve">
+    <value>Required field</value>
+  </data>
+  <data name="cap_campos_requeridos" xml:space="preserve">
+    <value>Required fields</value>
+  </data>
+  <data name="cap_no_encontrado" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="cap_pass_muy_corta" xml:space="preserve">
+    <value>Password too short</value>
+  </data>
+  <data name="cap_otp_invalido" xml:space="preserve">
+    <value>Invalid code</value>
+  </data>
+  <data name="cap_listo" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="cap_recuperar_contrasena" xml:space="preserve">
+    <value>Recover password</value>
+  </data>
+  <data name="cap_editar_empleado" xml:space="preserve">
+    <value>Edit employee</value>
+  </data>
+  <!-- ===== Password recovery (ForgotPasswordForm) ===== -->
+  <data name="val_recuperar_mail_requerido" xml:space="preserve">
+    <value>Please enter your email.</value>
+  </data>
+  <data name="val_pass_no_coinciden" xml:space="preserve">
+    <value>Passwords do not match.</value>
+  </data>
+  <data name="val_pass_muy_corta" xml:space="preserve">
+    <value>Password must be at least 6 characters long.</value>
+  </data>
+  <data name="err_recuperar_cuenta_no_encontrada" xml:space="preserve">
+    <value>No active account found with that email.</value>
+  </data>
+  <data name="err_otp_invalido" xml:space="preserve">
+    <value>The code is incorrect or has expired.</value>
+  </data>
+  <data name="err_otp_envio_fmt" xml:space="preserve">
+    <value>Error sending the code:
+{0}</value>
+  </data>
+  <data name="err_pass_cambio_fmt" xml:space="preserve">
+    <value>Error changing the password:
+{0}</value>
+  </data>
+  <data name="msg_pass_cambiada" xml:space="preserve">
+    <value>Password changed successfully. You can now sign in.</value>
+  </data>
+  <data name="msg_otp_enviado_fmt" xml:space="preserve">
+    <value>Code sent to {0}. Valid for 15 minutes.</value>
+  </data>
+  <data name="lbl_ingrese_mail" xml:space="preserve">
+    <value>Enter your email</value>
+  </data>
+  <data name="btn_enviar_codigo" xml:space="preserve">
+    <value>Send code</value>
+  </data>
+  <data name="btn_enviando" xml:space="preserve">
+    <value>Sending...</value>
+  </data>
+  <data name="btn_cambiar_contrasena" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="lbl_codigo_verificacion" xml:space="preserve">
+    <value>Verification code:</value>
+  </data>
+  <data name="lbl_nueva_contrasena" xml:space="preserve">
+    <value>New password:</value>
+  </data>
+  <data name="lbl_confirmar_contrasena" xml:space="preserve">
+    <value>Confirm password:</value>
+  </data>
+  <!-- ===== Confirmations (format) ===== -->
+  <data name="msg_confirmar_cerrar_sesion" xml:space="preserve">
+    <value>Sign out?</value>
+  </data>
+  <data name="msg_confirmar_eliminar_empleado_fmt" xml:space="preserve">
+    <value>Remove {0} from the project?</value>
+  </data>
+  <data name="msg_confirmar_eliminar_material_fmt" xml:space="preserve">
+    <value>Remove "{0}" from the project?</value>
+  </data>
+  <data name="msg_confirmar_eliminar_material_inv_fmt" xml:space="preserve">
+    <value>Delete "{0}"?
+This action cannot be undone.</value>
+  </data>
+  <data name="msg_confirmar_quitar_rol_fmt" xml:space="preserve">
+    <value>Remove role "{0}" from the user?</value>
+  </data>
+  <data name="msg_informe_generado_fmt" xml:space="preserve">
+    <value>Report generated.
+ID: {0}</value>
+  </data>
+  <!-- ===== Others ===== -->
+  <data name="err_eliminar_material_fmt" xml:space="preserve">
+    <value>Could not delete the material.
+{0}</value>
+  </data>
+  <data name="err_db_init_fmt" xml:space="preserve">
+    <value>Error initializing the database: {0}</value>
+  </data>
+  <data name="txt_sin_nombre" xml:space="preserve">
+    <value>(no name)</value>
+  </data>
+  <!-- ===== Login (UI labels) ===== -->
+  <data name="btn_iniciar_sesion" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="lnk_olvido_contrasena" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="lbl_mail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="lbl_contrasena" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <!-- ===== Edit employee / View logs (UI labels) ===== -->
+  <data name="btn_editar" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="lbl_sueldo" xml:space="preserve">
+    <value>Salary</value>
+  </data>
+  <data name="lbl_numero_documento" xml:space="preserve">
+    <value>Document number</value>
+  </data>
+  <data name="lbl_apellido" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="lbl_nombre" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="btn_ver_archivo" xml:space="preserve">
+    <value>View file</value>
+  </data>
+  <!-- ===== Header controls (detail columns) ===== -->
+  <data name="hdr_documento" xml:space="preserve">
+    <value>Document</value>
+  </data>
+  <data name="hdr_ganancia" xml:space="preserve">
+    <value>Earnings</value>
+  </data>
+  <data name="hdr_descripcion" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="hdr_categoria" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="hdr_unidad" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="hdr_cantidad_abr" xml:space="preserve">
+    <value>Qty.</value>
+  </data>
+  <data name="hdr_precio_unidad" xml:space="preserve">
+    <value>Price/U</value>
+  </data>
+  <data name="hdr_ganancia_unidad" xml:space="preserve">
+    <value>Earnings/U</value>
+  </data>
+  <data name="hdr_cantidad_faltante" xml:space="preserve">
+    <value>Missing qty.</value>
+  </data>
+  <!-- ===== Program startup ===== -->
+  <data name="err_missing_cs_default" xml:space="preserve">
+    <value>Missing 'Default' connection string in App.config.</value>
+  </data>
+  <data name="cap_configuracion" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="cap_inicio" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="msg_log_registrado" xml:space="preserve">
+    <value>Logged. Open the log viewer for details.</value>
+  </data>
+  <!-- ===== GestionUsuariosControl (programmatic UI) ===== -->
+  <data name="hdr_usuarios" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="hdr_roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="hdr_nuevo_usuario" xml:space="preserve">
+    <value>New user</value>
+  </data>
+  <data name="lbl_telefono" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="lbl_idioma" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="lbl_rol" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="lbl_descripcion" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="btn_crear_usuario" xml:space="preserve">
+    <value>Create user</value>
+  </data>
+  <data name="btn_crear_rol" xml:space="preserve">
+    <value>+ Create role</value>
+  </data>
+  <data name="btn_agregar" xml:space="preserve">
+    <value>+ Add</value>
+  </data>
+  <data name="btn_agregar_material" xml:space="preserve">
+    <value>+ Add material</value>
+  </data>
+  <data name="btn_volver" xml:space="preserve">
+    <value>← Back</value>
+  </data>
+  <data name="btn_buscar" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="btn_informe_compra" xml:space="preserve">
+    <value>Purchase report</value>
+  </data>
+  <data name="lbl_informe_pendiente_badge" xml:space="preserve">
+    <value>Pending in report</value>
+  </data>
+  <data name="btn_proveedores" xml:space="preserve">
+    <value>Suppliers</value>
+  </data>
+  <data name="msg_selecciona_rol" xml:space="preserve">
+    <value>Select a role to view its permissions</value>
+  </data>
+  <data name="lbl_permisos_fmt" xml:space="preserve">
+    <value>Permissions: {0}</value>
+  </data>
+  <data name="lbl_permisos_admin_fmt" xml:space="preserve">
+    <value>Permissions: {0}   (protected, read-only)</value>
+  </data>
+  <data name="hdr_modulo" xml:space="preserve">
+    <value>Module</value>
+  </data>
+  <data name="hdr_ver" xml:space="preserve">
+    <value>VIEW</value>
+  </data>
+  <data name="hdr_gestionar" xml:space="preserve">
+    <value>MANAGE</value>
+  </data>
+  <data name="txt_sin_rol" xml:space="preserve">
+    <value>(No role)</value>
+  </data>
+  <data name="lnk_ver_menos" xml:space="preserve">
+    <value>Show less</value>
+  </data>
+  <data name="lnk_ver_mas_fmt" xml:space="preserve">
+    <value>Show {0} more...</value>
+  </data>
+  <data name="mod_proyectos" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="mod_inventario" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="mod_empleados" xml:space="preserve">
+    <value>Employees</value>
+  </data>
+  <data name="mod_clientes" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="mod_proveedores" xml:space="preserve">
+    <value>Suppliers</value>
+  </data>
+  <data name="mod_informes_compra" xml:space="preserve">
+    <value>Purchase reports</value>
+  </data>
+  <data name="mod_logs" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="mod_configuracion" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="mod_usuarios" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <!-- ===== VerInventarioControl / ProveedorControl (programmatic UI) ===== -->
+  <data name="hdr_inventario" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="hdr_materiales" xml:space="preserve">
+    <value>Materials</value>
+  </data>
+  <data name="hdr_proveedores" xml:space="preserve">
+    <value>Suppliers</value>
+  </data>
+  <data name="hdr_lista" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <!-- ===== Project status / filter values ===== -->
+  <data name="val_estado_en_proceso" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="val_estado_suspendido" xml:space="preserve">
+    <value>Suspended</value>
+  </data>
+  <data name="val_estado_finalizado" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="val_estado_todos" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <!-- ===== HomeControl ===== -->
+  <data name="hdr_empleados_activos" xml:space="preserve">
+    <value>Active employees</value>
+  </data>
+  <data name="hdr_informes_de_compra" xml:space="preserve">
+    <value>Purchase reports</value>
+  </data>
+  <data name="hdr_proximo_cierre" xml:space="preserve">
+    <value>Next deadline</value>
+  </data>
+  <data name="txt_sin_proyectos_activos" xml:space="preserve">
+    <value>No active projects</value>
+  </data>
+  <!-- ===== DetalleProyectoControl / ProyectoItemControl ===== -->
+  <data name="lbl_fecha_de_cierre" xml:space="preserve">
+    <value>End date:</value>
+  </data>
+  <data name="hdr_empleados" xml:space="preserve">
+    <value>Employees</value>
+  </data>
+  <data name="hdr_faltante" xml:space="preserve">
+    <value>Missing</value>
+  </data>
+  <data name="lnk_ver_analisis" xml:space="preserve">
+    <value>View analysis</value>
+  </data>
+  <data name="txt_proyecto_num_default" xml:space="preserve">
+    <value>Project #</value>
+  </data>
+  <data name="txt_proyecto_na" xml:space="preserve">
+    <value>Project #N/A</value>
+  </data>
+  <data name="txt_proyecto_num_fmt" xml:space="preserve">
+    <value>Project #{0}</value>
+  </data>
+  <data name="txt_sin_descripcion" xml:space="preserve">
+    <value>No description</value>
+  </data>
+  <data name="txt_cliente_desconocido" xml:space="preserve">
+    <value>Unknown client</value>
+  </data>
+  <data name="txt_desconocido" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="txt_sin_fecha" xml:space="preserve">
+    <value>No date</value>
+  </data>
+  <data name="txt_fecha_no_disponible" xml:space="preserve">
+    <value>Date not available</value>
+  </data>
+  <data name="txt_estado_desconocido" xml:space="preserve">
+    <value>Unknown status</value>
+  </data>
+  <data name="txt_ubicacion_desconocida" xml:space="preserve">
+    <value>Unknown location</value>
+  </data>
+  <data name="txt_ubicacion_no_especificada" xml:space="preserve">
+    <value>Location not specified</value>
+  </data>
+  <data name="txt_faltantes_count_singular_fmt" xml:space="preserve">
+    <value>{0} missing material</value>
+  </data>
+  <data name="txt_faltantes_count_plural_fmt" xml:space="preserve">
+    <value>{0} missing materials</value>
+  </data>
+  <!-- ===== AnalisisProyectoForm ===== -->
+  <data name="cap_analisis_proyecto" xml:space="preserve">
+    <value>Project analysis</value>
+  </data>
+  <data name="cap_analisis_fmt" xml:space="preserve">
+    <value>Analysis — {0}</value>
+  </data>
+  <data name="lbl_filtrar_por" xml:space="preserve">
+    <value>Filter by:</value>
+  </data>
+  <data name="val_dias" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="val_meses" xml:space="preserve">
+    <value>Months</value>
+  </data>
+  <data name="val_anios" xml:space="preserve">
+    <value>Years</value>
+  </data>
+  <data name="hdr_analisis_compras" xml:space="preserve">
+    <value>Purchase analysis</value>
+  </data>
+  <data name="hdr_costo_proyecto" xml:space="preserve">
+    <value>Project cost</value>
+  </data>
+  <!-- ===== VerProyectosControl ===== -->
+  <data name="lnk_limpiar" xml:space="preserve">
+    <value>✕ Clear</value>
+  </data>
+  <data name="val_orden_mas_recientes" xml:space="preserve">
+    <value>Most recent</value>
+  </data>
+  <data name="val_orden_mas_antiguos" xml:space="preserve">
+    <value>Oldest</value>
+  </data>
+  <data name="val_orden_descripcion_az" xml:space="preserve">
+    <value>Description A-Z</value>
+  </data>
+  <data name="val_orden_cliente_az" xml:space="preserve">
+    <value>Client A-Z</value>
+  </data>
+  <data name="val_orden_mas_faltantes" xml:space="preserve">
+    <value>Most missing</value>
+  </data>
+  <data name="hdr_estado" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="txt_buscar_placeholder" xml:space="preserve">
+    <value>Search...</value>
+  </data>
+  <!-- ===== ItemControls misc ===== -->
+  <data name="val_transaccion_completa" xml:space="preserve">
+    <value>Transaction complete</value>
+  </data>
+  <data name="val_transaccion_cancelada" xml:space="preserve">
+    <value>Transaction cancelled</value>
+  </data>
+  <data name="txt_sin_descripcion_paren" xml:space="preserve">
+    <value>(no description)</value>
+  </data>
+  <data name="txt_materiales_aplicados" xml:space="preserve">
+    <value>Materials applied to project inventory.</value>
+  </data>
+  <data name="txt_sin_detalle" xml:space="preserve">
+    <value>(no details)</value>
+  </data>
+  <data name="val_sin_cupo" xml:space="preserve">
+    <value>No slots</value>
+  </data>
+  <data name="btn_agregar_simple" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="txt_sin_materiales_faltantes" xml:space="preserve">
+    <value>No missing materials.</value>
+  </data>
+  <data name="cap_limite_alcanzado" xml:space="preserve">
+    <value>Limit reached</value>
+  </data>
+  <data name="cap_diagnostico" xml:space="preserve">
+    <value>Diagnostic</value>
+  </data>
+  <data name="txt_sin_proveedor" xml:space="preserve">
+    <value>No supplier</value>
+  </data>
+  <data name="txt_este_material" xml:space="preserve">
+    <value>this material</value>
+  </data>
+  <!-- ===== EditClienteForm / EditProveedorForm / EditProyectoForm ===== -->
+  <data name="cap_editar_cliente" xml:space="preserve">
+    <value>Edit client</value>
+  </data>
+  <data name="cap_editar_proveedor" xml:space="preserve">
+    <value>Edit supplier</value>
+  </data>
+  <data name="cap_editar_proyecto" xml:space="preserve">
+    <value>Edit project</value>
+  </data>
+  <data name="lbl_razon_social" xml:space="preserve">
+    <value>Company name</value>
+  </data>
+  <data name="lbl_nombre_contacto" xml:space="preserve">
+    <value>Contact name</value>
+  </data>
+  <data name="lbl_descripcion_proyecto" xml:space="preserve">
+    <value>Project description</value>
+  </data>
+  <data name="lbl_cliente" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="lbl_ubicacion" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="lbl_fecha_inicio" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="lbl_fecha_cierre" xml:space="preserve">
+    <value>End date</value>
+  </data>
+  <data name="val_fecha_cierre_anterior" xml:space="preserve">
+    <value>The end date cannot be earlier than the start date.</value>
+  </data>
+  <data name="lbl_estado" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="btn_guardar" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <!-- ===== HistorialInformesControl / AgregarMaterialProyectoForm ===== -->
+  <data name="cap_historial_informes" xml:space="preserve">
+    <value>Report history</value>
+  </data>
+  <data name="txt_proyecto_sin_nombre" xml:space="preserve">
+    <value>Unnamed project</value>
+  </data>
+  <data name="txt_sin_tipo" xml:space="preserve">
+    <value>No type</value>
+  </data>
+  <data name="msg_materiales_agregados_con_faltantes_fmt" xml:space="preserve">
+    <value>Added {0} to the project and {1} were registered as missing materials.</value>
+  </data>
+  <data name="msg_materiales_agregados_fmt" xml:space="preserve">
+    <value>Added {0} to the project.</value>
+  </data>
+  <data name="cap_materiales_faltantes" xml:space="preserve">
+    <value>Missing materials</value>
+  </data>
+  <data name="btn_historial" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="btn_buscar_icon" xml:space="preserve">
+    <value>⌕  Search</value>
+  </data>
+  <data name="txt_sin_info_general" xml:space="preserve">
+    <value>No general information</value>
+  </data>
+  <data name="hdr_dgv_numero" xml:space="preserve">
+    <value>#</value>
+  </data>
+  <data name="hdr_dgv_rol" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="hdr_dgv_asignado" xml:space="preserve">
+    <value>Assigned</value>
+  </data>
+  <data name="mnu_configurar_parametros" xml:space="preserve">
+    <value>Configure parameters</value>
+  </data>
 </root>
+
+

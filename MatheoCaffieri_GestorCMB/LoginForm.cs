@@ -4,6 +4,7 @@ using DomainModel.Exceptions;
 using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using Services.Language;
+using Services.Logs;
 using Services.LoginService;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using Services.RoleService;                 // SessionContext
+using Services.RoleService;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RolesServiceLogic = Services.RoleService.Logic.RolesService;
@@ -24,12 +25,10 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class LoginForm : Form
     {
-        private LoginService _loginService; // Necesitarás inicializar esto (probablemente en el constructor)
+        private LoginService _loginService;
         private IPasswordHasher _passwordHasher;
         string connectionStringUsers = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"]?.ConnectionString;
 
-
-        // Constructor (ejemplo de inicialización)
         private System.Drawing.Point _mouseLocation;
 
         public LoginForm()
@@ -64,50 +63,60 @@ namespace MatheoCaffieri_GestorCMB
                     buttonLogin_Click(s, e);
             };
 
+            AplicarTraducciones();
+
             try
             {
-                // --- Inicialización de Servicios ---
+                // --- Inicialización de servicios de login ---
 
-                // 1. Obtener la cadena de conexión desde App.config
-                // Asegúrate de que el nombre "UsersConnectionString" exista en tu App.config
-
+                // 1. Connection string a la base de Usuarios (definida en App.config como "ConnUsuarios").
                 if (string.IsNullOrEmpty(connectionStringUsers))
                 {
                     MessageBox.Show(
                         LanguageService.Current?.T("err_config_connection_string") ?? "No se encontró la cadena de conexión en App.config.",
                         LanguageService.Current?.T("cap_error_config") ?? "Error de Configuración",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    // Podrías deshabilitar el botón de login o cerrar la aplicación aquí
                     buttonLogin.Enabled = false;
                     return;
                 }
 
-                // 2. Crear la instancia del Hasher
+                // 2. Hasher de contraseñas
                 _passwordHasher = new PasswordHasher();
 
-                // 3. Crear la instancia del LoginService, pasando la conexión y el hasher
+                // 3. LoginService (envuelve el repositorio de Usuario y el hasher).
                 _loginService = new LoginService(connectionStringUsers);
 
-                // 4. Garantizar que el rol Admin exista con todos los permisos
+                // 4. Garantizar que el rol Admin exista con todos los permisos (idempotente).
                 AccessServicesFactory.CreateRolesService(connectionStringUsers).EnsureAdminExists();
             }
             catch (ConfigurationErrorsException configEx)
             {
+                LoggerLogic.Error("[LoginForm] Falla al leer la configuración (App.config).", configEx);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_config_lectura") ?? "Error al leer la configuración.",
                     LanguageService.Current?.T("cap_error_config") ?? "Error de Configuración",
                     MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                buttonLogin.Enabled = false; // Deshabilitar login si hay error de config
+                buttonLogin.Enabled = false;
             }
             catch (Exception ex)
             {
-                // Captura cualquier otro error durante la inicialización
+                LoggerLogic.Error("[LoginForm] Falla inesperada al inicializar el LoginForm.", ex);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_init_inesperado") ?? "Error inesperado durante la inicialización.",
                     LanguageService.Current?.T("cap_error_critico") ?? "Error Crítico",
                     MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                buttonLogin.Enabled = false; // Deshabilitar login
+                buttonLogin.Enabled = false;
             }
+        }
+
+        // Aplica las traducciones a los labels/botones del Designer.
+        // El Designer.cs no usa .resx, así que sobreescribimos los Text acá según el idioma activo.
+        private void AplicarTraducciones()
+        {
+            buttonLogin.Text          = LanguageService.Current?.T("btn_iniciar_sesion")  ?? buttonLogin.Text;
+            buttonForgotPassword.Text = LanguageService.Current?.T("lnk_olvido_contrasena") ?? buttonForgotPassword.Text;
+            label1.Text               = LanguageService.Current?.T("lbl_mail")            ?? label1.Text;
+            labelPassword.Text        = LanguageService.Current?.T("lbl_contrasena")      ?? labelPassword.Text;
         }
 
         private static void CargarPermisosUsuario(Usuario usuario, string cs)
@@ -136,12 +145,12 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
-            string mail = textMail.Text.Trim(); // Asume que tus TextBox se llaman así
+            string mail = textMail.Text.Trim();
             string password = textPassword.Text;
 
-            // Validación básica de entrada
             if (string.IsNullOrWhiteSpace(mail) || string.IsNullOrWhiteSpace(password))
             {
+                LoggerLogic.Warn("[LoginForm] Validación: mail o contraseña vacíos.");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_login_campos_vacios") ?? "Por favor, ingrese su mail y contraseña.",
                     LanguageService.Current?.T("cap_campos_vacios") ?? "Campos Vacíos",
@@ -151,7 +160,7 @@ namespace MatheoCaffieri_GestorCMB
 
             try
             {
-                // Nuevo: login con motivo (Ok / Inactivo / CredencialesInvalidas)
+                // TryLogin devuelve el motivo (Ok / UsuarioInactivo / CredencialesInvalidas) para mostrar mensajes específicos.
                 var result = _loginService.TryLogin(mail, password, out Usuario usuarioLogueado);
 
                 if (result == LoginResult.UsuarioInactivo)
@@ -174,7 +183,7 @@ namespace MatheoCaffieri_GestorCMB
                     return;
                 }
 
-                // ===== Login OK (todo esto queda igual) =====
+                // ===== Login OK: armar sesión, cargar permisos, idioma y abrir MainForm =====
 
                 SessionManager.Instance.Login(usuarioLogueado);
                 UserSession.UserDisplayName = usuarioLogueado.Mail;
@@ -219,11 +228,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[LoginForm] Validación: {ex.MessageKey} (mail='{mail}')");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerLogic.Error($"[LoginForm] Falla inesperada en login (mail='{mail}').", ex);
                 var msg = LanguageService.Current?.T("err_generic") ?? "Ocurrió un error inesperado.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }

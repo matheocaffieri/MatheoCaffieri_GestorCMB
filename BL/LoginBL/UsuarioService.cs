@@ -17,8 +17,7 @@ namespace BL.LoginBL
         private readonly IPasswordHasher _hasher;
         private readonly ILoginUnitOfWork _uow;
 
-        // DI: te recomiendo que el factory de Login devuelva ILoginUnitOfWork (no el de EF)
-        // Si todavía no tenés ese factory, usá el ctor legacy o el ctor directo.
+        // DI: el UoW debe ser ILoginUnitOfWork (ADO.NET directo), NO el IUnitOfWork de EF.
         public UsuarioService(ILoginUnitOfWork uow, IUsuarioRepository usuarioRepo, IPasswordHasher hasher)
         {
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
@@ -26,7 +25,7 @@ namespace BL.LoginBL
             _hasher = hasher ?? throw new ArgumentNullException(nameof(hasher));
         }
 
-        // Legacy (string): nombre de CS o CS directa
+        // Recibe el nombre de la connection string definida en App.config o una cadena literal.
         public UsuarioService(string connectionStringOrName)
         {
             if (string.IsNullOrWhiteSpace(connectionStringOrName))

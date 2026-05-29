@@ -25,7 +25,7 @@ namespace BL
             _repo = new MaterialFaltanteRepository(_uow);
         }
 
-        // opcional DI/tests
+        // DI / tests
         public MaterialFaltanteBL(IUnitOfWork uow, IMaterialesFaltantesRepository repo)
         {
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
@@ -40,25 +40,28 @@ namespace BL
             if (string.IsNullOrWhiteSpace(tipoUnidad)) throw new AppException("err_tipo_unidad_required");
             if (cantidad <= 0) return;
 
-            // normalización "mínimo cambio" (evita duplicados por espacios/caso)
+            // Normalizamos espacios para que "Cable" y "Cable " no se traten como faltantes distintos.
             descripcion = descripcion.Trim();
             tipoMaterial = tipoMaterial.Trim();
             tipoUnidad = tipoUnidad.Trim();
-
-            LoggerLogic.Info($"[MaterialFaltanteBL] AddOrUpdate START. Proy={idProyecto} Desc='{descripcion}' Tipo='{tipoMaterial}' Unidad='{tipoUnidad}' Cant={cantidad}");
 
             _uow.Begin();
             try
             {
                 _repo.AddOrUpdate(idProyecto, descripcion, tipoMaterial, tipoUnidad, cantidad);
-
                 _uow.Commit();
-                LoggerLogic.Info($"[MaterialFaltanteBL] AddOrUpdate OK. Proy={idProyecto} Desc='{descripcion}'");
+                LoggerLogic.Info($"[MaterialFaltanteBL] Material faltante agregado/actualizado. Proy={idProyecto} Desc='{descripcion}' Cant={cantidad}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[MaterialFaltanteBL] Validación al agregar/actualizar faltante: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[MaterialFaltanteBL] AddOrUpdate ERROR. Proy={idProyecto} Desc='{descripcion}'", ex);
+                LoggerLogic.Error($"[MaterialFaltanteBL] Falla al agregar/actualizar faltante. Proy={idProyecto} Desc='{descripcion}'", ex);
                 throw;
             }
         }
@@ -66,18 +69,7 @@ namespace BL
         public List<MaterialFaltante> GetAll(Guid idProyecto)
         {
             if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
-
-            try
-            {
-                var list = _repo.GetAll(idProyecto);
-                LoggerLogic.Info($"[MaterialFaltanteBL] GetAll OK. Proy={idProyecto} Count={list.Count}");
-                return list;
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[MaterialFaltanteBL] GetAll ERROR. Proy={idProyecto}", ex);
-                throw;
-            }
+            return _repo.GetAll(idProyecto);
         }
     }
 }

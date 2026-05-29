@@ -20,13 +20,13 @@ namespace BL
 
         public DetalleEmpleadoBL()
         {
-            var ctx = new GestorCMBEntities(); // usa config
-            _uow = new SqlUnitOfWork(ctx);     // ctor nuevo: recibe Context
+            var ctx = new GestorCMBEntities();
+            _uow = new SqlUnitOfWork(ctx);
 
             _repo = new DetalleEmpleadosRepository(_uow);
         }
 
-        // (Opcional) ctor para DI/tests
+        // DI / tests
         public DetalleEmpleadoBL(IUnitOfWork uow, IDetalleEmpleadosRepository repo)
         {
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
@@ -38,72 +38,49 @@ namespace BL
         public List<DetalleProyectoEmpleado> GetAll(Guid idProyecto)
         {
             if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
-            try
-            {
-                return _repo.GetAll(idProyecto);
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[DetalleEmpleadoBL] GetAll ERROR. idProyecto={idProyecto}. {ex.Message}");
-                throw;
-            }
+            return _repo.GetAll(idProyecto);
         }
 
         public bool Exists(Guid idProyecto, Guid idEmpleado)
         {
             if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
             if (idEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
-
-            try
-            {
-                return _repo.Exists(idProyecto, idEmpleado);
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[DetalleEmpleadoBL] Exists ERROR. idProyecto={idProyecto}, idEmpleado={idEmpleado}. {ex.Message}");
-                throw;
-            }
+            return _repo.Exists(idProyecto, idEmpleado);
         }
 
         public DetalleProyectoEmpleado GetByProyectoEmpleado(Guid idProyecto, Guid idEmpleado)
         {
             if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
             if (idEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
-
-            try
-            {
-                return _repo.GetByProyectoEmpleado(idProyecto, idEmpleado);
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[DetalleEmpleadoBL] GetByProyectoEmpleado ERROR. idProyecto={idProyecto}, idEmpleado={idEmpleado}. {ex.Message}");
-                throw;
-            }
+            return _repo.GetByProyectoEmpleado(idProyecto, idEmpleado);
         }
 
         // ===== Writes (con Begin/Commit/Rollback) =====
 
-        // estado varchar: "1" activo, "0" inactivo
+        // Importante: el parámetro `estado` es varchar en BD — "1" = activo, "0" = inactivo.
         public void Add(DetalleProyectoEmpleado detalle, string estado = "1")
         {
             if (detalle == null) throw new AppException("err_entity_null");
             if (detalle.IdProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
             if (detalle.IdEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
-            LoggerLogic.Info($"[DetalleEmpleadoBL] Add START. idProyecto={detalle.IdProyecto}, idEmpleado={detalle.IdEmpleado}");
-
             _uow.Begin();
             try
             {
-                _repo.Add(detalle, estado); // queda pendiente en context
-                _uow.Commit();              // SaveChanges + commit trans
-
-                LoggerLogic.Info($"[DetalleEmpleadoBL] Add OK. idDetalle={detalle.IdDetalleProyectoEmpleado}");
+                _repo.Add(detalle, estado);
+                _uow.Commit();
+                LoggerLogic.Info($"[DetalleEmpleadoBL] Detalle agregado. idDetalle={detalle.IdDetalleProyectoEmpleado} Proy={detalle.IdProyecto} Emp={detalle.IdEmpleado}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[DetalleEmpleadoBL] Validación al agregar detalle: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[DetalleEmpleadoBL] Add ERROR. idProyecto={detalle.IdProyecto}, idEmpleado={detalle.IdEmpleado}. {ex.Message}");
+                LoggerLogic.Error($"[DetalleEmpleadoBL] Falla al agregar detalle. Proy={detalle.IdProyecto} Emp={detalle.IdEmpleado}", ex);
                 throw;
             }
         }
@@ -114,20 +91,23 @@ namespace BL
             if (detalle.IdDetalleProyectoEmpleado == Guid.Empty)
                 throw new AppException("err_empleado_id_detalle_required");
 
-            LoggerLogic.Info($"[DetalleEmpleadoBL] Update START. idDetalle={detalle.IdDetalleProyectoEmpleado}");
-
             _uow.Begin();
             try
             {
                 _repo.Update(detalle);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[DetalleEmpleadoBL] Update OK. idDetalle={detalle.IdDetalleProyectoEmpleado}");
+                LoggerLogic.Info($"[DetalleEmpleadoBL] Detalle actualizado. idDetalle={detalle.IdDetalleProyectoEmpleado}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[DetalleEmpleadoBL] Validación al actualizar detalle: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[DetalleEmpleadoBL] Update ERROR. idDetalle={detalle.IdDetalleProyectoEmpleado}. {ex.Message}");
+                LoggerLogic.Error($"[DetalleEmpleadoBL] Falla al actualizar detalle. Id={detalle.IdDetalleProyectoEmpleado}", ex);
                 throw;
             }
         }
@@ -137,20 +117,23 @@ namespace BL
             if (idDetalleEmpleado == Guid.Empty)
                 throw new AppException("err_empleado_id_detalle_required");
 
-            LoggerLogic.Info($"[DetalleEmpleadoBL] SetEstado START. idDetalle={idDetalleEmpleado}, estado={estado}");
-
             _uow.Begin();
             try
             {
                 _repo.SetEstado(idDetalleEmpleado, estado);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[DetalleEmpleadoBL] SetEstado OK. idDetalle={idDetalleEmpleado}, estado={estado}");
+                LoggerLogic.Info($"[DetalleEmpleadoBL] Detalle estado actualizado. idDetalle={idDetalleEmpleado} estado={estado}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[DetalleEmpleadoBL] Validación al cambiar estado de detalle: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[DetalleEmpleadoBL] SetEstado ERROR. idDetalle={idDetalleEmpleado}, estado={estado}. {ex.Message}");
+                LoggerLogic.Error($"[DetalleEmpleadoBL] Falla al cambiar estado de detalle. Id={idDetalleEmpleado}", ex);
                 throw;
             }
         }

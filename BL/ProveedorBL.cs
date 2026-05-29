@@ -21,7 +21,7 @@ namespace BL
         public ProveedorBL()
         {
             var ctx = new GestorCMBEntities();
-            _uow = new SqlUnitOfWork(ctx);          // ✅ NO connectionString
+            _uow = new SqlUnitOfWork(ctx);
             _repo = new ProveedorRepository(_uow);
         }
 
@@ -60,14 +60,19 @@ namespace BL
             try
             {
                 _repo.Add(entity);
-
                 _uow.Commit();
-                LoggerLogic.Info($"[ProveedorBL] Proveedor agregado OK: {entity.Descripcion} ({entity.IdProveedor})");
+                LoggerLogic.Info($"[ProveedorBL] Proveedor agregado: {entity.Descripcion} ({entity.IdProveedor})");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[ProveedorBL] Validación al agregar proveedor: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[ProveedorBL] Error al agregar proveedor ({entity?.Descripcion ?? "desconocido"})", ex);
+                LoggerLogic.Error($"[ProveedorBL] Falla al agregar proveedor ({entity?.Descripcion ?? "desconocido"})", ex);
                 throw;
             }
         }
@@ -80,14 +85,19 @@ namespace BL
             try
             {
                 _repo.Update(entity);
-
                 _uow.Commit();
-                LoggerLogic.Info($"[ProveedorBL] Proveedor actualizado OK: {entity.Descripcion} ({entity.IdProveedor})");
+                LoggerLogic.Info($"[ProveedorBL] Proveedor actualizado: {entity.Descripcion} ({entity.IdProveedor})");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[ProveedorBL] Validación al actualizar proveedor: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[ProveedorBL] Error al actualizar proveedor ({entity?.IdProveedor})", ex);
+                LoggerLogic.Error($"[ProveedorBL] Falla al actualizar proveedor ({entity?.IdProveedor})", ex);
                 throw;
             }
         }
@@ -102,14 +112,19 @@ namespace BL
             try
             {
                 _repo.Delete(entity);
-
                 _uow.Commit();
-                LoggerLogic.Info($"[ProveedorBL] Proveedor eliminado OK: {entity.Descripcion} ({entity.IdProveedor})");
+                LoggerLogic.Info($"[ProveedorBL] Proveedor eliminado: {entity.Descripcion} ({entity.IdProveedor})");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[ProveedorBL] Validación al eliminar proveedor: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[ProveedorBL] Error al eliminar proveedor ({entity?.IdProveedor})", ex);
+                LoggerLogic.Error($"[ProveedorBL] Falla al eliminar proveedor ({entity?.IdProveedor})", ex);
                 throw;
             }
         }
@@ -117,34 +132,10 @@ namespace BL
         public DomainModel.Proveedor GetById(Guid id)
         {
             if (id == Guid.Empty) throw new AppException("err_id_required");
-
-            try
-            {
-                var prov = _repo.GetById(id);
-                if (prov == null) LoggerLogic.Warn($"[ProveedorBL] Proveedor no encontrado. Id={id}");
-                return prov;
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[ProveedorBL] Error en GetById (Id={id})", ex);
-                throw;
-            }
+            return _repo.GetById(id);
         }
 
-        public List<DomainModel.Proveedor> GetAll()
-        {
-            try
-            {
-                var list = _repo.GetAll();
-                LoggerLogic.Info($"[ProveedorBL] Listado de proveedores OK: {list.Count} filas.");
-                return list;
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error("[ProveedorBL] Error al obtener listado de proveedores", ex);
-                throw;
-            }
-        }
+        public List<DomainModel.Proveedor> GetAll() => _repo.GetAll();
 
         // ===== Implementación explícita de IGenericRepository =====
         List<DomainModel.Proveedor> IGenericRepository<DomainModel.Proveedor>.GetAll() => GetAll();

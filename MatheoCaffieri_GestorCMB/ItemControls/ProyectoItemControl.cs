@@ -23,37 +23,37 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         public string NumProyecto
         {
             get => labelNumProyecto.Text;
-            set => labelNumProyecto.Text = value ?? "Proyecto #N/A";
+            set => labelNumProyecto.Text = value ?? (LanguageService.Current?.T("txt_proyecto_na") ?? "Proyecto #N/A");
         }
 
         public string DescripcionProyecto
         {
             get => labelDescripcionProyecto.Text;
-            set => labelDescripcionProyecto.Text = value ?? "Sin descripción";
+            set => labelDescripcionProyecto.Text = value ?? (LanguageService.Current?.T("txt_sin_descripcion") ?? "Sin descripción");
         }
 
         public string NombreCliente
         {
             get => labelNombreCliente.Text;
-            set => labelNombreCliente.Text = value ?? "Desconocido";
+            set => labelNombreCliente.Text = value ?? (LanguageService.Current?.T("txt_desconocido") ?? "Desconocido");
         }
 
         public string FechaInicio
         {
             get => labelFechaInicio.Text;
-            set => labelFechaInicio.Text = value ?? "Fecha no disponible";
+            set => labelFechaInicio.Text = value ?? (LanguageService.Current?.T("txt_fecha_no_disponible") ?? "Fecha no disponible");
         }
 
         public string EstadoProyecto
         {
             get => labelEstadoProyecto.Text;
-            set => labelEstadoProyecto.Text = value ?? "Estado desconocido";
+            set => labelEstadoProyecto.Text = value ?? (LanguageService.Current?.T("txt_estado_desconocido") ?? "Estado desconocido");
         }
 
         public string UbicacionProyecto
         {
             get => labelUbicacionProyecto.Text;
-            set => labelUbicacionProyecto.Text = value ?? "Ubicación no especificada";
+            set => labelUbicacionProyecto.Text = value ?? (LanguageService.Current?.T("txt_ubicacion_no_especificada") ?? "Ubicación no especificada");
         }
 
         public Proyecto ProyectoData
@@ -68,12 +68,15 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             this.mainForm = mainForm;
             this._proyecto = proyecto;
 
-            NumProyecto = "Proyecto #";
+            NumProyecto = LanguageService.Current?.T("txt_proyecto_num_default") ?? "Proyecto #";
             DescripcionProyecto = proyecto.Descripcion;
-            NombreCliente = proyecto.Cliente?.NombreContacto ?? "Cliente desconocido";
-            FechaInicio = proyecto.FechaInicio.ToString("dd/MM/yyyy") ?? "Sin fecha";
+            NombreCliente = proyecto.Cliente?.NombreContacto
+                ?? (LanguageService.Current?.T("txt_cliente_desconocido") ?? "Cliente desconocido");
+            FechaInicio = proyecto.FechaInicio.ToString("dd/MM/yyyy")
+                ?? (LanguageService.Current?.T("txt_sin_fecha") ?? "Sin fecha");
             EstadoProyecto = FormatEstado(proyecto.Estado);
-            UbicacionProyecto = proyecto.Ubicacion ?? "Ubicación desconocida";
+            UbicacionProyecto = proyecto.Ubicacion
+                ?? (LanguageService.Current?.T("txt_ubicacion_desconocida") ?? "Ubicación desconocida");
 
             switch (proyecto.Estado)
             {
@@ -189,7 +192,10 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
                 _badgeFaltantes.Height = 22;
                 _badgeFaltantes.Visible = true;
                 _badgeFaltantes.BringToFront();
-                _tipBadge.SetToolTip(_badgeFaltantes, $"{count} material{(count == 1 ? "" : "es")} faltante{(count == 1 ? "" : "s")}");
+                var keyFmt = count == 1 ? "txt_faltantes_count_singular_fmt" : "txt_faltantes_count_plural_fmt";
+                var fallback = count == 1 ? "{0} material faltante" : "{0} materiales faltantes";
+                _tipBadge.SetToolTip(_badgeFaltantes,
+                    string.Format(LanguageService.Current?.T(keyFmt) ?? fallback, count));
                 PositionBadge();
             }
             else
@@ -241,9 +247,9 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         {
             switch (estado)
             {
-                case EnumEstado.EnProceso:  return "En proceso";
-                case EnumEstado.Suspendido: return "Suspendido";
-                case EnumEstado.Finalizado: return "Finalizado";
+                case EnumEstado.EnProceso:  return LanguageService.Current?.T("val_estado_en_proceso") ?? "En proceso";
+                case EnumEstado.Suspendido: return LanguageService.Current?.T("val_estado_suspendido") ?? "Suspendido";
+                case EnumEstado.Finalizado: return LanguageService.Current?.T("val_estado_finalizado") ?? "Finalizado";
                 default:                    return estado.ToString();
             }
         }

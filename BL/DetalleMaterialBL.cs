@@ -26,7 +26,7 @@ namespace BL
             _repo = new DetalleMaterialesRepository(_uow);
         }
 
-        // (Opcional) ctor para DI/tests
+        // DI / tests
         public DetalleMaterialBL(IUnitOfWork uow, IDetalleMaterialesRepository repo)
         {
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
@@ -39,20 +39,23 @@ namespace BL
             if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
             if (cantidad <= 0) return;
 
-            LoggerLogic.Info($"[DetalleMaterialBL] AddOrUpdate START. idProyecto={idProyecto}, idMaterial={idMaterial}, cant={cantidad}");
-
             _uow.Begin();
             try
             {
-                _repo.AddOrUpdate(idProyecto, idMaterial, cantidad, valorGanancia, fechaIngreso); // pendiente commit
+                _repo.AddOrUpdate(idProyecto, idMaterial, cantidad, valorGanancia, fechaIngreso);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[DetalleMaterialBL] AddOrUpdate OK. idProyecto={idProyecto}, idMaterial={idMaterial}");
+                LoggerLogic.Info($"[DetalleMaterialBL] Detalle material agregado/actualizado. Proy={idProyecto} Mat={idMaterial} Cant={cantidad}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[DetalleMaterialBL] Validación al agregar/actualizar detalle: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[DetalleMaterialBL] AddOrUpdate ERROR. idProyecto={idProyecto}, idMaterial={idMaterial}. {ex.Message}");
+                LoggerLogic.Error($"[DetalleMaterialBL] Falla al agregar/actualizar detalle. Proy={idProyecto} Mat={idMaterial}", ex);
                 throw;
             }
         }
@@ -60,16 +63,7 @@ namespace BL
         public List<DetalleProyectoMaterial> GetAll(Guid idProyecto)
         {
             if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
-
-            try
-            {
-                return _repo.GetAll(idProyecto);
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[DetalleMaterialBL] GetAll ERROR. idProyecto={idProyecto}. {ex.Message}");
-                throw;
-            }
+            return _repo.GetAll(idProyecto);
         }
 
         public int Delete(Guid idProyecto, Guid idMaterial)
@@ -82,12 +76,19 @@ namespace BL
             {
                 int cantidad = _repo.Delete(idProyecto, idMaterial);
                 _uow.Commit();
+                LoggerLogic.Info($"[DetalleMaterialBL] Detalle material eliminado. Proy={idProyecto} Mat={idMaterial} CantDevuelta={cantidad}");
                 return cantidad;
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[DetalleMaterialBL] Validación al eliminar detalle: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[DetalleMaterialBL] Delete ERROR. idProyecto={idProyecto}, idMaterial={idMaterial}. {ex.Message}");
+                LoggerLogic.Error($"[DetalleMaterialBL] Falla al eliminar detalle. Proy={idProyecto} Mat={idMaterial}", ex);
                 throw;
             }
         }

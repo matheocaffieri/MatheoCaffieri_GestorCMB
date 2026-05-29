@@ -28,6 +28,8 @@ namespace MatheoCaffieri_GestorCMB
             this.dateTimePickerFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.labelEstado = new System.Windows.Forms.Label();
             this.comboBoxEstado = new System.Windows.Forms.ComboBox();
+            this.labelFechaCierre = new System.Windows.Forms.Label();
+            this.dateTimePickerFechaCierre = new System.Windows.Forms.DateTimePicker();
             this.buttonGuardar = new System.Windows.Forms.Button();
             this.FormPanel.SuspendLayout();
             this.SuspendLayout();
@@ -142,12 +144,27 @@ namespace MatheoCaffieri_GestorCMB
             this.comboBoxEstado.Size = new System.Drawing.Size(220, 24);
             this.comboBoxEstado.TabIndex = 11;
             //
+            // labelFechaCierre
+            //
+            this.labelFechaCierre.AutoSize = true;
+            this.labelFechaCierre.Location = new System.Drawing.Point(24, 320);
+            this.labelFechaCierre.Name = "labelFechaCierre";
+            this.labelFechaCierre.TabIndex = 12;
+            this.labelFechaCierre.Text = "Fecha de cierre";
+            //
+            // dateTimePickerFechaCierre
+            //
+            this.dateTimePickerFechaCierre.Location = new System.Drawing.Point(27, 344);
+            this.dateTimePickerFechaCierre.Name = "dateTimePickerFechaCierre";
+            this.dateTimePickerFechaCierre.Size = new System.Drawing.Size(220, 22);
+            this.dateTimePickerFechaCierre.TabIndex = 13;
+            //
             // buttonGuardar
             //
-            this.buttonGuardar.Location = new System.Drawing.Point(381, 340);
+            this.buttonGuardar.Location = new System.Drawing.Point(381, 410);
             this.buttonGuardar.Name = "buttonGuardar";
             this.buttonGuardar.Size = new System.Drawing.Size(112, 34);
-            this.buttonGuardar.TabIndex = 12;
+            this.buttonGuardar.TabIndex = 14;
             this.buttonGuardar.Text = "Guardar";
             this.buttonGuardar.UseVisualStyleBackColor = true;
             this.buttonGuardar.Click += new System.EventHandler(this.buttonGuardar_Click);
@@ -157,7 +174,7 @@ namespace MatheoCaffieri_GestorCMB
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(520, 395);
+            this.ClientSize = new System.Drawing.Size(520, 465);
             this.Controls.Add(this.FormPanel);
             this.Controls.Add(this.labelTitulo);
             this.Controls.Add(this.labelDescripcion);
@@ -170,6 +187,8 @@ namespace MatheoCaffieri_GestorCMB
             this.Controls.Add(this.dateTimePickerFechaInicio);
             this.Controls.Add(this.labelEstado);
             this.Controls.Add(this.comboBoxEstado);
+            this.Controls.Add(this.labelFechaCierre);
+            this.Controls.Add(this.dateTimePickerFechaCierre);
             this.Controls.Add(this.buttonGuardar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "EditProyectoForm";
@@ -194,6 +213,8 @@ namespace MatheoCaffieri_GestorCMB
         private System.Windows.Forms.DateTimePicker dateTimePickerFechaInicio;
         private System.Windows.Forms.Label labelEstado;
         private System.Windows.Forms.ComboBox comboBoxEstado;
+        private System.Windows.Forms.Label labelFechaCierre;
+        private System.Windows.Forms.DateTimePicker dateTimePickerFechaCierre;
         private System.Windows.Forms.Button buttonGuardar;
     }
 }

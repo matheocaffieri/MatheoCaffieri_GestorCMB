@@ -5,6 +5,7 @@ using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services;
 using Services.Language;
+using Services.Logs;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -35,12 +36,15 @@ namespace MatheoCaffieri_GestorCMB
             this.mainForm = mainForm;
             _proyecto = proyecto;
 
-            NumProyecto = "Proyecto #";
+            NumProyecto = LanguageService.Current?.T("txt_proyecto_num_default") ?? "Proyecto #";
             DescripcionProyecto = proyecto.Descripcion;
-            NombreCliente = proyecto.Cliente?.NombreContacto ?? "Cliente desconocido";
-            FechaInicio = proyecto.FechaInicio.ToString("dd/MM/yyyy") ?? "Sin fecha";
+            NombreCliente = proyecto.Cliente?.NombreContacto
+                ?? (LanguageService.Current?.T("txt_cliente_desconocido") ?? "Cliente desconocido");
+            FechaInicio = proyecto.FechaInicio.ToString("dd/MM/yyyy")
+                ?? (LanguageService.Current?.T("txt_sin_fecha") ?? "Sin fecha");
             AplicarEstado(proyecto.Estado);
-            UbicacionProyecto = proyecto.Ubicacion ?? "Ubicación desconocida";
+            UbicacionProyecto = proyecto.Ubicacion
+                ?? (LanguageService.Current?.T("txt_ubicacion_desconocida") ?? "Ubicación desconocida");
 
             buttonModificar.Click += buttonModificar_Click;
 
@@ -72,7 +76,7 @@ namespace MatheoCaffieri_GestorCMB
 
             _labelFechaCierreStatic = new Label
             {
-                Text = "Fecha de cierre:",
+                Text = LanguageService.Current?.T("lbl_fecha_de_cierre") ?? "Fecha de cierre:",
                 Font = new Font("Microsoft YaHei UI", 10f),
                 ForeColor = Color.FromArgb(70, 70, 70),
                 AutoSize = true
@@ -115,37 +119,37 @@ namespace MatheoCaffieri_GestorCMB
         public string NumProyecto
         {
             get => labelNumProyecto.Text;
-            set => labelNumProyecto.Text = value ?? "Proyecto #N/A";
+            set => labelNumProyecto.Text = value ?? (LanguageService.Current?.T("txt_proyecto_na") ?? "Proyecto #N/A");
         }
 
         public string DescripcionProyecto
         {
             get => labelDescProyecto.Text;
-            set => labelDescProyecto.Text = value ?? "Sin descripción";
+            set => labelDescProyecto.Text = value ?? (LanguageService.Current?.T("txt_sin_descripcion") ?? "Sin descripción");
         }
 
         public string NombreCliente
         {
             get => labelNomCliente.Text;
-            set => labelNomCliente.Text = value ?? "Desconocido";
+            set => labelNomCliente.Text = value ?? (LanguageService.Current?.T("txt_desconocido") ?? "Desconocido");
         }
 
         public string FechaInicio
         {
             get => labelFechaInicio.Text;
-            set => labelFechaInicio.Text = value ?? "Fecha no disponible";
+            set => labelFechaInicio.Text = value ?? (LanguageService.Current?.T("txt_fecha_no_disponible") ?? "Fecha no disponible");
         }
 
         public string EstadoProyecto
         {
             get => labelEstado.Text;
-            set => labelEstado.Text = value ?? "Estado desconocido";
+            set => labelEstado.Text = value ?? (LanguageService.Current?.T("txt_estado_desconocido") ?? "Estado desconocido");
         }
 
         public string UbicacionProyecto
         {
             get => labelUbiProyecto.Text;
-            set => labelUbiProyecto.Text = value ?? "Ubicación no especificada";
+            set => labelUbiProyecto.Text = value ?? (LanguageService.Current?.T("txt_ubicacion_no_especificada") ?? "Ubicación no especificada");
         }
 
         public string TotalEmpleados
@@ -184,9 +188,9 @@ namespace MatheoCaffieri_GestorCMB
         {
             switch (estado)
             {
-                case EnumEstado.EnProceso:  return "En proceso";
-                case EnumEstado.Suspendido: return "Suspendido";
-                case EnumEstado.Finalizado: return "Finalizado";
+                case EnumEstado.EnProceso:  return LanguageService.Current?.T("val_estado_en_proceso") ?? "En proceso";
+                case EnumEstado.Suspendido: return LanguageService.Current?.T("val_estado_suspendido") ?? "Suspendido";
+                case EnumEstado.Finalizado: return LanguageService.Current?.T("val_estado_finalizado") ?? "Finalizado";
                 default:                    return estado.ToString();
             }
         }
@@ -198,7 +202,7 @@ namespace MatheoCaffieri_GestorCMB
 
             flowLayoutPanelEmp.SuspendLayout();
             flowLayoutPanelEmp.Controls.Clear();
-            flowLayoutPanelEmp.Controls.Add(MakeSectionTitle("Empleados"));
+            flowLayoutPanelEmp.Controls.Add(MakeSectionTitle(LanguageService.Current?.T("hdr_empleados") ?? "Empleados"));
             flowLayoutPanelEmp.Controls.Add(new DetalleEmpleadoHeaderControl());
             flowLayoutPanelEmp.Controls.Add(MakeSeparator());
 
@@ -228,7 +232,7 @@ namespace MatheoCaffieri_GestorCMB
 
             flowLayoutPanelMat.SuspendLayout();
             flowLayoutPanelMat.Controls.Clear();
-            flowLayoutPanelMat.Controls.Add(MakeSectionTitle("Materiales"));
+            flowLayoutPanelMat.Controls.Add(MakeSectionTitle(LanguageService.Current?.T("hdr_materiales") ?? "Materiales"));
             flowLayoutPanelMat.Controls.Add(new DetalleMaterialHeaderControl());
             flowLayoutPanelMat.Controls.Add(MakeSeparator());
 
@@ -428,7 +432,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             return new Label
             {
-                Text      = "Faltante",
+                Text      = LanguageService.Current?.T("hdr_faltante") ?? "Faltante",
                 Font      = new System.Drawing.Font("Microsoft YaHei UI", 8F),
                 ForeColor = System.Drawing.Color.DarkOrange,
                 AutoSize  = false,
@@ -470,7 +474,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             _linkVerAnalisis = new LinkLabel
             {
-                Text      = "Ver análisis",
+                Text      = LanguageService.Current?.T("lnk_ver_analisis") ?? "Ver análisis",
                 AutoSize  = true,
                 Font      = new Font("Segoe UI", 9f),
                 Anchor    = AnchorStyles.Bottom | AnchorStyles.Right,
@@ -556,17 +560,21 @@ namespace MatheoCaffieri_GestorCMB
                 var bl = new InformeDeCompraBL();
                 var idInforme = bl.GenerarDesdeFaltantes(_proyecto.IdProyecto, unicoPorDia: true);
 
-                MessageBox.Show($"Informe generado.\nID: {idInforme}", "OK",
+                MessageBox.Show(
+                    string.Format(LanguageService.Current?.T("msg_informe_generado_fmt") ?? "Informe generado.\nID: {0}", idInforme),
+                    LanguageService.Current?.T("cap_ok") ?? "OK",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[DetalleProyectoControl] Validación al generar informe: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerLogic.Error($"[DetalleProyectoControl] Falla al generar informe (Proy={_proyecto.IdProyecto}).", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -722,8 +730,8 @@ namespace MatheoCaffieri_GestorCMB
             }
 
             var respuesta = MessageBox.Show(
-                $"¿Querés eliminar a {nombreCompleto} del proyecto?",
-                "Eliminar empleado",
+                string.Format(LanguageService.Current?.T("msg_confirmar_eliminar_empleado_fmt") ?? "¿Querés eliminar a {0} del proyecto?", nombreCompleto),
+                LanguageService.Current?.T("cap_eliminar_empleado") ?? "Eliminar empleado",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
@@ -739,11 +747,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[DetalleProyectoControl] Validación al quitar empleado: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerLogic.Error($"[DetalleProyectoControl] Falla al quitar empleado del proyecto (Proy={_proyecto.IdProyecto}, Emp={idEmpleado}).", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -761,8 +771,8 @@ namespace MatheoCaffieri_GestorCMB
             }
 
             var respuesta = MessageBox.Show(
-                $"¿Querés eliminar \"{descripcion}\" del proyecto?",
-                "Eliminar material",
+                string.Format(LanguageService.Current?.T("msg_confirmar_eliminar_material_fmt") ?? "¿Querés eliminar \"{0}\" del proyecto?", descripcion),
+                LanguageService.Current?.T("cap_eliminar_material") ?? "Eliminar material",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
@@ -779,11 +789,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[DetalleProyectoControl] Validación al quitar material: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerLogic.Error($"[DetalleProyectoControl] Falla al quitar material del proyecto (Proy={_proyecto.IdProyecto}, Mat={idMaterial}).", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

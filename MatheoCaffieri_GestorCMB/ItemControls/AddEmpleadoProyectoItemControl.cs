@@ -16,11 +16,9 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         private const int MAX_PROYECTOS_ACTIVOS = 3;
         private decimal _sueldo;
 
-        // === datos clave ===
         public Guid IdEmpleado { get; private set; }
         public int ProyectosActivos { get; private set; } = 0;
 
-        // evento para que el FORM haga la operación real
         public event EventHandler<AgregarEmpleadoEventArgs> AgregarClick;
 
         public AddEmpleadoProyectoItemControl()
@@ -29,14 +27,12 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             RefrescarUI();
         }
 
-        // ÚNICO LABEL (como aclaraste)
         public string InfoEmpleado
         {
             get => labelInfoEmpleado.Text;
             set => labelInfoEmpleado.Text = value ?? string.Empty;
         }
 
-        // Bind como en materiales
         public void Bind(Guid idEmpleado, string nombre, string apellido, int dni, decimal sueldo, int proyectosActivos)
         {
             IdEmpleado = idEmpleado;
@@ -53,7 +49,9 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         {
             var sinCupo = ProyectosActivos >= MAX_PROYECTOS_ACTIVOS;
             buttonAgregarEmpleado.Enabled = !sinCupo;
-            buttonAgregarEmpleado.Text = sinCupo ? "Sin cupo" : "Agregar";
+            buttonAgregarEmpleado.Text = sinCupo
+                ? (LanguageService.Current?.T("val_sin_cupo")      ?? "Sin cupo")
+                : (LanguageService.Current?.T("btn_agregar_simple") ?? "Agregar");
         }
 
         private void buttonAgregarEmpleado_Click(object sender, EventArgs e)
@@ -64,7 +62,8 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             {
                 MessageBox.Show(
                     LanguageService.Current?.T("err_empleado_max_proyectos") ?? "El empleado ya tiene 3 proyectos activos. No se puede agregar.",
-                    "Límite alcanzado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LanguageService.Current?.T("cap_limite_alcanzado") ?? "Límite alcanzado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 

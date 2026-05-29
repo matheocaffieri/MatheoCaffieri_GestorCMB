@@ -83,13 +83,13 @@ namespace MatheoCaffieri_GestorCMB
                 BackColor = Color.White,
             };
 
-            var btnBack = MakeNavBtn("← Volver");
+            var btnBack = MakeNavBtn(LanguageService.Current?.T("btn_volver") ?? "← Volver");
             btnBack.Location  = new Point(16, 15);
             btnBack.Click    += buttonBack_Click;
 
             var lblTitle = new Label
             {
-                Text      = "Proveedores",
+                Text      = LanguageService.Current?.T("hdr_proveedores") ?? "Proveedores",
                 Font      = new Font("Microsoft YaHei UI", 15f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(22, 22, 28),
                 AutoSize  = true,
@@ -117,7 +117,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var lblDesc = new Label
             {
-                Text      = "Descripción",
+                Text      = LanguageService.Current?.T("lbl_descripcion") ?? "Descripción",
                 Font      = new Font("Microsoft YaHei UI", 8.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(80, 80, 90),
                 AutoSize  = true,
@@ -135,7 +135,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var lblTel = new Label
             {
-                Text      = "Teléfono",
+                Text      = LanguageService.Current?.T("lbl_telefono") ?? "Teléfono",
                 Font      = new Font("Microsoft YaHei UI", 8.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(80, 80, 90),
                 AutoSize  = true,
@@ -153,7 +153,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var newAddBtn = new Button
             {
-                Text      = "+ Agregar",
+                Text      = LanguageService.Current?.T("btn_agregar") ?? "+ Agregar",
                 Location  = new Point(16, 146),
                 Height    = 30,
                 Width     = 210,
@@ -196,7 +196,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var lblSec = new Label
             {
-                Text      = "Lista",
+                Text      = LanguageService.Current?.T("hdr_lista") ?? "Lista",
                 Font      = new Font("Microsoft YaHei UI", 10f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(48, 48, 58),
                 AutoSize  = true,
@@ -223,7 +223,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var newSearchBtn = new Button
             {
-                Text      = "Buscar",
+                Text      = LanguageService.Current?.T("btn_buscar") ?? "Buscar",
                 Height    = 28,
                 Width     = 70,
                 BackColor = Color.White,
@@ -449,9 +449,17 @@ namespace MatheoCaffieri_GestorCMB
                 proveedor.IsActive = nuevoEstado;
                 _proveedorRepo.Update(proveedor);
             }
+            catch (DomainModel.Exceptions.AppException ex)
+            {
+                Services.Logs.LoggerLogic.Warn($"[ProveedorControl] Validación al cambiar estado de proveedor: {ex.MessageKey}");
+                MessageBox.Show(
+                    LanguageService.Current?.T(ex.MessageKey) ?? ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CargarListado(textBox1.Text);
+            }
             catch (Exception ex)
             {
-                Services.Logs.LoggerLogic.Error($"[ProveedorControl] Error al actualizar estado proveedor {proveedor.IdProveedor}: {ex.Message}");
+                Services.Logs.LoggerLogic.Error($"[ProveedorControl] Falla al cambiar estado de proveedor. Id={proveedor.IdProveedor}", ex);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

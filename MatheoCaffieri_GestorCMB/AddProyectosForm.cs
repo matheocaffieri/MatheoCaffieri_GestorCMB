@@ -3,6 +3,7 @@ using DomainModel;
 using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Language;
+using Services.Logs;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -84,6 +85,7 @@ namespace MatheoCaffieri_GestorCMB
 
             if (string.IsNullOrWhiteSpace(descripcion) || string.IsNullOrWhiteSpace(ubicacion))
             {
+                LoggerLogic.Warn("[AddProyectosForm] Validación: descripción o ubicación vacías al crear proyecto.");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_descripcion_ubicacion") ?? "Complete Descripción y Ubicación.",
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
@@ -93,6 +95,7 @@ namespace MatheoCaffieri_GestorCMB
 
             if (comboBoxCliente.SelectedValue == null || !(comboBoxCliente.SelectedValue is Guid idCliente) || idCliente == Guid.Empty)
             {
+                LoggerLogic.Warn("[AddProyectosForm] Validación: cliente no seleccionado al crear proyecto.");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_cliente_requerido") ?? "Seleccione un cliente.",
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
@@ -124,11 +127,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[AddProyectosForm] Validación de negocio: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerLogic.Error("[AddProyectosForm] Falla al guardar proyecto.", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -138,16 +143,12 @@ namespace MatheoCaffieri_GestorCMB
         {
             var clientes = _clienteRepo.GetAll().ToList();
 
-            // Diagnóstico rápido
-            // MessageBox.Show("Clientes encontrados: " + clientes.Count);
-
-            // Armo un datasource simple (Id + Texto)
+            // Texto a mostrar en el combo: primero RazonSocial; si está vacía, NombreContacto; si tampoco, ToString().
             var data = clientes
                 .Select(c => new
                 {
                     Id = c.IdCliente,
                     Texto =
-                        // probá primero RazonSocial, si no existe o viene null usa otras
                         (c.RazonSocial ?? "").Trim().Length > 0 ? c.RazonSocial :
                         (c.NombreContacto ?? "").Trim().Length > 0 ? c.NombreContacto :
                         c.ToString()
@@ -155,7 +156,8 @@ namespace MatheoCaffieri_GestorCMB
                 .OrderBy(x => x.Texto)
                 .ToList();
 
-            comboBoxCliente.DataSource = null; // importante para refrescar
+            // Reasignamos DataSource = null antes de re-bindear para que el combo dispare el refresh.
+            comboBoxCliente.DataSource = null;
             comboBoxCliente.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxCliente.DisplayMember = "Texto";
             comboBoxCliente.ValueMember = "Id";

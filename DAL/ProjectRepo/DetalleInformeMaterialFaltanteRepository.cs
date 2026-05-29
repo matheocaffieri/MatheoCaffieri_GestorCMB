@@ -19,6 +19,7 @@ using DomainModel.Entities;
 
 namespace DAL.ProjectRepo
 {
+    // Los métodos de escritura NO llaman a SaveChanges: la persistencia la dispara el UnitOfWork al Commit.
     public class DetalleInformeMaterialFaltanteRepository : IDetalleInformeMaterialFaltanteRepository
     {
         private readonly GestorCMBEntities _context;
@@ -54,7 +55,6 @@ namespace DAL.ProjectRepo
             MapToEf(entity, ef);
 
             _set.Add(ef);
-            // NO SaveChanges
         }
 
         public void Update(DetalleInformeMaterialFaltante entity)
@@ -66,7 +66,6 @@ namespace DAL.ProjectRepo
 
             MapToEf(entity, ef);
             _context.Entry(ef).State = EntityState.Modified;
-            // NO SaveChanges
         }
 
         public void Delete(DetalleInformeMaterialFaltante entity)
@@ -77,7 +76,6 @@ namespace DAL.ProjectRepo
             if (ef == null) return;
 
             _set.Remove(ef);
-            // NO SaveChanges
         }
 
         public DetalleInformeMaterialFaltante GetById(Guid id)

@@ -1,7 +1,7 @@
-﻿using DomainModel.LoginDALInterfaces; // IUsuarioRepository
+﻿using DomainModel.LoginDALInterfaces;
 using DomainModel.Login;
 using DomainModel.Exceptions;
-using Interfaces.LoginInterfaces; // IAccesoRepository
+using Interfaces.LoginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,7 +66,7 @@ namespace Services.RoleService.Logic
         public void AsignarUsuarioARol(Guid idRol, Guid idUsuario) => _famRepo.AddUsuario(idRol, idUsuario);
         public void QuitarUsuarioDeRol(Guid idRol, Guid idUsuario) => _famRepo.RemoveUsuario(idRol, idUsuario);
 
-        // ----- Accesos sueltos (si querés mantenerlo acá) -----
+        // ----- Accesos sueltos (catálogo) -----
 
         public List<Acceso> ListarAccesos() => _accRepo.GetAll();
         public Acceso CrearAcceso(string nombre, TipoPermiso key) => _accRepo.Create(nombre, key);

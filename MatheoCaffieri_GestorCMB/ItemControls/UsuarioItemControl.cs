@@ -1,5 +1,6 @@
 ﻿using BL.LoginBL;
 using DomainModel.Login;
+using Services.Language;
 using Services.RoleService.Logic;
 using System;
 using System.ComponentModel;
@@ -35,7 +36,8 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
             {
                 MessageBox.Show("UsuarioItemControl() sin servicios.\n\n" + Environment.StackTrace,
-                                "Diagnóstico", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                LanguageService.Current?.T("cap_diagnostico") ?? "Diagnóstico",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

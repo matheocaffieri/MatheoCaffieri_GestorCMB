@@ -12,6 +12,8 @@ using DomainModel;
 using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Language;
+using Services.Logs;
+// Las claves de traducción para los labels del Designer están en Properties/Resources.resx (btn_editar, lbl_*, cap_editar_empleado).
 
 namespace MatheoCaffieri_GestorCMB
 {
@@ -44,6 +46,8 @@ namespace MatheoCaffieri_GestorCMB
             if (_empleado.IdEmpleado == Guid.Empty)
                 throw new ArgumentException("IdEmpleado requerido.", nameof(empleado));
 
+            AplicarTraducciones();
+
             // Precargar campos
             textBoxNombre.Text = _empleado.Nombre;
             textBoxApellido.Text = _empleado.Apellido;
@@ -55,6 +59,16 @@ namespace MatheoCaffieri_GestorCMB
             buttonExit.Click    += (s, ev) => Close();
         }
 
+        private void AplicarTraducciones()
+        {
+            buttonEditar.Text = LanguageService.Current?.T("btn_editar")           ?? buttonEditar.Text;
+            label1.Text       = LanguageService.Current?.T("lbl_nombre")           ?? label1.Text;
+            label2.Text       = LanguageService.Current?.T("cap_editar_empleado")  ?? label2.Text;
+            label3.Text       = LanguageService.Current?.T("lbl_apellido")         ?? label3.Text;
+            label4.Text       = LanguageService.Current?.T("lbl_numero_documento") ?? label4.Text;
+            label5.Text       = LanguageService.Current?.T("lbl_sueldo")           ?? label5.Text;
+        }
+
       
 
         private void buttonEditar_Click(object sender, EventArgs e)
@@ -64,18 +78,21 @@ namespace MatheoCaffieri_GestorCMB
 
             if (string.IsNullOrWhiteSpace(nombre))
             {
+                LoggerLogic.Warn($"[EditEmpleadoForm] Validación: nombre vacío (Id={_empleado.IdEmpleado}).");
                 MessageBox.Show(LanguageService.Current?.T("val_nombre_requerido") ?? "Nombre requerido.");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(apellido))
             {
+                LoggerLogic.Warn($"[EditEmpleadoForm] Validación: apellido vacío (Id={_empleado.IdEmpleado}).");
                 MessageBox.Show(LanguageService.Current?.T("val_apellido_requerido") ?? "Apellido requerido.");
                 return;
             }
 
             if (!int.TryParse(textBoxDocumento.Text.Trim(), out int dni))
             {
+                LoggerLogic.Warn($"[EditEmpleadoForm] Validación: DNI inválido (Id={_empleado.IdEmpleado}).");
                 MessageBox.Show(LanguageService.Current?.T("val_dni_invalido") ?? "DNI inválido.");
                 return;
             }
@@ -83,6 +100,7 @@ namespace MatheoCaffieri_GestorCMB
             if (!float.TryParse(textBoxSueldo.Text.Trim(), NumberStyles.Float, CultureInfo.CurrentCulture, out float sueldo) &&
                 !float.TryParse(textBoxSueldo.Text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out sueldo))
             {
+                LoggerLogic.Warn($"[EditEmpleadoForm] Validación: sueldo inválido (Id={_empleado.IdEmpleado}).");
                 MessageBox.Show(LanguageService.Current?.T("val_sueldo_invalido") ?? "Sueldo inválido.");
                 return;
             }
@@ -102,11 +120,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[EditEmpleadoForm] Validación al actualizar empleado: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerLogic.Error($"[EditEmpleadoForm] Falla al actualizar empleado. Id={_empleado.IdEmpleado}", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

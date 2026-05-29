@@ -52,7 +52,29 @@
       "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB\\\\MatheoCaffieri_GestorCMB.csproj\" -t:Build -p:Configuration=Debug -m -v:m -nologo 2>&1 | Select-Object -Last 60)",
       "PowerShell(New-Item *)",
       "Bash(Select-Object -First 1)",
-      "Bash(grep -E \"\\\\.cs$\")"
+      "Bash(grep -E \"\\\\.cs$\")",
+      "PowerShell(Get-Command *)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" MatheoCaffieri_GestorCMB.sln /t:Build /p:Configuration=Debug /verbosity:minimal /nologo 2>&1 | Select-Object -Last 40)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" MatheoCaffieri_GestorCMB.sln /t:Build /p:Configuration=Debug /verbosity:minimal /nologo 2>&1 | Select-Object -Last 12)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" MatheoCaffieri_GestorCMB.sln /t:Build /p:Configuration=Debug /verbosity:minimal /nologo 2>&1 | Select-Object -Last 15)",
+      "Bash(Get-Content *.cs)",
+      "Bash(Select-String -Pattern '\\\\\\(Sin rol\\\\\\)|\\\\\\(Rol\\\\\\)|\"\\\\+\\\\s')",
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe\" MatheoCaffieri_GestorCMB.sln -t:Build -p:Configuration=Debug -v:minimal -nologo)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(\"/c/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe\" \"C:/Users/mcaff/source/repos/MatheoCaffieri_GestorCMB/MatheoCaffieri_GestorCMB.sln\" -t:Build -p:Configuration=Debug -v:minimal -nologo)",
+      "Bash(Select-Object Name)",
+      "PowerShell(Get-Content C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\\\\BL\\\\packages.config; \"---\"; Get-Content C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\\\\DAL\\\\packages.config; \"---\"; Get-Content C:\\\\Users\\\\mcaff\\\\source\\\\repos\\\\MatheoCaffieri_GestorCMB\\\\Services\\\\packages.config -ErrorAction SilentlyContinue)",
+      "Bash(\"C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual Studio\\\\2022\\\\BuildTools\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" MatheoCaffieri_GestorCMB.sln /t:Build /p:Configuration=Debug /v:minimal /nologo)",
+      "PowerShell(& 'C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe' 'MatheoCaffieri_GestorCMB.sln' /t:Build /p:Configuration=Debug /v:minimal /nologo)",
+      "Skill(claude-mermaid:mermaid-diagrams)",
+      "mcp__plugin_claude-mermaid_mermaid__mermaid_preview",
+      "Bash(mkdir -p \"C:/Users/mcaff/source/repos/MatheoCaffieri_GestorCMB/Docs/diagramas\")",
+      "Bash(cp \"C:/Users/mcaff/.config/claude-mermaid/live/er-negocio/diagram.svg\" \"C:/Users/mcaff/source/repos/MatheoCaffieri_GestorCMB/Docs/diagramas/ER_Negocio.svg\")",
+      "Bash(cp \"C:/Users/mcaff/.config/claude-mermaid/live/er-seguridad/diagram.svg\" \"C:/Users/mcaff/source/repos/MatheoCaffieri_GestorCMB/Docs/diagramas/ER_Seguridad.svg\")",
+      "mcp__plugin_claude-mermaid_mermaid__mermaid_save",
+      "Bash(grep -E \"\\(Form|Control\\)\\\\.cs$\")",
+      "Bash(Select-Object -First 20 FullName)",
+      "PowerShell(Write-Output \"PS-TEST-OK\"; \\(Get-Content \"BL\\\\LoginBL\\\\LoginService.cs\" -TotalCount 5\\) -join \"`n\")"
     ]
   }
 }

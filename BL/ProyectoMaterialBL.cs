@@ -73,16 +73,22 @@ namespace BL
                     uow.Commit();
 
                     LoggerLogic.Info(
-                        $"[ProyectoMaterialBL] Asignación material ok. Proy={idProyecto} Mat={idMaterial} " +
-                        $"Stock={stock} Sol={cantidadSolicitada} Asig={cantidadAsignada} Falt={cantidadFaltante}");
+                        $"[ProyectoMaterialBL] Material asignado al proyecto. Proy={idProyecto} Mat={idMaterial} " +
+                        $"Asig={cantidadAsignada} Falt={cantidadFaltante}");
 
                     return new AsignacionMaterialResult(stock, cantidadSolicitada, cantidadAsignada, cantidadFaltante);
+                }
+                catch (AppException ex)
+                {
+                    uow.Rollback();
+                    LoggerLogic.Warn($"[ProyectoMaterialBL] Validación al asignar material: {ex.MessageKey}");
+                    throw;
                 }
                 catch (Exception ex)
                 {
                     uow.Rollback();
                     LoggerLogic.Error(
-                        $"[ProyectoMaterialBL] Error asignando material. Proy={idProyecto} Mat={idMaterial} Sol={cantidadSolicitada}",
+                        $"[ProyectoMaterialBL] Falla asignando material. Proy={idProyecto} Mat={idMaterial} Sol={cantidadSolicitada}",
                         ex);
                     throw;
                 }
@@ -117,12 +123,18 @@ namespace BL
                     }
 
                     uow.Commit();
-                    LoggerLogic.Info($"[ProyectoMaterialBL] Material quitado del proyecto. Proy={idProyecto} Mat={idMaterial} Cantidad={cantidad}");
+                    LoggerLogic.Info($"[ProyectoMaterialBL] Material quitado del proyecto. Proy={idProyecto} Mat={idMaterial} CantDevuelta={cantidad}");
+                }
+                catch (AppException ex)
+                {
+                    uow.Rollback();
+                    LoggerLogic.Warn($"[ProyectoMaterialBL] Validación al quitar material: {ex.MessageKey}");
+                    throw;
                 }
                 catch (Exception ex)
                 {
                     uow.Rollback();
-                    LoggerLogic.Error($"[ProyectoMaterialBL] Error al quitar material. Proy={idProyecto} Mat={idMaterial}", ex);
+                    LoggerLogic.Error($"[ProyectoMaterialBL] Falla al quitar material. Proy={idProyecto} Mat={idMaterial}", ex);
                     throw;
                 }
             }

@@ -5,6 +5,7 @@ using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
+using Services.Logs;
 using Services.LoginService;
 using Services.RoleService;
 using Services.RoleService.Logic;
@@ -60,24 +61,26 @@ namespace MatheoCaffieri_GestorCMB
         private Panel _secRoles;
 
         // ── definición de módulos ──────────────────────────────────
+        // NombreKey es la clave de Resources.resx; se traduce en MakeModuloRow.
         private class Modulo
         {
-            public string      Nombre    { get; set; }
+            public string      NombreKey { get; set; }
+            public string      NombreFallback { get; set; }
             public TipoPermiso? Ver      { get; set; }
             public TipoPermiso? Gestionar { get; set; }
         }
 
         private static readonly Modulo[] _modulos = new Modulo[]
         {
-            new Modulo { Nombre = "Proyectos",       Ver = TipoPermiso.VER_PROYECTOS,       Gestionar = TipoPermiso.GESTIONAR_PROYECTOS       },
-            new Modulo { Nombre = "Inventario",      Ver = TipoPermiso.VER_INVENTARIO,      Gestionar = TipoPermiso.GESTIONAR_MATERIALES      },
-            new Modulo { Nombre = "Empleados",       Ver = TipoPermiso.VER_EMPLEADOS,       Gestionar = TipoPermiso.GESTIONAR_EMPLEADOS       },
-            new Modulo { Nombre = "Clientes",        Ver = TipoPermiso.VER_CLIENTES,        Gestionar = TipoPermiso.GESTIONAR_CLIENTES        },
-            new Modulo { Nombre = "Proveedores",     Ver = TipoPermiso.VER_PROVEEDORES,     Gestionar = TipoPermiso.GESTIONAR_PROVEEDORES     },
-            new Modulo { Nombre = "Informes compra", Ver = TipoPermiso.VER_INFORMES_COMPRA, Gestionar = TipoPermiso.GESTIONAR_INFORMES_COMPRA },
-            new Modulo { Nombre = "Logs",            Ver = TipoPermiso.VER_LOGS,            Gestionar = null                                  },
-            new Modulo { Nombre = "Configuración",   Ver = null,                            Gestionar = TipoPermiso.CONFIGURAR_PARAMETROS     },
-            new Modulo { Nombre = "Usuarios",        Ver = null,                            Gestionar = TipoPermiso.GESTIONAR_USUARIOS        },
+            new Modulo { NombreKey = "mod_proyectos",       NombreFallback = "Proyectos",       Ver = TipoPermiso.VER_PROYECTOS,       Gestionar = TipoPermiso.GESTIONAR_PROYECTOS       },
+            new Modulo { NombreKey = "mod_inventario",      NombreFallback = "Inventario",      Ver = TipoPermiso.VER_INVENTARIO,      Gestionar = TipoPermiso.GESTIONAR_MATERIALES      },
+            new Modulo { NombreKey = "mod_empleados",       NombreFallback = "Empleados",       Ver = TipoPermiso.VER_EMPLEADOS,       Gestionar = TipoPermiso.GESTIONAR_EMPLEADOS       },
+            new Modulo { NombreKey = "mod_clientes",        NombreFallback = "Clientes",        Ver = TipoPermiso.VER_CLIENTES,        Gestionar = TipoPermiso.GESTIONAR_CLIENTES        },
+            new Modulo { NombreKey = "mod_proveedores",     NombreFallback = "Proveedores",     Ver = TipoPermiso.VER_PROVEEDORES,     Gestionar = TipoPermiso.GESTIONAR_PROVEEDORES     },
+            new Modulo { NombreKey = "mod_informes_compra", NombreFallback = "Informes compra", Ver = TipoPermiso.VER_INFORMES_COMPRA, Gestionar = TipoPermiso.GESTIONAR_INFORMES_COMPRA },
+            new Modulo { NombreKey = "mod_logs",             NombreFallback = "Logs",            Ver = TipoPermiso.VER_LOGS,            Gestionar = null                                  },
+            new Modulo { NombreKey = "mod_configuracion",   NombreFallback = "Configuración",   Ver = null,                            Gestionar = TipoPermiso.CONFIGURAR_PARAMETROS     },
+            new Modulo { NombreKey = "mod_usuarios",        NombreFallback = "Usuarios",        Ver = null,                            Gestionar = TipoPermiso.GESTIONAR_USUARIOS        },
         };
 
         // ══════════════════════════════════════════════════════════
@@ -163,7 +166,7 @@ namespace MatheoCaffieri_GestorCMB
             var bg = Color.FromArgb(247, 248, 250);
             var panel = new Panel { BackColor = bg, Padding = new Padding(12, 12, 8, 8) };
 
-            var title = MakeLbl("Usuarios", 13f, FontStyle.Bold, Color.FromArgb(30, 30, 30));
+            var title = MakeLbl(LanguageService.Current?.T("hdr_usuarios") ?? "Usuarios", 13f, FontStyle.Bold, Color.FromArgb(30, 30, 30));
             title.Dock   = DockStyle.Top;
             title.Height = 36;
 
@@ -230,22 +233,22 @@ namespace MatheoCaffieri_GestorCMB
             var bg    = Color.FromArgb(247, 248, 250);
             var form  = new Panel { BackColor = bg, Height = 228, Padding = new Padding(0, 8, 0, 4) };
 
-            var titleCrear = MakeLbl("Nuevo usuario", 9.5f, FontStyle.Bold, Color.DimGray);
+            var titleCrear = MakeLbl(LanguageService.Current?.T("hdr_nuevo_usuario") ?? "Nuevo usuario", 9.5f, FontStyle.Bold, Color.DimGray);
             titleCrear.Dock   = DockStyle.Top;
             titleCrear.Height = 22;
 
-            var rowMail   = MakeCampo("Mail",       out _txtMail);
-            var rowPass   = MakeCampo("Contraseña", out _txtPass, isPassword: true);
-            var rowTel    = MakeCampo("Teléfono",   out _txtTel);
-            var rowIdioma = MakeCampoCombo("Idioma", out _comboIdioma);
+            var rowMail   = MakeCampo(LanguageService.Current?.T("lbl_mail")       ?? "Mail",       out _txtMail);
+            var rowPass   = MakeCampo(LanguageService.Current?.T("lbl_contrasena") ?? "Contraseña", out _txtPass, isPassword: true);
+            var rowTel    = MakeCampo(LanguageService.Current?.T("lbl_telefono")   ?? "Teléfono",   out _txtTel);
+            var rowIdioma = MakeCampoCombo(LanguageService.Current?.T("lbl_idioma") ?? "Idioma", out _comboIdioma);
             _comboIdioma.Items.AddRange(new object[] { "Español", "English" });
             _comboIdioma.SelectedIndex = 0;
 
-            var rowRol = MakeCampoCombo("Rol", out _comboRolCrear);
+            var rowRol = MakeCampoCombo(LanguageService.Current?.T("lbl_rol") ?? "Rol", out _comboRolCrear);
 
             var btnCrear = new Button
             {
-                Text      = "Crear usuario",
+                Text      = LanguageService.Current?.T("btn_crear_usuario") ?? "Crear usuario",
                 Dock      = DockStyle.Top,
                 Height    = 30,
                 BackColor = Color.FromArgb(76, 175, 80),
@@ -297,7 +300,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             var sec = new Panel { BackColor = Color.White };
 
-            var title = MakeLbl("Roles", 13f, FontStyle.Bold, Color.FromArgb(30, 30, 30));
+            var title = MakeLbl(LanguageService.Current?.T("hdr_roles") ?? "Roles", 13f, FontStyle.Bold, Color.FromArgb(30, 30, 30));
             title.Dock   = DockStyle.Top;
             title.Height = 34;
 
@@ -393,7 +396,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var btnCrearRol = new Button
             {
-                Text      = "+ Crear rol",
+                Text      = LanguageService.Current?.T("btn_crear_rol") ?? "+ Crear rol",
                 Width     = 88,
                 Height    = 26,
                 BackColor = Color.FromArgb(100, 149, 237),
@@ -429,7 +432,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             var sec = new Panel { BackColor = Color.White, Padding = new Padding(0, 10, 0, 0) };
 
-            _labelRolTitulo = MakeLbl("Seleccioná un rol para ver sus permisos", 10f, FontStyle.Regular, Color.DimGray);
+            _labelRolTitulo = MakeLbl(LanguageService.Current?.T("msg_selecciona_rol") ?? "Seleccioná un rol para ver sus permisos", 10f, FontStyle.Regular, Color.DimGray);
             _labelRolTitulo.Dock   = DockStyle.Top;
             _labelRolTitulo.Height = 28;
 
@@ -524,8 +527,8 @@ namespace MatheoCaffieri_GestorCMB
 
             string rolNombre = GetRolNombreById(rolId);
             _labelRolTitulo.Text      = esAdmin
-                ? $"Permisos: {rolNombre}   (protegido, solo lectura)"
-                : $"Permisos: {rolNombre}";
+                ? string.Format(LanguageService.Current?.T("lbl_permisos_admin_fmt") ?? "Permisos: {0}   (protegido, solo lectura)", rolNombre)
+                : string.Format(LanguageService.Current?.T("lbl_permisos_fmt")       ?? "Permisos: {0}", rolNombre);
             _labelRolTitulo.Font      = MakeFont(10f, FontStyle.Bold);
             _labelRolTitulo.ForeColor = esAdmin ? Color.Crimson : Color.FromArgb(40, 40, 40);
 
@@ -560,9 +563,9 @@ namespace MatheoCaffieri_GestorCMB
                 row.Controls.Add(lbl);
             }
 
-            AddHdr("Módulo",     10);
-            AddHdr("VER",        COL_VER);
-            AddHdr("GESTIONAR",  COL_GESTIONAR);
+            AddHdr(LanguageService.Current?.T("hdr_modulo")    ?? "Módulo",     10);
+            AddHdr(LanguageService.Current?.T("hdr_ver")       ?? "VER",        COL_VER);
+            AddHdr(LanguageService.Current?.T("hdr_gestionar") ?? "GESTIONAR",  COL_GESTIONAR);
 
             return row;
         }
@@ -573,7 +576,8 @@ namespace MatheoCaffieri_GestorCMB
             var rowBg = altRow ? Color.White : Color.FromArgb(249, 250, 251);
             var row   = new Panel { Dock = DockStyle.Top, Height = 38, BackColor = rowBg };
 
-            var lblNombre = MakeLbl(mod.Nombre, 9f, FontStyle.Regular, Color.FromArgb(40, 40, 40));
+            var nombreMod = LanguageService.Current?.T(mod.NombreKey) ?? mod.NombreFallback;
+            var lblNombre = MakeLbl(nombreMod, 9f, FontStyle.Regular, Color.FromArgb(40, 40, 40));
             lblNombre.AutoSize = true;
             lblNombre.Location = new Point(10, (38 - 18) / 2);
             row.Controls.Add(lblNombre);
@@ -623,15 +627,18 @@ namespace MatheoCaffieri_GestorCMB
                     _rolesSrv.AsignarPermisoARol(rolId, accesoId);
                 else
                     _rolesSrv.QuitarPermisoDeRol(rolId, accesoId);
+                LoggerLogic.Info($"[GestionUsuariosControl] Permiso {(activar ? "asignado" : "quitado")} al rol. Rol={rolId} Permiso={permiso}");
             }
             catch (AppException ex)
             {
                 RevertirToggle(permiso, !activar);
+                LoggerLogic.Warn($"[GestionUsuariosControl] Validación al cambiar permiso de rol: {ex.MessageKey}");
                 MessageBox.Show(LanguageService.Current?.T(ex.MessageKey) ?? ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 RevertirToggle(permiso, !activar);
+                LoggerLogic.Error($"[GestionUsuariosControl] Falla al actualizar permisos. Rol={rolId} Permiso={permiso}", ex);
                 MessageBox.Show(LanguageService.Current?.T("err_actualizar_permisos") ?? "No se pudo actualizar los permisos.");
             }
         }
@@ -687,13 +694,19 @@ namespace MatheoCaffieri_GestorCMB
                     {
                         _usuarioSrv.SetActivo(usr.IdUsuario, on);
                         usr.IsActive = on;
+                        LoggerLogic.Info($"[GestionUsuariosControl] Usuario {(on ? "activado" : "desactivado")}. Id={usr.IdUsuario} Mail='{usr.Mail}'");
                     }
                     catch (AppException ex)
                     {
                         ctrl.Activo = !on;
+                        LoggerLogic.Warn($"[GestionUsuariosControl] Validación al cambiar estado de usuario: {ex.MessageKey}");
                         MessageBox.Show(LanguageService.Current?.T(ex.MessageKey) ?? ex.Message);
                     }
-                    catch { ctrl.Activo = !on; }
+                    catch (Exception ex)
+                    {
+                        ctrl.Activo = !on;
+                        LoggerLogic.Error($"[GestionUsuariosControl] Falla al cambiar estado de usuario. Id={usr.IdUsuario}", ex);
+                    }
                 };
 
                 _panelUsuariosLista.Controls.Add(item);
@@ -704,7 +717,9 @@ namespace MatheoCaffieri_GestorCMB
                 int resto = _cachedUsuarios.Count - USUARIOS_PREVIEW;
                 var link = new LinkLabel
                 {
-                    Text      = _usersExpanded ? "Ver menos" : $"Ver {resto} más...",
+                    Text      = _usersExpanded
+                        ? (LanguageService.Current?.T("lnk_ver_menos") ?? "Ver menos")
+                        : string.Format(LanguageService.Current?.T("lnk_ver_mas_fmt") ?? "Ver {0} más...", resto),
                     Width     = itemW,
                     Height    = 22,
                     Font      = MakeFont(8.5f),
@@ -732,16 +747,28 @@ namespace MatheoCaffieri_GestorCMB
             var idi    = (_comboIdioma?.SelectedIndex ?? 0) == 1 ? "en" : "es";
 
             if (string.IsNullOrWhiteSpace(mail))
-            { MessageBox.Show(LanguageService.Current?.T("val_mail_requerido") ?? "El mail es obligatorio."); _txtMail?.Focus(); return; }
+            {
+                LoggerLogic.Warn("[GestionUsuariosControl] Validación: mail vacío al crear usuario.");
+                MessageBox.Show(LanguageService.Current?.T("val_mail_requerido") ?? "El mail es obligatorio."); _txtMail?.Focus(); return;
+            }
             if (string.IsNullOrWhiteSpace(pass))
-            { MessageBox.Show(LanguageService.Current?.T("val_contrasena_requerida") ?? "La contraseña es obligatoria."); _txtPass?.Focus(); return; }
+            {
+                LoggerLogic.Warn("[GestionUsuariosControl] Validación: contraseña vacía al crear usuario.");
+                MessageBox.Show(LanguageService.Current?.T("val_contrasena_requerida") ?? "La contraseña es obligatoria."); _txtPass?.Focus(); return;
+            }
             if (!string.IsNullOrWhiteSpace(telStr) && !int.TryParse(telStr, out _))
-            { MessageBox.Show(LanguageService.Current?.T("val_telefono_invalido") ?? "El teléfono debe ser numérico."); _txtTel?.Focus(); return; }
+            {
+                LoggerLogic.Warn($"[GestionUsuariosControl] Validación: teléfono inválido al crear usuario ('{telStr}').");
+                MessageBox.Show(LanguageService.Current?.T("val_telefono_invalido") ?? "El teléfono debe ser numérico."); _txtTel?.Focus(); return;
+            }
 
             try
             {
                 if (_usuarioSrv.ObtenerPorMail(mail) != null)
-                { MessageBox.Show(LanguageService.Current?.T("err_mail_duplicado") ?? "Ya existe un usuario con ese mail."); return; }
+                {
+                    LoggerLogic.Warn($"[GestionUsuariosControl] Validación: mail duplicado al crear usuario ('{mail}').");
+                    MessageBox.Show(LanguageService.Current?.T("err_mail_duplicado") ?? "Ya existe un usuario con ese mail."); return;
+                }
 
                 var nuevo = new Usuario
                 {
@@ -752,9 +779,13 @@ namespace MatheoCaffieri_GestorCMB
                     Idioma    = idi,
                 };
                 _usuarioSrv.CrearUsuario(nuevo, pass);
+                LoggerLogic.Info($"[GestionUsuariosControl] Usuario creado. Id={nuevo.IdUsuario} Mail='{nuevo.Mail}'");
 
                 if (_comboRolCrear?.SelectedValue is Guid rolId && rolId != Guid.Empty)
+                {
                     _rolesSrv.AsignarUsuarioARol(rolId, nuevo.IdUsuario);
+                    LoggerLogic.Info($"[GestionUsuariosControl] Rol inicial asignado al nuevo usuario. Rol={rolId} Usuario={nuevo.IdUsuario}");
+                }
 
                 MessageBox.Show(LanguageService.Current?.T("msg_usuario_creado") ?? "Usuario creado correctamente.");
                 _txtMail.Clear(); _txtPass.Clear(); _txtTel.Clear();
@@ -762,15 +793,21 @@ namespace MatheoCaffieri_GestorCMB
                 CargarUsuarios();
             }
             catch (AppException ex)
-            { MessageBox.Show(LanguageService.Current?.T(ex.MessageKey) ?? ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            catch
-            { MessageBox.Show(LanguageService.Current?.T("err_crear_usuario") ?? "Error al crear el usuario."); }
+            {
+                LoggerLogic.Warn($"[GestionUsuariosControl] Validación al crear usuario: {ex.MessageKey}");
+                MessageBox.Show(LanguageService.Current?.T(ex.MessageKey) ?? ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                LoggerLogic.Error($"[GestionUsuariosControl] Falla al crear usuario ('{mail}').", ex);
+                MessageBox.Show(LanguageService.Current?.T("err_crear_usuario") ?? "Error al crear el usuario.");
+            }
         }
 
         private void ActualizarComboRoles()
         {
             if (_comboRolCrear == null) return;
-            var items = new List<RolItem> { new RolItem { Id = Guid.Empty, Nombre = "(Sin rol)" } };
+            var items = new List<RolItem> { new RolItem { Id = Guid.Empty, Nombre = LanguageService.Current?.T("txt_sin_rol") ?? "(Sin rol)" } };
             foreach (var rol in _rolesSrv.ListarRoles())
                 items.Add(new RolItem { Id = GetRolId(rol), Nombre = GetRolNombre(rol) });
             _comboRolCrear.DisplayMember = "Nombre";

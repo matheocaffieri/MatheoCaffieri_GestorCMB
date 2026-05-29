@@ -30,6 +30,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void HistorialInformesControl_Load(object sender, EventArgs e)
         {
+            AplicarTraducciones();
             AplicarEstilo();
             CrearPanelLista();
 
@@ -57,6 +58,11 @@ namespace MatheoCaffieri_GestorCMB
         [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
 
+        private void AplicarTraducciones()
+        {
+            labelTitulo.Text = LanguageService.Current?.T("cap_historial_informes") ?? "Historial de informes";
+        }
+
         private void AplicarEstilo()
         {
             BackColor = Color.FromArgb(245, 246, 250);
@@ -75,7 +81,7 @@ namespace MatheoCaffieri_GestorCMB
 
             textBoxBuscar.Font = new Font("Microsoft YaHei UI", 9.5f);
             textBoxBuscar.BorderStyle = BorderStyle.FixedSingle;
-            SendMessage(textBoxBuscar.Handle, 0x1501, 1, "Buscar...");
+            SendMessage(textBoxBuscar.Handle, 0x1501, 1, LanguageService.Current?.T("txt_buscar_placeholder") ?? "Buscar...");
 
             buttonBuscar.Text = "›";
             buttonBuscar.Font = new Font("Microsoft YaHei UI", 16f, FontStyle.Bold);
@@ -181,7 +187,7 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error("HistorialInformesControl.CargarHistorial_FAIL", ex);
+                LoggerLogic.Error("[HistorialInformesControl] Falla al cargar historial de informes.", ex);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -224,7 +230,8 @@ namespace MatheoCaffieri_GestorCMB
                 var item = new HistorialInformeItemControl();
                 item.Bind(
                     fecha: inf.FechaRealizacion.ToString("dd/MM/yyyy"),
-                    nombreProyecto: proyecto.Descripcion ?? "Proyecto sin nombre",
+                    nombreProyecto: proyecto.Descripcion
+                        ?? (LanguageService.Current?.T("txt_proyecto_sin_nombre") ?? "Proyecto sin nombre"),
                     estado: inf.Estado,
                     faltantes: faltantes
                 );

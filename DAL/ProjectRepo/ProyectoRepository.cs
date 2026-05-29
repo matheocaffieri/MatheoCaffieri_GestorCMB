@@ -11,7 +11,7 @@ using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Interfaces;
 
-// Aliases EF (ajusta si tu namespace difiere)
+// Aliases EF para evitar choque de nombres con DomainModel.*
 using ProyectoEf = DAL.Proyecto;
 using ClienteEf = DAL.Cliente;
 using InfCompraEf = DAL.Informe_compra;
@@ -43,11 +43,12 @@ namespace DAL.ProjectRepo
         {
             dst.idProyecto = src.IdProyecto;
             dst.descripcion = src.Descripcion;
-            dst.estado = src.Estado.ToString(); // guardás el nombre del enum; si en DB usás otro formato, normalizá acá
+            // En BD el estado se guarda como string con el nombre del enum (ParseEstado lo revierte al leer).
+            dst.estado = src.Estado.ToString();
             dst.ubicacion = src.Ubicacion;
             dst.fechaInicio = src.FechaInicio;
             dst.fechaFin = src.FechaFin;
-            dst.idCliente = src.IdCliente; // FK
+            dst.idCliente = src.IdCliente;
         }
 
         public void Add(DomainModel.Proyecto entity)
@@ -81,13 +82,15 @@ namespace DAL.ProjectRepo
 
         public List<DomainModel.Proyecto> GetAll()
         {
-            // Paso 1: proyección SQL-friendly (sin Enum.TryParse), materializamos a memoria.
+            // Carga del grafo completo en dos pasos:
+            //   1) Proyección anónima traducible a SQL (sin Enum.TryParse, que EF no sabe traducir).
+            //   2) Mapeo a entidades de dominio en memoria, parseando el enum recién acá.
             var rows = _set.AsNoTracking()
                            .Select(e => new
                            {
                                e.idProyecto,
                                e.descripcion,
-                               e.estado,          // string
+                               e.estado,
                                e.ubicacion,
                                e.fechaInicio,
                                e.fechaFin,
@@ -134,7 +137,6 @@ namespace DAL.ProjectRepo
                            })
                            .ToList();
 
-            // Paso 2: mapping en memoria, incluyendo el enum.
             var list = new List<DomainModel.Proyecto>(rows.Count);
             foreach (var r in rows)
             {
@@ -202,7 +204,7 @@ namespace DAL.ProjectRepo
 
         public DomainModel.Proyecto GetById(Guid id)
         {
-            // Idem GetAll pero filtrado por id
+            // Mismo patrón de doble paso que GetAll (proyección anónima + mapeo en memoria), filtrado por Id.
             var r = _set.AsNoTracking()
                         .Where(e => e.idProyecto == id)
                         .Select(e => new

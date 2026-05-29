@@ -3,6 +3,7 @@ using BL.LoginBL;
 using DomainModel.Exceptions;
 using DomainModel.Login;
 using Services.Language;
+using Services.Logs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -87,7 +88,7 @@ namespace MatheoCaffieri_GestorCMB
             dataGridRoles.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "N",
-                HeaderText = "N°",
+                HeaderText = LanguageService.Current?.T("hdr_dgv_numero") ?? "N°",
                 Width = 40,
                 Name = "N"
             });
@@ -105,7 +106,7 @@ namespace MatheoCaffieri_GestorCMB
             dataGridRoles.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "Rol",
-                HeaderText = "Rol",
+                HeaderText = LanguageService.Current?.T("hdr_dgv_rol") ?? "Rol",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
                 Name = "Rol"
             });
@@ -130,7 +131,7 @@ namespace MatheoCaffieri_GestorCMB
             // Check: asignado
             var colCheck = new DataGridViewCheckBoxColumn
             {
-                HeaderText = "Asignado",
+                HeaderText = LanguageService.Current?.T("hdr_dgv_asignado") ?? "Asignado",
                 DataPropertyName = "Asignado",
                 Name = "Asignado",
                 Width = 80
@@ -145,7 +146,7 @@ namespace MatheoCaffieri_GestorCMB
             };
             var colNombre = new DataGridViewTextBoxColumn
             {
-                HeaderText = "Rol",
+                HeaderText = LanguageService.Current?.T("hdr_dgv_rol") ?? "Rol",
                 DataPropertyName = "Nombre",
                 Name = "Nombre",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
@@ -160,16 +161,14 @@ namespace MatheoCaffieri_GestorCMB
 
         private void CargarCombos()
         {
-            // ejemplo: cargar idioma
             comboBoxIdioma.DataSource = new[]
             {
-            new { Id = "es", Nombre = "Español" },
-            new { Id = "en", Nombre = "Inglés" }
-        };
+                new { Id = "es", Nombre = "Español" },
+                new { Id = "en", Nombre = "Inglés" }
+            };
             comboBoxIdioma.DisplayMember = "Nombre";
             comboBoxIdioma.ValueMember = "Id";
 
-            // ejemplo: cargar roles
             var roles = _rolService.ListarRoles();
             comboBoxPermisoEdit.DataSource = roles;
             comboBoxPermisoEdit.DisplayMember = "Nombre";
@@ -181,7 +180,6 @@ namespace MatheoCaffieri_GestorCMB
             textBoxMailEditUser.Text = _usuario.Mail;
             textBoxTelEditUser.Text = _usuario.Telefono.ToString();
             comboBoxIdioma.SelectedValue = _usuario.Idioma;
-            // comboBoxPermisoEdit.SelectedValue = _usuario.;
         }
 
         private void EditUserForm_Load(object sender, EventArgs e)
@@ -197,6 +195,7 @@ namespace MatheoCaffieri_GestorCMB
             {
                 if (comboBoxPermisoEdit.SelectedIndex < 0)
                 {
+                    LoggerLogic.Warn($"[EditUserForm] Validación: rol no seleccionado para asignar (Usuario={_usuario.IdUsuario}).");
                     MessageBox.Show(
                         LanguageService.Current?.T("val_rol_requerido") ?? "Elegí un rol de la lista.",
                         LanguageService.Current?.T("cap_aviso") ?? "Aviso",
@@ -216,20 +215,22 @@ namespace MatheoCaffieri_GestorCMB
                     rolId = opt.IdRol;
                 }
 
-                var usuarioId = _usuario.IdUsuario; // usa el nombre real de tu propiedad
+                var usuarioId = _usuario.IdUsuario;
                 _rolService.AsignarUsuarioARol(rolId, usuarioId);
+                LoggerLogic.Info($"[EditUserForm] Rol asignado al usuario. Rol={rolId} Usuario={usuarioId}");
 
-                // Refrescos
                 CargarRolesGrid(usuarioId);
                 CargarComboRoles(usuarioId);
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[EditUserForm] Validación al asignar rol: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
+                LoggerLogic.Error($"[EditUserForm] Falla al asignar rol al usuario (Usuario={_usuario.IdUsuario}).", ex);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_agregar_rol") ?? "Error al agregar el rol.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -251,24 +252,24 @@ namespace MatheoCaffieri_GestorCMB
                 .OrderBy(o => o.Nombre)
                 .ToList();
 
-            // 2) ORDEN correcto de bindeo
+            // 2) Bindeo: limpiar DataSource, configurar Display/Value y recién después asignar la lista
+            //    (si invertimos el orden, el combo lanza eventos con valores inconsistentes).
             comboBoxPermisoEdit.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxPermisoEdit.DataSource = null;                        // <- limpia
-            comboBoxPermisoEdit.DisplayMember = nameof(RolOption.Nombre);    // <- set antes
-            comboBoxPermisoEdit.ValueMember = nameof(RolOption.IdRol);     // <- set antes
-            comboBoxPermisoEdit.DataSource = opciones;                    // <- ahora sí
-            comboBoxPermisoEdit.SelectedIndex = opciones.Count > 0 ? 0 : -1; // o -1 si querés
+            comboBoxPermisoEdit.DataSource = null;
+            comboBoxPermisoEdit.DisplayMember = nameof(RolOption.Nombre);
+            comboBoxPermisoEdit.ValueMember = nameof(RolOption.IdRol);
+            comboBoxPermisoEdit.DataSource = opciones;
+            comboBoxPermisoEdit.SelectedIndex = opciones.Count > 0 ? 0 : -1;
         }
 
 
         private void dataGridRoles_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Ignorar encabezados
             if (e.RowIndex < 0) return;
 
             var row = dataGridRoles.Rows[e.RowIndex];
 
-            // Intentamos obtener el item tipado (DTO que usás para el grid)
+            // Intentamos primero el DTO tipado; si el DataSource fue armado de otra forma, caemos al fallback por nombre de columna.
             var item = row.DataBoundItem as RolesServiceLogic.RolPlano;
 
             Guid rolId;
@@ -281,37 +282,41 @@ namespace MatheoCaffieri_GestorCMB
             }
             else
             {
-                // Fallback por si el DataSource no es RolPlano (usa nombres de columnas)
                 object idCell = row.Cells["IdRol"].Value;
                 object nomCell = row.Cells["Rol"].Value;
                 if (idCell == null) return;
 
                 rolId = (Guid)idCell;
-                nombreRol = nomCell == null ? "(sin nombre)" : nomCell.ToString();
+                nombreRol = nomCell == null
+                    ? (LanguageService.Current?.T("txt_sin_nombre") ?? "(sin nombre)")
+                    : nomCell.ToString();
             }
 
             var resp = MessageBox.Show(
-                string.Format("¿Quitar el rol \"{0}\" del usuario?", nombreRol),
-                "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                string.Format(LanguageService.Current?.T("msg_confirmar_quitar_rol_fmt") ?? "¿Quitar el rol \"{0}\" del usuario?", nombreRol),
+                LanguageService.Current?.T("cap_confirmar") ?? "Confirmar",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (resp != DialogResult.Yes) return;
 
             try
             {
-                var usuarioId = _usuario.IdUsuario; // ajustá el nombre si difiere
+                var usuarioId = _usuario.IdUsuario;
                 _rolService.QuitarUsuarioDeRol(rolId, usuarioId);
+                LoggerLogic.Info($"[EditUserForm] Rol quitado del usuario. Rol={rolId} Usuario={usuarioId}");
 
-                // Refrescos
                 CargarRolesGrid(usuarioId);
-                CargarComboRoles(usuarioId); // si usás combo con “no asignados”
+                CargarComboRoles(usuarioId);
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[EditUserForm] Validación al quitar rol: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
+                LoggerLogic.Error($"[EditUserForm] Falla al quitar rol del usuario (Usuario={_usuario.IdUsuario}).", ex);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_quitar_rol") ?? "No se pudo quitar el rol.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -372,6 +377,7 @@ namespace MatheoCaffieri_GestorCMB
 
             if (string.IsNullOrWhiteSpace(mail))
             {
+                LoggerLogic.Warn($"[EditUserForm] Validación: mail vacío (Usuario={_usuario.IdUsuario}).");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_mail_requerido") ?? "Ingresá un mail.",
                     LanguageService.Current?.T("cap_aviso") ?? "Aviso",
@@ -381,6 +387,7 @@ namespace MatheoCaffieri_GestorCMB
 
             if (string.IsNullOrWhiteSpace(pass))
             {
+                LoggerLogic.Warn($"[EditUserForm] Validación: contraseña vacía (Usuario={_usuario.IdUsuario}).");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_contrasena_requerida") ?? "Ingresá una contraseña.",
                     LanguageService.Current?.T("cap_aviso") ?? "Aviso",
@@ -390,6 +397,7 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!int.TryParse(telTxt, out var tel))
             {
+                LoggerLogic.Warn($"[EditUserForm] Validación: teléfono inválido (Usuario={_usuario.IdUsuario}).");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_telefono_invalido") ?? "Ingresá un teléfono válido.",
                     LanguageService.Current?.T("cap_aviso") ?? "Aviso",
@@ -405,6 +413,7 @@ namespace MatheoCaffieri_GestorCMB
             try
             {
                 _usuarioService.ActualizarUsuario(_usuario);
+                LoggerLogic.Info($"[EditUserForm] Usuario actualizado. Id={_usuario.IdUsuario} Mail='{_usuario.Mail}'");
 
                 var cultureCode = idioma == "en" ? "en-US" : "es-AR";
 
@@ -424,11 +433,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[EditUserForm] Validación al actualizar usuario: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
+                LoggerLogic.Error($"[EditUserForm] Falla al actualizar usuario. Id={_usuario.IdUsuario}", ex);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_actualizar_usuario") ?? "No se pudo actualizar el usuario.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

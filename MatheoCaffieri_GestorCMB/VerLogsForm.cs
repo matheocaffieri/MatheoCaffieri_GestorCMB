@@ -40,6 +40,13 @@ namespace MatheoCaffieri_GestorCMB
                 Close();
                 return;
             }
+
+            AplicarTraducciones();
+        }
+
+        private void AplicarTraducciones()
+        {
+            buttonArchivo.Text = LanguageService.Current?.T("btn_ver_archivo") ?? buttonArchivo.Text;
         }
 
         private void SetupListView()
@@ -202,13 +209,12 @@ namespace MatheoCaffieri_GestorCMB
             try
             {
                 SetupListView();
-                // connectionString desde App.config, ej: ConnLogs
                 var cs = System.Configuration.ConfigurationManager.ConnectionStrings["LogsConnection"]?.ConnectionString;
                 CargarLogsDesdeSql(cs);
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error("Descripción breve y clara del contexto", ex);
+                LoggerLogic.Error("[VerLogsForm] Error cargando logs desde SQL.", ex);
             }
         }
     }

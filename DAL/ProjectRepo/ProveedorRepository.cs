@@ -12,11 +12,12 @@ using System.Linq.Expressions;
 using DomainModel;
 using DomainModel.Interfaces;
 
-// Alias a la entidad EF (ajustá namespace si difiere)
+// Alias a la entidad EF para evitar choque de nombres con DomainModel.Proveedor.
 using ProveedorEf = DAL.Proveedor;
 
 namespace DAL.ProjectRepo
 {
+    // Los métodos de escritura NO llaman a SaveChanges: la persistencia la dispara el UnitOfWork al Commit.
     public class ProveedorRepository : IProveedorRepository
     {
         private readonly GestorCMBEntities _context;
@@ -54,7 +55,6 @@ namespace DAL.ProjectRepo
             var ef = new ProveedorEf();
             MapToEf(entity, ef);
             _set.Add(ef);
-            // NO SaveChanges (lo hace el UoW)
         }
 
         public void Update(DomainModel.Proveedor entity)
@@ -66,7 +66,6 @@ namespace DAL.ProjectRepo
 
             MapToEf(entity, ef);
             _context.Entry(ef).State = EntityState.Modified;
-            // NO SaveChanges
         }
 
         public void Delete(DomainModel.Proveedor entity)
@@ -77,7 +76,6 @@ namespace DAL.ProjectRepo
             if (ef == null) return;
 
             _set.Remove(ef);
-            // NO SaveChanges
         }
 
         public DomainModel.Proveedor GetById(Guid id)

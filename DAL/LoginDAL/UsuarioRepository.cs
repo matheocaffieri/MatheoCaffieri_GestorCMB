@@ -5,14 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-
-// IMPORTANTE: este es el UoW correcto para este repo
 using DAL.FactoryDAL;
+
 namespace DAL.LoginDAL
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        // B) Forzá el tipo exacto para evitar que tome el IUnitOfWork equivocado
+        // Usamos ILoginUnitOfWork (no IUnitOfWork de EF) porque este repo trabaja directo contra ADO.NET.
         private readonly ILoginUnitOfWork _uow;
 
         public UsuarioRepository(ILoginUnitOfWork uow)

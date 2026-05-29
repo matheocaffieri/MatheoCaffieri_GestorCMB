@@ -1,5 +1,7 @@
 using BL;
+using DomainModel.Exceptions;
 using Services.Language;
+using Services.Logs;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -27,8 +29,13 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         private Color _chipColor = Color.Gray;
         private Inventario _currentInv;
 
+        private Panel _badgePendiente;
+        private Label _lblBadgeTxt;
+        private bool  _badgeVisible;
+
         public event EventHandler<Inventario> EditRequested;
         public event EventHandler Deleted;
+        public event EventHandler InformePendienteClicked;
 
         public InventarioItemControl()
         {
@@ -113,6 +120,37 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             _stockPanel.Controls.Add(_lblCantidad);
             _stockPanel.Controls.Add(_btnIncrease);
 
+            // ── Badge "informe pendiente" (oculto por defecto) ────
+            _badgePendiente = new Panel
+            {
+                Height    = 22,
+                Visible   = false,
+                BackColor = Color.Transparent,
+                Cursor    = Cursors.Hand,
+            };
+            _badgePendiente.Paint += (s, e) =>
+            {
+                var g = e.Graphics;
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                var r = new Rectangle(0, 0, _badgePendiente.Width - 1, _badgePendiente.Height - 1);
+                int radius = r.Height / 2;
+                using (var path = RoundedRect(r, radius))
+                using (var br   = new SolidBrush(Color.FromArgb(235, 123, 56)))
+                    g.FillPath(br, path);
+            };
+            _lblBadgeTxt = new Label
+            {
+                Font      = new Font("Microsoft YaHei UI", 7.5f, FontStyle.Bold),
+                ForeColor = Color.White,
+                AutoSize  = true,
+                BackColor = Color.Transparent,
+                Location  = new Point(8, 4),
+                Cursor    = Cursors.Hand,
+            };
+            _badgePendiente.Controls.Add(_lblBadgeTxt);
+            _badgePendiente.Click += (s, e) => InformePendienteClicked?.Invoke(this, EventArgs.Empty);
+            _lblBadgeTxt.Click    += (s, e) => InformePendienteClicked?.Invoke(this, EventArgs.Empty);
+
             // ── Action panel (edit + delete) ──────────────────────
             _actionPanel = new Panel { Width = 66, BackColor = Color.Transparent };
 
@@ -128,6 +166,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             this.Controls.Add(_lblNombre);
             this.Controls.Add(_chip);
             this.Controls.Add(_lblInfo);
+            this.Controls.Add(_badgePendiente);
             this.Controls.Add(_stockPanel);
             this.Controls.Add(_actionPanel);
         }
@@ -213,14 +252,39 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             _lblCantidad.Location = new Point(0, _btnIncrease.Bottom + 1);
             _btnDecrease.Location = new Point(0, _lblCantidad.Bottom + 1);
 
-            // Fila 1: nombre hasta el panel de acciones
-            int maxRight = _actionPanel.Left - 10;
-            _lblNombre.Width = Math.Max(10, maxRight - _lblNombre.Left);
+            // Fila 1: badge "pendiente" anclado a la derecha (si está visible) + nombre hasta el badge / acciones
+            int titleRightLimit = _actionPanel.Left - 10;
+            if (_badgePendiente != null && _badgeVisible)
+            {
+                int badgeY = (Math.Max(14, _lblNombre.Top + (_lblNombre.Height - _badgePendiente.Height) / 2));
+                _badgePendiente.Location = new Point(_actionPanel.Left - _badgePendiente.Width - 8, badgeY);
+                titleRightLimit = _badgePendiente.Left - 8;
+            }
+            _lblNombre.Width = Math.Max(10, titleRightLimit - _lblNombre.Left);
 
             // Fila 2: chip + info hasta el panel de acciones
+            int maxRight  = _actionPanel.Left - 10;
             int chipRight = _chip.Right + 8;
             _lblInfo.Location = new Point(chipRight, 37);
             _lblInfo.Width    = Math.Max(10, maxRight - chipRight);
+        }
+
+        public void SetInformePendiente(bool hasPending)
+        {
+            _badgeVisible = hasPending;
+            if (_badgePendiente == null) return;
+
+            _badgePendiente.Visible = hasPending;
+            if (!hasPending)
+            {
+                OnResize(EventArgs.Empty);
+                return;
+            }
+
+            _lblBadgeTxt.Text       = LanguageService.Current?.T("lbl_informe_pendiente_badge") ?? "Pendiente en informe";
+            _badgePendiente.Width   = _lblBadgeTxt.Width + 16;
+            OnResize(EventArgs.Empty);
+            _badgePendiente.Invalidate();
         }
 
         // ── Bind ──────────────────────────────────────────────────
@@ -228,9 +292,11 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         public void Bind(Inventario inv)
         {
             _currentInv = inv;
-            string nombre = inv.Material?.DescripcionArticulo         ?? "Sin nombre";
+            string nombre = inv.Material?.DescripcionArticulo
+                ?? (LanguageService.Current?.T("txt_sin_nombre") ?? "(sin nombre)");
             string tipo   = inv.Material?.TipoMaterial                ?? "—";
-            string prov   = inv.Material?.Proveedor?.Descripcion      ?? "Sin proveedor";
+            string prov   = inv.Material?.Proveedor?.Descripcion
+                ?? (LanguageService.Current?.T("txt_sin_proveedor") ?? "Sin proveedor");
             string unidad = inv.Material?.TipoUnidad                  ?? "";
             var    costo  = (decimal)(inv.Material?.CostoPorUnidad ?? 0);
 
@@ -276,15 +342,29 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         private void BtnIncrease_Click(object sender, EventArgs e)
         {
             if (!((sender as Button)?.Tag is Guid id)) return;
-            try   { _lblCantidad.Text = _invBL.CambiarCantidad(id, +1).ToString(); }
-            catch { MessageBox.Show(LanguageService.Current?.T("err_aumentar_cantidad") ?? "No se pudo aumentar la cantidad.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            try
+            {
+                _lblCantidad.Text = _invBL.CambiarCantidad(id, +1).ToString();
+            }
+            catch (Exception ex)
+            {
+                LoggerLogic.Error($"[InventarioItemControl] Falla al aumentar cantidad. InvId={id}", ex);
+                MessageBox.Show(LanguageService.Current?.T("err_aumentar_cantidad") ?? "No se pudo aumentar la cantidad.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtnDecrease_Click(object sender, EventArgs e)
         {
             if (!((sender as Button)?.Tag is Guid id)) return;
-            try   { _lblCantidad.Text = _invBL.CambiarCantidad(id, -1).ToString(); }
-            catch { MessageBox.Show(LanguageService.Current?.T("err_disminuir_cantidad") ?? "No se pudo disminuir la cantidad.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            try
+            {
+                _lblCantidad.Text = _invBL.CambiarCantidad(id, -1).ToString();
+            }
+            catch (Exception ex)
+            {
+                LoggerLogic.Error($"[InventarioItemControl] Falla al disminuir cantidad. InvId={id}", ex);
+                MessageBox.Show(LanguageService.Current?.T("err_disminuir_cantidad") ?? "No se pudo disminuir la cantidad.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtnEdit_Click(object sender, EventArgs e)
@@ -296,10 +376,11 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         private void BtnDelete_Click(object sender, EventArgs e)
         {
             if (_currentInv == null) return;
-            string nombre = _currentInv.Material?.DescripcionArticulo ?? "este material";
+            string nombre = _currentInv.Material?.DescripcionArticulo
+                ?? (LanguageService.Current?.T("txt_este_material") ?? "este material");
             var r = MessageBox.Show(
-                $"¿Eliminar \"{nombre}\"?\nEsta acción no se puede deshacer.",
-                "Confirmar eliminación",
+                string.Format(LanguageService.Current?.T("msg_confirmar_eliminar_material_inv_fmt") ?? "¿Eliminar \"{0}\"?\nEsta acción no se puede deshacer.", nombre),
+                LanguageService.Current?.T("cap_confirmar_eliminacion") ?? "Confirmar eliminación",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
             if (r != DialogResult.Yes) return;
             try
@@ -307,10 +388,21 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
                 new MaterialBL().Delete(_currentInv.Material);
                 Deleted?.Invoke(this, EventArgs.Empty);
             }
+            catch (AppException ex)
+            {
+                LoggerLogic.Warn($"[InventarioItemControl] Validación al eliminar material: {ex.MessageKey}");
+                MessageBox.Show(
+                    LanguageService.Current?.T(ex.MessageKey) ?? ex.Message,
+                    LanguageService.Current?.T("cap_error") ?? "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo eliminar el material.\n" + ex.Message,
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LoggerLogic.Error($"[InventarioItemControl] Falla al eliminar material. Id={_currentInv.Material?.IdMaterial}", ex);
+                MessageBox.Show(
+                    string.Format(LanguageService.Current?.T("err_eliminar_material_fmt") ?? "No se pudo eliminar el material.\n{0}", ex.Message),
+                    LanguageService.Current?.T("cap_error") ?? "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

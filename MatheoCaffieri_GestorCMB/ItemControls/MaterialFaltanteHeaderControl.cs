@@ -1,3 +1,4 @@
+using Services.Language;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +12,16 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         {
             InitializeComponent();
             DoubleBuffered = true;
+            AplicarTraducciones();
             ApplyLayout();
+        }
+
+        private void AplicarTraducciones()
+        {
+            labelDescripcion.Text = LanguageService.Current?.T("hdr_descripcion")        ?? labelDescripcion.Text;
+            labelCategoria.Text   = LanguageService.Current?.T("hdr_categoria")          ?? labelCategoria.Text;
+            labelUnidad.Text      = LanguageService.Current?.T("hdr_unidad")             ?? labelUnidad.Text;
+            labelCantidad.Text    = LanguageService.Current?.T("hdr_cantidad_faltante")  ?? labelCantidad.Text;
         }
 
         protected override void OnSizeChanged(EventArgs e)

@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manual del Programador — GestorCMB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-body: #ffffff;
+      --bg-card: #ffffff;
+      --bg-sidebar: #f7f8fa;
+      --bg-header: #ffffff;
+      --bg-code: #f4f6f9;
+      --accent: #2c5fa8;
+      --accent-soft: #e7eef9;
+      --text-main: #1e2330;
+      --text-muted: #5a6275;
+      --border-subtle: #e3e6ec;
+      --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+      --radius-card: 10px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: var(--bg-body);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.15s ease; }
+    a:hover { opacity: 0.75; }
+
+    .header {
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 28px 24px;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .subtitle {
+      margin: 4px 0 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 24px;
+    }
+
+    .sidebar {
+      background: var(--bg-sidebar);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-card);
+      padding: 18px 16px;
+      position: sticky;
+      top: 20px;
+      align-self: start;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+    }
+    .sidebar h3 {
+      margin: 0 0 10px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .sidebar ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      counter-reset: nav;
+    }
+    .sidebar li {
+      counter-increment: nav;
+      margin: 0;
+    }
+    .sidebar li a {
+      display: block;
+      padding: 7px 10px;
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+    .sidebar li a::before {
+      content: counter(nav) ". ";
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+    .sidebar li a:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+      opacity: 1;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-card);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-soft);
+      scroll-margin-top: 20px;
+    }
+    .card h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+    }
+    .card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 22px 0 8px;
+      color: var(--text-main);
+    }
+    .card p { margin: 0 0 12px; }
+    .card ul, .card ol { margin: 0 0 12px; padding-left: 22px; }
+    .card li { margin: 4px 0; }
+
+    code {
+      font-family: var(--font-mono);
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.9em;
+    }
+    pre.code {
+      font-family: var(--font-mono);
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin: 10px 0 16px;
+    }
+    pre.code code {
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 16px;
+      font-size: 0.93rem;
+    }
+    thead th {
+      background: var(--accent-soft);
+      color: var(--accent);
+      text-align: left;
+      padding: 9px 12px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    tbody td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: top;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .note {
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      padding: 10px 14px;
+      border-radius: 4px;
+      margin: 12px 0;
+      color: var(--text-main);
+      font-size: 0.92rem;
+    }
+    .note strong { color: var(--accent); }
+
+    .footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 24px 28px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    @media (max-width: 860px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static;
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <h1>Manual del Programador — GestorCMB</h1>
+      <p class="subtitle">Sistema de gestión de obras de construcción · WinForms · .NET Framework 4.7.2 · Entity Framework 6</p>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar">
+      <h3>Contenido</h3>
+      <ol>
+        <li><a href="#intro">Introducción técnica</a></li>
+        <li><a href="#requisitos">Requisitos del entorno</a></li>
+        <li><a href="#arquitectura">Arquitectura general</a></li>
+        <li><a href="#patrones">Patrones de diseño</a></li>
+        <li><a href="#estructura">Estructura de proyectos y carpetas</a></li>
+        <li><a href="#entidades">Entidades del dominio</a></li>
+        <li><a href="#servicios">Servicios transversales</a></li>
+        <li><a href="#flujos">Flujos internos clave</a></li>
+        <li><a href="#bd">Base de datos</a></li>
+        <li><a href="#seguridad">Seguridad y permisos</a></li>
+        <li><a href="#i18n">Internacionalización</a></li>
+        <li><a href="#bitacora">Bitácora y logging</a></li>
+        <li><a href="#historial">Historial de informes</a></li>
+        <li><a href="#reglas">Reglas de negocio</a></li>
+        <li><a href="#extender">Cómo extender el sistema</a></li>
+        <li><a href="#glosario">Glosario del dominio</a></li>
+      </ol>
+    </nav>
+
+    <main class="content">
+
+      <section id="intro" class="card">
+        <h2>1. Introducción técnica</h2>
+        <p>
+          <strong>GestorCMB</strong> es un sistema de escritorio para la gestión integral de
+          obras de construcción civil. Cubre el ciclo: alta de clientes y proveedores, creación
+          de proyectos, asignación de empleados y materiales por obra, control de inventario,
+          detección de materiales faltantes, generación de informes de compra (con historial
+          de soft-delete), cálculo del monto total del proyecto con márgenes parametrizables y
+          análisis gráfico de costos.
+        </p>
+        <p>
+          La aplicación está construida sobre <strong>.NET Framework 4.7.2</strong> en
+          <strong>C#</strong> con interfaz <strong>WinForms</strong> y persistencia en
+          <strong>SQL Server</strong> (instancia <code>SQLEXPRESS</code> local con autenticación
+          integrada). Se separa en <strong>tres bases de datos</strong> independientes:
+          <code>GestorCMB</code> para los datos del negocio (mapeado por EDMX),
+          <code>GestorCMB_Users</code> para usuarios, roles, permisos y parámetros, y
+          <code>GestorCMB_Logs</code> para la bitácora técnica.
+        </p>
+        <p>
+          La arquitectura es en seis capas con dependencias unidireccionales:
+          <code>UI → BL → DAL → DomainModel</code>, con <code>Interfaces</code> como
+          contratos compartidos y <code>Services</code> como anillo transversal (logging,
+          idioma, seguridad, snapshot histórico, hash de contraseñas).
+        </p>
+        <p>
+          El módulo de Seguridad (árbol <em>Composite</em> de roles y permisos, enum
+          <code>TipoPermiso</code>, hash <em>BCrypt</em> con compatibilidad <em>SHA-256</em>
+          legacy, recuperación de contraseña por <em>OTP</em> vía SMTP, rol Administrador
+          protegido) está inspirado en patrones reutilizables de cátedra y adaptado al dominio
+          de GestorCMB.
+        </p>
+      </section>
+
+      <section id="requisitos" class="card">
+        <h2>2. Requisitos del entorno de desarrollo</h2>
+
+        <h3>Herramientas</h3>
+        <ul>
+          <li><strong>Visual Studio 2019 / 2022</strong> con cargas de trabajo .NET Desktop.</li>
+          <li><strong>.NET Framework 4.7.2</strong> Developer Pack.</li>
+          <li><strong>SQL Server Express 2019+</strong> y <strong>SSMS</strong> para crear las tres bases.</li>
+          <li>
+            <strong>MSBuild</strong> de Visual Studio (no <code>dotnet build</code>: la solución
+            usa <code>packages.config</code> y se compila con MSBuild clásico).
+          </li>
+          <li><code>nuget.exe</code> para restauración de paquetes.</li>
+        </ul>
+
+        <h3>Paquetes NuGet relevantes</h3>
+        <ul>
+          <li><code>EntityFramework</code> 6.5.1 — ORM para la BD <code>GestorCMB</code> vía EDMX. Referenciado por <code>DAL</code>, <code>BL</code> y la UI.</li>
+          <li><code>BCrypt.Net-Next</code> 4.0.3 — hash de contraseñas con <em>work factor</em> 12. Referenciado por <code>Services</code>.</li>
+          <li><code>System.Buffers</code> 4.5.1, <code>System.Memory</code> 4.5.4, <code>System.Numerics.Vectors</code> 4.5.0, <code>System.Runtime.CompilerServices.Unsafe</code> 6.0.0 — dependencias transitivas de EF y BCrypt.</li>
+        </ul>
+
+        <h3>Configuración inicial</h3>
+        <ol>
+          <li>Clonar el repo en una ruta sin espacios (p. ej. <code>C:\source\repos\MatheoCaffieri_GestorCMB</code>).</li>
+          <li>Restaurar paquetes con <code>nuget.exe restore MatheoCaffieri_GestorCMB.sln</code>.</li>
+          <li>
+            Crear las tres bases en SSMS (por ahora los scripts no están versionados en el
+            repo; ver §9 para la lista de tablas). Nombres:
+            <code>GestorCMB</code>, <code>GestorCMB_Users</code> (también referenciada como
+            <code>CMB_USERS</code> en una connection string legacy), <code>GestorCMB_Logs</code>.
+          </li>
+          <li>
+            Editar las <em>connection strings</em> en
+            <code>MatheoCaffieri_GestorCMB/App.config</code>. Por defecto apuntan a la instancia
+            local del desarrollador (<code>Data Source=VICTUS-TATE\SQLEXPRESS</code>); reemplazar
+            por <code>.\SQLEXPRESS</code> o el nombre del SQL local de cada máquina.
+          </li>
+          <li>
+            Configurar SMTP si se quiere probar la recuperación de contraseña: claves
+            <code>SmtpHost</code>, <code>SmtpPort</code>, <code>SmtpUser</code>,
+            <code>SmtpPass</code> en <code>&lt;appSettings&gt;</code>. Ver §10.4.
+          </li>
+          <li>Compilar el proyecto de UI (<code>MatheoCaffieri_GestorCMB.csproj</code>); arrastra el resto de dependencias.</li>
+        </ol>
+
+        <div class="note">
+          <strong>Seguridad.</strong> La <code>SmtpPass</code> en <code>App.config</code> queda
+          en texto plano. En producción debería migrarse a un mecanismo de secretos
+          (<em>App Secrets</em>, variables de entorno, Windows Credential Manager) o, como
+          mínimo, cifrar la sección <code>appSettings</code> con
+          <code>aspnet_regiis -pef</code>. No commitear nunca la contraseña real.
+        </div>
+
+        <div class="note">
+          <strong>Nota.</strong> La autenticación a SQL Server es integrada
+          (<code>Integrated Security=True</code>). El usuario de Windows que ejecuta la app
+          debe tener acceso a las tres bases.
+        </div>
+      </section>
+
+      <section id="arquitectura" class="card">
+        <h2>3. Arquitectura general del sistema</h2>
+
+        <p>
+          La solución <code>MatheoCaffieri_GestorCMB.sln</code> se compone de seis proyectos
+          con dependencias unidireccionales. <code>DomainModel</code> e <code>Interfaces</code>
+          son referenciados por todas las capas superiores; las flechas indican el sentido de
+          la dependencia (quien apunta usa al apuntado).
+        </p>
+
+<pre class="code">┌───────────────────────────────────────────────────────────────┐
+│  UI  —  MatheoCaffieri_GestorCMB  (WinExe, WinForms)          │
+│        Forms/, Controls/, Properties/, Localization/, Program │
+└───────────────┬─────────────────────────┬─────────────────────┘
+                │                         │
+                ▼                         ▼
+┌──────────────────────────────┐  ┌────────────────────────────┐
+│  BL                          │  │  Services                  │
+│  *BL.cs, LoginBL/,           │  │  Logs/, Language/,         │
+│  AccessBL/, DatabaseManager  │  │  RoleService/, Tools/,     │
+└──────────────┬───────────────┘  │  LoginService/, Historial/ │
+               │                  └─────────────┬──────────────┘
+               ▼                                ▼
+┌──────────────────────────────────────────────────────────────┐
+│  DAL                                                         │
+│  ProjectRepo/, LoginDAL/, AccessDAL/, FactoryDAL/,           │
+│  GestorCMBEntityModel.edmx, GestorCMBEntities.Parcial.cs     │
+└────────────────┬─────────────────────────────────────────────┘
+                 │
+                 ▼
+┌──────────────────────────────────────────────────────────────┐
+│  Interfaces           ▶  contratos compartidos (IRepo, IUoW) │
+│  DomainModel          ▶  entidades del dominio + AppException│
+└──────────────────────────────────────────────────────────────┘</pre>
+
+        <h3>Responsabilidades por capa</h3>
+
+        <table>
+          <thead>
+            <tr><th>Capa</th><th>Tipo</th><th>Rol</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>DomainModel</code></td><td>Library</td><td>Entidades de negocio (Cliente, Proyecto, Empleado, Material, Inventario, Informe de compra, etc.), entidades de seguridad (Usuario, Acceso, Parametros, UserSession), interfaces de repositorio por entidad y <code>AppException</code> con <code>MessageKey</code> para i18n.</td></tr>
+            <tr><td><code>Interfaces</code></td><td>Library</td><td>Contratos transversales del módulo de Seguridad: <code>IAuthAppService</code>, <code>IPermiso</code>, <code>IPermisoRepository</code>, <code>IPasswordHasher</code>, enum <code>TipoPermiso</code> (15 permisos del sistema).</td></tr>
+            <tr><td><code>DAL</code></td><td>Library</td><td>Persistencia. Contiene el modelo <code>GestorCMBEntityModel.edmx</code> (EF6 Database-First) y los repositorios EF de la BD <code>GestorCMB</code>. Los datos de seguridad (BD <code>GestorCMB_Users</code>) se acceden con <em>ADO.NET</em> directo a través de <code>SqlLoginUnitOfWork</code>. <code>FactoryDAL</code> define los dos <em>Unit of Work</em>.</td></tr>
+            <tr><td><code>Services</code></td><td>Library</td><td>Servicios transversales sin estado de negocio: logging (<code>Logs/</code> con <em>Strategy</em> archivo/BD/composite), idioma (<code>Language/</code>, singleton), roles y permisos (<code>RoleService/</code>, <em>Composite</em> de permisos), hash de contraseñas (<code>LoginService/</code> con BCrypt), snapshot de historial (<code>Historial/</code>).</td></tr>
+            <tr><td><code>BL</code></td><td>Library</td><td>Lógica de negocio por entidad (<code>ProyectoBL</code>, <code>EmpleadoBL</code>, <code>MaterialBL</code>, etc.), orquestación de <em>Unit of Work</em>, validación con <code>AppException</code>, logging de operaciones de éxito/error. Subcarpetas: <code>LoginBL/</code> (<code>LoginService</code>, <code>UsuarioService</code>, <code>OtpService</code>, <code>SessionManager</code>) y <code>AccessBL/</code> (<code>AccessServicesFactory</code>).</td></tr>
+            <tr><td><code>UI</code></td><td>WinExe</td><td>Aplicación WinForms. <code>Program.cs</code> inicializa idioma, BD y servicios de roles; <code>MainForm</code> hospeda los <code>UserControl</code> de cada módulo. Convive con <code>Properties/Resources.resx</code> + <code>Resources.en-US.resx</code> para i18n.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Dos Unit of Work paralelos — no mezclarlos</h3>
+        <p>
+          El sistema convive con dos mecanismos de persistencia distintos en el mismo proceso:
+        </p>
+        <ul>
+          <li>
+            <strong><code>SqlUnitOfWork</code></strong> (<code>DAL/FactoryDAL/SqlUnitOfWork.cs</code>):
+            envuelve un <code>GestorCMBEntities</code> de EF y un
+            <code>DbContextTransaction</code>. Lo usan todos los <code>*BL</code> de negocio.
+            <code>Begin/Commit/Rollback/Dispose</code> trabajan sobre la transacción de EF y
+            cierran el contexto en el <code>using</code>.
+          </li>
+          <li>
+            <strong><code>SqlLoginUnitOfWork</code></strong> (<code>DAL/FactoryDAL/SqlLoginUnitOfWork.cs</code>):
+            envuelve un <code>SqlConnection</code> + <code>SqlTransaction</code> directos. Lo
+            usan <code>UsuarioRepository</code> y los repos de <code>AccessDAL/</code> contra
+            <code>GestorCMB_Users</code>.
+          </li>
+        </ul>
+        <div class="note">
+          <strong>Regla.</strong> Un <code>BL</code> no abre los dos UoW en el mismo método.
+          Si una operación toca <em>negocio + seguridad</em>, se hace en dos pasos secuenciales
+          con su propia transacción cada una. No hay <em>distributed transaction</em>.
+        </div>
+      </section>
+
+      <section id="patrones" class="card">
+        <h2>4. Patrones de diseño utilizados</h2>
+
+        <p>El sistema aplica los siguientes patrones, en orden de importancia para entender el código:</p>
+
+        <h3>4.1 Singleton</h3>
+        <p>Aplicado a servicios sin estado de negocio que deben tener una única instancia viva durante toda la sesión:</p>
+        <ul>
+          <li>
+            <code>BL.LoginBL.SessionManager</code> — singleton <em>thread-safe</em> con
+            doble verificación bloqueada. Expone
+            <code>SessionManager.Instance</code>, <code>Login(Usuario)</code>,
+            <code>Logout()</code>, <code>IsLoggedIn()</code>, <code>UsuarioActual</code> y
+            <code>TienePermiso(TipoPermiso)</code>. Mantiene el usuario logueado con sus
+            permisos resueltos.
+          </li>
+          <li>
+            <code>Services.Language.LanguageService</code> — singleton público vía la propiedad
+            estática <code>LanguageService.Current</code>. Se inicializa una sola vez en
+            <code>Program.cs</code> con un <code>ILanguageRepository</code> concreto
+            (<code>ResxLanguageRepository</code>) y la <code>CultureCode</code> guardada en
+            <code>Properties.Settings.Default</code>.
+          </li>
+          <li>
+            <code>Services.Logs.LoggerLogic</code> — fachada estática sobre un
+            <code>Lazy&lt;ILoggerStrategy&gt;</code>. No es estrictamente un objeto singleton,
+            pero el comportamiento es equivalente: una sola estrategia viva por proceso,
+            inicializada bajo demanda.
+          </li>
+        </ul>
+
+        <h3>4.2 Factory</h3>
+        <ul>
+          <li>
+            <code>BL.AccessBL.AccessServicesFactory</code> — fabrica los servicios del módulo
+            de seguridad (<code>AccesoService</code>, <code>RolesService</code>,
+            <code>UsuarioPermisosService</code>, <code>ParametrosService</code>) inyectando los
+            repositorios concretos de <code>DAL/AccessDAL/</code> a partir de la connection
+            string a <code>GestorCMB_Users</code>.
+          </li>
+          <li>
+            <code>Services.Logs.LoggerFactory</code> — lee <code>App.config["LoggerType"]</code>
+            (<code>file</code>, <code>database</code>, <code>both</code> o lista por comas) y
+            arma la <code>ILoggerStrategy</code> resultante: un único sink o un
+            <code>CompositeLoggerStrategy</code> que reenvía a múltiples.
+          </li>
+        </ul>
+
+        <h3>4.3 Repository</h3>
+        <p>
+          Cada entidad de negocio tiene su interfaz en <code>DomainModel/Interfaces/</code>
+          (todas implementan la genérica <code>IGenericRepository&lt;T&gt;</code> con
+          <code>Add/Update/Delete/GetById/GetAll</code>) y su implementación EF en
+          <code>DAL/ProjectRepo/</code>. Los repos no abren transacción: reciben el
+          <code>SqlUnitOfWork</code> ya iniciado y operan sobre su
+          <code>Context</code>. Para la BD de seguridad se sigue el mismo patrón pero la
+          implementación es ADO.NET (clase base <code>DALBase</code> en
+          <code>DAL/AccessDAL/</code>).
+        </p>
+
+        <h3>4.4 Unit of Work</h3>
+        <p>
+          Dos UoW conviven (ver §3): <code>SqlUnitOfWork</code> envuelve EF para
+          <code>GestorCMB</code> y <code>SqlLoginUnitOfWork</code> envuelve ADO.NET para
+          <code>GestorCMB_Users</code>. Ambos implementan
+          <code>Begin/Commit/Rollback/Dispose</code> y se consumen con un <code>using</code>
+          en el BL.
+        </p>
+
+<pre class="code">// Patrón canónico de un BL con UoW
+public void Add(Proyecto entity)
+{
+    if (entity == null) throw new AppException("err_entity_null");
+
+    using (var ctx = new GestorCMBEntities())
+    using (var uow = new SqlUnitOfWork(ctx))
+    {
+        uow.Begin();
+        try
+        {
+            var repo = new ProyectoRepository(uow);
+            repo.Add(entity);
+            uow.Commit();
+            LoggerLogic.Info($"[ProyectoBL] Proyecto agregado. Id={entity.IdProyecto} Desc='{entity.Descripcion}'");
+        }
+        catch (AppException ex)
+        {
+            uow.Rollback();
+            LoggerLogic.Warn($"[ProyectoBL] Validación al agregar proyecto: {ex.MessageKey}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            uow.Rollback();
+            LoggerLogic.Error($"[ProyectoBL] Falla al agregar proyecto. Id={entity?.IdProyecto}", ex);
+            throw;
+        }
+    }
+}</pre>
+
+        <h3>4.5 Strategy</h3>
+        <p>
+          El subsistema de logging define <code>ILoggerStrategy</code> con tres
+          implementaciones intercambiables:
+        </p>
+        <ul>
+          <li><code>FileLoggerStrategy</code> — escribe archivos diarios en <code>LogDirectory</code>.</li>
+          <li><code>DatabaseLoggerStrategy</code> — INSERT en la tabla <code>Log</code> de la BD <code>GestorCMB_Logs</code> (connection string <code>LogsConnection</code>).</li>
+          <li><code>CompositeLoggerStrategy</code> — agrupa varias estrategias (ver §4.6).</li>
+        </ul>
+
+        <h3>4.6 Composite</h3>
+        <ul>
+          <li>
+            <code>Services.Logs.Strategy.CompositeLoggerStrategy</code> — recibe
+            <code>params ILoggerStrategy[]</code> y delega cada
+            <code>WriteLog</code> a todos sus hijos, capturando errores individuales para
+            que la caída de un sink no rompa los demás.
+          </li>
+          <li>
+            <code>Services.RoleService.RolCompuesto</code> — implementa
+            <code>IPermiso</code> y mantiene una lista interna <code>_hijos</code>. La
+            evaluación <code>TienePermiso(TipoPermiso)</code> recorre recursivamente sus hijos
+            (que pueden ser <code>Acceso</code> u otros <code>RolCompuesto</code>). Es el árbol
+            de permisos del sistema.
+          </li>
+        </ul>
+
+        <h3>4.7 Facade</h3>
+        <ul>
+          <li>
+            <code>LoggerLogic</code> es la fachada estática que oculta toda la
+            mecánica de <em>Strategy</em>: el resto del sistema solo conoce
+            <code>LoggerLogic.Info / Warn / Error / Critical</code>.
+          </li>
+          <li>
+            <code>LanguageService</code> es la fachada de la i18n: el resto del sistema solo
+            conoce <code>LanguageService.Current?.T("clave")</code>.
+          </li>
+        </ul>
+
+        <h3>4.8 DTO / VO</h3>
+        <ul>
+          <li><code>DomainModel.Login.UserSession</code> — datos de sesión cargados al loguear.</li>
+          <li><code>Services.Language.Language</code> — DTO <code>Code</code> + <code>Name</code> para listar idiomas disponibles.</li>
+          <li><code>Services.LoginService.LoginResult</code> — enum de resultado de login (<code>Ok</code>, <code>CredencialesInvalidas</code>, <code>UsuarioInactivo</code>).</li>
+          <li><code>DomainModel.Entities.AsignacionMaterialResult</code> — resultado de una asignación de material a un proyecto.</li>
+        </ul>
+
+        <h3>4.9 Exception con clave de mensaje</h3>
+        <p>
+          <code>DomainModel.Exceptions.AppException</code> lleva una propiedad
+          <code>MessageKey</code>: las excepciones del BL no contienen mensajes en español
+          sino claves (<code>err_proyecto_id_required</code>,
+          <code>err_informe_sin_faltantes</code>, etc.) que se traducen en la UI vía
+          <code>LanguageService.Current?.T(appEx.MessageKey)</code>. Ver §11.
+        </p>
+      </section>
+
+      <section id="estructura" class="card">
+        <h2>5. Estructura de proyectos y carpetas</h2>
+
+<pre class="code">MatheoCaffieri_GestorCMB.sln
+│
+├── DomainModel/                    ▶  Library  (referenciada por todos)
+│   ├── Entities/
+│   │   ├── Cliente.cs              ▶  PK Guid, nombreContacto, razonSocial, mail, telefono
+│   │   ├── Proyecto.cs             ▶  PK Guid, FK Cliente, descripcion, estado, fechas
+│   │   ├── Empleado.cs             ▶  PK Guid, nombre, apellido, nroDocumento, sueldo
+│   │   ├── Material.cs             ▶  PK Guid, FK Proveedor, descripcion, tipo, unidad, costo
+│   │   ├── Proveedor.cs            ▶  PK Guid, descripcion, telefono, isActive
+│   │   ├── Inventario.cs           ▶  PK Guid, FK Material, cantidad
+│   │   ├── InformeDeCompra.cs      ▶  PK Guid, FK Proyecto, fecha, estado (pend/fin/cancel)
+│   │   ├── InformeMonto.cs         ▶  totales materiales + empleados + monto total
+│   │   ├── MaterialFaltante.cs     ▶  PK Guid, FK Proyecto, descripcion, cantidad
+│   │   ├── DetalleProyectoEmpleado.cs
+│   │   ├── DetalleProyectoMaterial.cs
+│   │   ├── DetalleInformeMaterialFaltante.cs
+│   │   ├── AsignacionMaterialResult.cs
+│   │   └── EnumEstado.cs
+│   ├── Interfaces/                 ▶  IGenericRepository y por entidad
+│   ├── Login/
+│   │   ├── Usuario.cs              ▶  Mail, Contraseña, IsActive, Idioma, Otp, OtpExpiry
+│   │   ├── UserSession.cs
+│   │   ├── Parametros.cs           ▶  margenes y utilidad (decimal 0..1)
+│   │   └── Acceso.cs               ▶  IPermiso con DataKey (TipoPermiso)
+│   ├── LoginDALInterfaces/         ▶  IUsuarioRepository, IAccesoRepository, etc.
+│   └── Exceptions/AppException.cs
+│
+├── Interfaces/                     ▶  Library
+│   ├── IGenericRepository.cs
+│   └── LoginInterfaces/
+│       ├── IAuthAppService.cs
+│       ├── IPermiso.cs
+│       ├── IPermisoRepository.cs
+│       ├── IPasswordHasher.cs
+│       └── TipoPermiso.cs          ▶  enum con 15 permisos
+│
+├── DAL/                            ▶  Library
+│   ├── GestorCMBEntityModel.edmx   ▶  modelo EF6 Database-First de la BD GestorCMB
+│   ├── GestorCMBEntities.Parcial.cs▶  partial del DbContext generado
+│   ├── DatabaseService.cs          ▶  WarmUp() — abre el ctx por primera vez
+│   ├── FactoryDAL/
+│   │   ├── IUnitOfWork.cs          ▶  contrato para EF
+│   │   ├── ILoginUnitOfWork.cs     ▶  contrato para ADO.NET (BD usuarios)
+│   │   ├── SqlUnitOfWork.cs        ▶  envuelve GestorCMBEntities + DbContextTransaction
+│   │   └── SqlLoginUnitOfWork.cs   ▶  envuelve SqlConnection + SqlTransaction
+│   ├── ProjectRepo/                ▶  repos EF de negocio
+│   │   ├── ProyectoRepository.cs, EmpleadoRepository.cs, MaterialRepository.cs,
+│   │   ├── ClienteRepository.cs, ProveedorRepository.cs, InventarioRepository.cs,
+│   │   ├── InformeDeCompraRepository.cs, InformeMontoRepository.cs,
+│   │   ├── MaterialFaltanteRepository.cs,
+│   │   ├── DetalleMaterialesRepository.cs, DetalleEmpleadosRepository.cs,
+│   │   └── DetalleInformeMaterialFaltanteRepository.cs
+│   ├── LoginDAL/UsuarioRepository.cs           ▶  ADO.NET contra GestorCMB_Users
+│   └── AccessDAL/                  ▶  ADO.NET contra GestorCMB_Users
+│       ├── DALBase.cs              ▶  helper de conexión + transacción
+│       ├── AccesoRepository.cs, FamiliaRepository.cs,
+│       ├── UsuarioAccesoRepository.cs, ParametrosRepository.cs
+│
+├── Services/                       ▶  Library  (anillo transversal)
+│   ├── Logs/
+│   │   ├── LoggerLogic.cs          ▶  Info/Warn/Error/Critical (Facade estática)
+│   │   ├── LoggerFactory.cs        ▶  lee LoggerType de App.config
+│   │   ├── ILoggerStrategy.cs
+│   │   ├── Log.cs                  ▶  modelo de un evento de log
+│   │   ├── LoggerRepository.cs     ▶  archivo + BD
+│   │   ├── LogHelper.cs            ▶  atajos
+│   │   └── Strategy/
+│   │       ├── FileLoggerStrategy.cs
+│   │       ├── DatabaseLoggerStrategy.cs
+│   │       └── CompositeLoggerStrategy.cs
+│   ├── Language/
+│   │   ├── LanguageService.cs      ▶  Singleton .Current, T(clave), SetCulture
+│   │   ├── ILanguageService.cs, ILanguageRepository.cs
+│   │   └── Language.cs             ▶  DTO Code+Name
+│   ├── LoginService/
+│   │   ├── PasswordHasher.cs       ▶  BCrypt wf=12 + SHA-256 legacy
+│   │   └── LoginResult.cs          ▶  enum
+│   ├── RoleService/
+│   │   ├── SessionContext.cs       ▶  set normalizado de accesos del usuario
+│   │   ├── ParametrosContext.cs
+│   │   ├── RolCompuesto.cs         ▶  Composite de permisos
+│   │   └── Logic/
+│   │       ├── RolesService.cs     ▶  CRUD de roles + seed AdminRole, etc.
+│   │       ├── UsuarioPermisosService.cs
+│   │       ├── ParametrosService.cs
+│   │       └── AccesoService.cs
+│   ├── Tools/ ▶  NodoPermRol.cs, RolItem.cs (nodos para UI de árbol)
+│   └── Historial/SnapshotService.cs▶  persiste snapshots en %LOCALAPPDATA%\GestorCMB\historial
+│
+├── BL/                             ▶  Library
+│   ├── ProyectoBL.cs, EmpleadoBL.cs, MaterialBL.cs, ClienteBL.cs,
+│   ├── ProveedorBL.cs, InventarioBL.cs, InformeDeCompraBL.cs, InformeMontoBL.cs,
+│   ├── MaterialFaltanteBL.cs, DetalleEmpleadoBL.cs, DetalleMaterialBL.cs,
+│   ├── DetalleInformeCompraBL.cs, ProyectoEmpleadoBL.cs, ProyectoMaterialBL.cs,
+│   ├── DatabaseManager.cs          ▶  WarmUp en Program.cs
+│   ├── LoginBL/
+│   │   ├── LoginService.cs         ▶  TryLogin → LoginResult
+│   │   ├── UsuarioService.cs       ▶  CRUD de usuarios + Idioma
+│   │   ├── OtpService.cs           ▶  Generar/Validar/CambiarContraseña + SMTP
+│   │   └── SessionManager.cs       ▶  Singleton de sesión
+│   └── AccessBL/AccessServicesFactory.cs
+│
+└── MatheoCaffieri_GestorCMB/       ▶  WinExe (UI)
+    ├── Program.cs                  ▶  Inicializa i18n, BD, RolesService; abre LoginForm
+    ├── MainForm.cs                 ▶  hospeda los UserControl de cada módulo
+    ├── Forms — LoginForm, ForgotPasswordForm, AddEmpleadosForm, AddProyectosForm,
+    │            AddMaterialesForm, EditEmpleadoForm, EditClienteForm,
+    │            EditProveedorForm, EditProyectoForm, EditUserForm, AccesosForm,
+    │            AgregarEmpleadoProyectoForm, AgregarMaterialProyectoForm,
+    │            AnalisisProyectoForm, VerLogsForm
+    ├── UserControls — HomeControl, ClientesControl, ProveedorControl,
+    │            VerEmpleadosControl, VerProyectosControl, DetalleProyectoControl,
+    │            VerInventarioControl, InformesDeCompraControl, HistorialInformesControl,
+    │            GestionUsuariosControl, ConfigurarParametrosControl
+    ├── Localization/ResxLanguageRepository.cs
+    ├── Properties/Resources.resx + Resources.en-US.resx
+    └── App.config                  ▶  connection strings + SMTP + LoggerType</pre>
+      </section>
+
+      <section id="entidades" class="card">
+        <h2>6. Entidades del dominio</h2>
+
+        <p>
+          Las entidades de negocio están en <code>DomainModel/Entities/</code> y se mapean por
+          EDMX contra las tablas homónimas de la BD <code>GestorCMB</code> (ver §9). Las
+          entidades de seguridad están en <code>DomainModel/Login/</code> y se mapean
+          manualmente desde ADO.NET contra <code>GestorCMB_Users</code>.
+        </p>
+
+        <h3>Cliente, Proyecto y sus detalles</h3>
+        <ul>
+          <li>
+            <strong><code>Cliente</code></strong> — destinatario de la obra. PK
+            <code>IdCliente</code> (Guid), <code>NombreContacto</code>,
+            <code>RazonSocial</code>, <code>Mail</code>, <code>Telefono</code> (int),
+            <code>IsActive</code> (baja lógica).
+          </li>
+          <li>
+            <strong><code>Proyecto</code></strong> — obra a ejecutar. PK <code>IdProyecto</code>,
+            FK <code>IdCliente</code>, <code>Descripcion</code>, <code>Estado</code>,
+            <code>FechaInicio</code>, <code>FechaFin</code>, <code>Ubicacion</code>.
+          </li>
+          <li>
+            <strong><code>DetalleProyectoEmpleado</code></strong> — relación N:M entre
+            proyecto y empleado con <code>FechaIngresoEmpleado</code>,
+            <code>ValorGanancia</code> (sueldo aplicado al proyecto) y <code>Estado</code>.
+          </li>
+          <li>
+            <strong><code>DetalleProyectoMaterial</code></strong> — relación N:M entre
+            proyecto y material con <code>Cantidad</code>, <code>ValorGanancia</code> y
+            <code>FechaIngresoMaterial</code>.
+          </li>
+        </ul>
+
+        <h3>Empleado, Material, Proveedor</h3>
+        <ul>
+          <li>
+            <strong><code>Empleado</code></strong> — PK <code>IdEmpleado</code>,
+            <code>Nombre</code>, <code>Apellido</code>, <code>NroDocumento</code> (int),
+            <code>Sueldo</code> (float), <code>CantidadProyectosActivos</code> (denormalizado),
+            <code>IsActive</code>.
+          </li>
+          <li>
+            <strong><code>Material</code></strong> — PK <code>IdMaterial</code>,
+            <code>DescripcionArticulo</code>, <code>TipoMaterial</code>,
+            <code>TipoUnidad</code>, <code>CostoPorUnidad</code> (float),
+            FK <code>IdProveedor</code>.
+          </li>
+          <li>
+            <strong><code>Proveedor</code></strong> — PK <code>IdProveedor</code>,
+            <code>Descripcion</code>, <code>Telefono</code>, <code>IsActive</code>.
+          </li>
+        </ul>
+
+        <h3>Inventario, Material faltante y compras</h3>
+        <ul>
+          <li>
+            <strong><code>Inventario</code></strong> — PK <code>IdMaterialInventario</code>,
+            FK <code>IdMaterial</code>, <code>Cantidad</code>. Una fila por material en stock.
+          </li>
+          <li>
+            <strong><code>MaterialFaltante</code></strong> — materiales que un proyecto
+            necesita pero no están en inventario. PK <code>IdMaterialFaltante</code>,
+            FK <code>IdProyecto</code>, <code>DescripcionArticuloFaltante</code>,
+            <code>TipoMaterialFaltante</code>, <code>TipoUnidadMaterialFaltante</code>,
+            <code>CantidadFaltante</code> (int).
+          </li>
+          <li>
+            <strong><code>InformeDeCompra</code></strong> — agrupa materiales faltantes a
+            comprar. PK <code>IdInformeCompra</code>, FK <code>IdProyecto</code>,
+            <code>FechaRealizacion</code>, <code>Estado</code> (<code>pendiente</code> /
+            <code>finalizado</code> / <code>cancelado</code>). Ver §13.
+          </li>
+          <li>
+            <strong><code>DetalleInformeMaterialFaltante</code></strong> — N:M entre informe
+            y material faltante. PK <code>IdDetalleMaterialFaltante</code>,
+            FKs <code>IdInformeCompra</code>, <code>IdMaterialFaltante</code>.
+          </li>
+          <li>
+            <strong><code>InformeMonto</code></strong> — agregados precomputados de un
+            proyecto: <code>TotalMateriales</code>, <code>TotalEmpleados</code>,
+            <code>MontoTotal</code>. Se recalcula con <code>InformeMontoBL.Recalcular</code>
+            cada vez que se refresca el detalle del proyecto.
+          </li>
+        </ul>
+
+        <h3>Dominio de Seguridad (<code>DomainModel/Login/</code>)</h3>
+        <ul>
+          <li>
+            <strong><code>Usuario</code></strong> — <code>IdUsuario</code> (Guid),
+            <code>Mail</code>, <code>Contraseña</code> (hash BCrypt), <code>IsActive</code>,
+            <code>Telefono</code>, <code>Idioma</code> (<code>es</code> / <code>en</code>),
+            <code>Otp</code> y <code>OtpExpiry</code> (recuperación), más una lista interna
+            <code>_permisos: IReadOnlyCollection&lt;IPermiso&gt;</code>. Métodos
+            <code>AgregarPermiso(IPermiso)</code> y <code>TienePermiso(TipoPermiso)</code>.
+          </li>
+          <li>
+            <strong><code>Acceso</code></strong> — implementa <code>IPermiso</code>. Tiene
+            <code>Id</code> (Guid), <code>Nombre</code> y <code>DataKey</code> (valor del enum
+            <code>TipoPermiso</code>). Es el nodo <em>hoja</em> del árbol Composite.
+          </li>
+          <li>
+            <strong><code>Parametros</code></strong> — <code>MargenEmpleados</code>,
+            <code>MargenMateriales</code>, <code>UtilidadEmpresa</code> (decimal 0..1),
+            <code>UltimaModificacion</code>, <code>ModificadoPor</code>. Único registro,
+            consumido por <code>InformeMontoBL</code>.
+          </li>
+          <li>
+            <strong><code>UserSession</code></strong> — DTO con datos cacheados de la sesión
+            actual (Id, Mail, idioma, accesos).
+          </li>
+        </ul>
+      </section>
+
+      <section id="servicios" class="card">
+        <h2>7. Servicios transversales</h2>
+
+        <h3>7.1 Los catorce <code>Business</code> del BL</h3>
+        <p>
+          La capa <code>BL</code> tiene un servicio por entidad de negocio, todos siguiendo
+          el mismo patrón <em>UoW + try/catch + Log</em> (ver §4.4). No son singletons:
+          se instancian por uso. La lista exhaustiva:
+        </p>
+        <table>
+          <thead><tr><th>Servicio</th><th>Responsabilidad</th></tr></thead>
+          <tbody>
+            <tr><td><code>ClienteBL</code></td><td>CRUD de clientes.</td></tr>
+            <tr><td><code>ProveedorBL</code></td><td>CRUD de proveedores.</td></tr>
+            <tr><td><code>EmpleadoBL</code></td><td>CRUD de empleados, baja lógica con <code>IsActive</code>.</td></tr>
+            <tr><td><code>MaterialBL</code></td><td>CRUD de materiales del catálogo.</td></tr>
+            <tr><td><code>InventarioBL</code></td><td>Alta/baja de stock + <code>CambiarCantidad</code>. Las modificaciones de cantidad <strong>no</strong> generan log Info por ruido (ver §12).</td></tr>
+            <tr><td><code>ProyectoBL</code></td><td>CRUD de proyectos.</td></tr>
+            <tr><td><code>ProyectoEmpleadoBL</code> / <code>ProyectoMaterialBL</code></td><td>Asignación de empleados y materiales a un proyecto.</td></tr>
+            <tr><td><code>DetalleEmpleadoBL</code> / <code>DetalleMaterialBL</code></td><td>Manipulación del detalle (<code>Detalle_proyecto_empleado</code>, <code>Detalle_proyecto_material</code>).</td></tr>
+            <tr><td><code>MaterialFaltanteBL</code></td><td>Registro y borrado de faltantes por proyecto.</td></tr>
+            <tr><td><code>InformeDeCompraBL</code></td><td>Generar, aplicar (<code>ConfirmarCompraYAplicar</code>) y cancelar informe; gestiona los tres estados.</td></tr>
+            <tr><td><code>DetalleInformeCompraBL</code></td><td>Detalle del informe (vínculo con faltantes).</td></tr>
+            <tr><td><code>InformeMontoBL</code></td><td><code>Recalcular(idProyecto)</code>: recomputa totales aplicando los <code>Parametros</code> globales. No loguea éxito (se llama en cada refresh).</td></tr>
+            <tr><td><code>DatabaseManager</code></td><td><code>InitializeDatabase()</code> hace WarmUp de EF en <code>Program.cs</code>.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>7.2 <code>SessionManager</code> — única fuente de verdad de la sesión</h3>
+        <p>
+          Singleton thread-safe en <code>BL/LoginBL/SessionManager.cs</code>. Tras un login
+          exitoso, <code>LoginService.TryLogin</code> invoca
+          <code>SessionManager.Instance.Login(usuario)</code> y a partir de ahí toda la UI
+          consulta el usuario actual y sus permisos a través de la propiedad
+          <code>UsuarioActual</code> y los helpers
+          <code>IsLoggedIn() / TienePermiso(TipoPermiso) / Logout()</code>. Cerrar la app o
+          llamar <code>Logout</code> libera la instancia.
+        </p>
+
+        <h3>7.3 <code>LoggerLogic</code> — fachada de bitácora</h3>
+        <p>
+          API estática en <code>Services/Logs/LoggerLogic.cs</code>. Internamente arma una
+          única <code>ILoggerStrategy</code> vía <code>LoggerFactory.Create()</code> usando
+          <code>Lazy&lt;T&gt;</code>. Niveles disponibles: <code>Info</code>,
+          <code>Warn</code>, <code>Debug</code>, <code>Error(msg, ex)</code>,
+          <code>Critical(msg, ex)</code>. Ver §12 para la convención de qué se loguea.
+        </p>
+
+        <h3>7.4 <code>LanguageService</code> — fachada de i18n</h3>
+        <p>
+          Singleton <code>Services.Language.LanguageService.Current</code>. Se inicializa una
+          vez en <code>Program.cs</code> con un <code>ResxLanguageRepository</code> que lee
+          las claves desde <code>Properties/Resources.resx</code> (default es-AR) y
+          <code>Resources.en-US.resx</code>. La API se reduce a
+          <code>T(string clave)</code> y <code>SetCulture(string cultureCode)</code>. Ver §11.
+        </p>
+
+        <h3>7.5 <code>PasswordHasher</code></h3>
+        <p>
+          Implementa <code>IPasswordHasher</code> en
+          <code>Services/LoginService/PasswordHasher.cs</code>. Dos métodos:
+        </p>
+        <ul>
+          <li><code>Hash(plainText)</code> — <code>BCrypt.Net.BCrypt.HashPassword(plainText, workFactor: 12)</code>. Produce hashes con prefijo <code>$2a$</code>.</li>
+          <li>
+            <code>Verify(hash, plainText)</code> — si el hash empieza con <code>$2a$ / $2b$ / $2y$</code> usa
+            <code>BCrypt.Verify</code>; si no, asume formato legacy SHA-256 en Base64 (usuarios
+            anteriores a la migración a BCrypt) y compara hasheando el plain con SHA-256.
+          </li>
+        </ul>
+
+        <h3>7.6 <code>SnapshotService</code></h3>
+        <p>
+          Estático en <code>Services/Historial/SnapshotService.cs</code>. Persiste un
+          archivo de texto por cada informe finalizado en
+          <code>%LOCALAPPDATA%\GestorCMB\historial\{idInforme}.txt</code> con una línea
+          por material faltante aplicado, en formato
+          <code>cantidad|descripcion|tipo|unidad</code>. Permite reconstruir el historial
+          incluso después de que los <code>MaterialFaltante</code> originales sean
+          eliminados al aplicar la compra. Ver §13.
+        </p>
+      </section>
+
+      <section id="flujos" class="card">
+        <h2>8. Flujos internos clave</h2>
+
+        <h3>8.1 Arranque de la aplicación</h3>
+        <ol>
+          <li><code>Program.Main</code> se suscribe a tres handlers de excepción no manejada (<code>Application.ThreadException</code>, <code>AppDomain.UnhandledException</code>, <code>TaskScheduler.UnobservedTaskException</code>) que delegan a <code>HandleFatalException</code>.</li>
+          <li>Lee <code>Properties.Settings.Default.CultureCode</code> (default <code>es-AR</code>) y llama <code>LanguageService.Initialize(new ResxLanguageRepository(), cultureCode)</code>.</li>
+          <li>Lee la connection string <code>ConnUsuarios</code>. Si falta, muestra <code>err_missing_cs_default</code> y sale.</li>
+          <li>Llama <code>new DatabaseManager().InitializeDatabase()</code> que internamente hace <code>DatabaseService.WarmUp()</code> (primer abrir-cerrar de EF para precargar el modelo).</li>
+          <li>Construye <code>AccessServicesFactory.CreateRolesService(cs)</code> y <code>new UsuarioService(cs)</code> — esto crea el rol <strong>Administrador</strong> protegido si no existe y siembra los roles predefinidos (<code>JefeDeObra</code>, <code>Operario</code>, <code>Comprador</code>, <code>Gerente</code>).</li>
+          <li><code>Application.Run(new LoginForm())</code>.</li>
+        </ol>
+
+        <h3>8.2 Login</h3>
+        <ol>
+          <li><code>LoginForm</code> recibe mail + contraseña.</li>
+          <li>Invoca <code>LoginService.TryLogin(mail, pass, out Usuario u)</code>:
+            <ul>
+              <li>Si alguno está vacío → <code>LoginResult.CredencialesInvalidas</code> (no consulta la BD).</li>
+              <li><code>UsuarioRepository.FindByEmail(mail)</code> sobre <code>GestorCMB_Users</code>.</li>
+              <li>Si <code>IsActive == false</code> → <code>LoginResult.UsuarioInactivo</code> (mensaje específico).</li>
+              <li><code>PasswordHasher.Verify(usuario.Contraseña, pass)</code> — <code>Ok</code> o <code>CredencialesInvalidas</code>.</li>
+            </ul>
+          </li>
+          <li>Si <code>Ok</code>: se cargan los permisos heredados de los roles del usuario, se invoca <code>SessionManager.Instance.Login(usuario)</code> y <code>LoggerLogic.Info(...)</code>.</li>
+          <li>Se abre <code>MainForm</code>; los <code>UserControl</code> consultan <code>SessionManager.Instance.TienePermiso(...)</code> para mostrar u ocultar sus acciones.</li>
+        </ol>
+
+        <h3>8.3 Recuperación de contraseña (OTP por mail)</h3>
+        <ol>
+          <li>Usuario abre <code>ForgotPasswordForm</code> e ingresa su mail.</li>
+          <li><code>OtpService.EnviarOtp(mail)</code> busca el usuario activo, genera un entero entre <code>100000</code> y <code>999999</code>, calcula <code>OtpExpiry = DateTime.Now + 15min</code>, persiste ambos campos en el <code>Usuario</code> y envía un correo SMTP con asunto <em>"Código de recuperación de contraseña"</em>.</li>
+          <li>El usuario recibe el código, lo ingresa junto con la nueva contraseña.</li>
+          <li><code>OtpService.ValidarOtp(mail, otp)</code> compara con <code>StringComparison.Ordinal</code> (tras <code>Trim()</code>) y chequea expiración.</li>
+          <li>Si es válido, <code>OtpService.CambiarContraseña(mail, nueva)</code> hashea con <code>PasswordHasher.Hash</code> y limpia <code>Otp</code>/<code>OtpExpiry</code>.</li>
+        </ol>
+        <div class="note">
+          <strong>Privacidad.</strong> Si el mail no corresponde a un usuario activo, el servicio
+          devuelve <code>false</code> sin lanzar excepción. La UI muestra un mensaje genérico
+          para no filtrar la existencia de cuentas.
+        </div>
+
+        <h3>8.4 Operación CRUD con Unit of Work (canónico)</h3>
+        <p>Ver §4.4. Todo método <code>Add/Update/Delete</code> en un <code>BL</code> sigue:</p>
+        <ol>
+          <li>Validación de argumentos → <code>throw new AppException("clave")</code>.</li>
+          <li><code>using (var ctx = new GestorCMBEntities())</code> + <code>using (var uow = new SqlUnitOfWork(ctx))</code>.</li>
+          <li><code>uow.Begin()</code>.</li>
+          <li><code>try { repo.X(entity); uow.Commit(); LoggerLogic.Info(...); }</code>.</li>
+          <li><code>catch (AppException ex) { uow.Rollback(); LoggerLogic.Warn(ex.MessageKey); throw; }</code>.</li>
+          <li><code>catch (Exception ex) { uow.Rollback(); LoggerLogic.Error(contexto, ex); throw; }</code>.</li>
+        </ol>
+        <p>
+          Los métodos de consulta (<code>GetAll</code>, <code>GetById</code>,
+          <code>FindBy*</code>) <strong>no</strong> abren transacción, <strong>no</strong>
+          envuelven en try/catch y <strong>no</strong> loguean. Las excepciones burbujean al
+          Form que las captura.
+        </p>
+
+        <h3>8.5 Generar y aplicar un informe de compra</h3>
+        <p>Detalle completo en §13. Resumen del flujo "aplicar compra" (<code>ConfirmarCompraYAplicar</code>):</p>
+        <ol>
+          <li>Obtiene los <code>MaterialFaltante</code> del informe.</li>
+          <li>Para cada uno, busca el <code>Material</code> del catálogo por <em>descripción + tipo + unidad</em> (case-insensitive, trim).</li>
+          <li>Si lo encuentra: incrementa o crea el <code>DetalleProyectoMaterial</code> del proyecto con fecha del día.</li>
+          <li><code>SnapshotService.Guardar(idInforme, faltantes)</code>.</li>
+          <li>Borra los <code>DetalleInformeMaterialFaltante</code> que apuntan a esos faltantes.</li>
+          <li>Marca el informe actual como <code>finalizado</code> y cualquier otro informe <code>pendiente</code> del mismo proyecto como <code>cancelado</code>.</li>
+          <li>Elimina los <code>MaterialFaltante</code> del proyecto.</li>
+          <li>Todo dentro de un único <code>SqlUnitOfWork</code> — si algo falla, <code>Rollback</code>.</li>
+        </ol>
+
+        <h3>8.6 Cambio de idioma en runtime</h3>
+        <ol>
+          <li>Usuario edita su perfil en <code>EditUserForm</code> y selecciona idioma (<code>es</code> / <code>en</code>).</li>
+          <li><code>UsuarioService.Update</code> persiste el cambio en <code>GestorCMB_Users</code>.</li>
+          <li>Si el usuario editado es el logueado, la UI guarda <code>Properties.Settings.Default.CultureCode = "es-AR" | "en-US"</code> y llama <code>Application.Restart()</code>. Los Forms <em>Localizable</em> reciben la cultura nueva; los no-Localizable ejecutan su <code>AplicarTraducciones()</code> en el constructor. Ver §11.</li>
+        </ol>
+
+        <h3>8.7 Manejo de excepciones globales</h3>
+        <p>
+          Los tres handlers de <code>Program.Main</code> delegan a
+          <code>HandleFatalException</code>, que:
+        </p>
+        <ol>
+          <li>Llama <code>LogHelper.Error("Excepción no controlada", ex)</code>.</li>
+          <li>Si <code>ex is AppException</code> → muestra <code>T(appEx.MessageKey)</code>.</li>
+          <li>Si no, muestra <code>T("err_generic")</code>.</li>
+          <li>Sugiere abrir <code>VerLogsForm</code> para más detalle.</li>
+        </ol>
+      </section>
+
+      <section id="bd" class="card">
+        <h2>9. Base de datos</h2>
+
+        <h3>9.1 Las tres bases</h3>
+        <table>
+          <thead><tr><th>BD</th><th>Connection string</th><th>Acceso</th><th>Contenido</th></tr></thead>
+          <tbody>
+            <tr><td><code>GestorCMB</code></td><td><code>GestorCMBConnection</code> + <code>GestorCMBEntities</code></td><td>EF6 (EDMX)</td><td>Datos del negocio.</td></tr>
+            <tr><td><code>GestorCMB_Users</code></td><td><code>ConnUsuarios</code> (también legacy <code>CMB_USERSConnectionString</code>)</td><td>ADO.NET directo</td><td>Usuarios, roles, accesos, parámetros.</td></tr>
+            <tr><td><code>GestorCMB_Logs</code></td><td><code>LogsConnection</code></td><td>ADO.NET directo (<code>LoggerRepository</code>)</td><td>Bitácora técnica (tabla <code>Log</code>).</td></tr>
+          </tbody>
+        </table>
+
+        <h3>9.2 BD <code>GestorCMB</code> — tablas mapeadas por EDMX</h3>
+        <table>
+          <thead><tr><th>Tabla</th><th>PK</th><th>Columnas relevantes</th></tr></thead>
+          <tbody>
+            <tr><td><code>Cliente</code></td><td><code>idCliente</code> (uniqueidentifier)</td><td><code>nombreContacto</code>, <code>razonSocial</code>, <code>mail</code>, <code>telefono</code> (int), <code>isActive</code> (bit)</td></tr>
+            <tr><td><code>Proyecto</code></td><td><code>idProyecto</code></td><td>FK <code>idCliente</code>, <code>descripcion</code>, <code>estado</code>, <code>fechaInicio</code>, <code>fechaFin</code>, <code>ubicacion</code></td></tr>
+            <tr><td><code>Empleado</code></td><td><code>idEmpleado</code></td><td><code>nombre</code>, <code>apellido</code>, <code>nroDocumento</code> (int), <code>sueldo</code> (float), <code>cantidadProyectosActivos</code> (int), <code>isActive</code></td></tr>
+            <tr><td><code>Proveedor</code></td><td><code>idProveedor</code></td><td><code>descripcion</code>, <code>telefono</code>, <code>isActive</code></td></tr>
+            <tr><td><code>Material</code></td><td><code>idMaterial</code></td><td><code>descripcionArticulo</code>, <code>tipoMaterial</code>, <code>tipoUnidad</code>, <code>costoPorUnidad</code> (float), FK <code>idProveedor</code></td></tr>
+            <tr><td><code>Inventario</code></td><td><code>idMaterialInventario</code></td><td><code>cantidad</code> (int), FK <code>idMaterial</code></td></tr>
+            <tr><td><code>Material_faltante</code></td><td><code>idMaterialFaltante</code></td><td><code>descripcionArticuloFaltante</code>, <code>tipoMaterialFaltante</code>, <code>tipoUnidadMaterialFaltante</code>, FK <code>idProyecto</code>, <code>cantidadFaltante</code> (int)</td></tr>
+            <tr><td><code>Detalle_proyecto_empleado</code></td><td><code>idDetalleEmpleado</code></td><td>FKs <code>idProyecto</code>, <code>idEmpleado</code>, <code>fechaIngresoEmpleado</code>, <code>valorGanancia</code> (float), <code>estado</code></td></tr>
+            <tr><td><code>Detalle_proyecto_material</code></td><td><code>idDetalleMaterial</code></td><td>FKs <code>idProyecto</code>, <code>idMaterial</code>, <code>cantidad</code> (int), <code>valorGanancia</code>, <code>fechaIngresoMaterial</code></td></tr>
+            <tr><td><code>Informe_compra</code></td><td><code>idInformeCompra</code></td><td>FK <code>idProyecto</code>, <code>fechaRealizacion</code>, <code>estado</code> (varchar 20, ver §13)</td></tr>
+            <tr><td><code>Informe_monto</code></td><td><code>idInformeMonto</code></td><td>FK <code>idProyecto</code>, <code>totalMateriales</code>, <code>totalEmpleados</code>, <code>montoTotal</code> (float)</td></tr>
+            <tr><td><code>Detalle_informe_material_faltante</code></td><td><code>idDetalleMaterialFaltante</code></td><td>FKs <code>idInformeCompra</code>, <code>idMaterialFaltante</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3>9.3 BD <code>GestorCMB_Users</code> — tablas (acceso ADO.NET)</h3>
+        <p>
+          No hay EDMX para esta BD. Las clases parciales en <code>DAL/AccessDAL/</code> y
+          <code>DAL/LoginDAL/UsuarioRepository.cs</code> mapean a mano. Tablas principales
+          (los nombres pueden variar según el script de creación del entorno; los repos esperan
+          la estructura siguiente):
+        </p>
+        <ul>
+          <li><code>Usuario</code> — datos de cuenta, hash BCrypt en <code>Contraseña</code>, <code>Otp</code>, <code>OtpExpiry</code>.</li>
+          <li><code>Acceso</code> — catálogo de permisos: <code>idAcceso</code>, <code>nombre</code>, <code>dataKey</code> (string del enum <code>TipoPermiso</code>).</li>
+          <li><code>Familia</code> / <code>Rol</code> — agrupación de accesos. Cinco roles semilla con GUID fijo (ver §10.2).</li>
+          <li><code>UsuarioAcceso</code> — accesos directos asignados a un usuario (sin pasar por rol).</li>
+          <li><code>Parametros</code> — única fila con márgenes y utilidad.</li>
+        </ul>
+
+        <h3>9.4 BD <code>GestorCMB_Logs</code></h3>
+        <ul>
+          <li><code>Log</code> — <code>Fecha</code> (datetime), <code>Nivel</code> (string), <code>Mensaje</code> (nvarchar), <code>Excepcion</code> (nvarchar nullable). Insertado por <code>DatabaseLoggerStrategy</code>.</li>
+        </ul>
+
+        <h3>9.5 Hash de contraseñas</h3>
+        <ul>
+          <li>Default actual: <strong>BCrypt</strong> con <em>work factor</em> 12. El hash incluye salt aleatorio único; dos contraseñas iguales producen hashes distintos. Comprobación con <code>BCrypt.Verify</code>.</li>
+          <li>Legacy aceptado: <strong>SHA-256 en Base64</strong> sin prefijo. Pensado para usuarios anteriores a la migración. No hay rehash al loguear (los hashes legacy permanecen hasta el próximo cambio de contraseña).</li>
+        </ul>
+
+        <h3>9.6 Deuda técnica conocida del esquema</h3>
+        <ul>
+          <li>Nombres de columnas en español + camelCase mezclados (<code>idProyecto</code>, <code>fechaRealizacion</code>, <code>descripcionArticulo</code>). EF mapea por <code>Code</code> a propiedades PascalCase del lado .NET.</li>
+          <li><code>telefono</code> en <code>Cliente</code> y otras tablas es <code>int</code>: no soporta prefijos internacionales ni el dígito cero inicial.</li>
+          <li>La BD de seguridad convive con un nombre legacy <code>CMB_USERS</code> en una <em>connection string</em>; la efectiva es <code>GestorCMB_Users</code> (usada por <code>ConnUsuarios</code>).</li>
+          <li>No hay scripts SQL versionados todavía: la creación de las tres bases se hace a mano contra una instancia local.</li>
+          <li><code>Empleado.cantidadProyectosActivos</code> es un campo denormalizado; mantener sincronizado al asignar/desasignar empleados.</li>
+        </ul>
+      </section>
+
+      <section id="seguridad" class="card">
+        <h2>10. Seguridad y permisos</h2>
+
+        <h3>10.1 Modelo Composite</h3>
+        <p>
+          Los permisos forman un árbol con dos tipos de nodos:
+        </p>
+        <ul>
+          <li>
+            <code>Acceso</code> (hoja) — implementa <code>IPermiso</code>; tiene un
+            <code>DataKey</code> que es un valor del enum <code>TipoPermiso</code>. Su
+            <code>TienePermiso(p)</code> retorna <code>DataKey == p</code>.
+          </li>
+          <li>
+            <code>RolCompuesto</code> (compuesto) — implementa <code>IPermiso</code>; mantiene
+            una lista interna de hijos. Su <code>TienePermiso(p)</code> recorre recursivamente
+            la lista.
+          </li>
+        </ul>
+        <p>
+          Al loguear, los servicios del módulo de seguridad cargan los roles del usuario,
+          arman su <code>RolCompuesto</code> con todos sus <code>Acceso</code> hijos, y lo
+          inyectan en <code>Usuario._permisos</code>. La UI consulta
+          <code>SessionManager.Instance.TienePermiso(TipoPermiso.X)</code> antes de renderizar
+          cada acción.
+        </p>
+
+        <h3>10.2 Roles predefinidos (seed)</h3>
+        <p>
+          <code>RolesService</code> mantiene cinco GUIDs constantes y crea/repara estos roles
+          en el arranque si no existen:
+        </p>
+        <ul>
+          <li><strong>Administrador</strong> — protegido (sólo lectura desde la UI). Tiene todos los permisos.</li>
+          <li><strong>JefeDeObra</strong> — gestión de proyectos, empleados, materiales y compras de su obra.</li>
+          <li><strong>Operario</strong> — visualización del proyecto en el que está asignado.</li>
+          <li><strong>Comprador</strong> — gestión de informes de compra e inventario.</li>
+          <li><strong>Gerente</strong> — visualización amplia + configuración de parámetros.</li>
+        </ul>
+        <div class="note">
+          <strong>Last-admin guard.</strong> El rol Administrador es protegido en la UI: la
+          matriz de toggles aparece deshabilitada y <code>RolesService</code> impide modificar
+          o eliminar sus permisos. Esto evita que un administrador se autoexpulse del sistema
+          por error.
+        </div>
+
+        <h3>10.3 <code>TipoPermiso</code> — los 15 permisos del sistema</h3>
+<pre class="code">enum TipoPermiso
+{
+    VER_PROYECTOS,           GESTIONAR_PROYECTOS,
+    VER_INVENTARIO,          GESTIONAR_MATERIALES,
+    VER_EMPLEADOS,           GESTIONAR_EMPLEADOS,
+    VER_CLIENTES,            GESTIONAR_CLIENTES,
+    VER_PROVEEDORES,         GESTIONAR_PROVEEDORES,
+    VER_INFORMES_COMPRA,     GESTIONAR_INFORMES_COMPRA,
+    VER_LOGS,
+    CONFIGURAR_PARAMETROS,
+    GESTIONAR_USUARIOS
+}</pre>
+        <p>
+          Patrón: <code>VER_*</code> habilita el listado / detalle; <code>GESTIONAR_*</code>
+          habilita altas, modificaciones y bajas. <code>GESTIONAR_USUARIOS</code> es el
+          permiso administrativo principal y por defecto solo lo tiene el rol Administrador.
+        </p>
+
+        <h3>10.4 Recuperación por OTP</h3>
+        <p>
+          Implementada en <code>BL/LoginBL/OtpService.cs</code>. Configuración SMTP en
+          <code>App.config</code>:
+        </p>
+        <ul>
+          <li><code>SmtpHost</code>, <code>SmtpPort</code> — servidor (por defecto Gmail <code>smtp.gmail.com:587</code>).</li>
+          <li><code>SmtpUser</code> — cuenta remitente.</li>
+          <li><code>SmtpPass</code> — App password de Gmail (¡texto plano hoy! Ver nota de §2).</li>
+        </ul>
+        <p>
+          OTP de 6 dígitos, expiración 15 minutos, comparación binaria estricta
+          (<code>StringComparison.Ordinal</code> tras <code>Trim</code>). El campo se borra
+          recién cuando la nueva contraseña se aplica con éxito, lo que permite reintentos en
+          caso de error tipográfico.
+        </p>
+
+        <h3>10.5 Servicios del módulo</h3>
+        <table>
+          <thead><tr><th>Servicio</th><th>Métodos clave</th></tr></thead>
+          <tbody>
+            <tr><td><code>RolesService</code></td><td><code>ListarRoles</code>, <code>CrearRol</code>, <code>AsignarPermisoARol</code>, <code>QuitarPermisoDeRol</code>, <code>ReemplazarPermisosDeRol</code>, <code>UsuariosDelRol</code>, <code>AsignarUsuarioARol</code>, <code>EnsureAdminExists</code>, <code>EnsureRolesPredefinidosExist</code>.</td></tr>
+            <tr><td><code>UsuarioPermisosService</code></td><td><code>ObtenerDirectos(idUsuario)</code>, <code>ReemplazarDirectos(idUsuario, permisos[])</code> — accesos directos sin rol.</td></tr>
+            <tr><td><code>AccesoService</code></td><td><code>ListarAccesos</code>, <code>CrearAcceso(nombre, dataKey)</code>.</td></tr>
+            <tr><td><code>ParametrosService</code></td><td><code>Obtener</code>, <code>Guardar(parametros)</code>.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>10.6 <code>SessionContext</code> — set normalizado de accesos</h3>
+        <p>
+          En <code>Services/RoleService/SessionContext.cs</code> hay un contexto estático
+          adicional con un <code>HashSet&lt;string&gt;</code> de accesos del usuario actual,
+          normalizados (<code>ToUpperInvariant().Trim()</code>). Útil para chequeos por nombre
+          de acceso desde la UI sin pasar por el <code>SessionManager</code>.
+        </p>
+      </section>
+
+      <section id="i18n" class="card">
+        <h2>11. Internacionalización</h2>
+
+        <p>
+          La app es bilingüe <strong>es-AR / en-US</strong>. La traducción se hace 100% por
+          clave contra <code>Properties/Resources.resx</code> (ES, default) y
+          <code>Properties/Resources.en-US.resx</code> (EN). El acceso runtime es
+          <code>LanguageService.Current?.T("clave")</code>.
+        </p>
+
+        <h3>11.1 Cómo se traduce en runtime</h3>
+        <ol>
+          <li><code>Program.Main</code> lee <code>Properties.Settings.Default.CultureCode</code>.</li>
+          <li>Instancia <code>ResxLanguageRepository</code> (en <code>MatheoCaffieri_GestorCMB/Localization/</code>) y llama <code>LanguageService.Initialize(repo, cultureCode)</code>.</li>
+          <li><code>LanguageService.SetCulture</code> asigna tanto <code>Thread.CurrentThread.CurrentCulture</code> como <code>CurrentUICulture</code>.</li>
+          <li>Cada vez que el código necesita una cadena: <code>LanguageService.Current?.T("clave") ?? "fallback en español"</code>. El fallback se ejecuta sólo si el servicio no se inicializó (defensivo).</li>
+          <li>Para mensajes con argumentos: <code>string.Format(T("clave_fmt"), arg0, arg1)</code>. Convención: nombrar la clave con sufijo <code>_fmt</code>.</li>
+        </ol>
+
+        <h3>11.2 Convención de nombres de claves</h3>
+        <table>
+          <thead><tr><th>Prefijo</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><code>err_*</code></td><td>Mensajes de error, incluyendo el <code>MessageKey</code> de <code>AppException</code>.</td></tr>
+            <tr><td><code>val_*</code></td><td>Validaciones de UI (campo vacío, formato inválido).</td></tr>
+            <tr><td><code>msg_*</code></td><td>Mensajes de éxito o confirmación.</td></tr>
+            <tr><td><code>cap_*</code></td><td>Captions de <code>MessageBox</code> y títulos cortos.</td></tr>
+            <tr><td><code>lbl_*</code></td><td>Labels de Form.</td></tr>
+            <tr><td><code>btn_*</code></td><td>Texto de botones.</td></tr>
+            <tr><td><code>lnk_*</code></td><td>Texto de <code>LinkLabel</code>.</td></tr>
+            <tr><td><code>hdr_*</code></td><td>Headers de columnas en grillas.</td></tr>
+            <tr><td><code>txt_*</code></td><td>Strings cortos misceláneos ("(sin nombre)", etc.).</td></tr>
+          </tbody>
+        </table>
+
+        <h3>11.3 Dos mecanismos de traducción por Form</h3>
+        <p>
+          Hay dos maneras de gestionar i18n en WinForms y conviven en GestorCMB porque algunos
+          Forms se construyeron con <code>Localizable=true</code> en el Designer (VS migra
+          automáticamente los <code>.Text = "..."</code> a
+          <code>resources.ApplyResources(...)</code> y crea el <code>.en-US.resx</code> del
+          Form) y otros no.
+        </p>
+        <ul>
+          <li>
+            <strong>Forms <code>Localizable=true</code></strong>: tienen su propio
+            <code>.en-US.resx</code> auto-generado. Los <code>Text</code> de cada control se
+            traducen automáticamente al cambiar
+            <code>Thread.CurrentThread.CurrentUICulture</code>. Incluyen, entre otros:
+            <code>MainForm</code>, <code>AddEmpleadosForm</code>, <code>AddMaterialesForm</code>,
+            <code>AddProyectosForm</code>, <code>AccesosForm</code>, <code>EditUserForm</code>,
+            <code>ClientesControl</code>, <code>ProveedorControl</code>,
+            <code>VerEmpleadosControl</code>, <code>VerProyectosControl</code>,
+            <code>VerInventarioControl</code>, <code>DetalleProyectoControl</code>,
+            <code>GestionUsuariosControl</code>, <code>InformesDeCompraControl</code>,
+            <code>HomeControl</code>, <code>ConfigurarParametrosControl</code> y varios ItemControls.
+          </li>
+          <li>
+            <strong>Forms no-Localizable</strong>: tienen textos hardcoded en el Designer y
+            <strong>no</strong> tienen <code>.en-US.resx</code> propio. Implementan un método
+            privado <code>AplicarTraducciones()</code> que se llama en el constructor (después
+            de <code>InitializeComponent()</code>) y sobreescribe los <code>.Text</code> con
+            <code>LanguageService.Current?.T(...)</code>. Aplican a <code>LoginForm</code>,
+            <code>EditEmpleadoForm</code>, <code>VerLogsForm</code>,
+            <code>ForgotPasswordForm</code> (este construye su UI programáticamente con
+            <code>T()</code> inline) y los 3 Header controls
+            (<code>DetalleEmpleadoHeaderControl</code>, <code>DetalleMaterialHeaderControl</code>,
+            <code>MaterialFaltanteHeaderControl</code>).
+          </li>
+        </ul>
+
+        <h3>11.4 Cómo agregar un idioma</h3>
+        <ol>
+          <li>Crear <code>Properties/Resources.{cultureCode}.resx</code> (p. ej. <code>Resources.pt-BR.resx</code>) con las mismas claves que <code>Resources.resx</code>.</li>
+          <li>Para los Forms <code>Localizable=true</code>: abrir cada Form en el Designer con la cultura nueva activa y traducir los <code>Text</code> de cada control. VS genera el <code>.{cultureCode}.resx</code> del Form.</li>
+          <li>Para los Forms no-Localizable: nada que hacer si <code>AplicarTraducciones()</code> ya usa <code>T()</code> para todos los strings.</li>
+          <li>Actualizar el combo de idiomas en <code>EditUserForm</code> y persistir el código.</li>
+        </ol>
+      </section>
+
+      <section id="bitacora" class="card">
+        <h2>12. Bitácora y logging</h2>
+
+        <h3>12.1 Estrategias y configuración</h3>
+        <p>
+          <code>LoggerFactory.Create()</code> lee la clave <code>LoggerType</code> de
+          <code>App.config</code> y arma la <code>ILoggerStrategy</code> resultante:
+        </p>
+        <table>
+          <thead><tr><th>Valor</th><th>Estrategia armada</th></tr></thead>
+          <tbody>
+            <tr><td><code>file</code> (default)</td><td><code>FileLoggerStrategy</code></td></tr>
+            <tr><td><code>database</code></td><td><code>DatabaseLoggerStrategy</code></td></tr>
+            <tr><td><code>both</code> o <code>"file,database"</code></td><td><code>CompositeLoggerStrategy(file, database)</code></td></tr>
+          </tbody>
+        </table>
+        <p>
+          Otras claves de <code>App.config</code> relevantes:
+        </p>
+        <ul>
+          <li><code>LogDirectory</code> — carpeta de archivos. Default <code>logs</code> (relativo al ejecutable). En el repo está en <code>C:\Logs\MiApp</code>.</li>
+          <li><code>LogRetentionDays</code> — días de retención de archivos. Default 14.</li>
+        </ul>
+
+        <h3>12.2 FileLoggerStrategy</h3>
+        <p>
+          Crea un archivo por día y por nivel:
+          <code>yyyyMMdd_info.log</code> y <code>yyyyMMdd_error.log</code> en
+          <code>LogDirectory</code>. Modo append, encoding UTF-8. Formato:
+        </p>
+<pre class="code">[2026-05-26 10:14:33] [INFO]  :: [ProyectoBL] Proyecto agregado. Id=ab12-... Desc='Obra Centro'
+                                    | date=2026-05-26 10:14:33
+[2026-05-26 10:14:40] [ERROR] :: [ProyectoBL] Falla al agregar proyecto. Id=...
+                                    | date=2026-05-26 10:14:40
+                                    | ex=System.Data.Entity.... at ProyectoRepository.Add...</pre>
+        <p>
+          Al inicio de cada escritura, <code>TryRetention(dir)</code> borra archivos cuya
+          fecha de modificación supere <code>LogRetentionDays</code>.
+        </p>
+
+        <h3>12.3 DatabaseLoggerStrategy</h3>
+        <p>
+          <code>LoggerRepository.WriteLogToDatabase()</code> abre una <code>SqlConnection</code>
+          contra <code>LogsConnection</code> e inserta en la tabla <code>Log</code>
+          (<code>Fecha</code>, <code>Nivel</code>, <code>Mensaje</code>, <code>Excepcion</code>).
+          La UI de <code>VerLogsForm</code> lee de esa tabla.
+        </p>
+
+        <h3>12.4 CompositeLoggerStrategy</h3>
+        <p>
+          <code>sealed</code>, recibe <code>params ILoggerStrategy[] targets</code>.
+          Reenvía <code>WriteLog</code> a cada hijo dentro de un <code>try/catch</code>
+          individual: si un sink falla (p. ej. BD caída), los demás siguen funcionando.
+        </p>
+
+        <h3>12.5 Convención: qué se loguea y qué no</h3>
+        <p>
+          <code>LoggerLogic</code> es la única forma de loguear. En la UI <code>VerLogsForm</code>
+          los niveles se ven así: <strong>Warn = naranja</strong> (validaciones),
+          <strong>Error / Critical = rojo</strong> (fallas reales), <strong>Info = neutro</strong>
+          (eventos de éxito).
+        </p>
+
+        <h4>Qué SÍ se loguea</h4>
+        <ul>
+          <li>Login: <code>Info</code> en éxito, <code>Warn</code> en credenciales inválidas o usuario inactivo (<code>BL.LoginBL.LoginService.TryLogin</code>).</li>
+          <li>Creación, modificación y eliminación de entidades: <strong>un solo log <code>Info</code></strong> por operación, en el BL después del <code>Commit</code>. Formato: <code>"[XxxBL] &lt;Entidad&gt; &lt;verbo&gt;. Id={...}"</code>.</li>
+          <li>Validaciones de UI (campo vacío, dato inválido, dato duplicado): <code>LoggerLogic.Warn</code> ANTES del <code>MessageBox.Show</code>. Formato: <code>"[XxxForm] Validación: &lt;qué falla&gt;."</code>.</li>
+          <li>Validaciones de negocio (<code>catch (AppException ex)</code>): <code>LoggerLogic.Warn</code> con el <code>MessageKey</code>.</li>
+          <li>Fallas de sistema (<code>catch (Exception ex)</code>): <code>LoggerLogic.Error("contexto", ex)</code> con la excepción.</li>
+        </ul>
+
+        <h4>Qué NO se loguea</h4>
+        <ul>
+          <li>Consultas: <code>GetAll</code>, <code>GetById</code>, <code>Exists</code>, <code>FindBy*</code>. Sin try/catch en el BL; dejar que la excepción burbujee.</li>
+          <li>Búsquedas por barra de filtro.</li>
+          <li>Navegación entre Forms / Controls.</li>
+          <li>Cambios de cantidad de inventario: <code>InventarioBL.Update</code> y <code>InventarioBL.CambiarCantidad</code> no loguean éxito (sí loguean error). <code>InventarioBL.Add / Delete</code> sí loguean.</li>
+          <li><code>InformeMontoBL.Recalcular</code>: no loguea éxito (se llama en cada refresh).</li>
+          <li>Logs duplicados entre BL y DAL: el log vive en el BL después del <code>Commit</code>; los repos EF no loguean.</li>
+        </ul>
+      </section>
+
+      <section id="historial" class="card">
+        <h2>13. Historial de informes de compra</h2>
+
+        <p>
+          Un <code>InformeDeCompra</code> atraviesa tres estados que conviven en la misma
+          tabla <code>Informe_compra</code> mediante la columna <code>estado</code>
+          (<code>varchar(20) NOT NULL DEFAULT 'pendiente'</code>):
+        </p>
+        <table>
+          <thead><tr><th>Estado</th><th>Significado</th><th>Detalles en BD</th></tr></thead>
+          <tbody>
+            <tr><td><code>pendiente</code></td><td>Recién generado, aguarda confirmación de compra.</td><td>Se conservan los <code>DetalleInformeMaterialFaltante</code>.</td></tr>
+            <tr><td><code>finalizado</code></td><td>La compra fue aplicada al proyecto.</td><td>Se borran los detalles y los <code>MaterialFaltante</code>; se guarda <strong>snapshot</strong> en archivo (ver abajo).</td></tr>
+            <tr><td><code>cancelado</code></td><td>El informe fue descartado sin aplicarse.</td><td>Los detalles se conservan; los faltantes del proyecto siguen disponibles.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>13.1 Comportamiento del repositorio</h3>
+        <ul>
+          <li><code>InformeDeCompraRepository.GetAll()</code> retorna solo los <code>pendiente</code>. Es lo que muestra <code>InformesDeCompraControl</code>.</li>
+          <li><code>GetHistorial()</code> retorna <code>finalizado</code> + <code>cancelado</code>. Es lo que muestra <code>HistorialInformesControl</code>.</li>
+          <li><code>InformeDeCompraBL.EliminarInforme</code> → <code>estado = 'cancelado'</code> (no <code>DELETE</code> físico).</li>
+          <li><code>InformeDeCompraBL.ConfirmarCompraYAplicar</code> → <code>estado = 'finalizado'</code> + borra detalles y faltantes + persiste snapshot.</li>
+        </ul>
+
+        <h3>13.2 Snapshot persistido en disco</h3>
+        <p>
+          Al pasar a <code>finalizado</code>, se borran los <code>MaterialFaltante</code> y
+          sus detalles. Para conservar la trazabilidad,
+          <code>SnapshotService.Guardar(idInforme, faltantes)</code> escribe un archivo de
+          texto en:
+        </p>
+<pre class="code">%LOCALAPPDATA%\GestorCMB\historial\{idInforme:N}.txt
+
+cantidad|descripcion|tipo|unidad
+cantidad|descripcion|tipo|unidad
+...</pre>
+        <p>
+          <code>SnapshotService.Leer(idInforme)</code> reconstruye la lista al mostrar el
+          historial. Si el archivo no existe (por ejemplo, en otra máquina o si se borró el
+          perfil de usuario local), el ítem se muestra sin materiales — el sistema no aborta
+          la carga del resto.
+        </p>
+
+        <h3>13.3 Migración SQL</h3>
+        <p>
+          Para entornos pre-existentes, agregar la columna:
+        </p>
+<pre class="code">ALTER TABLE Informe_compra
+ADD estado varchar(20) NOT NULL DEFAULT 'pendiente';</pre>
+
+        <h3>13.4 UI</h3>
+        <ul>
+          <li><code>InformesDeCompraControl</code>: lista de pendientes agrupados por proyecto. Botón "Historial" navega a <code>HistorialInformesControl</code>.</li>
+          <li><code>HistorialInformesControl</code>: lista del historial filtrable por descripción del proyecto o razón social del cliente. Acción única es la búsqueda — no se permite editar ni reabrir.</li>
+        </ul>
+      </section>
+
+      <section id="reglas" class="card">
+        <h2>14. Reglas de negocio principales</h2>
+
+        <h3>14.1 Usuarios y roles</h3>
+        <ul>
+          <li>Un usuario puede pertenecer a uno o más roles y hereda todos sus permisos.</li>
+          <li>El rol <strong>Administrador</strong> tiene siempre todos los permisos y no es editable desde la UI.</li>
+          <li><code>UsuarioPermisosService.ReemplazarDirectos</code> permite asignar accesos directos a un usuario sin que dependa de un rol.</li>
+          <li>Mail único por usuario; el sistema rechaza duplicados con <code>err_usuario_mail_duplicado</code>.</li>
+          <li>Baja lógica con <code>IsActive=false</code>: la sesión no abre y el OTP no se envía.</li>
+        </ul>
+
+        <h3>14.2 Recuperación de contraseña</h3>
+        <ul>
+          <li>OTP de 6 dígitos.</li>
+          <li>Expiración 15 minutos desde la generación.</li>
+          <li>El OTP se invalida solo después de aplicar el cambio de contraseña exitosamente (permite reintentos).</li>
+          <li>Si el mail no corresponde a un usuario activo, el servicio devuelve <code>false</code> sin enviar correo ni filtrar la existencia de la cuenta.</li>
+        </ul>
+
+        <h3>14.3 Proyectos</h3>
+        <ul>
+          <li>Un proyecto pertenece a un único cliente.</li>
+          <li>Asignar un empleado a un proyecto incrementa <code>Empleado.CantidadProyectosActivos</code>; quitarlo lo decrementa.</li>
+          <li>El monto total del proyecto se calcula con <code>InformeMontoBL.Recalcular(idProyecto)</code>: <code>totalEmpleados × (1 + MargenEmpleados) + totalMateriales × (1 + MargenMateriales) + UtilidadEmpresa</code>. Los parámetros se editan en <code>ConfigurarParametrosControl</code>.</li>
+        </ul>
+
+        <h3>14.4 Materiales e inventario</h3>
+        <ul>
+          <li>Un material pertenece a un proveedor.</li>
+          <li>El inventario tiene una fila por material; la columna <code>cantidad</code> es <code>int</code> (no soporta fracciones).</li>
+          <li>El cruce material-faltante ↔ material del catálogo se hace por <em>descripción + tipo + unidad</em>, case-insensitive y con <code>Trim</code>.</li>
+        </ul>
+
+        <h3>14.5 Informes de compra</h3>
+        <ul>
+          <li>Solo se puede generar un informe por proyecto por día (<code>unicoPorDia=true</code>): si ya existe uno hoy, se reutiliza y se agregan los faltantes que no estaban.</li>
+          <li>Generar requiere <code>GESTIONAR_INFORMES_COMPRA</code> y al menos un faltante; consultar requiere <code>VER_INFORMES_COMPRA</code>.</li>
+          <li>Aplicar un informe cancela automáticamente los demás informes <code>pendiente</code> del mismo proyecto.</li>
+          <li>Cancelar un informe es soft-delete (estado a <code>cancelado</code>); no borra el registro físico.</li>
+        </ul>
+
+        <h3>14.6 Parámetros del sistema</h3>
+        <ul>
+          <li><code>MargenEmpleados</code>, <code>MargenMateriales</code> y <code>UtilidadEmpresa</code> se almacenan como <code>decimal</code> entre 0 y 1; en la UI se ingresan como porcentaje (multiplicado por 100).</li>
+          <li>Cada guardado actualiza <code>UltimaModificacion</code> y <code>ModificadoPor</code>.</li>
+          <li>Requiere permiso <code>CONFIGURAR_PARAMETROS</code>.</li>
+        </ul>
+      </section>
+
+      <section id="extender" class="card">
+        <h2>15. Cómo extender el sistema</h2>
+
+        <h3>15.1 Agregar un campo a una tabla de <code>GestorCMB</code></h3>
+        <ol>
+          <li>Modificar la tabla en SQL (script <code>ALTER TABLE</code>).</li>
+          <li>Abrir <code>DAL/GestorCMBEntityModel.edmx</code>:
+            <ul>
+              <li>Agregar la columna en el <strong>SSDL</strong> (storage).</li>
+              <li>Agregar la propiedad en el <strong>CSDL</strong> (conceptual).</li>
+              <li>Mapearla en el <strong>MSL</strong> (mapping).</li>
+            </ul>
+          </li>
+          <li>Editar el archivo <code>.cs</code> auto-generado de la entidad EF en <code>DAL/</code> (agregar la propiedad pública).</li>
+          <li>Reflejar el campo en la entidad de dominio correspondiente (<code>DomainModel/Entities/</code>).</li>
+          <li>Actualizar el repositorio EF (<code>DAL/ProjectRepo/</code>) — generalmente solo afecta a las consultas que materializan la entidad.</li>
+          <li>Si requiere lógica, agregar la regla al <code>BL</code> y, en caso de validación de UI, agregar la clave a <code>Resources.resx</code> y <code>Resources.en-US.resx</code>.</li>
+        </ol>
+
+        <h3>15.2 Agregar un permiso nuevo</h3>
+        <ol>
+          <li>Agregar el valor al enum <code>TipoPermiso</code> en <code>Interfaces/LoginInterfaces/TipoPermiso.cs</code>.</li>
+          <li>Crear el <code>Acceso</code> en la BD <code>GestorCMB_Users</code> (tabla <code>Acceso</code>) con <code>dataKey</code> igual al nombre del enum, o usar <code>AccesoService.CrearAcceso(nombre, TipoPermiso)</code> desde <code>AccesosForm</code>.</li>
+          <li>Asignar el permiso al rol Administrador en <code>RolesService.EnsureAdminExists</code> para que quede semilla.</li>
+          <li>En la UI, consultar <code>SessionManager.Instance.TienePermiso(TipoPermiso.X)</code> antes de mostrar la acción.</li>
+        </ol>
+
+        <h3>15.3 Agregar un rol predefinido</h3>
+        <ol>
+          <li>Definir un <code>Guid</code> constante en <code>RolesService</code> (siguiendo el patrón de <code>AdminRoleId</code>).</li>
+          <li>Agregarlo a <code>EnsureRolesPredefinidosExist</code> con su set inicial de accesos.</li>
+        </ol>
+
+        <h3>15.4 Agregar un módulo / pantalla completa</h3>
+        <ol>
+          <li>Crear el <code>UserControl</code> en <code>MatheoCaffieri_GestorCMB/</code>. Preferentemente con <code>Localizable=true</code> en el Designer para evitar tener que escribir <code>AplicarTraducciones()</code>.</li>
+          <li>Registrarlo en <code>MainForm</code> (panel de navegación + lógica de carga).</li>
+          <li>Si el módulo persiste datos: agregar entidad en <code>DomainModel</code>, interfaz en <code>DomainModel/Interfaces/</code>, repo EF en <code>DAL/ProjectRepo/</code>, BL en <code>BL/</code> (siguiendo el patrón de §4.4).</li>
+          <li>Definir un permiso <code>VER_X</code> y <code>GESTIONAR_X</code> en <code>TipoPermiso</code> y aplicar guardas.</li>
+          <li>Agregar todas las claves de i18n a ambos <code>.resx</code>.</li>
+        </ol>
+
+        <h3>15.5 Agregar un sink de logging</h3>
+        <ol>
+          <li>Implementar <code>ILoggerStrategy</code> en <code>Services/Logs/Strategy/</code>.</li>
+          <li>Agregar el caso en <code>LoggerFactory.Create()</code> (mapeo del valor de <code>LoggerType</code>).</li>
+          <li>Si se quiere combinar con otros, <code>LoggerType=both</code> ya soporta lista por comas a través de <code>CompositeLoggerStrategy</code>.</li>
+        </ol>
+
+        <h3>15.6 Agregar un idioma</h3>
+        <p>Ver §11.4.</p>
+      </section>
+
+      <section id="glosario" class="card">
+        <h2>16. Glosario del dominio</h2>
+        <table>
+          <thead><tr><th>Término</th><th>Significado</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Acceso</strong></td><td>Nodo hoja del árbol de permisos (clase <code>Acceso</code>, implementa <code>IPermiso</code>). Tiene un <code>DataKey</code> que es un valor del enum <code>TipoPermiso</code>.</td></tr>
+            <tr><td><strong>AppException</strong></td><td>Excepción del dominio con un <code>MessageKey</code> en lugar de mensaje literal. La UI traduce la clave con <code>LanguageService.T</code>.</td></tr>
+            <tr><td><strong>BCrypt</strong></td><td>Algoritmo de hash unidireccional usado para guardar contraseñas. Work factor 12 (~250 ms por hash).</td></tr>
+            <tr><td><strong>BL</strong></td><td>Business Logic. Capa que orquesta repositorios y aplica reglas de negocio.</td></tr>
+            <tr><td><strong>CompositeLoggerStrategy</strong></td><td>Estrategia que reenvía cada log a varios sinks con tolerancia a fallos individuales.</td></tr>
+            <tr><td><strong>Cultura / CultureCode</strong></td><td><code>es-AR</code> o <code>en-US</code>. Persistido en <code>Properties.Settings.Default.CultureCode</code>.</td></tr>
+            <tr><td><strong>DataKey</strong></td><td>Identificador del permiso en la BD (string que mapea a un valor del enum <code>TipoPermiso</code>).</td></tr>
+            <tr><td><strong>EDMX</strong></td><td>Entity Data Model File. Archivo XML que combina SSDL + CSDL + MSL para EF6 Database-First.</td></tr>
+            <tr><td><strong>Familia</strong></td><td>Sinónimo histórico de <em>Rol</em> en el módulo de seguridad (la tabla aún se llama <code>Familia</code> en la BD).</td></tr>
+            <tr><td><strong>InformeDeCompra</strong></td><td>Agrupación de materiales faltantes de un proyecto pendientes de comprar. Tres estados: pendiente / finalizado / cancelado.</td></tr>
+            <tr><td><strong>InformeMonto</strong></td><td>Agregado precomputado del monto total de un proyecto, recalculado en cada refresh.</td></tr>
+            <tr><td><strong>MaterialFaltante</strong></td><td>Material que un proyecto necesita pero no está cubierto por el inventario.</td></tr>
+            <tr><td><strong>OTP</strong></td><td>One-Time Password. Código de 6 dígitos enviado por mail para recuperación de contraseña; expira a los 15 minutos.</td></tr>
+            <tr><td><strong>Parametros</strong></td><td>Configuración global: márgenes de empleados, márgenes de materiales y utilidad de la empresa. Una sola fila en BD.</td></tr>
+            <tr><td><strong>RolCompuesto</strong></td><td>Nodo compuesto del árbol de permisos. Agrupa <code>Acceso</code>s y otros <code>RolCompuesto</code>s. Implementa <code>IPermiso</code> (Composite pattern).</td></tr>
+            <tr><td><strong>SessionManager</strong></td><td>Singleton de sesión. Mantiene el <code>Usuario</code> autenticado y expone <code>TienePermiso</code> a la UI.</td></tr>
+            <tr><td><strong>SHA-256 legacy</strong></td><td>Formato de hash usado por versiones previas del sistema, aceptado por compatibilidad retroactiva en <code>PasswordHasher.Verify</code>.</td></tr>
+            <tr><td><strong>Snapshot</strong></td><td>Archivo de texto por informe finalizado, guardado en <code>%LOCALAPPDATA%\GestorCMB\historial\</code>, que preserva la lista de materiales aplicados.</td></tr>
+            <tr><td><strong>SqlUnitOfWork</strong></td><td>UoW de EF6 sobre la BD <code>GestorCMB</code>: envuelve <code>GestorCMBEntities</code> + <code>DbContextTransaction</code>.</td></tr>
+            <tr><td><strong>SqlLoginUnitOfWork</strong></td><td>UoW de ADO.NET sobre la BD <code>GestorCMB_Users</code>: envuelve <code>SqlConnection</code> + <code>SqlTransaction</code>.</td></tr>
+            <tr><td><strong>TipoPermiso</strong></td><td>Enum con los 15 permisos del sistema (<code>VER_*</code> y <code>GESTIONAR_*</code>).</td></tr>
+            <tr><td><strong>UoW</strong></td><td>Unit of Work. Encapsula una transacción y los cambios pendientes.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    Manual del Programador — GestorCMB · Documento técnico interno
+  </footer>
+
+</body>
+</html>

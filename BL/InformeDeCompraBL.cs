@@ -20,8 +20,6 @@ namespace BL
             if (idProyecto == Guid.Empty)
                 throw new AppException("err_proyecto_id_required");
 
-            LoggerLogic.Info($"[InformeDeCompraBL] GenerarDesdeFaltantes START. idProyecto={idProyecto}, unicoPorDia={unicoPorDia}");
-
             var ctx = new GestorCMBEntities();
             var uow = new SqlUnitOfWork(ctx);
 
@@ -77,13 +75,19 @@ namespace BL
 
                 uow.Commit();
 
-                LoggerLogic.Info($"[InformeDeCompraBL] GenerarDesdeFaltantes OK. idInforme={informe.IdInformeCompra}");
+                LoggerLogic.Info($"[InformeDeCompraBL] Informe de compra generado. Id={informe.IdInformeCompra} Proy={idProyecto}");
                 return informe.IdInformeCompra;
+            }
+            catch (AppException ex)
+            {
+                uow.Rollback();
+                LoggerLogic.Warn($"[InformeDeCompraBL] Validación al generar informe: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 uow.Rollback();
-                LoggerLogic.Error($"[InformeDeCompraBL] GenerarDesdeFaltantes ERROR. idProyecto={idProyecto}. {ex.Message}");
+                LoggerLogic.Error($"[InformeDeCompraBL] Falla al generar informe. Proy={idProyecto}", ex);
                 throw;
             }
             finally
@@ -95,43 +99,49 @@ namespace BL
 
         public List<InformeDeCompra> GetAll()
         {
+            var ctx = new GestorCMBEntities();
+            var uow = new SqlUnitOfWork(ctx);
             try
             {
-                var ctx = new GestorCMBEntities();
-                var uow = new SqlUnitOfWork(ctx);
                 var repo = new InformeDeCompraRepository(uow);
-
-                var list = repo.GetAll();
-
+                return repo.GetAll();
+            }
+            finally
+            {
                 uow.Dispose();
                 ctx.Dispose();
-                return list;
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[InformeDeCompraBL] GetAll ERROR. {ex.Message}");
-                throw;
             }
         }
 
         public List<InformeDeCompra> GetHistorial()
         {
+            var ctx = new GestorCMBEntities();
+            var uow = new SqlUnitOfWork(ctx);
             try
             {
-                var ctx = new GestorCMBEntities();
-                var uow = new SqlUnitOfWork(ctx);
                 var repo = new InformeDeCompraRepository(uow);
-
-                var list = repo.GetHistorial();
-
+                return repo.GetHistorial();
+            }
+            finally
+            {
                 uow.Dispose();
                 ctx.Dispose();
-                return list;
             }
-            catch (Exception ex)
+        }
+
+        public HashSet<Guid> GetMaterialesConInformesPendientes()
+        {
+            var ctx = new GestorCMBEntities();
+            var uow = new SqlUnitOfWork(ctx);
+            try
             {
-                LoggerLogic.Error($"[InformeDeCompraBL] GetHistorial ERROR. {ex.Message}");
-                throw;
+                var repo = new InformeDeCompraRepository(uow);
+                return repo.GetMaterialesConInformesPendientes();
+            }
+            finally
+            {
+                uow.Dispose();
+                ctx.Dispose();
             }
         }
 
@@ -139,8 +149,6 @@ namespace BL
         {
             if (idInformeCompra == Guid.Empty)
                 throw new AppException("err_informe_id_required");
-
-            LoggerLogic.Info($"[InformeDeCompraBL] EliminarInforme START. idInforme={idInformeCompra}");
 
             var ctx = new GestorCMBEntities();
             var uow = new SqlUnitOfWork(ctx);
@@ -158,12 +166,18 @@ namespace BL
                 }
 
                 uow.Commit();
-                LoggerLogic.Info($"[InformeDeCompraBL] EliminarInforme OK. idInforme={idInformeCompra}");
+                LoggerLogic.Info($"[InformeDeCompraBL] Informe cancelado. Id={idInformeCompra}");
+            }
+            catch (AppException ex)
+            {
+                uow.Rollback();
+                LoggerLogic.Warn($"[InformeDeCompraBL] Validación al cancelar informe: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 uow.Rollback();
-                LoggerLogic.Error($"[InformeDeCompraBL] EliminarInforme ERROR. idInforme={idInformeCompra}. {ex.Message}");
+                LoggerLogic.Error($"[InformeDeCompraBL] Falla al cancelar informe. Id={idInformeCompra}", ex);
                 throw;
             }
             finally
@@ -179,8 +193,6 @@ namespace BL
                 throw new AppException("err_proyecto_id_required");
             if (idInformeCompra == Guid.Empty)
                 throw new AppException("err_informe_id_required");
-
-            LoggerLogic.Info($"[InformeDeCompraBL] ConfirmarCompraYAplicar START. idProyecto={idProyecto}, idInforme={idInformeCompra}");
 
             var ctx = new GestorCMBEntities();
             var uow = new SqlUnitOfWork(ctx);
@@ -275,12 +287,18 @@ namespace BL
 
                 uow.Commit();
 
-                LoggerLogic.Info($"[InformeDeCompraBL] ConfirmarCompraYAplicar OK. idProyecto={idProyecto}, idInforme={idInformeCompra}");
+                LoggerLogic.Info($"[InformeDeCompraBL] Compra confirmada y aplicada al proyecto. Proy={idProyecto} Informe={idInformeCompra}");
+            }
+            catch (AppException ex)
+            {
+                uow.Rollback();
+                LoggerLogic.Warn($"[InformeDeCompraBL] Validación al confirmar compra: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 uow.Rollback();
-                LoggerLogic.Error($"[InformeDeCompraBL] ConfirmarCompraYAplicar ERROR. idProyecto={idProyecto}, idInforme={idInformeCompra}. {ex.Message}");
+                LoggerLogic.Error($"[InformeDeCompraBL] Falla al confirmar compra. Proy={idProyecto} Informe={idInformeCompra}", ex);
                 throw;
             }
             finally

@@ -26,13 +26,11 @@ namespace MatheoCaffieri_GestorCMB
 
         public Point mouseLocation;
 
-        // ctor por defecto: usa tus BL reales
         public AddMaterialesForm() : this(new MaterialBL(), new ProveedorBL())
         {
-            // acá NO va InitializeComponent ni WireEvents
         }
 
-        // ctor edición
+        // Constructor de edición.
         public AddMaterialesForm(Material materialToEdit) : this(new MaterialBL(), new ProveedorBL())
         {
             _editTarget = materialToEdit ?? throw new ArgumentNullException(nameof(materialToEdit));
@@ -81,7 +79,7 @@ namespace MatheoCaffieri_GestorCMB
 
                 if (IsEditMode)
                 {
-                    buttonAgregar.Text            = "Guardar";
+                    buttonAgregar.Text            = LanguageService.Current?.T("btn_guardar") ?? "Guardar";
                     textBoxDescripcion.Text        = _editTarget.DescripcionArticulo;
                     textBoxPrecio.Text             = _editTarget.CostoPorUnidad.ToString(System.Globalization.CultureInfo.CurrentCulture);
                     comboBoxMaterial.SelectedItem  = _editTarget.TipoMaterial;
@@ -93,14 +91,14 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
-                LoggerLogic.Error("[AddMaterialesForm] Error iniciando", ex);
+                LoggerLogic.Warn($"[AddMaterialesForm] Validación al inicializar: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error("[AddMaterialesForm] Error iniciando", ex);
+                LoggerLogic.Error("[AddMaterialesForm] Falla al inicializar el form.", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
@@ -109,7 +107,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void CargarCombosFijos()
         {
-            // Si luego los guardás en tablas, reemplazá por repos
+            // Listas hardcodeadas: si en algún momento se mueven a tablas, reemplazar por sus repositorios.
             var tiposMaterial = new List<string> { "Cable", "Material", "Cañería", "Accesorio", "Electrónica", "Otro" };
             var tiposUnidad = new List<string> { "un", "cm", "m", "kg", "l" };
 
@@ -127,7 +125,7 @@ namespace MatheoCaffieri_GestorCMB
             comboBoxProveedor.ValueMember = "IdProveedor";
             comboBoxProveedor.DataSource = proveedores;
 
-            // si la FK no acepta NULL, exigí selección
+            // La FK idProveedor en Material es NOT NULL: si no hay proveedores cargados, deshabilitamos el combo.
             comboBoxProveedor.SelectedIndex = proveedores.Count > 0 ? 0 : -1;
             comboBoxProveedor.Enabled = proveedores.Count > 0;
         }
@@ -140,19 +138,18 @@ namespace MatheoCaffieri_GestorCMB
             try
             {
                 _matBL.Add(mat);
-                LoggerLogic.Info($"[AddMaterialesForm] Material agregado: {mat.DescripcionArticulo} ({mat.IdMaterial})");
                 DialogResult = DialogResult.OK;
                 Close();
             }
             catch (AppException ex)
             {
-                LoggerLogic.Error("[AddMaterialesForm] Error al guardar material", ex);
+                LoggerLogic.Warn($"[AddMaterialesForm] Validación al agregar material: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error("[AddMaterialesForm] Error al guardar material", ex);
+                LoggerLogic.Error("[AddMaterialesForm] Falla al agregar material.", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -189,39 +186,38 @@ namespace MatheoCaffieri_GestorCMB
                 return false;
             }
 
-            // Proveedor (si tu FK no acepta NULL, esto debe ser obligatorio)
             Guid idProv = Guid.Empty;
             if (comboBoxProveedor.Enabled && comboBoxProveedor.SelectedValue is Guid g) idProv = g;
 
             m = new Material
             {
-                IdMaterial = Guid.Empty,      // lo asigna el BL si hace falta
+                // IdMaterial queda en Empty: el BL le asigna un Guid nuevo en el Add.
+                IdMaterial = Guid.Empty,
                 DescripcionArticulo = desc,
                 TipoMaterial = tipoMat,
                 TipoUnidad = tipoUni,
-                CostoPorUnidad = (float)precio,          // usá decimal en dominio
+                CostoPorUnidad = (float)precio,
                 IdProveedor = idProv
             };
 
             return true;
         }
 
+        // Acepta números con coma o punto: prueba cultura actual, invariante, y como fallback fuerza el punto.
         private static bool TryParseDecimal(string input, out decimal value)
         {
             var s = (input ?? "").Trim();
-            // cultura actual
             if (decimal.TryParse(s, NumberStyles.Number, CultureInfo.CurrentCulture, out value))
                 return true;
-            // invariante
             if (decimal.TryParse(s, NumberStyles.Number, CultureInfo.InvariantCulture, out value))
                 return true;
-            // reemplazo rápido
             s = s.Replace(',', '.');
             return decimal.TryParse(s, NumberStyles.Number, CultureInfo.InvariantCulture, out value);
         }
 
         private static void Warn(string msg, Control focus)
         {
+            LoggerLogic.Warn($"[AddMaterialesForm] Validación: {msg}");
             MessageBox.Show(msg, LanguageService.Current?.T("cap_validacion") ?? "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             focus.Focus();
         }
@@ -268,12 +264,10 @@ namespace MatheoCaffieri_GestorCMB
                 {
                     mat.IdMaterial = _editTarget.IdMaterial;
                     _matBL.Update(mat);
-                    LoggerLogic.Info($"[AddMaterialesForm] Material editado: {mat.DescripcionArticulo} ({mat.IdMaterial})");
                 }
                 else
                 {
                     _matBL.Add(mat);
-                    LoggerLogic.Info($"[AddMaterialesForm] Material agregado: {mat.DescripcionArticulo} ({mat.IdMaterial})");
                 }
 
                 DialogResult = DialogResult.OK;
@@ -281,13 +275,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
-                LoggerLogic.Error("[AddMaterialesForm] Error al guardar material", ex);
+                LoggerLogic.Warn($"[AddMaterialesForm] Validación al guardar material: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error("[AddMaterialesForm] Error al guardar material", ex);
+                LoggerLogic.Error("[AddMaterialesForm] Falla al guardar material.", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

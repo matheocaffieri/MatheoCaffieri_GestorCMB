@@ -117,9 +117,9 @@ namespace MatheoCaffieri_GestorCMB
 
             textBox1.Font = new Font("Microsoft YaHei UI", 9.5f);
             textBox1.BorderStyle = BorderStyle.FixedSingle;
-            SendMessage(textBox1.Handle, 0x1501, 1, "Buscar...");
+            SendMessage(textBox1.Handle, 0x1501, 1, LanguageService.Current?.T("txt_buscar_placeholder") ?? "Buscar...");
 
-            buttonSearchClientes.Text = "⌕  Buscar";
+            buttonSearchClientes.Text = LanguageService.Current?.T("btn_buscar_icon") ?? "⌕  Buscar";
             buttonSearchClientes.Font = new Font("Microsoft YaHei UI", 10f, FontStyle.Bold);
             buttonSearchClientes.BackColor = Color.FromArgb(76, 175, 80);
             buttonSearchClientes.ForeColor = Color.White;
@@ -128,7 +128,7 @@ namespace MatheoCaffieri_GestorCMB
             buttonSearchClientes.FlatAppearance.MouseOverBackColor = Color.FromArgb(56, 142, 60);
             buttonSearchClientes.Cursor = Cursors.Hand;
 
-            buttonHistorial.Text = "Historial";
+            buttonHistorial.Text = LanguageService.Current?.T("btn_historial") ?? "Historial";
             buttonHistorial.Font = new Font("Microsoft YaHei UI", 8.5f, FontStyle.Bold);
             buttonHistorial.BackColor = Color.FromArgb(63, 81, 181);
             buttonHistorial.ForeColor = Color.White;
@@ -159,7 +159,7 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error("InformesDeCompraControl.CargarInformesItems_FAIL", ex);
+                LoggerLogic.Error("[InformesDeCompraControl] Falla al cargar listado de informes.", ex);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -234,13 +234,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
-                LoggerLogic.Error("InformesDeCompraControl.AgregarCompra_FAIL", ex);
+                LoggerLogic.Warn($"[InformesDeCompraControl] Validación al confirmar compra: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error("InformesDeCompraControl.AgregarCompra_FAIL", ex);
+                LoggerLogic.Error("[InformesDeCompraControl] Falla al confirmar compra desde el listado.", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -266,13 +266,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
-                LoggerLogic.Error("InformesDeCompraControl.EliminarInforme_FAIL", ex);
+                LoggerLogic.Warn($"[InformesDeCompraControl] Validación al eliminar informe: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                LoggerLogic.Error("InformesDeCompraControl.EliminarInforme_FAIL", ex);
+                LoggerLogic.Error("[InformesDeCompraControl] Falla al eliminar informe desde el listado.", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

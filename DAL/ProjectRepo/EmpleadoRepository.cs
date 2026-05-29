@@ -13,12 +13,12 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using EmpleadoDom = DomainModel.Empleado;
-// Cambiá este namespace por el REAL donde vive tu entidad EF “Empleado”
 using EmpleadoEf = DAL.Empleado;
 
 
 namespace DAL.ProjectRepo
 {
+    // Los métodos de escritura NO llaman a SaveChanges: la persistencia la dispara el UnitOfWork al Commit.
     public class EmpleadoRepository : IEmpleadoRepository
     {
         private readonly GestorCMBEntities _context;
@@ -49,11 +49,7 @@ namespace DAL.ProjectRepo
             dst.nombre = src.Nombre;
             dst.apellido = src.Apellido;
             dst.nroDocumento = src.NroDocumento;
-
-            // si EF sueldo es decimal, lo correcto sería: dst.sueldo = (decimal)src.Sueldo;
-            // dejo tu lógica "mínimo cambio", pero esto conviene corregir.
             dst.sueldo = (float)src.Sueldo;
-
             dst.cantidadProyectosActivos = src.CantidadProyectosActivos;
             dst.isActive = src.IsActive;
         }
@@ -64,7 +60,6 @@ namespace DAL.ProjectRepo
             var ef = new EmpleadoEf();
             MapToEf(entity, ef);
             _set.Add(ef);
-            // NO SaveChanges
         }
 
         public void Update(EmpleadoDom entity)
@@ -75,7 +70,6 @@ namespace DAL.ProjectRepo
 
             MapToEf(entity, ef);
             _context.Entry(ef).State = EntityState.Modified;
-            // NO SaveChanges
         }
 
         public void Delete(EmpleadoDom entity)
@@ -85,7 +79,6 @@ namespace DAL.ProjectRepo
             if (ef == null) return;
 
             _set.Remove(ef);
-            // NO SaveChanges
         }
 
         public EmpleadoDom GetById(Guid id)

@@ -246,9 +246,17 @@ namespace MatheoCaffieri_GestorCMB
                 {
                     _empleadoRepo.Update(e);
                 }
+                catch (DomainModel.Exceptions.AppException ex)
+                {
+                    Services.Logs.LoggerLogic.Warn($"[VerEmpleadosControl] Validación al cambiar estado de empleado: {ex.MessageKey}");
+                    MessageBox.Show(
+                        LanguageService.Current?.T(ex.MessageKey) ?? ex.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    CargarListado(textBox1.Text);
+                }
                 catch (Exception ex)
                 {
-                    Services.Logs.LoggerLogic.Error($"[VerEmpleadosControl] Error al actualizar estado: {ex.Message}");
+                    Services.Logs.LoggerLogic.Error($"[VerEmpleadosControl] Falla al cambiar estado de empleado. Id={e.IdEmpleado}", ex);
                     MessageBox.Show(
                         LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

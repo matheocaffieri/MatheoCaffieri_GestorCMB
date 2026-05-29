@@ -30,6 +30,7 @@ namespace MatheoCaffieri_GestorCMB
         public MainForm()
         {
             InitializeComponent();
+            AplicarTraducciones();
             var homeControl = new HomeControl(this);   // HomeControl NO lleva servicios
             addUserControl(homeControl);
         }
@@ -38,6 +39,7 @@ namespace MatheoCaffieri_GestorCMB
         public MainForm(RolesService rolesService, UsuarioService usuarioService, ParametrosServiceLogic parametrosService)
         {
             InitializeComponent();
+            AplicarTraducciones();
             _rolesService = rolesService ?? throw new ArgumentNullException(nameof(rolesService));
             _usuarioService = usuarioService ?? throw new ArgumentNullException(nameof(usuarioService));
             _parametrosService = parametrosService ?? throw new ArgumentNullException(nameof(parametrosService));
@@ -48,6 +50,13 @@ namespace MatheoCaffieri_GestorCMB
 
             var homeControl = new HomeControl(this);
             addUserControl(homeControl);
+        }
+
+        // Items del menú que no están localizados via Designer (sin ApplyResources)
+        private void AplicarTraducciones()
+        {
+            configurarParametrosToolStripMenuItem.Text =
+                LanguageService.Current?.T("mnu_configurar_parametros") ?? "Configurar Parámetros";
         }
 
         private bool Require(string permiso)

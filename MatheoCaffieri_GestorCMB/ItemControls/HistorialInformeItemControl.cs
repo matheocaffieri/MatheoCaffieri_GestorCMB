@@ -1,4 +1,5 @@
 using DomainModel;
+using Services.Language;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,21 +27,22 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             var estadoNormalizado = (estado ?? string.Empty).Trim().ToLowerInvariant();
             if (estadoNormalizado == "finalizado")
             {
-                labelEstado.Text = "Transacción completa";
+                labelEstado.Text = LanguageService.Current?.T("val_transaccion_completa") ?? "Transacción completa";
                 labelEstado.BackColor = Color.FromArgb(76, 175, 80);
             }
             else
             {
-                labelEstado.Text = "Transacción cancelada";
+                labelEstado.Text = LanguageService.Current?.T("val_transaccion_cancelada") ?? "Transacción cancelada";
                 labelEstado.BackColor = Color.FromArgb(229, 57, 53);
             }
 
             if (faltantes != null && faltantes.Count > 0)
             {
+                var sinDesc = LanguageService.Current?.T("txt_sin_descripcion_paren") ?? "(sin descripción)";
                 var sb = new StringBuilder();
                 foreach (var f in faltantes)
                 {
-                    var desc = string.IsNullOrWhiteSpace(f.DescripcionArticuloFaltante) ? "(sin descripción)" : f.DescripcionArticuloFaltante;
+                    var desc = string.IsNullOrWhiteSpace(f.DescripcionArticuloFaltante) ? sinDesc : f.DescripcionArticuloFaltante;
                     var tipo = string.IsNullOrWhiteSpace(f.TipoMaterialFaltante) ? "-" : f.TipoMaterialFaltante;
                     var unidad = string.IsNullOrWhiteSpace(f.TipoUnidadMaterialFaltante) ? "" : f.TipoUnidadMaterialFaltante;
                     sb.AppendLine($"• {f.CantidadFaltante} {unidad} - {desc} ({tipo})");
@@ -51,8 +53,8 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             else
             {
                 textBoxMateriales.Text = estadoNormalizado == "finalizado"
-                    ? "Materiales aplicados al inventario del proyecto."
-                    : "(sin detalle)";
+                    ? (LanguageService.Current?.T("txt_materiales_aplicados") ?? "Materiales aplicados al inventario del proyecto.")
+                    : (LanguageService.Current?.T("txt_sin_detalle")          ?? "(sin detalle)");
             }
         }
 

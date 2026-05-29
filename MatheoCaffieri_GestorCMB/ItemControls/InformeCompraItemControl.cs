@@ -1,4 +1,5 @@
 ﻿using DomainModel;
+using Services.Language;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -152,7 +153,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         {
             if (faltantes == null || faltantes.Count == 0)
             {
-                textBoxItemsFaltantes.Text = "Sin materiales faltantes.";
+                textBoxItemsFaltantes.Text = LanguageService.Current?.T("txt_sin_materiales_faltantes") ?? "Sin materiales faltantes.";
                 buttonAgregarCompra.Enabled = false;
                 return;
             }
@@ -168,7 +169,9 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             var sb = new StringBuilder();
             foreach (var f in ordered)
             {
-                var desc = string.IsNullOrWhiteSpace(f.DescripcionArticuloFaltante) ? "(sin descripción)" : f.DescripcionArticuloFaltante;
+                var desc = string.IsNullOrWhiteSpace(f.DescripcionArticuloFaltante)
+                    ? (LanguageService.Current?.T("txt_sin_descripcion_paren") ?? "(sin descripción)")
+                    : f.DescripcionArticuloFaltante;
                 var tipo = string.IsNullOrWhiteSpace(f.TipoMaterialFaltante) ? "-" : f.TipoMaterialFaltante;
                 var unidad = string.IsNullOrWhiteSpace(f.TipoUnidadMaterialFaltante) ? "" : f.TipoUnidadMaterialFaltante;
 

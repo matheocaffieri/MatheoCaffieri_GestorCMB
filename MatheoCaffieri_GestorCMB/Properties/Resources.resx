@@ -451,4 +451,564 @@
   <data name="msg_informe_eliminado" xml:space="preserve">
     <value>Informe eliminado.</value>
   </data>
+  <!-- ===== Captions ===== -->
+  <data name="cap_error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="cap_confirmar" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="cap_confirmar_eliminacion" xml:space="preserve">
+    <value>Confirmar eliminación</value>
+  </data>
+  <data name="cap_cerrar_sesion" xml:space="preserve">
+    <value>Cerrar sesión</value>
+  </data>
+  <data name="cap_eliminar_empleado" xml:space="preserve">
+    <value>Eliminar empleado</value>
+  </data>
+  <data name="cap_eliminar_material" xml:space="preserve">
+    <value>Eliminar material</value>
+  </data>
+  <data name="cap_campo_requerido" xml:space="preserve">
+    <value>Campo requerido</value>
+  </data>
+  <data name="cap_campos_requeridos" xml:space="preserve">
+    <value>Campos requeridos</value>
+  </data>
+  <data name="cap_no_encontrado" xml:space="preserve">
+    <value>No encontrado</value>
+  </data>
+  <data name="cap_pass_muy_corta" xml:space="preserve">
+    <value>Contraseña muy corta</value>
+  </data>
+  <data name="cap_otp_invalido" xml:space="preserve">
+    <value>Código inválido</value>
+  </data>
+  <data name="cap_listo" xml:space="preserve">
+    <value>Listo</value>
+  </data>
+  <data name="cap_recuperar_contrasena" xml:space="preserve">
+    <value>Recuperar contraseña</value>
+  </data>
+  <data name="cap_editar_empleado" xml:space="preserve">
+    <value>Editar empleado</value>
+  </data>
+  <!-- ===== Recuperación de contraseña (ForgotPasswordForm) ===== -->
+  <data name="val_recuperar_mail_requerido" xml:space="preserve">
+    <value>Ingrese su correo electrónico.</value>
+  </data>
+  <data name="val_pass_no_coinciden" xml:space="preserve">
+    <value>Las contraseñas no coinciden.</value>
+  </data>
+  <data name="val_pass_muy_corta" xml:space="preserve">
+    <value>La contraseña debe tener al menos 6 caracteres.</value>
+  </data>
+  <data name="err_recuperar_cuenta_no_encontrada" xml:space="preserve">
+    <value>No se encontró una cuenta activa con ese correo.</value>
+  </data>
+  <data name="err_otp_invalido" xml:space="preserve">
+    <value>El código es incorrecto o ha expirado.</value>
+  </data>
+  <data name="err_otp_envio_fmt" xml:space="preserve">
+    <value>Error al enviar el código:
+{0}</value>
+  </data>
+  <data name="err_pass_cambio_fmt" xml:space="preserve">
+    <value>Error al cambiar la contraseña:
+{0}</value>
+  </data>
+  <data name="msg_pass_cambiada" xml:space="preserve">
+    <value>Contraseña cambiada exitosamente. Ya puede iniciar sesión.</value>
+  </data>
+  <data name="msg_otp_enviado_fmt" xml:space="preserve">
+    <value>Código enviado a {0}. Válido por 15 minutos.</value>
+  </data>
+  <data name="lbl_ingrese_mail" xml:space="preserve">
+    <value>Ingrese su correo electrónico</value>
+  </data>
+  <data name="btn_enviar_codigo" xml:space="preserve">
+    <value>Enviar código</value>
+  </data>
+  <data name="btn_enviando" xml:space="preserve">
+    <value>Enviando...</value>
+  </data>
+  <data name="btn_cambiar_contrasena" xml:space="preserve">
+    <value>Cambiar contraseña</value>
+  </data>
+  <data name="lbl_codigo_verificacion" xml:space="preserve">
+    <value>Código de verificación:</value>
+  </data>
+  <data name="lbl_nueva_contrasena" xml:space="preserve">
+    <value>Nueva contraseña:</value>
+  </data>
+  <data name="lbl_confirmar_contrasena" xml:space="preserve">
+    <value>Confirmar contraseña:</value>
+  </data>
+  <!-- ===== Confirmaciones (formato) ===== -->
+  <data name="msg_confirmar_cerrar_sesion" xml:space="preserve">
+    <value>¿Querés cerrar sesión?</value>
+  </data>
+  <data name="msg_confirmar_eliminar_empleado_fmt" xml:space="preserve">
+    <value>¿Querés eliminar a {0} del proyecto?</value>
+  </data>
+  <data name="msg_confirmar_eliminar_material_fmt" xml:space="preserve">
+    <value>¿Querés eliminar "{0}" del proyecto?</value>
+  </data>
+  <data name="msg_confirmar_eliminar_material_inv_fmt" xml:space="preserve">
+    <value>¿Eliminar "{0}"?
+Esta acción no se puede deshacer.</value>
+  </data>
+  <data name="msg_confirmar_quitar_rol_fmt" xml:space="preserve">
+    <value>¿Quitar el rol "{0}" del usuario?</value>
+  </data>
+  <data name="msg_informe_generado_fmt" xml:space="preserve">
+    <value>Informe generado.
+ID: {0}</value>
+  </data>
+  <!-- ===== Otros ===== -->
+  <data name="err_eliminar_material_fmt" xml:space="preserve">
+    <value>No se pudo eliminar el material.
+{0}</value>
+  </data>
+  <data name="err_db_init_fmt" xml:space="preserve">
+    <value>Error al inicializar la base de datos: {0}</value>
+  </data>
+  <data name="txt_sin_nombre" xml:space="preserve">
+    <value>(sin nombre)</value>
+  </data>
+  <!-- ===== Login (UI labels) ===== -->
+  <data name="btn_iniciar_sesion" xml:space="preserve">
+    <value>Iniciar sesión</value>
+  </data>
+  <data name="lnk_olvido_contrasena" xml:space="preserve">
+    <value>¿Olvidó su contraseña?</value>
+  </data>
+  <data name="lbl_mail" xml:space="preserve">
+    <value>Mail</value>
+  </data>
+  <data name="lbl_contrasena" xml:space="preserve">
+    <value>Contraseña</value>
+  </data>
+  <!-- ===== Edit empleado / VerLogs (UI labels) ===== -->
+  <data name="btn_editar" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="lbl_sueldo" xml:space="preserve">
+    <value>Sueldo</value>
+  </data>
+  <data name="lbl_numero_documento" xml:space="preserve">
+    <value>Número de documento</value>
+  </data>
+  <data name="lbl_apellido" xml:space="preserve">
+    <value>Apellido</value>
+  </data>
+  <data name="lbl_nombre" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="btn_ver_archivo" xml:space="preserve">
+    <value>Ver archivo</value>
+  </data>
+  <!-- ===== Header controls (columnas de detalle) ===== -->
+  <data name="hdr_documento" xml:space="preserve">
+    <value>Documento</value>
+  </data>
+  <data name="hdr_ganancia" xml:space="preserve">
+    <value>Ganancia</value>
+  </data>
+  <data name="hdr_descripcion" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="hdr_categoria" xml:space="preserve">
+    <value>Categoría</value>
+  </data>
+  <data name="hdr_unidad" xml:space="preserve">
+    <value>Unidad</value>
+  </data>
+  <data name="hdr_cantidad_abr" xml:space="preserve">
+    <value>Cant.</value>
+  </data>
+  <data name="hdr_precio_unidad" xml:space="preserve">
+    <value>Precio/U</value>
+  </data>
+  <data name="hdr_ganancia_unidad" xml:space="preserve">
+    <value>Ganancia/U</value>
+  </data>
+  <data name="hdr_cantidad_faltante" xml:space="preserve">
+    <value>Cant. faltante</value>
+  </data>
+  <!-- ===== Program startup ===== -->
+  <data name="err_missing_cs_default" xml:space="preserve">
+    <value>Falta el connection string 'Default' en App.config.</value>
+  </data>
+  <data name="cap_configuracion" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="cap_inicio" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="msg_log_registrado" xml:space="preserve">
+    <value>Se registró en el log. Abrí el visor de logs para ver el detalle.</value>
+  </data>
+  <!-- ===== GestionUsuariosControl (UI programática) ===== -->
+  <data name="hdr_usuarios" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
+  <data name="hdr_roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="hdr_nuevo_usuario" xml:space="preserve">
+    <value>Nuevo usuario</value>
+  </data>
+  <data name="lbl_telefono" xml:space="preserve">
+    <value>Teléfono</value>
+  </data>
+  <data name="lbl_idioma" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="lbl_rol" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="lbl_descripcion" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="btn_crear_usuario" xml:space="preserve">
+    <value>Crear usuario</value>
+  </data>
+  <data name="btn_crear_rol" xml:space="preserve">
+    <value>+ Crear rol</value>
+  </data>
+  <data name="btn_agregar" xml:space="preserve">
+    <value>+ Agregar</value>
+  </data>
+  <data name="btn_agregar_material" xml:space="preserve">
+    <value>+ Agregar material</value>
+  </data>
+  <data name="btn_volver" xml:space="preserve">
+    <value>← Volver</value>
+  </data>
+  <data name="btn_buscar" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="btn_informe_compra" xml:space="preserve">
+    <value>Informe de compra</value>
+  </data>
+  <data name="lbl_informe_pendiente_badge" xml:space="preserve">
+    <value>Pendiente en informe</value>
+  </data>
+  <data name="btn_proveedores" xml:space="preserve">
+    <value>Proveedores</value>
+  </data>
+  <data name="msg_selecciona_rol" xml:space="preserve">
+    <value>Seleccioná un rol para ver sus permisos</value>
+  </data>
+  <data name="lbl_permisos_fmt" xml:space="preserve">
+    <value>Permisos: {0}</value>
+  </data>
+  <data name="lbl_permisos_admin_fmt" xml:space="preserve">
+    <value>Permisos: {0}   (protegido, solo lectura)</value>
+  </data>
+  <data name="hdr_modulo" xml:space="preserve">
+    <value>Módulo</value>
+  </data>
+  <data name="hdr_ver" xml:space="preserve">
+    <value>VER</value>
+  </data>
+  <data name="hdr_gestionar" xml:space="preserve">
+    <value>GESTIONAR</value>
+  </data>
+  <data name="txt_sin_rol" xml:space="preserve">
+    <value>(Sin rol)</value>
+  </data>
+  <data name="lnk_ver_menos" xml:space="preserve">
+    <value>Ver menos</value>
+  </data>
+  <data name="lnk_ver_mas_fmt" xml:space="preserve">
+    <value>Ver {0} más...</value>
+  </data>
+  <data name="mod_proyectos" xml:space="preserve">
+    <value>Proyectos</value>
+  </data>
+  <data name="mod_inventario" xml:space="preserve">
+    <value>Inventario</value>
+  </data>
+  <data name="mod_empleados" xml:space="preserve">
+    <value>Empleados</value>
+  </data>
+  <data name="mod_clientes" xml:space="preserve">
+    <value>Clientes</value>
+  </data>
+  <data name="mod_proveedores" xml:space="preserve">
+    <value>Proveedores</value>
+  </data>
+  <data name="mod_informes_compra" xml:space="preserve">
+    <value>Informes compra</value>
+  </data>
+  <data name="mod_logs" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="mod_configuracion" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="mod_usuarios" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
+  <!-- ===== VerInventarioControl / ProveedorControl (UI programática) ===== -->
+  <data name="hdr_inventario" xml:space="preserve">
+    <value>Inventario</value>
+  </data>
+  <data name="hdr_materiales" xml:space="preserve">
+    <value>Materiales</value>
+  </data>
+  <data name="hdr_proveedores" xml:space="preserve">
+    <value>Proveedores</value>
+  </data>
+  <data name="hdr_lista" xml:space="preserve">
+    <value>Lista</value>
+  </data>
+  <!-- ===== Estados de proyecto / valores de filtros ===== -->
+  <data name="val_estado_en_proceso" xml:space="preserve">
+    <value>En proceso</value>
+  </data>
+  <data name="val_estado_suspendido" xml:space="preserve">
+    <value>Suspendido</value>
+  </data>
+  <data name="val_estado_finalizado" xml:space="preserve">
+    <value>Finalizado</value>
+  </data>
+  <data name="val_estado_todos" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <!-- ===== HomeControl ===== -->
+  <data name="hdr_empleados_activos" xml:space="preserve">
+    <value>Empleados activos</value>
+  </data>
+  <data name="hdr_informes_de_compra" xml:space="preserve">
+    <value>Informes de compra</value>
+  </data>
+  <data name="hdr_proximo_cierre" xml:space="preserve">
+    <value>Próximo cierre</value>
+  </data>
+  <data name="txt_sin_proyectos_activos" xml:space="preserve">
+    <value>Sin proyectos activos</value>
+  </data>
+  <!-- ===== DetalleProyectoControl / ProyectoItemControl ===== -->
+  <data name="lbl_fecha_de_cierre" xml:space="preserve">
+    <value>Fecha de cierre:</value>
+  </data>
+  <data name="hdr_empleados" xml:space="preserve">
+    <value>Empleados</value>
+  </data>
+  <data name="hdr_faltante" xml:space="preserve">
+    <value>Faltante</value>
+  </data>
+  <data name="lnk_ver_analisis" xml:space="preserve">
+    <value>Ver análisis</value>
+  </data>
+  <data name="txt_proyecto_num_default" xml:space="preserve">
+    <value>Proyecto #</value>
+  </data>
+  <data name="txt_proyecto_na" xml:space="preserve">
+    <value>Proyecto #N/A</value>
+  </data>
+  <data name="txt_proyecto_num_fmt" xml:space="preserve">
+    <value>Proyecto #{0}</value>
+  </data>
+  <data name="txt_sin_descripcion" xml:space="preserve">
+    <value>Sin descripción</value>
+  </data>
+  <data name="txt_cliente_desconocido" xml:space="preserve">
+    <value>Cliente desconocido</value>
+  </data>
+  <data name="txt_desconocido" xml:space="preserve">
+    <value>Desconocido</value>
+  </data>
+  <data name="txt_sin_fecha" xml:space="preserve">
+    <value>Sin fecha</value>
+  </data>
+  <data name="txt_fecha_no_disponible" xml:space="preserve">
+    <value>Fecha no disponible</value>
+  </data>
+  <data name="txt_estado_desconocido" xml:space="preserve">
+    <value>Estado desconocido</value>
+  </data>
+  <data name="txt_ubicacion_desconocida" xml:space="preserve">
+    <value>Ubicación desconocida</value>
+  </data>
+  <data name="txt_ubicacion_no_especificada" xml:space="preserve">
+    <value>Ubicación no especificada</value>
+  </data>
+  <data name="txt_faltantes_count_singular_fmt" xml:space="preserve">
+    <value>{0} material faltante</value>
+  </data>
+  <data name="txt_faltantes_count_plural_fmt" xml:space="preserve">
+    <value>{0} materiales faltantes</value>
+  </data>
+  <!-- ===== AnalisisProyectoForm ===== -->
+  <data name="cap_analisis_proyecto" xml:space="preserve">
+    <value>Análisis del proyecto</value>
+  </data>
+  <data name="cap_analisis_fmt" xml:space="preserve">
+    <value>Análisis — {0}</value>
+  </data>
+  <data name="lbl_filtrar_por" xml:space="preserve">
+    <value>Filtrar por:</value>
+  </data>
+  <data name="val_dias" xml:space="preserve">
+    <value>Días</value>
+  </data>
+  <data name="val_meses" xml:space="preserve">
+    <value>Meses</value>
+  </data>
+  <data name="val_anios" xml:space="preserve">
+    <value>Años</value>
+  </data>
+  <data name="hdr_analisis_compras" xml:space="preserve">
+    <value>Análisis de compras</value>
+  </data>
+  <data name="hdr_costo_proyecto" xml:space="preserve">
+    <value>Costo del proyecto</value>
+  </data>
+  <!-- ===== VerProyectosControl ===== -->
+  <data name="lnk_limpiar" xml:space="preserve">
+    <value>✕ Limpiar</value>
+  </data>
+  <data name="val_orden_mas_recientes" xml:space="preserve">
+    <value>Más recientes</value>
+  </data>
+  <data name="val_orden_mas_antiguos" xml:space="preserve">
+    <value>Más antiguos</value>
+  </data>
+  <data name="val_orden_descripcion_az" xml:space="preserve">
+    <value>Descripción A-Z</value>
+  </data>
+  <data name="val_orden_cliente_az" xml:space="preserve">
+    <value>Cliente A-Z</value>
+  </data>
+  <data name="val_orden_mas_faltantes" xml:space="preserve">
+    <value>Más faltantes</value>
+  </data>
+  <data name="hdr_estado" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="txt_buscar_placeholder" xml:space="preserve">
+    <value>Buscar...</value>
+  </data>
+  <!-- ===== ItemControls misc ===== -->
+  <data name="val_transaccion_completa" xml:space="preserve">
+    <value>Transacción completa</value>
+  </data>
+  <data name="val_transaccion_cancelada" xml:space="preserve">
+    <value>Transacción cancelada</value>
+  </data>
+  <data name="txt_sin_descripcion_paren" xml:space="preserve">
+    <value>(sin descripción)</value>
+  </data>
+  <data name="txt_materiales_aplicados" xml:space="preserve">
+    <value>Materiales aplicados al inventario del proyecto.</value>
+  </data>
+  <data name="txt_sin_detalle" xml:space="preserve">
+    <value>(sin detalle)</value>
+  </data>
+  <data name="val_sin_cupo" xml:space="preserve">
+    <value>Sin cupo</value>
+  </data>
+  <data name="btn_agregar_simple" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
+  <data name="txt_sin_materiales_faltantes" xml:space="preserve">
+    <value>Sin materiales faltantes.</value>
+  </data>
+  <data name="cap_limite_alcanzado" xml:space="preserve">
+    <value>Límite alcanzado</value>
+  </data>
+  <data name="cap_diagnostico" xml:space="preserve">
+    <value>Diagnóstico</value>
+  </data>
+  <data name="txt_sin_proveedor" xml:space="preserve">
+    <value>Sin proveedor</value>
+  </data>
+  <data name="txt_este_material" xml:space="preserve">
+    <value>este material</value>
+  </data>
+  <!-- ===== EditClienteForm / EditProveedorForm / EditProyectoForm ===== -->
+  <data name="cap_editar_cliente" xml:space="preserve">
+    <value>Editar cliente</value>
+  </data>
+  <data name="cap_editar_proveedor" xml:space="preserve">
+    <value>Editar proveedor</value>
+  </data>
+  <data name="cap_editar_proyecto" xml:space="preserve">
+    <value>Editar proyecto</value>
+  </data>
+  <data name="lbl_razon_social" xml:space="preserve">
+    <value>Razón social</value>
+  </data>
+  <data name="lbl_nombre_contacto" xml:space="preserve">
+    <value>Nombre de contacto</value>
+  </data>
+  <data name="lbl_descripcion_proyecto" xml:space="preserve">
+    <value>Descripción del proyecto</value>
+  </data>
+  <data name="lbl_cliente" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="lbl_ubicacion" xml:space="preserve">
+    <value>Ubicación</value>
+  </data>
+  <data name="lbl_fecha_inicio" xml:space="preserve">
+    <value>Fecha de inicio</value>
+  </data>
+  <data name="lbl_fecha_cierre" xml:space="preserve">
+    <value>Fecha de cierre</value>
+  </data>
+  <data name="val_fecha_cierre_anterior" xml:space="preserve">
+    <value>La fecha de cierre no puede ser anterior a la fecha de inicio.</value>
+  </data>
+  <data name="lbl_estado" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="btn_guardar" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <!-- ===== HistorialInformesControl / AgregarMaterialProyectoForm ===== -->
+  <data name="cap_historial_informes" xml:space="preserve">
+    <value>Historial de informes</value>
+  </data>
+  <data name="txt_proyecto_sin_nombre" xml:space="preserve">
+    <value>Proyecto sin nombre</value>
+  </data>
+  <data name="txt_sin_tipo" xml:space="preserve">
+    <value>Sin tipo</value>
+  </data>
+  <data name="msg_materiales_agregados_con_faltantes_fmt" xml:space="preserve">
+    <value>Se agregaron {0} al proyecto y {1} se cargaron como material faltante.</value>
+  </data>
+  <data name="msg_materiales_agregados_fmt" xml:space="preserve">
+    <value>Se agregaron {0} al proyecto.</value>
+  </data>
+  <data name="cap_materiales_faltantes" xml:space="preserve">
+    <value>Materiales faltantes</value>
+  </data>
+  <data name="btn_historial" xml:space="preserve">
+    <value>Historial</value>
+  </data>
+  <data name="btn_buscar_icon" xml:space="preserve">
+    <value>⌕  Buscar</value>
+  </data>
+  <data name="txt_sin_info_general" xml:space="preserve">
+    <value>Sin información general</value>
+  </data>
+  <data name="hdr_dgv_numero" xml:space="preserve">
+    <value>N°</value>
+  </data>
+  <data name="hdr_dgv_rol" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="hdr_dgv_asignado" xml:space="preserve">
+    <value>Asignado</value>
+  </data>
+  <data name="mnu_configurar_parametros" xml:space="preserve">
+    <value>Configurar Parámetros</value>
+  </data>
 </root>

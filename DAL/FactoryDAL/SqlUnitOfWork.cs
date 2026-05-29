@@ -2,9 +2,9 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Data.Entity;                    // EF6
-using System.Data.Entity.Infrastructure;     // IObjectContextAdapter
-using System.Data.Entity.Core.EntityClient;  // EntityConnection
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Core.EntityClient;
 using DomainModel.Interfaces;
 
 namespace DAL.FactoryDAL

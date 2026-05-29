@@ -4,6 +4,7 @@ using DomainModel;
 using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Language;
+using Services.Logs;
 
 namespace MatheoCaffieri_GestorCMB
 {
@@ -21,6 +22,8 @@ namespace MatheoCaffieri_GestorCMB
 
             if (_cliente.IdCliente == Guid.Empty)
                 throw new ArgumentException("IdCliente requerido.", nameof(cliente));
+
+            AplicarTraducciones();
 
             // Precargar campos
             textBoxRazonSocial.Text = _cliente.RazonSocial;
@@ -59,6 +62,17 @@ namespace MatheoCaffieri_GestorCMB
 
         private System.Drawing.Point _mouseLocation;
 
+        private void AplicarTraducciones()
+        {
+            this.Text             = LanguageService.Current?.T("cap_editar_cliente") ?? "Editar cliente";
+            labelTitulo.Text      = LanguageService.Current?.T("cap_editar_cliente") ?? "Editar cliente";
+            labelRazonSocial.Text = LanguageService.Current?.T("lbl_razon_social")   ?? "Razón social";
+            labelTelefono.Text    = LanguageService.Current?.T("lbl_telefono")       ?? "Teléfono";
+            labelMail.Text        = LanguageService.Current?.T("lbl_mail")           ?? "Mail";
+            labelNombreContacto.Text = LanguageService.Current?.T("lbl_nombre_contacto") ?? "Nombre de contacto";
+            buttonGuardar.Text    = LanguageService.Current?.T("btn_guardar")        ?? "Guardar";
+        }
+
         private void EnterSubmit(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -76,6 +90,7 @@ namespace MatheoCaffieri_GestorCMB
 
             if (string.IsNullOrWhiteSpace(razonSocial))
             {
+                LoggerLogic.Warn($"[EditClienteForm] Validación: razón social vacía (Id={_cliente.IdCliente}).");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_razon_social_requerida") ?? "La razón social es obligatoria.",
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
@@ -86,6 +101,7 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!int.TryParse(textBoxTelefono.Text.Trim(), out int telefono))
             {
+                LoggerLogic.Warn($"[EditClienteForm] Validación: teléfono inválido (Id={_cliente.IdCliente}).");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_telefono_invalido") ?? "El teléfono debe ser numérico.",
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
@@ -108,11 +124,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[EditClienteForm] Validación al actualizar cliente: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerLogic.Error($"[EditClienteForm] Falla al actualizar cliente. Id={_cliente.IdCliente}", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

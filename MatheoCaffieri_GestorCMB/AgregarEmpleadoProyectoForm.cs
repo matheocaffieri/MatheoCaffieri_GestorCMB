@@ -4,6 +4,7 @@ using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
+using Services.Logs;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -59,10 +60,8 @@ namespace MatheoCaffieri_GestorCMB
 
             var empleados = ((IGenericRepository<Empleado>)new EmpleadoBL()).GetAll();
 
-            // ✅ SOLO ACTIVOS
             empleados = empleados.Where(e => e.IsActive).ToList();
 
-            // opcional: filtrar por nombre/apellido/dni (pero siempre dentro de activos)
             if (!string.IsNullOrWhiteSpace(filtro))
             {
                 var f = filtro.Trim().ToLowerInvariant();
@@ -98,12 +97,14 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[AgregarEmpleadoProyectoForm] Validación al asignar empleado: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarEmpleadosItems();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerLogic.Error("[AgregarEmpleadoProyectoForm] Falla al asignar empleado al proyecto.", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 CargarEmpleadosItems();

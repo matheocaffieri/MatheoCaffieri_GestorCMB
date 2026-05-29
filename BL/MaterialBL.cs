@@ -58,8 +58,6 @@ namespace BL
             if (entity.IdMaterial == Guid.Empty)
                 entity.IdMaterial = Guid.NewGuid();
 
-            LoggerLogic.Info($"[MaterialBL] Add START. MaterialId={entity.IdMaterial} Desc='{entity.DescripcionArticulo}' Prov={entity.IdProveedor}");
-
             _uow.Begin();
             try
             {
@@ -76,13 +74,18 @@ namespace BL
                 _inventarioRepository.Add(inventario);
 
                 _uow.Commit();
-
-                LoggerLogic.Info($"[MaterialBL] Add OK. MaterialId={entity.IdMaterial} InvId={inventario.IdMaterialInventario}");
+                LoggerLogic.Info($"[MaterialBL] Material agregado. Id={entity.IdMaterial} Desc='{entity.DescripcionArticulo}'");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[MaterialBL] Validación al agregar material: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[MaterialBL] Add ERROR. MaterialId={entity?.IdMaterial}", ex);
+                LoggerLogic.Error($"[MaterialBL] Falla al agregar material. Id={entity?.IdMaterial}", ex);
                 throw;
             }
         }
@@ -91,20 +94,23 @@ namespace BL
         {
             Validate(entity, isUpdate: true);
 
-            LoggerLogic.Info($"[MaterialBL] Update START. MaterialId={entity.IdMaterial}");
-
             _uow.Begin();
             try
             {
                 _materialRepository.Update(entity);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[MaterialBL] Update OK. MaterialId={entity.IdMaterial}");
+                LoggerLogic.Info($"[MaterialBL] Material actualizado. Id={entity.IdMaterial}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[MaterialBL] Validación al actualizar material: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[MaterialBL] Update ERROR. MaterialId={entity?.IdMaterial}", ex);
+                LoggerLogic.Error($"[MaterialBL] Falla al actualizar material. Id={entity?.IdMaterial}", ex);
                 throw;
             }
         }
@@ -115,29 +121,31 @@ namespace BL
             if (entity.IdMaterial == Guid.Empty)
                 throw new AppException("err_material_id_delete");
 
-            LoggerLogic.Info($"[MaterialBL] Delete START. MaterialId={entity.IdMaterial}");
-
             _uow.Begin();
             try
             {
-                // OJO: si tu DB tiene FK Inventario->Material, primero deberías borrar inventario.
-                // Como no tenemos método DeleteByMaterialId en repo, dejamos “mínimo cambio”:
-                // 1) intentamos borrar inventario si existe
+                // El inventario tiene FK al material, así que primero se borra el inventario y después el material.
+                // 1) Inventario asociado (si existe)
                 var inv = _inventarioRepository.GetByMaterialId(entity.IdMaterial);
                 if (inv != null)
                     _inventarioRepository.Delete(inv);
 
-                // 2) borramos material
+                // 2) Material
                 _materialRepository.Delete(entity);
 
                 _uow.Commit();
-
-                LoggerLogic.Info($"[MaterialBL] Delete OK. MaterialId={entity.IdMaterial}");
+                LoggerLogic.Info($"[MaterialBL] Material eliminado. Id={entity.IdMaterial}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[MaterialBL] Validación al eliminar material: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[MaterialBL] Delete ERROR. MaterialId={entity?.IdMaterial}", ex);
+                LoggerLogic.Error($"[MaterialBL] Falla al eliminar material. Id={entity?.IdMaterial}", ex);
                 throw;
             }
         }
@@ -145,34 +153,10 @@ namespace BL
         public DomainModel.Material GetById(Guid id)
         {
             if (id == Guid.Empty) throw new AppException("err_id_required");
-
-            try
-            {
-                var mat = _materialRepository.GetById(id);
-                if (mat == null) LoggerLogic.Warn($"[MaterialBL] GetById: no encontrado. MaterialId={id}");
-                return mat;
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[MaterialBL] GetById ERROR. MaterialId={id}", ex);
-                throw;
-            }
+            return _materialRepository.GetById(id);
         }
 
-        public List<DomainModel.Material> GetAll()
-        {
-            try
-            {
-                var list = _materialRepository.GetAll();
-                LoggerLogic.Info($"[MaterialBL] GetAll OK. Count={list.Count}");
-                return list;
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error("[MaterialBL] GetAll ERROR.", ex);
-                throw;
-            }
-        }
+        public List<DomainModel.Material> GetAll() => _materialRepository.GetAll();
 
         // ===== Implementación explícita de IGenericRepository =====
         List<DomainModel.Material> IGenericRepository<DomainModel.Material>.GetAll() => GetAll();

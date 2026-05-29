@@ -52,42 +52,48 @@ namespace BL
             if (entity.IdMaterialInventario == Guid.Empty)
                 entity.IdMaterialInventario = Guid.NewGuid();
 
-            LoggerLogic.Info($"[InventarioBL] Add START. InvId={entity.IdMaterialInventario} Material={entity.IdMaterial} Cant={entity.Cantidad}");
-
             _uow.Begin();
             try
             {
-                _repo.Add(entity);      // pendiente commit
+                _repo.Add(entity);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[InventarioBL] Add OK. InvId={entity.IdMaterialInventario}");
+                LoggerLogic.Info($"[InventarioBL] Inventario creado. Id={entity.IdMaterialInventario} Material={entity.IdMaterial}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[InventarioBL] Validación al crear inventario: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[InventarioBL] Add ERROR. InvId={entity.IdMaterialInventario}. {ex.Message}");
+                LoggerLogic.Error($"[InventarioBL] Falla al crear inventario. Id={entity.IdMaterialInventario}", ex);
                 throw;
             }
         }
 
+        // No loguea: los cambios de cantidad de inventario están explícitamente excluidos del historial de eventos.
         public void Update(DomainModel.Inventario entity)
         {
             Validate(entity, isUpdate: true);
-
-            LoggerLogic.Info($"[InventarioBL] Update START. InvId={entity.IdMaterialInventario} Cant={entity.Cantidad}");
 
             _uow.Begin();
             try
             {
                 _repo.Update(entity);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[InventarioBL] Update OK. InvId={entity.IdMaterialInventario}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[InventarioBL] Validación al actualizar inventario: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[InventarioBL] Update ERROR. InvId={entity.IdMaterialInventario}. {ex.Message}");
+                LoggerLogic.Error($"[InventarioBL] Falla al actualizar inventario. Id={entity.IdMaterialInventario}", ex);
                 throw;
             }
         }
@@ -98,98 +104,55 @@ namespace BL
             if (entity.IdMaterialInventario == Guid.Empty)
                 throw new AppException("err_inventario_id_delete");
 
-            LoggerLogic.Info($"[InventarioBL] Delete START. InvId={entity.IdMaterialInventario}");
-
             _uow.Begin();
             try
             {
                 _repo.Delete(entity);
                 _uow.Commit();
-
-                LoggerLogic.Info($"[InventarioBL] Delete OK. InvId={entity.IdMaterialInventario}");
+                LoggerLogic.Info($"[InventarioBL] Inventario eliminado. Id={entity.IdMaterialInventario}");
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[InventarioBL] Validación al eliminar inventario: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[InventarioBL] Delete ERROR. InvId={entity.IdMaterialInventario}. {ex.Message}");
+                LoggerLogic.Error($"[InventarioBL] Falla al eliminar inventario. Id={entity.IdMaterialInventario}", ex);
                 throw;
             }
         }
 
-        // ========= READ (sin transacción) =========
+        // ========= READ (sin transacción ni log) =========
 
         public DomainModel.Inventario GetById(Guid id)
         {
             if (id == Guid.Empty) throw new AppException("err_id_required");
-
-            try
-            {
-                var inv = _repo.GetById(id);
-                if (inv == null) LoggerLogic.Warn($"[InventarioBL] GetById: no encontrado. InvId={id}");
-                return inv;
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[InventarioBL] GetById ERROR. InvId={id}. {ex.Message}");
-                throw;
-            }
+            return _repo.GetById(id);
         }
 
-        public List<DomainModel.Inventario> GetAll()
-        {
-            try
-            {
-                var list = _repo.GetAll();
-                LoggerLogic.Info($"[InventarioBL] GetAll OK. Count={list.Count}");
-                return list;
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[InventarioBL] GetAll ERROR. {ex.Message}");
-                throw;
-            }
-        }
+        public List<DomainModel.Inventario> GetAll() => _repo.GetAll();
 
         public DomainModel.Inventario GetByMaterialId(Guid idMaterial)
         {
             if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
-
-            try
-            {
-                var inv = _repo.GetByMaterialId(idMaterial);
-                if (inv == null) LoggerLogic.Warn($"[InventarioBL] GetByMaterialId: sin inventario. Material={idMaterial}");
-                return inv;
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[InventarioBL] GetByMaterialId ERROR. Material={idMaterial}. {ex.Message}");
-                throw;
-            }
+            return _repo.GetByMaterialId(idMaterial);
         }
 
         public decimal GetCantidad(Guid idMaterial)
         {
             if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
-
-            try
-            {
-                return _repo.GetCantidad(idMaterial);
-            }
-            catch (Exception ex)
-            {
-                LoggerLogic.Error($"[InventarioBL] GetCantidad ERROR. Material={idMaterial}. {ex.Message}");
-                throw;
-            }
+            return _repo.GetCantidad(idMaterial);
         }
 
-        // ========= Extra: cambia cantidad (WRITE => Begin/Commit) =========
+        // ========= Extra: cambia cantidad (WRITE => Begin/Commit, sin log de éxito por ser cambio de stock) =========
 
         public int CambiarCantidad(Guid idInventario, int delta)
         {
             if (idInventario == Guid.Empty) throw new AppException("err_id_required");
             if (delta == 0) return GetById(idInventario)?.Cantidad ?? 0;
-
-            LoggerLogic.Info($"[InventarioBL] CambiarCantidad START. InvId={idInventario} Delta={delta}");
 
             _uow.Begin();
             try
@@ -200,7 +163,6 @@ namespace BL
                 var nuevaCantidad = inv.Cantidad + delta;
                 if (nuevaCantidad < 0)
                 {
-                    LoggerLogic.Warn($"[InventarioBL] CambiarCantidad: queda negativa, no aplica. InvId={idInventario} Actual={inv.Cantidad} Delta={delta}");
                     _uow.Rollback();
                     return inv.Cantidad;
                 }
@@ -209,13 +171,18 @@ namespace BL
                 _repo.Update(inv);
 
                 _uow.Commit();
-                LoggerLogic.Info($"[InventarioBL] CambiarCantidad OK. InvId={idInventario} NuevaCantidad={nuevaCantidad}");
                 return nuevaCantidad;
+            }
+            catch (AppException ex)
+            {
+                _uow.Rollback();
+                LoggerLogic.Warn($"[InventarioBL] Validación al cambiar cantidad de inventario: {ex.MessageKey}");
+                throw;
             }
             catch (Exception ex)
             {
                 _uow.Rollback();
-                LoggerLogic.Error($"[InventarioBL] CambiarCantidad ERROR. InvId={idInventario}. {ex.Message}");
+                LoggerLogic.Error($"[InventarioBL] Falla al cambiar cantidad de inventario. Id={idInventario}", ex);
                 throw;
             }
         }

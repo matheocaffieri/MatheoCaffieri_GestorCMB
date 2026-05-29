@@ -1,8 +1,10 @@
 ﻿using BL;
 using DomainModel;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
+using Services.Logs;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -22,10 +24,9 @@ namespace MatheoCaffieri_GestorCMB
         private const string REQUIRED = "VER_CLIENTES";
 
 
-        // ctor por defecto -> usa BL real
         public ClientesControl(MainForm mainForm) : this(mainForm, new ClienteBL()) { }
 
-        // ctor inyectable (para tests)
+        // DI / tests
         public ClientesControl(MainForm mainForm, IGenericRepository<Cliente> clienteRepo)
         {
             InitializeComponent();
@@ -54,13 +55,7 @@ namespace MatheoCaffieri_GestorCMB
             for (int i = 0; i < clienteItemControls.Length; i++)
             {
                 clienteItemControls[i] = new ClientesItemControl();
-                //clienteItemControls[i].Dock = DockStyle.Top;
-                //clienteItemControls[i].BringToFront();
-
-                
-
                 gestionarClientesLayoutPanel.Controls.Add(clienteItemControls[i]);
-
             }
         }
 
@@ -84,7 +79,6 @@ namespace MatheoCaffieri_GestorCMB
                 clientes = clientes
                     .Where(c =>
                         (!string.IsNullOrEmpty(c.RazonSocial) && c.RazonSocial.ToLower().Contains(filtro)) ||
-                        // Telefono es int: convertir a string antes de buscar.
                         (c != null && c.Telefono.ToString().Contains(filtro)) ||
                         (!string.IsNullOrEmpty(c.Mail) && c.Mail.ToLower().Contains(filtro)) ||
                         (!string.IsNullOrEmpty(c.NombreContacto) && c.NombreContacto.ToLower().Contains(filtro))
@@ -133,20 +127,27 @@ namespace MatheoCaffieri_GestorCMB
                 cli.IsActive = nuevoEstado;
                 _clienteRepo.Update(cli);
             }
+            catch (AppException ex)
+            {
+                LoggerLogic.Warn($"[ClientesControl] Validación al cambiar estado de cliente: {ex.MessageKey}");
+                MessageBox.Show(
+                    LanguageService.Current?.T(ex.MessageKey) ?? ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CargarListado(textBoxBuscar.Text);
+            }
             catch (Exception ex)
             {
-                Services.Logs.LoggerLogic.Error($"[ClientesControl] Error al actualizar estado cliente {cli.IdCliente}: {ex.Message}");
+                LoggerLogic.Error($"[ClientesControl] Falla al cambiar estado de cliente. Id={cli.IdCliente}", ex);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // Revertir el switch visualmente
+                // Recargar para revertir el switch visualmente al estado real de la BD.
                 CargarListado(textBoxBuscar.Text);
             }
         }
 
         private void buttonAddCliente_Click(object sender, EventArgs e)
         {
-            // Ajustá estos nombres a los de tu diseñador
             string razonSocial = textBoxRazonSocial.Text.Trim();
             string telefono = textBoxTelefono.Text.Trim();
             string mail = textBoxMail.Text.Trim();
@@ -154,6 +155,7 @@ namespace MatheoCaffieri_GestorCMB
 
             if (string.IsNullOrWhiteSpace(razonSocial))
             {
+                LoggerLogic.Warn("[ClientesControl] Validación: razón social vacía al crear cliente.");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_razon_social_requerida") ?? "La razón social es obligatoria.",
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
@@ -165,6 +167,7 @@ namespace MatheoCaffieri_GestorCMB
 
             if (!int.TryParse(telefono, out telefonoNum))
             {
+                LoggerLogic.Warn($"[ClientesControl] Validación: teléfono inválido al crear cliente ('{telefono}').");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_telefono_invalido") ?? "El teléfono debe ser numérico.",
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
@@ -176,22 +179,36 @@ namespace MatheoCaffieri_GestorCMB
             {
                 IdCliente = Guid.NewGuid(),
                 RazonSocial = razonSocial,
-                Telefono = telefonoNum,     // CORRECTO
+                Telefono = telefonoNum,
                 Mail = mail,
                 NombreContacto = nombreContacto
             };
 
+            try
+            {
+                _clienteRepo.Add(nuevo);
 
-            _clienteRepo.Add(nuevo);
+                textBoxRazonSocial.Clear();
+                textBoxTelefono.Clear();
+                textBoxMail.Clear();
+                textBoxNombreContacto.Clear();
 
-            // Limpiar formulario
-            textBoxRazonSocial.Clear();
-            textBoxTelefono.Clear();
-            textBoxMail.Clear();
-            textBoxNombreContacto.Clear();
-
-            // Refrescar listado con el filtro actual
-            CargarListado(textBoxBuscar.Text);
+                CargarListado(textBoxBuscar.Text);
+            }
+            catch (AppException ex)
+            {
+                LoggerLogic.Warn($"[ClientesControl] Validación al crear cliente: {ex.MessageKey}");
+                MessageBox.Show(
+                    LanguageService.Current?.T(ex.MessageKey) ?? ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                LoggerLogic.Error("[ClientesControl] Falla al crear cliente.", ex);
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void textBoxBuscar_TextChanged(object sender, EventArgs e)

@@ -50,8 +50,9 @@ namespace MatheoCaffieri_GestorCMB
             if (string.IsNullOrWhiteSpace(cs))
             {
                 MessageBox.Show(
-                    "Falta el connection string 'Default' en App.config.",
-                    "Configuración", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LanguageService.Current?.T("err_missing_cs_default") ?? "Falta el connection string 'Default' en App.config.",
+                    LanguageService.Current?.T("cap_configuracion") ?? "Configuración",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -62,8 +63,10 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al inicializar la base de datos: {ex.Message}",
-                                "Inicio", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    string.Format(LanguageService.Current?.T("err_db_init_fmt") ?? "Error al inicializar la base de datos: {0}", ex.Message),
+                    LanguageService.Current?.T("cap_inicio") ?? "Inicio",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             var rolesService = AccessServicesFactory.CreateRolesService(cs);
@@ -86,8 +89,8 @@ namespace MatheoCaffieri_GestorCMB
 
                 MessageBox.Show(
                     msg + "\n\n" +
-                    "Se registró en el log. Abrí el visor de logs para ver el detalle.",
-                    "Error",
+                    (LanguageService.Current?.T("msg_log_registrado") ?? "Se registró en el log. Abrí el visor de logs para ver el detalle."),
+                    LanguageService.Current?.T("cap_error") ?? "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );

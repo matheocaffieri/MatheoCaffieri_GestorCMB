@@ -6,6 +6,7 @@ using DomainModel.Interfaces;
 using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using Services.Language;
+using Services.Logs;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -129,7 +130,6 @@ namespace MatheoCaffieri_GestorCMB
 
             bool compact = Height < 620 || Width < 980;
 
-            // Antes: int metricsH = compact ? 86 : (int)DesignMetricsH;
             int metricsH = compact ? 96 : (int)DesignMetricsH;
             int metricsSideMargin = compact ? 10 : 0;
 
@@ -224,8 +224,8 @@ namespace MatheoCaffieri_GestorCMB
         private void linkLabelUser_DoubleClick(object sender, EventArgs e)
         {
             var result = MessageBox.Show(
-                "¿Querés cerrar sesión?",
-                "Cerrar sesión",
+                LanguageService.Current?.T("msg_confirmar_cerrar_sesion") ?? "¿Querés cerrar sesión?",
+                LanguageService.Current?.T("cap_cerrar_sesion") ?? "Cerrar sesión",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
@@ -233,6 +233,8 @@ namespace MatheoCaffieri_GestorCMB
 
             try
             {
+                LoggerLogic.Info($"[HomeControl] Cierre de sesión solicitado. Usuario='{UserSession.UserDisplayName}'");
+
                 var t = new System.Threading.Thread(() => Application.Run(new LoginForm()));
                 t.SetApartmentState(System.Threading.ApartmentState.STA);
                 t.Start();
@@ -242,12 +244,14 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[HomeControl] Validación al cerrar sesión: {ex.MessageKey}");
                 MessageBox.Show(
                     LanguageService.Current?.T(ex.MessageKey) ?? ex.Message,
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch
+            catch (Exception ex)
             {
+                LoggerLogic.Error("[HomeControl] Falla al cerrar sesión.", ex);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_cerrar_sesion") ?? "No se pudo cerrar sesión.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -377,8 +381,8 @@ namespace MatheoCaffieri_GestorCMB
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,  1f));
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,  33f));
 
-            var cellEmpleados = CreateMetricCell("Empleados activos",  out _lblEmpleadosTitulo, out _lblEmpleadosVal);
-            var cellInformes  = CreateMetricCell("Informes de compra", out _lblInformesTitulo,  out _lblInformesVal);
+            var cellEmpleados = CreateMetricCell(LanguageService.Current?.T("hdr_empleados_activos")   ?? "Empleados activos",  out _lblEmpleadosTitulo, out _lblEmpleadosVal);
+            var cellInformes  = CreateMetricCell(LanguageService.Current?.T("hdr_informes_de_compra") ?? "Informes de compra", out _lblInformesTitulo,  out _lblInformesVal);
             var cellProyecto  = CreateProyectoCell(out _lblProyectoTitulo, out _lblProyectoNombre, out _lblProyectoFecha);
 
             table.Controls.Add(cellEmpleados, 0, 0);
@@ -477,7 +481,7 @@ namespace MatheoCaffieri_GestorCMB
 
             lblTitulo = new Label
             {
-                Text = "Próximo cierre",
+                Text = LanguageService.Current?.T("hdr_proximo_cierre") ?? "Próximo cierre",
                 Font = new Font("Microsoft YaHei UI", 8.5f),
                 ForeColor = Color.FromArgb(110, 110, 110),
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -522,7 +526,7 @@ namespace MatheoCaffieri_GestorCMB
             try
             {
                 var bl = (IEmpleadoRepository)new EmpleadoBL();
-                _lblEmpleadosVal.Text = bl.GetAll().Count(e => e.CantidadProyectosActivos > 0).ToString();
+                _lblEmpleadosVal.Text = bl.GetAll().Count(e => e.IsActive).ToString();
             }
             catch { _lblEmpleadosVal.Text = "—"; }
 
@@ -540,7 +544,8 @@ namespace MatheoCaffieri_GestorCMB
                     .FirstOrDefault();
 
                 _proximoProyecto        = proximo;
-                _lblProyectoNombre.Text = proximo?.Descripcion ?? "Sin proyectos activos";
+                _lblProyectoNombre.Text = proximo?.Descripcion
+                    ?? (LanguageService.Current?.T("txt_sin_proyectos_activos") ?? "Sin proyectos activos");
                 _lblProyectoFecha.Text  = proximo != null ? proximo.FechaFin.ToString("dd/MM/yyyy") : "";
             }
             catch

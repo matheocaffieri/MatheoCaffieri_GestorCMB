@@ -1,5 +1,6 @@
 using BL;
 using DomainModel;
+using Services.Language;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -19,7 +20,10 @@ namespace MatheoCaffieri_GestorCMB
         {
             InitializeComponent();
             _idProyecto = idProyecto;
-            Text        = $"Análisis — {nombreProyecto}";
+            AplicarTraducciones();
+            Text        = string.Format(
+                LanguageService.Current?.T("cap_analisis_fmt") ?? "Análisis — {0}",
+                nombreProyecto);
 
             // Shown dispara después del primer paint, cuando Dock=Fill ya aplicó
             // el tamaño real — único momento seguro para setear SplitterDistance.
@@ -28,6 +32,14 @@ namespace MatheoCaffieri_GestorCMB
                 if (splitCharts.Width > 0)
                     splitCharts.SplitterDistance = splitCharts.Width / 2;
             };
+        }
+
+        private void AplicarTraducciones()
+        {
+            labelFiltrar.Text = LanguageService.Current?.T("lbl_filtrar_por") ?? "Filtrar por:";
+            radioDias.Text    = LanguageService.Current?.T("val_dias")        ?? "Días";
+            radioMeses.Text   = LanguageService.Current?.T("val_meses")       ?? "Meses";
+            radioAnios.Text   = LanguageService.Current?.T("val_anios")       ?? "Años";
         }
 
         // ── Load ────────────────────────────────────────────────────────────
@@ -120,7 +132,7 @@ namespace MatheoCaffieri_GestorCMB
             chartCompras.Titles.Clear();
             chartCompras.Legends.Clear();
 
-            chartCompras.Titles.Add(new Title("Análisis de compras")
+            chartCompras.Titles.Add(new Title(LanguageService.Current?.T("hdr_analisis_compras") ?? "Análisis de compras")
             {
                 Font      = new Font("Segoe UI", 10f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(35, 35, 35),
@@ -159,7 +171,7 @@ namespace MatheoCaffieri_GestorCMB
             chartCostos.Titles.Clear();
             chartCostos.Legends.Clear();
 
-            chartCostos.Titles.Add(new Title("Costo del proyecto")
+            chartCostos.Titles.Add(new Title(LanguageService.Current?.T("hdr_costo_proyecto") ?? "Costo del proyecto")
             {
                 Font      = new Font("Segoe UI", 10f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(35, 35, 35),

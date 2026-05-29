@@ -32,8 +32,6 @@ namespace BL
                 MontoTotal      = montoTotal
             };
 
-            LoggerLogic.Info($"[InformeMontoBL] Recalcular START. idProyecto={idProyecto} | emp={totalEmp} mat={totalMat} total={montoTotal}");
-
             var ctx = new GestorCMBEntities();
             var uow = new SqlUnitOfWork(ctx);
             var repo = new InformeMontoRepository(uow);
@@ -43,12 +41,12 @@ namespace BL
             {
                 repo.Upsert(informe);
                 uow.Commit();
-                LoggerLogic.Info($"[InformeMontoBL] Recalcular OK. idProyecto={idProyecto}");
+                // Sin log: este método se llama cada vez que se refresca un proyecto, no es un evento de negocio.
             }
             catch (Exception ex)
             {
                 uow.Rollback();
-                LoggerLogic.Error($"[InformeMontoBL] Recalcular ERROR. idProyecto={idProyecto}. {ex.Message}");
+                LoggerLogic.Error($"[InformeMontoBL] Falla al recalcular informe de monto. Proy={idProyecto}", ex);
                 throw;
             }
 

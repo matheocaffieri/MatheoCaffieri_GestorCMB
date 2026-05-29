@@ -3,6 +3,7 @@ using DomainModel;
 using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using Services.Language;
+using Services.Logs;
 using Services.RoleService;
 using System;
 using System.Drawing;
@@ -77,6 +78,7 @@ namespace MatheoCaffieri_GestorCMB
                 string.IsNullOrWhiteSpace(documentoStr) ||
                 string.IsNullOrWhiteSpace(sueldoStr))
             {
+                LoggerLogic.Warn("[AddEmpleadosForm] Validación: faltan campos obligatorios al agregar empleado.");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_campos_completos") ?? "Complete todos los campos.",
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
@@ -88,6 +90,7 @@ namespace MatheoCaffieri_GestorCMB
             if (!int.TryParse(documentoStr, NumberStyles.Integer, CultureInfo.CurrentCulture, out int documento) ||
                 documento < 0)
             {
+                LoggerLogic.Warn($"[AddEmpleadosForm] Validación: DNI inválido ('{documentoStr}').");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_dni_invalido") ?? "El número de documento no es válido.",
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
@@ -98,6 +101,7 @@ namespace MatheoCaffieri_GestorCMB
             if (!decimal.TryParse(sueldoStr, NumberStyles.Number, CultureInfo.CurrentCulture, out decimal sueldo) ||
                 sueldo < 0)
             {
+                LoggerLogic.Warn($"[AddEmpleadosForm] Validación: sueldo inválido ('{sueldoStr}').");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_sueldo_invalido") ?? "El sueldo no es válido.",
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
@@ -112,7 +116,6 @@ namespace MatheoCaffieri_GestorCMB
                 Apellido = apellido,
                 NroDocumento = documento,
                 Sueldo = (float)sueldo
-                // agregá acá otros campos si tu entidad los tiene
             };
 
             try
@@ -126,11 +129,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[AddEmpleadosForm] Validación de negocio: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerLogic.Error("[AddEmpleadosForm] Falla al guardar empleado.", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

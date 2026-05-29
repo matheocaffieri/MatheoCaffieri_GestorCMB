@@ -48,7 +48,7 @@ namespace BL
                         ValorGanancia = (float)valorGanancia
                     };
 
-                    detRepo.Add(det, estado: "1"); // "1" activo
+                    detRepo.Add(det, estado: "1");
 
                     emp.CantidadProyectosActivos += 1;
                     empRepo.Update(emp);
@@ -56,10 +56,16 @@ namespace BL
                     uow.Commit();
                     LoggerLogic.Info($"[ProyectoEmpleadoBL] Empleado agregado al proyecto. Proy={idProyecto} Emp={idEmpleado} Det={det.IdDetalleProyectoEmpleado}");
                 }
+                catch (AppException ex)
+                {
+                    uow.Rollback();
+                    LoggerLogic.Warn($"[ProyectoEmpleadoBL] Validación al agregar empleado al proyecto: {ex.MessageKey}");
+                    throw;
+                }
                 catch (Exception ex)
                 {
                     uow.Rollback();
-                    LoggerLogic.Error($"[ProyectoEmpleadoBL] Error al agregar empleado. Proy={idProyecto} Emp={idEmpleado}", ex);
+                    LoggerLogic.Error($"[ProyectoEmpleadoBL] Falla al agregar empleado. Proy={idProyecto} Emp={idEmpleado}", ex);
                     throw;
                 }
             }
@@ -83,7 +89,7 @@ namespace BL
                     var det = detRepo.GetByProyectoEmpleado(idProyecto, idEmpleado);
                     if (det == null) throw new AppException("err_empleado_no_en_proyecto");
 
-                    detRepo.SetEstado(det.IdDetalleProyectoEmpleado, "0"); // "0" inactivo
+                    detRepo.SetEstado(det.IdDetalleProyectoEmpleado, "0");
 
                     var emp = empRepo.GetById(idEmpleado);
                     if (emp != null && emp.CantidadProyectosActivos > 0)
@@ -95,10 +101,16 @@ namespace BL
                     uow.Commit();
                     LoggerLogic.Info($"[ProyectoEmpleadoBL] Empleado quitado del proyecto. Proy={idProyecto} Emp={idEmpleado} Det={det.IdDetalleProyectoEmpleado}");
                 }
+                catch (AppException ex)
+                {
+                    uow.Rollback();
+                    LoggerLogic.Warn($"[ProyectoEmpleadoBL] Validación al quitar empleado: {ex.MessageKey}");
+                    throw;
+                }
                 catch (Exception ex)
                 {
                     uow.Rollback();
-                    LoggerLogic.Error($"[ProyectoEmpleadoBL] Error al quitar empleado. Proy={idProyecto} Emp={idEmpleado}", ex);
+                    LoggerLogic.Error($"[ProyectoEmpleadoBL] Falla al quitar empleado. Proy={idProyecto} Emp={idEmpleado}", ex);
                     throw;
                 }
             }

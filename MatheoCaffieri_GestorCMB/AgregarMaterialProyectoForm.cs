@@ -4,6 +4,7 @@ using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
+using Services.Logs;
 using Services.RoleService;
 using System;
 using System.Collections.Generic;
@@ -61,7 +62,6 @@ namespace MatheoCaffieri_GestorCMB
         }
         private void ConfigurarLayout()
         {
-            // Si es FlowLayoutPanel
             gestionarMaterialesDetalleLayoutPanel.AutoScroll = true;
             gestionarMaterialesDetalleLayoutPanel.WrapContents = false;
             gestionarMaterialesDetalleLayoutPanel.FlowDirection = FlowDirection.TopDown;
@@ -76,17 +76,15 @@ namespace MatheoCaffieri_GestorCMB
 
             foreach (var inv in inventario)
             {
-                // si querés ocultar stock 0:
-                // if (inv.Cantidad <= 0) continue;
-
                 var item = new AddMaterialProyectoItemControl
                 {
-                    DescripcionArticuloInventario = inv.Material?.DescripcionArticulo ?? "Sin descripción",
-                    TipoArticuloInventario = inv.Material?.TipoMaterial ?? "Sin tipo",
-                    InfoGeneralArticuloInventario = $"| {inv.Material?.Proveedor?.Descripcion ?? "Sin proveedor"} | ${inv.Material?.CostoPorUnidad ?? 0}"
+                    DescripcionArticuloInventario = inv.Material?.DescripcionArticulo
+                        ?? (LanguageService.Current?.T("txt_sin_descripcion") ?? "Sin descripción"),
+                    TipoArticuloInventario = inv.Material?.TipoMaterial
+                        ?? (LanguageService.Current?.T("txt_sin_tipo") ?? "Sin tipo"),
+                    InfoGeneralArticuloInventario = $"| {inv.Material?.Proveedor?.Descripcion ?? (LanguageService.Current?.T("txt_sin_proveedor") ?? "Sin proveedor")} | ${inv.Material?.CostoPorUnidad ?? 0}"
                 };
 
-                // Bind: idInventario + idMaterial + stock
                 item.Bind(inv.IdMaterialInventario, inv.IdMaterial, inv.Cantidad);
 
                 item.AgregarClick += Item_AgregarClick;
@@ -125,18 +123,18 @@ namespace MatheoCaffieri_GestorCMB
                     valorGanancia
                 );
 
-                // refrescar stock del inventario en este form
                 CargarInventarioItems();
 
-                // avisar al padre (DetalleProyectoControl) para refrescar materiales + faltantes
+                // Avisar al padre (DetalleProyectoControl) para que refresque materiales + faltantes.
                 MaterialesProyectoActualizados?.Invoke(this, EventArgs.Empty);
 
-                // opcional: feedback al usuario
                 if (r.Faltante > 0)
                 {
                     MessageBox.Show(
-                        $"Se agregaron {r.Asignado} al proyecto y {r.Faltante} se cargaron como material faltante.",
-                        "Materiales faltantes",
+                        string.Format(
+                            LanguageService.Current?.T("msg_materiales_agregados_con_faltantes_fmt") ?? "Se agregaron {0} al proyecto y {1} se cargaron como material faltante.",
+                            r.Asignado, r.Faltante),
+                        LanguageService.Current?.T("cap_materiales_faltantes") ?? "Materiales faltantes",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information
                     );
@@ -144,8 +142,10 @@ namespace MatheoCaffieri_GestorCMB
                 else
                 {
                     MessageBox.Show(
-                        $"Se agregaron {r.Asignado} al proyecto.",
-                        "OK",
+                        string.Format(
+                            LanguageService.Current?.T("msg_materiales_agregados_fmt") ?? "Se agregaron {0} al proyecto.",
+                            r.Asignado),
+                        LanguageService.Current?.T("cap_ok") ?? "OK",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information
                     );
@@ -153,11 +153,13 @@ namespace MatheoCaffieri_GestorCMB
             }
             catch (AppException ex)
             {
+                LoggerLogic.Warn($"[AgregarMaterialProyectoForm] Validación al asignar material: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerLogic.Error("[AgregarMaterialProyectoForm] Falla al asignar material al proyecto.", ex);
                 var msg = LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

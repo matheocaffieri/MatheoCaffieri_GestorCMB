@@ -12,7 +12,7 @@ using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Interfaces;
 
-// Alias a la entidad EF (ajustá el namespace si difiere)
+// Alias a la entidad EF para evitar choque de nombres con DomainModel.MaterialFaltante.
 using MaterialFaltanteEf = DAL.Material_faltante;
 
 namespace DAL.ProjectRepo
@@ -32,7 +32,6 @@ namespace DAL.ProjectRepo
                 TipoMaterialFaltante = d.tipoMaterialFaltante,
                 TipoUnidadMaterialFaltante = d.tipoUnidadMaterialFaltante,
                 IdProyecto = d.idProyecto,
-                // Si en EF es decimal, casteamos a float para el dominio
                 CantidadFaltante = (int)d.cantidadFaltante
             };
 
