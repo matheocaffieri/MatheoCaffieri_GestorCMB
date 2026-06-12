@@ -218,6 +218,9 @@ namespace MatheoCaffieri_GestorCMB
         // 4) borrar materiales faltantes del proyecto
         private void Item_AgregarCompraClicked(object sender, Guid idProyecto)
         {
+            if (!PermisosUI.Require(Interfaces.LoginInterfaces.TipoPermiso.GESTIONAR_INFORMES_COMPRA))
+                return;
+
             try
             {
                 var item = (InformeCompraItemControl)sender;
@@ -250,6 +253,9 @@ namespace MatheoCaffieri_GestorCMB
         // Borrar informe (y su detalle) para rehacerlo después
         private void Item_EliminarClicked(object sender, Guid idProyecto)
         {
+            if (!PermisosUI.Require(Interfaces.LoginInterfaces.TipoPermiso.GESTIONAR_INFORMES_COMPRA))
+                return;
+
             try
             {
                 var item = (InformeCompraItemControl)sender;

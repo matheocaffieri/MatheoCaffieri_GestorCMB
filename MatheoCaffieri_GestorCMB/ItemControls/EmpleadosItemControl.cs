@@ -148,7 +148,12 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             _lblNombre.Text = $"{e.Nombre} {e.Apellido}";
 
             int p = e.CantidadProyectosActivos;
-            _lblInfo.Text = $"DNI: {e.NroDocumento}  ·  ${e.Sueldo:N0}  ·  {p} proyecto{(p == 1 ? "" : "s")} activo{(p == 1 ? "" : "s")}";
+            string dni = Services.Language.LanguageService.Current?.T("txt_dni") ?? "DNI";
+            string proyectos = string.Format(
+                Services.Language.LanguageService.Current?.T(p == 1 ? "txt_proyecto_activo_fmt" : "txt_proyectos_activos_fmt")
+                    ?? (p == 1 ? "{0} proyecto activo" : "{0} proyectos activos"),
+                p);
+            _lblInfo.Text = $"{dni}: {e.NroDocumento}  ·  ${e.Sueldo:N0}  ·  {proyectos}";
 
             _toggle.IsOn = e.IsActive;
         }

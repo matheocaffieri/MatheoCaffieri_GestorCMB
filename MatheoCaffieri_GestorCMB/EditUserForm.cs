@@ -49,7 +49,10 @@ namespace MatheoCaffieri_GestorCMB
             _loggedUserId = loggedUserId;
 
             textBoxMailEditUser.Text = _usuario.Mail;
-            textBoxContraseñaEditUser.Text = _usuario.Contraseña;
+            // El campo arranca vacío (vacío = mantener la contraseña actual) y enmascarado.
+            // Nunca precargar _usuario.Contraseña: es el hash BCrypt, no la contraseña.
+            textBoxContraseñaEditUser.Text = string.Empty;
+            textBoxContraseñaEditUser.UseSystemPasswordChar = true;
             textBoxTelEditUser.Text = _usuario.Telefono.ToString();
 
             dataGridRoles.CellDoubleClick += dataGridRoles_CellDoubleClick;
@@ -385,15 +388,17 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(pass))
+            if (!Validaciones.EsMailValido(mail))
             {
-                LoggerLogic.Warn($"[EditUserForm] Validación: contraseña vacía (Usuario={_usuario.IdUsuario}).");
+                LoggerLogic.Warn($"[EditUserForm] Validación: mail con formato inválido (Usuario={_usuario.IdUsuario}).");
                 MessageBox.Show(
-                    LanguageService.Current?.T("val_contrasena_requerida") ?? "Ingresá una contraseña.",
+                    LanguageService.Current?.T("val_mail_invalido") ?? "El mail no tiene un formato válido.",
                     LanguageService.Current?.T("cap_aviso") ?? "Aviso",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
+            // Contraseña vacía = mantener la actual (el campo no se precarga con el hash).
 
             if (!int.TryParse(telTxt, out var tel))
             {
@@ -406,13 +411,13 @@ namespace MatheoCaffieri_GestorCMB
             }
 
             _usuario.Mail = mail;
-            _usuario.Contraseña = pass;
             _usuario.Telefono = tel;
             _usuario.Idioma = idioma;
 
             try
             {
-                _usuarioService.ActualizarUsuario(_usuario);
+                // El service hashea la contraseña nueva; si va vacía, conserva la actual.
+                _usuarioService.ActualizarUsuario(_usuario, pass);
                 LoggerLogic.Info($"[EditUserForm] Usuario actualizado. Id={_usuario.IdUsuario} Mail='{_usuario.Mail}'");
 
                 var cultureCode = idioma == "en" ? "en-US" : "es-AR";

@@ -23,7 +23,18 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         public string NumProyecto
         {
             get => labelNumProyecto.Text;
-            set => labelNumProyecto.Text = value ?? (LanguageService.Current?.T("txt_proyecto_na") ?? "Proyecto #N/A");
+            set
+            {
+                labelNumProyecto.Text = value ?? (LanguageService.Current?.T("txt_proyecto_na") ?? "Proyecto #N/A");
+                RepositionarDescripcion();
+            }
+        }
+
+        // El número (AutoSize) cambia de ancho según el texto, así que pegamos la
+        // descripción justo a su derecha para que no quede un hueco fijo en el medio.
+        private void RepositionarDescripcion()
+        {
+            labelDescripcionProyecto.Left = labelNumProyecto.Right + 10;
         }
 
         public string DescripcionProyecto
@@ -263,6 +274,9 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            if (!PermisosUI.Require(Interfaces.LoginInterfaces.TipoPermiso.VER_PROYECTOS))
+                return;
 
             // Cambiar la vista en el MainForm
             mainForm.addUserControl(new DetalleProyectoControl(mainForm, _proyecto));

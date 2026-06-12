@@ -28,7 +28,7 @@ namespace MatheoCaffieri_GestorCMB
 
             // Precargar campos
             textBoxDescripcion.Text = _proveedor.Descripcion;
-            textBoxTelefono.Text = _proveedor.Telefono.ToString();
+            textBoxTelefono.Text = _proveedor.Telefono == 0 ? "" : _proveedor.Telefono.ToString();
 
             buttonGuardar.Click += buttonGuardar_Click;
             buttonExitEP.Click += (_, __) => Close();
@@ -92,7 +92,10 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
-            if (!int.TryParse(textBoxTelefono.Text.Trim(), out int telefono))
+            // Teléfono opcional (vacío => 0), igual que en el alta.
+            var telefonoStr = textBoxTelefono.Text.Trim();
+            int telefono = 0;
+            if (telefonoStr.Length > 0 && !int.TryParse(telefonoStr, out telefono))
             {
                 LoggerLogic.Warn($"[EditProveedorForm] Validación: teléfono inválido (Id={_proveedor.IdProveedor}).");
                 MessageBox.Show(

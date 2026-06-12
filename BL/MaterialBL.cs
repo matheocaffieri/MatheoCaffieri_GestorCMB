@@ -8,6 +8,7 @@ using Services.Logs;
 using Services.Logs.Strategy;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BL
 {
@@ -120,6 +121,16 @@ namespace BL
             if (entity == null) throw new AppException("err_entity_null");
             if (entity.IdMaterial == Guid.Empty)
                 throw new AppException("err_material_id_delete");
+
+            // La FK de Detalle_proyecto_material bloquea el delete: avisar con un mensaje claro
+            // en vez de dejar que explote el constraint en la DB.
+            bool asociadoAProyecto = _uow.Context.Detalle_proyecto_material
+                .Any(d => d.idMaterial == entity.IdMaterial);
+            if (asociadoAProyecto)
+            {
+                LoggerLogic.Warn($"[MaterialBL] Intento de eliminar material asociado a un proyecto. Id={entity.IdMaterial}");
+                throw new AppException("err_material_asociado_proyecto");
+            }
 
             _uow.Begin();
             try

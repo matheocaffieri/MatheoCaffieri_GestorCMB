@@ -2,10 +2,12 @@
 using System.Configuration;
 using DAL.FactoryDAL;
 using DAL.LoginDAL;
+using DomainModel.Exceptions;
 using DomainModel.Interfaces;
 using DomainModel.Login;
 using System.Collections.Generic;
 using Services.LoginService;
+using Services.RoleService.Logic;
 using Interfaces.LoginInterfaces;
 using DomainModel.LoginDALInterfaces;
 
@@ -57,7 +59,18 @@ namespace BL.LoginBL
 
         public List<Usuario> ObtenerTodos() => _usuarioRepo.GetAll();
 
-        public void SetActivo(Guid idUsuario, bool activo) => _usuarioRepo.SetActivo(idUsuario, activo);
+        // El usuario administrador es intocable: ninguna operación de gestión puede afectarlo.
+        private static void RechazarSiEsAdmin(Guid idUsuario)
+        {
+            if (idUsuario == RolesService.AdminUserId)
+                throw new AppException("err_admin_protegido");
+        }
+
+        public void SetActivo(Guid idUsuario, bool activo)
+        {
+            RechazarSiEsAdmin(idUsuario);
+            _usuarioRepo.SetActivo(idUsuario, activo);
+        }
 
         public Usuario ObtenerPorId(Guid id) => _usuarioRepo.GetById(id);
 
@@ -70,14 +83,23 @@ namespace BL.LoginBL
             _usuarioRepo.Add(u);
         }
 
-        public void ActualizarUsuario(Usuario u)
+        // nuevaContraseñaPlano: null o vacía = mantener la contraseña actual;
+        // con valor = se hashea acá y reemplaza a la anterior. u.Contraseña nunca
+        // debe traer texto plano desde la UI.
+        public void ActualizarUsuario(Usuario u, string nuevaContraseñaPlano = null)
         {
             if (u == null) throw new ArgumentNullException(nameof(u));
+            RechazarSiEsAdmin(u.IdUsuario);
+
+            if (!string.IsNullOrWhiteSpace(nuevaContraseñaPlano))
+                u.Contraseña = _hasher.Hash(nuevaContraseñaPlano);
+
             _usuarioRepo.Update(u);
         }
 
         public void EliminarUsuario(Guid id)
         {
+            RechazarSiEsAdmin(id);
             var usuario = _usuarioRepo.GetById(id);
             if (usuario != null)
                 _usuarioRepo.Delete(usuario);

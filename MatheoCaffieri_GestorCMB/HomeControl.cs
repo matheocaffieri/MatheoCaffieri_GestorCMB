@@ -391,10 +391,16 @@ namespace MatheoCaffieri_GestorCMB
             table.Controls.Add(CreateSeparator(), 3, 0);
             table.Controls.Add(cellProyecto,  4, 0);
 
-            ApplyInteraction(cellEmpleados, () => mainForm.addUserControl(new VerEmpleadosControl()));
-            ApplyInteraction(cellInformes,  () => mainForm.addUserControl(new InformesDeCompraControl(mainForm)));
+            ApplyInteraction(cellEmpleados, () => {
+                if (PermisosUI.Require(TipoPermiso.VER_EMPLEADOS))
+                    mainForm.addUserControl(new VerEmpleadosControl());
+            });
+            ApplyInteraction(cellInformes,  () => {
+                if (PermisosUI.Require(TipoPermiso.VER_INFORMES_COMPRA))
+                    mainForm.addUserControl(new InformesDeCompraControl(mainForm));
+            });
             ApplyInteraction(cellProyecto,  () => {
-                if (_proximoProyecto != null)
+                if (_proximoProyecto != null && PermisosUI.Require(TipoPermiso.VER_PROYECTOS))
                     mainForm.addUserControl(new DetalleProyectoControl(mainForm, _proximoProyecto));
             });
 

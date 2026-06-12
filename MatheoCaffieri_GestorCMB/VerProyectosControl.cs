@@ -89,7 +89,12 @@ namespace MatheoCaffieri_GestorCMB
             int panelWidth = proyectoItemPanel.ClientSize.Width;
             if (panelWidth <= 0) return;
             int columnas  = panelWidth >= 1400 ? 3 : panelWidth >= 900 ? 2 : 1;
-            int itemWidth = (panelWidth / columnas) - 10;
+            // Reservamos el ancho de la barra de scroll vertical para que los ítems nunca
+            // queden más anchos que el área visible. Si no, al maximizar el panel dispara una
+            // barra horizontal que tapa/anula la vertical y no se puede bajar a ver los ítems.
+            int disponible = panelWidth - SystemInformation.VerticalScrollBarWidth - proyectoItemPanel.Padding.Horizontal;
+            int itemWidth  = (disponible / columnas) - 10;
+            if (itemWidth < 50) itemWidth = 50;
             foreach (Control c in proyectoItemPanel.Controls)
                 c.Width = itemWidth;
         }
@@ -228,7 +233,7 @@ namespace MatheoCaffieri_GestorCMB
             {
                 var item = new ProyectoItemControl(mainForm, p);
                 item.NumProyecto = string.Format(
-                    LanguageService.Current?.T("txt_proyecto_num_fmt") ?? "Proyecto #{0}",
+                    LanguageService.Current?.T("txt_proyecto_num_fmt") ?? "#{0}",
                     numeros[p.IdProyecto]);
                 if (faltantes.TryGetValue(p.IdProyecto, out var cnt))
                     item.SetFaltantesCount(cnt);

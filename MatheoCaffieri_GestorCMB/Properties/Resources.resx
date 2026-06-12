@@ -812,7 +812,7 @@ ID: {0}</value>
     <value>Proyecto #N/A</value>
   </data>
   <data name="txt_proyecto_num_fmt" xml:space="preserve">
-    <value>Proyecto #{0}</value>
+    <value>#{0}</value>
   </data>
   <data name="txt_sin_descripcion" xml:space="preserve">
     <value>Sin descripción</value>
@@ -1010,5 +1010,33 @@ ID: {0}</value>
   </data>
   <data name="mnu_configurar_parametros" xml:space="preserve">
     <value>Configurar Parámetros</value>
+  </data>
+  <!-- ===== Fixes pre-entrega (empleados i18n, material asociado) ===== -->
+  <data name="hdr_personal" xml:space="preserve">
+    <value>Personal</value>
+  </data>
+  <data name="btn_agregar_empleado" xml:space="preserve">
+    <value>+ Agregar empleado</value>
+  </data>
+  <data name="txt_dni" xml:space="preserve">
+    <value>DNI</value>
+  </data>
+  <data name="txt_proyecto_activo_fmt" xml:space="preserve">
+    <value>{0} proyecto activo</value>
+  </data>
+  <data name="txt_proyectos_activos_fmt" xml:space="preserve">
+    <value>{0} proyectos activos</value>
+  </data>
+  <data name="err_material_asociado_proyecto" xml:space="preserve">
+    <value>No se puede eliminar: este material está asociado a un proyecto.</value>
+  </data>
+  <data name="val_mail_invalido" xml:space="preserve">
+    <value>El mail no tiene un formato válido.</value>
+  </data>
+  <data name="val_nombre_contacto_requerido" xml:space="preserve">
+    <value>El nombre de contacto es obligatorio.</value>
+  </data>
+  <data name="val_telefono_requerido" xml:space="preserve">
+    <value>El teléfono es obligatorio.</value>
   </data>
 </root>

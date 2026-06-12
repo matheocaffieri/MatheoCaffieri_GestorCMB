@@ -306,7 +306,9 @@
     <Compile Include="HomeControl.Designer.cs">
       <DependentUpon>HomeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="PermisosUI.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Validaciones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProveedorControl.cs">
       <SubType>UserControl</SubType>

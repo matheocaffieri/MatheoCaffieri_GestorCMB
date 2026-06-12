@@ -90,15 +90,16 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
-            if (!int.TryParse(textBoxDocumento.Text.Trim(), out int dni))
+            if (!int.TryParse(textBoxDocumento.Text.Trim(), out int dni) || dni <= 0)
             {
                 LoggerLogic.Warn($"[EditEmpleadoForm] Validación: DNI inválido (Id={_empleado.IdEmpleado}).");
                 MessageBox.Show(LanguageService.Current?.T("val_dni_invalido") ?? "DNI inválido.");
                 return;
             }
 
-            if (!float.TryParse(textBoxSueldo.Text.Trim(), NumberStyles.Float, CultureInfo.CurrentCulture, out float sueldo) &&
-                !float.TryParse(textBoxSueldo.Text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out sueldo))
+            if ((!float.TryParse(textBoxSueldo.Text.Trim(), NumberStyles.Float, CultureInfo.CurrentCulture, out float sueldo) &&
+                 !float.TryParse(textBoxSueldo.Text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out sueldo)) ||
+                sueldo < 0)
             {
                 LoggerLogic.Warn($"[EditEmpleadoForm] Validación: sueldo inválido (Id={_empleado.IdEmpleado}).");
                 MessageBox.Show(LanguageService.Current?.T("val_sueldo_invalido") ?? "Sueldo inválido.");

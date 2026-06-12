@@ -1,6 +1,7 @@
 using BL;
 using DomainModel;
 using DomainModel.Interfaces;
+using Interfaces.LoginInterfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
 using Services.RoleService;
@@ -41,6 +42,8 @@ namespace MatheoCaffieri_GestorCMB
         private void VerEmpleadosControl_Load(object sender, EventArgs e)
         {
             if (DesignMode) return;
+            // Backstop: si llegó acá sin permiso (navegación que no chequeó), no construir nada.
+            if (!SessionContext.Has(REQUIRED)) return;
             BuildUI();
             BeginInvoke((Action)(() => CargarListado()));
         }
@@ -65,7 +68,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var lblTitle = new Label
             {
-                Text      = "Personal",
+                Text      = LanguageService.Current?.T("hdr_personal") ?? "Personal",
                 Font      = new Font("Microsoft YaHei UI", 15f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(22, 22, 28),
                 AutoSize  = true,
@@ -82,7 +85,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var newAddBtn = new Button
             {
-                Text      = "+ Agregar empleado",
+                Text      = LanguageService.Current?.T("btn_agregar_empleado") ?? "+ Agregar empleado",
                 Height    = 30,
                 Width     = 158,
                 BackColor = Color.FromArgb(76, 175, 80),
@@ -116,7 +119,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var lblSec = new Label
             {
-                Text      = "Empleados",
+                Text      = LanguageService.Current?.T("hdr_empleados") ?? "Empleados",
                 Font      = new Font("Microsoft YaHei UI", 10f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(48, 48, 58),
                 AutoSize  = true,
@@ -242,6 +245,11 @@ namespace MatheoCaffieri_GestorCMB
             item.ActiveChanged += (e, nuevoEstado) =>
             {
                 if (e == null || e.IdEmpleado == Guid.Empty) return;
+                if (!PermisosUI.Require(TipoPermiso.GESTIONAR_EMPLEADOS))
+                {
+                    CargarListado(textBox1.Text); // revertir el switch al estado real
+                    return;
+                }
                 try
                 {
                     _empleadoRepo.Update(e);
@@ -267,6 +275,8 @@ namespace MatheoCaffieri_GestorCMB
             item.EditRequested += (e) =>
             {
                 if (e == null || e.IdEmpleado == Guid.Empty) return;
+                if (!PermisosUI.Require(TipoPermiso.GESTIONAR_EMPLEADOS))
+                    return;
 
                 using (var frm = new EditEmpleadoForm(_empleadoRepo, e))
                 {
@@ -304,6 +314,9 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonAgregarEmpleado_Click(object sender, EventArgs e)
         {
+            if (!PermisosUI.Require(TipoPermiso.GESTIONAR_EMPLEADOS))
+                return;
+
             using (var frm = new AddEmpleadosForm(_empleadoRepo))
             {
                 var owner = this.FindForm();

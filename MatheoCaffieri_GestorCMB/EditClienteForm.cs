@@ -99,7 +99,19 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
-            if (!int.TryParse(textBoxTelefono.Text.Trim(), out int telefono))
+            var telefonoStr = textBoxTelefono.Text.Trim();
+            if (string.IsNullOrWhiteSpace(telefonoStr))
+            {
+                LoggerLogic.Warn($"[EditClienteForm] Validación: teléfono vacío (Id={_cliente.IdCliente}).");
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_telefono_requerido") ?? "El teléfono es obligatorio.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxTelefono.Focus();
+                return;
+            }
+
+            if (!int.TryParse(telefonoStr, out int telefono) || telefono <= 0)
             {
                 LoggerLogic.Warn($"[EditClienteForm] Validación: teléfono inválido (Id={_cliente.IdCliente}).");
                 MessageBox.Show(
@@ -107,6 +119,39 @@ namespace MatheoCaffieri_GestorCMB
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBoxTelefono.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(mail))
+            {
+                LoggerLogic.Warn($"[EditClienteForm] Validación: mail vacío (Id={_cliente.IdCliente}).");
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_mail_requerido") ?? "El mail es obligatorio.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxMail.Focus();
+                return;
+            }
+
+            if (!Validaciones.EsMailValido(mail))
+            {
+                LoggerLogic.Warn($"[EditClienteForm] Validación: mail con formato inválido (Id={_cliente.IdCliente}).");
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_mail_invalido") ?? "El mail no tiene un formato válido.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxMail.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(nombreContacto))
+            {
+                LoggerLogic.Warn($"[EditClienteForm] Validación: nombre de contacto vacío (Id={_cliente.IdCliente}).");
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_nombre_contacto_requerido") ?? "El nombre de contacto es obligatorio.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxNombreContacto.Focus();
                 return;
             }
 

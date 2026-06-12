@@ -2,6 +2,7 @@
 using DomainModel;
 using DomainModel.Exceptions;
 using DomainModel.Interfaces;
+using Interfaces.LoginInterfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
 using Services.Logs;
@@ -113,6 +114,9 @@ namespace MatheoCaffieri_GestorCMB
 
         private void EditarCliente(Cliente cli)
         {
+            if (!PermisosUI.Require(TipoPermiso.GESTIONAR_CLIENTES))
+                return;
+
             using (var form = new EditClienteForm(_clienteRepo, cli))
             {
                 if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -122,6 +126,12 @@ namespace MatheoCaffieri_GestorCMB
 
         private void ToggleActivoCliente(Cliente cli, bool nuevoEstado)
         {
+            if (!PermisosUI.Require(TipoPermiso.GESTIONAR_CLIENTES))
+            {
+                CargarListado(textBoxBuscar.Text); // revertir el switch al estado real
+                return;
+            }
+
             try
             {
                 cli.IsActive = nuevoEstado;
@@ -148,6 +158,9 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonAddCliente_Click(object sender, EventArgs e)
         {
+            if (!PermisosUI.Require(TipoPermiso.GESTIONAR_CLIENTES))
+                return;
+
             string razonSocial = textBoxRazonSocial.Text.Trim();
             string telefono = textBoxTelefono.Text.Trim();
             string mail = textBoxMail.Text.Trim();
@@ -163,13 +176,53 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(telefono))
+            {
+                LoggerLogic.Warn("[ClientesControl] Validación: teléfono vacío al crear cliente.");
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_telefono_requerido") ?? "El teléfono es obligatorio.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             int telefonoNum;
 
-            if (!int.TryParse(telefono, out telefonoNum))
+            if (!int.TryParse(telefono, out telefonoNum) || telefonoNum <= 0)
             {
                 LoggerLogic.Warn($"[ClientesControl] Validación: teléfono inválido al crear cliente ('{telefono}').");
                 MessageBox.Show(
                     LanguageService.Current?.T("val_telefono_invalido") ?? "El teléfono debe ser numérico.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(mail))
+            {
+                LoggerLogic.Warn("[ClientesControl] Validación: mail vacío al crear cliente.");
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_mail_requerido") ?? "El mail es obligatorio.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!Validaciones.EsMailValido(mail))
+            {
+                LoggerLogic.Warn($"[ClientesControl] Validación: mail con formato inválido al crear cliente ('{mail}').");
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_mail_invalido") ?? "El mail no tiene un formato válido.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(nombreContacto))
+            {
+                LoggerLogic.Warn("[ClientesControl] Validación: nombre de contacto vacío al crear cliente.");
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_nombre_contacto_requerido") ?? "El nombre de contacto es obligatorio.",
                     LanguageService.Current?.T("cap_validacion") ?? "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -181,7 +234,8 @@ namespace MatheoCaffieri_GestorCMB
                 RazonSocial = razonSocial,
                 Telefono = telefonoNum,
                 Mail = mail,
-                NombreContacto = nombreContacto
+                NombreContacto = nombreContacto,
+                IsActive = true
             };
 
             try

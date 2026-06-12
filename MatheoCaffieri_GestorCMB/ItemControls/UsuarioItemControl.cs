@@ -104,6 +104,16 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             var u = Usuario ?? Tag as Usuario;
             if (u == null) return;
 
+            // El usuario administrador es intocable: no se abre el editor para él.
+            if (u.IdUsuario == RolesServiceLogic.AdminUserId)
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_admin_protegido") ?? "El usuario administrador está protegido y no se puede modificar.",
+                    LanguageService.Current?.T("cap_acceso_denegado") ?? "Acceso denegado",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             using (var frm = new EditUserForm(u, _rolService, _usuarioService, LoggedUserId))
             {
                 if (frm.ShowDialog() == DialogResult.OK)

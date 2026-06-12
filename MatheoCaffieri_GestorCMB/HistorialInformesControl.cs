@@ -119,8 +119,10 @@ namespace MatheoCaffieri_GestorCMB
             };
 
             historialLayoutPanel.Dock = DockStyle.Fill;
-            historialLayoutPanel.WrapContents = false;
-            historialLayoutPanel.FlowDirection = FlowDirection.TopDown;
+            // Flujo horizontal con wrap (igual que InformesDeCompraControl): así
+            // AjustarAnchoItems puede armar 2 columnas en pantallas anchas.
+            historialLayoutPanel.WrapContents = true;
+            historialLayoutPanel.FlowDirection = FlowDirection.LeftToRight;
             historialLayoutPanel.AutoScroll = true;
         }
 
@@ -165,12 +167,14 @@ namespace MatheoCaffieri_GestorCMB
 
         private void AjustarAnchoItems()
         {
-            int w = historialLayoutPanel.ClientSize.Width;
+            // Ancho realmente disponible: el ClientSize incluye el Padding del panel
+            // (14 por lado) y cada item aporta su Margin (6 por lado); si no se
+            // descuentan, la segunda columna no entra y el wrap la baja de fila.
+            int w = historialLayoutPanel.ClientSize.Width - historialLayoutPanel.Padding.Horizontal;
             if (w <= 0) return;
 
             int cols = w >= 1150 ? 2 : 1;
-            int gap = 12;
-            int itemW = (w - ((cols - 1) * gap)) / cols;
+            int itemW = (w / cols) - 14;
 
             foreach (Control c in historialLayoutPanel.Controls)
                 c.Width = Math.Max(280, itemW);

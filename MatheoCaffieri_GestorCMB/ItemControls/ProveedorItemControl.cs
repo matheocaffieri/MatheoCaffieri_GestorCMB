@@ -38,7 +38,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
         {
             Proveedor = p;
             labelDescripcionProveedor.Text = p.Descripcion;
-            labelTelefonoProveedor.Text = p.Telefono.ToString();
+            labelTelefonoProveedor.Text = p.Telefono == 0 ? "—" : p.Telefono.ToString();
             SwitchHabilitarProveedor.IsOn = p.IsActive;
 
             buttonEditarProveedor.Click -= buttonEditarProveedor_Click;

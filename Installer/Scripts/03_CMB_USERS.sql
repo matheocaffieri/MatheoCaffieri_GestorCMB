@@ -1,0 +1,69 @@
+﻿-- Script generado para el instalador de GestorCMB
+-- Base: CMB_USERS
+IF DB_ID(N'CMB_USERS') IS NULL CREATE DATABASE [CMB_USERS];
+GO
+USE [CMB_USERS];
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[User_role]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[User_role](
+	[idUsuario] [uniqueidentifier] NOT NULL,
+	[idRol] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_User_role] PRIMARY KEY CLUSTERED 
+(
+	[idUsuario] ASC,
+	[idRol] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[User]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[User](
+	[idUsuario] [uniqueidentifier] NOT NULL,
+	[nombre] [varchar](50) NOT NULL,
+	[mail] [varchar](50) NOT NULL,
+	[contraseña] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
+(
+	[idUsuario] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Role]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Role](
+	[idRol] [uniqueidentifier] NOT NULL,
+	[nombre] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Role] PRIMARY KEY CLUSTERED 
+(
+	[idRol] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DF_User_idUsuario]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[User] ADD  CONSTRAINT [DF_User_idUsuario]  DEFAULT (newsequentialid()) FOR [idUsuario]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DF_Role_idRol]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbo].[Role] ADD  CONSTRAINT [DF_Role_idRol]  DEFAULT (newsequentialid()) FOR [idRol]
+END
+
+GO

@@ -141,8 +141,14 @@ namespace MatheoCaffieri_GestorCMB
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            MaximizedBounds = Screen.FromHandle(Handle).WorkingArea;
         }
+
+        // Maximizado manual: con FormBorderStyle.None, el maximizado nativo (MaximizedBounds /
+        // WM_GETMINMAXINFO) interpreta los valores relativos al monitor PRIMARIO y los "compensa"
+        // contra el monitor real, así que en un monitor de otro tamaño queda corrido o se pasa.
+        // Seteamos Bounds directo al área de trabajo del monitor actual y listo.
+        private bool _maximizado;
+        private Rectangle _boundsRestaurar;
 
         protected override void WndProc(ref Message m)
         {
@@ -157,7 +163,7 @@ namespace MatheoCaffieri_GestorCMB
             const int HTBOTTOMRIGHT = 17;
             const int borderWidth = 6;
 
-            if (m.Msg == WM_NCHITTEST && WindowState != FormWindowState.Maximized)
+            if (m.Msg == WM_NCHITTEST && WindowState != FormWindowState.Maximized && !_maximizado)
             {
                 base.WndProc(ref m);
                 short screenX = (short)(m.LParam.ToInt32() & 0xFFFF);
@@ -194,15 +200,17 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonMaximize_Click(object sender, EventArgs e)
         {
-            if (WindowState == FormWindowState.Maximized)
+            if (_maximizado)
             {
-                WindowState = FormWindowState.Normal;
+                Bounds = _boundsRestaurar;
+                _maximizado = false;
                 buttonMaximize.Text = "□";
             }
             else
             {
-                MaximizedBounds = Screen.FromHandle(Handle).WorkingArea;
-                WindowState = FormWindowState.Maximized;
+                _boundsRestaurar = Bounds;
+                Bounds = Screen.FromControl(this).WorkingArea;
+                _maximizado = true;
                 buttonMaximize.Text = "❐";
             }
         }
@@ -231,7 +239,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void FormPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && WindowState != FormWindowState.Maximized)
+            if (e.Button == MouseButtons.Left && WindowState != FormWindowState.Maximized && !_maximizado)
             {
                 Point mousePosition = MousePosition;
                 mousePosition.Offset(mouseLocation.X, mouseLocation.Y);
@@ -336,6 +344,16 @@ namespace MatheoCaffieri_GestorCMB
                 return;
 
             AddMaterialesForm addMaterialesForm = new AddMaterialesForm();
+
+            addMaterialesForm.FormClosed += (s, ev) =>
+            {
+                // Solo refresco si realmente guardó
+                if (addMaterialesForm.DialogResult != DialogResult.OK) return;
+
+                var ver = FindControl<VerInventarioControl>(this);
+                ver?.Refrescar();
+            };
+
             addMaterialesForm.Show(this);
         }
 

@@ -31,6 +31,8 @@ namespace MatheoCaffieri_GestorCMB
 
         public event EventHandler ProyectoCreado;
 
+        private DateTimePicker dateTimePickerCierre;
+
         public AddProyectosForm() : this(new ProyectoBL(), new ClienteBL())
         {
             // InitializeComponent lo llama el ctor principal
@@ -104,8 +106,18 @@ namespace MatheoCaffieri_GestorCMB
             }
 
             var fechaInicio = dateTimePickerProyecto.Value.Date;
+            var fechaCierre = dateTimePickerCierre.Value.Date;
 
-            // En tu DB fechaFin NO permite null, por eso lo inicializamos así.
+            if (fechaCierre < fechaInicio)
+            {
+                LoggerLogic.Warn("[AddProyectosForm] Validación: fecha de cierre anterior a fecha de inicio al crear proyecto.");
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_fecha_cierre_anterior") ?? "La fecha de cierre no puede ser anterior a la fecha de inicio.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var proyecto = new Proyecto
             {
                 IdProyecto = Guid.NewGuid(),
@@ -113,7 +125,7 @@ namespace MatheoCaffieri_GestorCMB
                 Descripcion = descripcion,
                 Ubicacion = ubicacion,
                 FechaInicio = fechaInicio,
-                FechaFin = fechaInicio,
+                FechaFin = fechaCierre,
                 Estado = EnumEstado.EnProceso
             };
 
@@ -141,7 +153,8 @@ namespace MatheoCaffieri_GestorCMB
 
         private void CargarClientes()
         {
-            var clientes = _clienteRepo.GetAll().ToList();
+            // Solo clientes activos: los deshabilitados con el switch no deben poder asignarse a proyectos nuevos.
+            var clientes = _clienteRepo.GetAll().Where(c => c.IsActive).ToList();
 
             // Texto a mostrar en el combo: primero RazonSocial; si está vacía, NombreContacto; si tampoco, ToString().
             var data = clientes
@@ -172,7 +185,35 @@ namespace MatheoCaffieri_GestorCMB
         private void AddProyectosForm_Load(object sender, EventArgs e)
         {
             CargarClientes();
+            CrearCampoFechaCierre();
+        }
 
+        // El layout del form vive en el .resx (Localizable); este campo se agrega por código.
+        // Las posiciones se toman de los controles existentes (ya escalados por DPI): misma
+        // fila que "Fecha de inicio" (label5/dateTimePickerProyecto) y misma columna que
+        // "Cliente" (label3/comboBoxCliente). Nada de coordenadas fijas.
+        private void CrearCampoFechaCierre()
+        {
+            var lblFechaCierre = new Label
+            {
+                Text = LanguageService.Current?.T("lbl_fecha_cierre") ?? "Fecha de cierre",
+                AutoSize = true,
+                Location = new System.Drawing.Point(label3.Left, label5.Top),
+                Font = label5.Font,
+                ForeColor = label5.ForeColor,
+                BackColor = label5.BackColor
+            };
+
+            dateTimePickerCierre = new DateTimePicker
+            {
+                Location = new System.Drawing.Point(comboBoxCliente.Left, dateTimePickerProyecto.Top),
+                Size = dateTimePickerProyecto.Size,
+                Format = dateTimePickerProyecto.Format,
+                Value = dateTimePickerProyecto.Value
+            };
+
+            Controls.Add(lblFechaCierre);
+            Controls.Add(dateTimePickerCierre);
         }
     }
 }

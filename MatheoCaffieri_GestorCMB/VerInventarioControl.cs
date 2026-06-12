@@ -296,6 +296,8 @@ namespace MatheoCaffieri_GestorCMB
             MaterialesItemPanel.ResumeLayout();
         }
 
+        public void Refrescar() => CargarListado(textBox1.Text);
+
         private int CardWidth()
         {
             if (_scrollArea == null) return 600;
@@ -327,6 +329,9 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonAgregarMaterial_Click(object sender, EventArgs e)
         {
+            if (!PermisosUI.Require(Interfaces.LoginInterfaces.TipoPermiso.GESTIONAR_MATERIALES))
+                return;
+
             using (var form = new AddMaterialesForm())
             {
                 form.StartPosition = FormStartPosition.CenterParent;

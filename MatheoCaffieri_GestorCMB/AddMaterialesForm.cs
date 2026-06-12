@@ -119,7 +119,12 @@ namespace MatheoCaffieri_GestorCMB
 
         private void CargarProveedores()
         {
-            var proveedores = _provBL.GetAll().OrderBy(p => p.Descripcion).ToList();
+            // Solo proveedores activos. En edición se conserva el proveedor actual del material
+            // aunque esté inactivo, para no perder la selección existente.
+            var proveedores = _provBL.GetAll()
+                .Where(p => p.IsActive || (IsEditMode && p.IdProveedor == _editTarget.IdProveedor))
+                .OrderBy(p => p.Descripcion)
+                .ToList();
 
             comboBoxProveedor.DisplayMember = "Descripcion";
             comboBoxProveedor.ValueMember = "IdProveedor";
@@ -180,7 +185,7 @@ namespace MatheoCaffieri_GestorCMB
                 return false;
             }
 
-            if (!TryParseDecimal(textBoxPrecio.Text, out var precio) || precio < 0)
+            if (!TryParseDecimal(textBoxPrecio.Text, out var precio) || precio <= 0)
             {
                 Warn(LanguageService.Current?.T("val_precio_invalido") ?? "Ingresá un precio válido (número positivo).", textBoxPrecio);
                 return false;

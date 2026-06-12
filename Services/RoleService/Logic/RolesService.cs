@@ -52,7 +52,12 @@ namespace Services.RoleService.Logic
 
         public Guid CrearRol(string nombre) => _famRepo.Create(nombre);
 
-        public void AsignarPermisoARol(Guid idRol, Guid idAcceso) => _famRepo.AddAcceso(idRol, idAcceso);
+        public void AsignarPermisoARol(Guid idRol, Guid idAcceso)
+        {
+            if (idRol == AdminRoleId)
+                throw new AppException("err_admin_protegido");
+            _famRepo.AddAcceso(idRol, idAcceso);
+        }
 
         public void QuitarPermisoDeRol(Guid idRol, Guid idAcceso)
         {
@@ -63,8 +68,19 @@ namespace Services.RoleService.Logic
 
         public List<Usuario> UsuariosDelRol(Guid idRol) => _famRepo.GetUsuarios(idRol);
 
-        public void AsignarUsuarioARol(Guid idRol, Guid idUsuario) => _famRepo.AddUsuario(idRol, idUsuario);
-        public void QuitarUsuarioDeRol(Guid idRol, Guid idUsuario) => _famRepo.RemoveUsuario(idRol, idUsuario);
+        public void AsignarUsuarioARol(Guid idRol, Guid idUsuario)
+        {
+            if (idUsuario == AdminUserId)
+                throw new AppException("err_admin_protegido");
+            _famRepo.AddUsuario(idRol, idUsuario);
+        }
+
+        public void QuitarUsuarioDeRol(Guid idRol, Guid idUsuario)
+        {
+            if (idUsuario == AdminUserId)
+                throw new AppException("err_admin_protegido");
+            _famRepo.RemoveUsuario(idRol, idUsuario);
+        }
 
         // ----- Accesos sueltos (catálogo) -----
 

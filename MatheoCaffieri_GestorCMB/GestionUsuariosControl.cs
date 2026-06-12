@@ -410,7 +410,12 @@ namespace MatheoCaffieri_GestorCMB
             btnCrearRol.Click += (s, e) =>
             {
                 var nombre = txtNombre.Text.Trim();
-                if (string.IsNullOrWhiteSpace(nombre)) return;
+                if (string.IsNullOrWhiteSpace(nombre))
+                {
+                    MessageBox.Show(LanguageService.Current?.T("val_nombre_rol_requerido") ?? "El nombre del rol es obligatorio.");
+                    txtNombre.Focus();
+                    return;
+                }
                 try
                 {
                     _rolesSrv.CrearRol(nombre);
@@ -750,6 +755,11 @@ namespace MatheoCaffieri_GestorCMB
             {
                 LoggerLogic.Warn("[GestionUsuariosControl] Validación: mail vacío al crear usuario.");
                 MessageBox.Show(LanguageService.Current?.T("val_mail_requerido") ?? "El mail es obligatorio."); _txtMail?.Focus(); return;
+            }
+            if (!Validaciones.EsMailValido(mail))
+            {
+                LoggerLogic.Warn($"[GestionUsuariosControl] Validación: mail con formato inválido al crear usuario ('{mail}').");
+                MessageBox.Show(LanguageService.Current?.T("val_mail_invalido") ?? "El mail no tiene un formato válido."); _txtMail?.Focus(); return;
             }
             if (string.IsNullOrWhiteSpace(pass))
             {

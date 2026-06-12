@@ -535,6 +535,9 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonModificar_Click(object sender, EventArgs e)
         {
+            if (!PermisosUI.Require(Interfaces.LoginInterfaces.TipoPermiso.GESTIONAR_PROYECTOS))
+                return;
+
             using (var frm = new EditProyectoForm(_proyecto))
             {
                 frm.StartPosition = FormStartPosition.CenterParent;
@@ -555,6 +558,9 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonGenerarInforme_Click(object sender, EventArgs e)
         {
+            if (!PermisosUI.Require(Interfaces.LoginInterfaces.TipoPermiso.GESTIONAR_INFORMES_COMPRA))
+                return;
+
             try
             {
                 var bl = new InformeDeCompraBL();

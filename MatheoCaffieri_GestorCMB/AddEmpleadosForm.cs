@@ -88,7 +88,7 @@ namespace MatheoCaffieri_GestorCMB
 
             // Validar y parsear documento a int
             if (!int.TryParse(documentoStr, NumberStyles.Integer, CultureInfo.CurrentCulture, out int documento) ||
-                documento < 0)
+                documento <= 0)
             {
                 LoggerLogic.Warn($"[AddEmpleadosForm] Validación: DNI inválido ('{documentoStr}').");
                 MessageBox.Show(

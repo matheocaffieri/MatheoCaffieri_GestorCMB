@@ -1,6 +1,7 @@
 using BL;
 using DomainModel;
 using DomainModel.Interfaces;
+using Interfaces.LoginInterfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
 using Services.RoleService;
@@ -400,6 +401,9 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonAddProveedor_Click(object sender, EventArgs e)
         {
+            if (!PermisosUI.Require(TipoPermiso.GESTIONAR_PROVEEDORES))
+                return;
+
             string descripcion = textBoxDescripcion.Text.Trim();
             string telefonoStr = textBoxTelefono.Text.Trim();
 
@@ -412,38 +416,58 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
-            long? telefono = null;
-            if (!string.IsNullOrWhiteSpace(telefonoStr))
+            // El teléfono es opcional: en la DB la columna es int NOT NULL, así que "sin teléfono" se guarda como 0.
+            int telefono = 0;
+            if (!string.IsNullOrWhiteSpace(telefonoStr) && !int.TryParse(telefonoStr, out telefono))
             {
-                if (long.TryParse(telefonoStr, out long telParsed))
-                    telefono = telParsed;
-                else
-                {
-                    MessageBox.Show(
-                        LanguageService.Current?.T("val_telefono_invalido") ?? "El teléfono debe ser numérico.",
-                        LanguageService.Current?.T("cap_validacion") ?? "Validación",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                MessageBox.Show(
+                    LanguageService.Current?.T("val_telefono_invalido") ?? "El teléfono debe ser numérico.",
+                    LanguageService.Current?.T("cap_validacion") ?? "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
             var nuevoProveedor = new Proveedor
             {
                 Descripcion = descripcion,
-                Telefono    = (int)telefono,
+                Telefono    = telefono,
+                IsActive    = true,
             };
 
-            _proveedorRepo.Add(nuevoProveedor);
+            try
+            {
+                _proveedorRepo.Add(nuevoProveedor);
 
-            textBoxDescripcion.Clear();
-            textBoxTelefono.Clear();
-            textBoxDescripcion.Focus();
+                textBoxDescripcion.Clear();
+                textBoxTelefono.Clear();
+                textBoxDescripcion.Focus();
 
-            CargarListado(textBox1.Text);
+                CargarListado(textBox1.Text);
+            }
+            catch (DomainModel.Exceptions.AppException ex)
+            {
+                Services.Logs.LoggerLogic.Warn($"[ProveedorControl] Validación al crear proveedor: {ex.MessageKey}");
+                MessageBox.Show(
+                    LanguageService.Current?.T(ex.MessageKey) ?? ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                Services.Logs.LoggerLogic.Error("[ProveedorControl] Falla al crear proveedor.", ex);
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_db_generic") ?? "Error al acceder a la base de datos.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ToggleActivoProveedor(Proveedor proveedor, bool nuevoEstado)
         {
+            if (!PermisosUI.Require(TipoPermiso.GESTIONAR_PROVEEDORES))
+            {
+                CargarListado(textBox1.Text); // revertir el switch al estado real
+                return;
+            }
+
             try
             {
                 proveedor.IsActive = nuevoEstado;
@@ -469,6 +493,9 @@ namespace MatheoCaffieri_GestorCMB
 
         private void EditarProveedor(DomainModel.Proveedor proveedor)
         {
+            if (!PermisosUI.Require(TipoPermiso.GESTIONAR_PROVEEDORES))
+                return;
+
             using (var frm = new EditProveedorForm(_proveedorRepo, proveedor))
             {
                 frm.StartPosition = FormStartPosition.CenterParent;
