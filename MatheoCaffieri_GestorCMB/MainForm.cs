@@ -1,5 +1,5 @@
-﻿using BL.AccessBL;
-using BL.LoginBL;
+﻿using Services.RoleService;
+using Services.LoginService.Logic;
 using Interfaces.LoginInterfaces;
 using Services.Language;
 using Services.RoleService;

@@ -1,6 +1,5 @@
-using DAL.FactoryDAL;
-using DAL.LoginDAL;
-using DomainModel.LoginDALInterfaces;
+using Services.LoginService.DataAccess;
+using Services.Services_Interfaces;
 using Interfaces.LoginInterfaces;
 using Services.LoginService;
 using System;
@@ -9,7 +8,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
 
-namespace BL.LoginBL
+namespace Services.LoginService.Logic
 {
     public class OtpService
     {

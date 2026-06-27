@@ -1,9 +1,9 @@
 using DomainModel.Login;
-using DomainModel.LoginDALInterfaces;
 using System;
 using System.Data.SqlClient;
+using Services.Services_Interfaces;
 
-namespace DAL.AccessDAL
+namespace Services.RoleService.DataAccess
 {
     public class ParametrosRepository : DALBase, IParametrosRepository
     {

@@ -3,9 +3,9 @@ using Interfaces.LoginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using DomainModel.LoginDALInterfaces;
+using Services.Services_Interfaces;
 
-namespace DAL.AccessDAL
+namespace Services.RoleService.DataAccess
 {
     public class UsuarioAccesoRepository : DALBase, IUsuarioAccesoRepository
     {

@@ -1,4 +1,4 @@
-﻿using DAL.LoginDAL;
+﻿using Services.LoginService.DataAccess;
 using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using Services.LoginService;
@@ -8,11 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DAL.FactoryDAL;
-using DomainModel.LoginDALInterfaces;
-using DomainModel.Interfaces;
+using Services.Services_Interfaces;
 
-namespace BL.LoginBL
+namespace Services.LoginService.Logic
 {
     public class LoginService
     {

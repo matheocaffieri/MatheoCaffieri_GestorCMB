@@ -1,12 +1,8 @@
-﻿using DomainModel.Login;
+using DomainModel.Login;
 using Interfaces.LoginInterfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DomainModel.LoginDALInterfaces
+namespace Services.Services_Interfaces
 {
     public interface IAccesoRepository
     {

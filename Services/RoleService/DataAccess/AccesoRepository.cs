@@ -1,12 +1,11 @@
-﻿using DomainModel.Login;
+using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.SqlClient;
-using DomainModel.LoginDALInterfaces;
+using Services.Services_Interfaces;
 
-namespace DAL.AccessDAL
+namespace Services.RoleService.DataAccess
 {
     public class AccesoRepository : DALBase, IAccesoRepository
     {

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Configuration;
-using DAL.FactoryDAL;
-using DAL.LoginDAL;
+using Services.LoginService.DataAccess;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
 using DomainModel.Login;
 using System.Collections.Generic;
 using Services.LoginService;
 using Services.RoleService.Logic;
 using Interfaces.LoginInterfaces;
-using DomainModel.LoginDALInterfaces;
+using Services.Services_Interfaces;
 
-namespace BL.LoginBL
+namespace Services.LoginService.Logic
 {
     public class UsuarioService : IDisposable
     {

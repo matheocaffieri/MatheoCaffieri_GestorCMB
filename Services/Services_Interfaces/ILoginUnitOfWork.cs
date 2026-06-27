@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DAL.FactoryDAL
+namespace Services.Services_Interfaces
 {
     public interface ILoginUnitOfWork : IDisposable
     {

@@ -1,5 +1,5 @@
 using BL;
-using BL.LoginBL;
+using Services.LoginService.Logic;
 using DomainModel;
 using DomainModel.Exceptions;
 using DomainModel.Interfaces;

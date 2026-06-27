@@ -100,11 +100,29 @@
     <Compile Include="RoleService\Logic\ParametrosService.cs" />
     <Compile Include="RoleService\Logic\RolesService.cs" />
     <Compile Include="RoleService\Logic\UsuarioPermisosService.cs" />
+    <Compile Include="RoleService\AccessServicesFactory.cs" />
     <Compile Include="RoleService\ParametrosContext.cs" />
     <Compile Include="RoleService\RolCompuesto.cs" />
     <Compile Include="RoleService\SessionContext.cs" />
     <Compile Include="Tools\NodoPermRol.cs" />
     <Compile Include="Tools\RolItem.cs" />
+    <Compile Include="Services_Interfaces\IAccesoRepository.cs" />
+    <Compile Include="Services_Interfaces\IFamiliaRepository.cs" />
+    <Compile Include="Services_Interfaces\IParametrosRepository.cs" />
+    <Compile Include="Services_Interfaces\IUsuarioAccesoRepository.cs" />
+    <Compile Include="Services_Interfaces\IUsuarioRepository.cs" />
+    <Compile Include="Services_Interfaces\ILoginUnitOfWork.cs" />
+    <Compile Include="RoleService\DataAccess\DALBase.cs" />
+    <Compile Include="RoleService\DataAccess\AccesoRepository.cs" />
+    <Compile Include="RoleService\DataAccess\FamiliaRepository.cs" />
+    <Compile Include="RoleService\DataAccess\ParametrosRepository.cs" />
+    <Compile Include="RoleService\DataAccess\UsuarioAccesoRepository.cs" />
+    <Compile Include="LoginService\DataAccess\SqlLoginUnitOfWork.cs" />
+    <Compile Include="LoginService\DataAccess\UsuarioRepository.cs" />
+    <Compile Include="LoginService\Logic\LoginService.cs" />
+    <Compile Include="LoginService\Logic\UsuarioService.cs" />
+    <Compile Include="LoginService\Logic\OtpService.cs" />
+    <Compile Include="LoginService\Logic\SessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

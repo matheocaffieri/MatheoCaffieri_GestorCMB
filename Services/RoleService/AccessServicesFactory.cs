@@ -1,8 +1,8 @@
-using DAL.AccessDAL;
-using DomainModel.LoginDALInterfaces;
+using Services.RoleService.DataAccess;
+using Services.Services_Interfaces;
 using Services.RoleService.Logic;
 
-namespace BL.AccessBL
+namespace Services.RoleService
 {
     public static class AccessServicesFactory
     {

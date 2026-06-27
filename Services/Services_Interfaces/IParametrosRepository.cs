@@ -1,6 +1,6 @@
 using DomainModel.Login;
 
-namespace DomainModel.LoginDALInterfaces
+namespace Services.Services_Interfaces
 {
     public interface IParametrosRepository
     {

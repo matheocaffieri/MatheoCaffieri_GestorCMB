@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Services.Services_Interfaces;
 
-namespace DAL.FactoryDAL
+namespace Services.LoginService.DataAccess
 {
     public class SqlLoginUnitOfWork : ILoginUnitOfWork
     {

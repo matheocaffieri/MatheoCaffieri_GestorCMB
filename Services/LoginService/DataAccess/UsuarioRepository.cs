@@ -1,13 +1,11 @@
-﻿using DomainModel;
 using DomainModel.Login;
-using DomainModel.LoginDALInterfaces;
+using Services.Services_Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using DAL.FactoryDAL;
 
-namespace DAL.LoginDAL
+namespace Services.LoginService.DataAccess
 {
     public class UsuarioRepository : IUsuarioRepository
     {
@@ -129,7 +127,7 @@ VALUES (@Id, @Mail, @Pass, @Tel, @Idi, @Act, @Otp, @OtpExp);";
                     if (_uow.Transaction != null) cmd.Transaction = _uow.Transaction;
 
                     cmd.CommandText = @"
-UPDATE dbo.Usuario SET 
+UPDATE dbo.Usuario SET
     Mail=@Mail, [Contraseña]=@Pass, Telefono=@Tel, Idioma=@Idi,
     IsActive=@Act, Otp=@Otp, OtpExpiry=@OtpExp
 WHERE IdUsuario=@Id;";
@@ -326,16 +324,16 @@ WHERE IdUsuario=@Id;";
         }
 
         /* ============================================================
-         *  ADAPTADORES IGenericRepository<Usuario>
+         *  ADAPTADORES IUsuarioRepository (Services)
          * ============================================================ */
 
-        List<Usuario> DomainModel.Interfaces.IGenericRepository<Usuario>.GetAll()
+        List<Usuario> IUsuarioRepository.GetAll()
             => new List<Usuario>(List());
 
-        Usuario DomainModel.Interfaces.IGenericRepository<Usuario>.GetById(Guid id)
+        Usuario IUsuarioRepository.GetById(Guid id)
             => GetById((object)id);
 
-        void DomainModel.Interfaces.IGenericRepository<Usuario>.Delete(Usuario entity)
+        void IUsuarioRepository.Delete(Usuario entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
             Delete((object)entity.IdUsuario);

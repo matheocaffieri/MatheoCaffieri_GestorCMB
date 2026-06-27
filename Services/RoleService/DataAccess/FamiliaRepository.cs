@@ -1,11 +1,11 @@
-﻿using DomainModel.Login;
+using DomainModel.Login;
 using Interfaces.LoginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using DomainModel.LoginDALInterfaces;
+using Services.Services_Interfaces;
 
-namespace DAL.AccessDAL
+namespace Services.RoleService.DataAccess
 {
     public class FamiliaRepository : DALBase, IFamiliaRepository
     {
@@ -183,10 +183,6 @@ namespace DAL.AccessDAL
                 cmd.ExecuteNonQuery();
             }
         }
-
-
-
-
 
         public List<(Guid Id, string Nombre)> GetRolesDeUsuario(Guid idUsuario)
         {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BL.LoginBL
+namespace Services.LoginService.Logic
 {
     public class SessionManager
     {
