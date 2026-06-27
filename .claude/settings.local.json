@@ -109,7 +109,8 @@
       "PowerShell(& \"C:\\\\Program Files \\(x86\\)\\\\Caphyon\\\\Advanced Installer 23.7\\\\bin\\\\x86\\\\AdvancedInstaller.com\" /build \"C:\\\\Users\\\\mcaff\\\\OneDrive\\\\Documentos\\\\Advanced Installer\\\\Projects\\\\GestorCMB\\\\GestorCMB.aip\" 2>&1 | Select-Object -Last 4)",
       "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"MatheoCaffieri_GestorCMB.sln\" /p:Configuration=Debug /v:m /nologo 2>&1 | Select-Object -Last 3)",
       "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" \"MatheoCaffieri_GestorCMB.sln\" /p:Configuration=Debug /v:m /nologo 2>&1 | Select-Object -Last 1)",
-      "PowerShell(git add *)"
+      "PowerShell(git add *)",
+      "PowerShell(& \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" MatheoCaffieri_GestorCMB.sln /p:Configuration=Debug /v:m /nologo)"
     ]
   }
 }

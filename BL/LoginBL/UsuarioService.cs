@@ -76,9 +76,19 @@ namespace BL.LoginBL
 
         public Usuario ObtenerPorMail(string mail) => _usuarioRepo.FindByEmail(mail);
 
+        // El mail identifica al usuario en el login: no puede repetirse.
+        // Al actualizar, se excluye al propio usuario para permitir guardar sin cambiar el mail.
+        private void RechazarSiMailDuplicado(Usuario u)
+        {
+            var existente = _usuarioRepo.FindByEmail(u.Mail);
+            if (existente != null && existente.IdUsuario != u.IdUsuario)
+                throw new AppException("err_mail_duplicado");
+        }
+
         public void CrearUsuario(Usuario u, string contraseñaPlano)
         {
             if (u == null) throw new ArgumentNullException(nameof(u));
+            RechazarSiMailDuplicado(u);
             u.Contraseña = _hasher.Hash(contraseñaPlano);
             _usuarioRepo.Add(u);
         }
@@ -90,6 +100,7 @@ namespace BL.LoginBL
         {
             if (u == null) throw new ArgumentNullException(nameof(u));
             RechazarSiEsAdmin(u.IdUsuario);
+            RechazarSiMailDuplicado(u);
 
             if (!string.IsNullOrWhiteSpace(nuevaContraseñaPlano))
                 u.Contraseña = _hasher.Hash(nuevaContraseñaPlano);

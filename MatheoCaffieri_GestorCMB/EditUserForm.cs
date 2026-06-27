@@ -410,6 +410,12 @@ namespace MatheoCaffieri_GestorCMB
                 return;
             }
 
+            // _usuario es el mismo objeto que cachea la grilla: si el guardado
+            // falla hay que restaurar los valores para no mostrar datos no persistidos.
+            var mailAnterior = _usuario.Mail;
+            var telAnterior = _usuario.Telefono;
+            var idiomaAnterior = _usuario.Idioma;
+
             _usuario.Mail = mail;
             _usuario.Telefono = tel;
             _usuario.Idioma = idioma;
@@ -434,16 +440,23 @@ namespace MatheoCaffieri_GestorCMB
                     LanguageService.Current?.T("msg_usuario_actualizado") ?? "Usuario actualizado.",
                     LanguageService.Current?.T("cap_ok") ?? "OK",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult = DialogResult.OK;
                 Close();
             }
             catch (AppException ex)
             {
+                _usuario.Mail = mailAnterior;
+                _usuario.Telefono = telAnterior;
+                _usuario.Idioma = idiomaAnterior;
                 LoggerLogic.Warn($"[EditUserForm] Validación al actualizar usuario: {ex.MessageKey}");
                 var msg = LanguageService.Current?.T(ex.MessageKey) ?? ex.Message;
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
+                _usuario.Mail = mailAnterior;
+                _usuario.Telefono = telAnterior;
+                _usuario.Idioma = idiomaAnterior;
                 LoggerLogic.Error($"[EditUserForm] Falla al actualizar usuario. Id={_usuario.IdUsuario}", ex);
                 MessageBox.Show(
                     LanguageService.Current?.T("err_actualizar_usuario") ?? "No se pudo actualizar el usuario.",

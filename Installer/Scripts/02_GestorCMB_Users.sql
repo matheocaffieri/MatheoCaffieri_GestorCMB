@@ -59,6 +59,14 @@ CREATE TABLE [dbo].[Usuario](
 ) ON [PRIMARY]
 END
 GO
+-- El mail identifica al usuario en el login: índice único.
+-- Se omite si la base ya tiene mails duplicados (resolver a mano antes de crearlo).
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = N'UQ_Usuario_Mail' AND object_id = OBJECT_ID(N'[dbo].[Usuario]'))
+AND NOT EXISTS (SELECT [mail] FROM [dbo].[Usuario] GROUP BY [mail] HAVING COUNT(*) > 1)
+BEGIN
+CREATE UNIQUE NONCLUSTERED INDEX [UQ_Usuario_Mail] ON [dbo].[Usuario]([mail] ASC)
+END
+GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

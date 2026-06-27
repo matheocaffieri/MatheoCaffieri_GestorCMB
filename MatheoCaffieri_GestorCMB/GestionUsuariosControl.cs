@@ -714,6 +714,9 @@ namespace MatheoCaffieri_GestorCMB
                     }
                 };
 
+                // BeginInvoke: la recarga destruye el item cuyo handler sigue corriendo.
+                item.UsuarioEditado += (s, usr) => BeginInvoke((Action)CargarUsuarios);
+
                 _panelUsuariosLista.Controls.Add(item);
             }
 
