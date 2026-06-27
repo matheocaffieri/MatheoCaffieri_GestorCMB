@@ -111,6 +111,7 @@
     <Compile Include="Services_Interfaces\IParametrosRepository.cs" />
     <Compile Include="Services_Interfaces\IUsuarioAccesoRepository.cs" />
     <Compile Include="Services_Interfaces\IUsuarioRepository.cs" />
+    <Compile Include="Services_Interfaces\IPasswordHasher.cs" />
     <Compile Include="Services_Interfaces\ILoginUnitOfWork.cs" />
     <Compile Include="RoleService\DataAccess\DALBase.cs" />
     <Compile Include="RoleService\DataAccess\AccesoRepository.cs" />
@@ -148,10 +149,6 @@
     <ProjectReference Include="..\DomainModel\DomainModel.csproj">
       <Project>{f44ba8e1-9dd9-4860-907d-c3a82dc7b74e}</Project>
       <Name>DomainModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
-      <Project>{bcf0c972-b0c8-47fa-bf8d-0888c565df9d}</Project>
-      <Name>Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

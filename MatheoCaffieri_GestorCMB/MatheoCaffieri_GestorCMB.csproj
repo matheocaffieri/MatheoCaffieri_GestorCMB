@@ -547,10 +547,6 @@
       <Project>{f44ba8e1-9dd9-4860-907d-c3a82dc7b74e}</Project>
       <Name>DomainModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
-      <Project>{bcf0c972-b0c8-47fa-bf8d-0888c565df9d}</Project>
-      <Name>Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Services\Services.csproj">
       <Project>{1dcb5e64-dfcd-4d80-b425-aa9f13dab451}</Project>
       <Name>Services</Name>
