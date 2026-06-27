@@ -3,7 +3,7 @@ using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 using Services.Logs;
 using Services.Logs.Strategy;
 using System;
@@ -14,7 +14,7 @@ using BL.BL_Interfaces;
 
 namespace BL
 {
-    public class MaterialBL : IMaterialRepository, IMaterialBL
+    public class MaterialBL : IMaterialBL
     {
         private readonly IMaterialRepository _materialRepository;
         private readonly IInventarioRepository _inventarioRepository;
@@ -172,7 +172,5 @@ namespace BL
         public List<DomainModel.Material> GetAll() => _materialRepository.GetAll();
 
         // ===== Implementación explícita de IGenericRepository =====
-        List<DomainModel.Material> IGenericRepository<DomainModel.Material>.GetAll() => GetAll();
-        DomainModel.Material IGenericRepository<DomainModel.Material>.GetById(Guid id) => GetById(id);
     }
 }

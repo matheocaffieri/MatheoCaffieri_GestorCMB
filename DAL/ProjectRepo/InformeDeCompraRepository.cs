@@ -1,7 +1,7 @@
 using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Entities;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

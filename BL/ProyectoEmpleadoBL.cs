@@ -3,7 +3,7 @@ using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 using Services.Logs;
 using System;
 using System.Data.Entity.Core.EntityClient;

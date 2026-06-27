@@ -63,6 +63,20 @@
       <DependentUpon>CMB_USERSDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="DatabaseService.cs" />
+    <Compile Include="DAL_Interfaces\IClienteRepository.cs" />
+    <Compile Include="DAL_Interfaces\IDetalleEmpleadosRepository.cs" />
+    <Compile Include="DAL_Interfaces\IDetalleGeneric.cs" />
+    <Compile Include="DAL_Interfaces\IDetalleInformeMaterialFaltanteRepository.cs" />
+    <Compile Include="DAL_Interfaces\IDetalleMaterialesRepository.cs" />
+    <Compile Include="DAL_Interfaces\IEmpleadoRepository.cs" />
+    <Compile Include="DAL_Interfaces\IGenericRepository.cs" />
+    <Compile Include="DAL_Interfaces\IInformeDeCompraRepository.cs" />
+    <Compile Include="DAL_Interfaces\IInformeMontoRepository.cs" />
+    <Compile Include="DAL_Interfaces\IInventarioRepository.cs" />
+    <Compile Include="DAL_Interfaces\IMaterialRepository.cs" />
+    <Compile Include="DAL_Interfaces\IMaterialesFaltantesRepository.cs" />
+    <Compile Include="DAL_Interfaces\IProveedorRepository.cs" />
+    <Compile Include="DAL_Interfaces\IProyectoRepository.cs" />
     <Compile Include="Detalle_informe_material_faltante.cs">
       <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
     </Compile>
@@ -123,7 +137,6 @@
     <Compile Include="ProjectRepo\InventarioRepository.cs" />
     <Compile Include="ProjectRepo\MaterialFaltanteRepository.cs" />
     <Compile Include="ProjectRepo\MaterialRepository.cs" />
-    <Compile Include="ProjectRepo\ProveedorRepo.cs" />
     <Compile Include="ProjectRepo\ProyectoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProjectRepo\ProveedorRepository.cs" />

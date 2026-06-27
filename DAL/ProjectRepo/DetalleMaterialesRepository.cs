@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 using DAL.FactoryDAL;
 
 using DomainModel;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 
 // Aliases EF para evitar choque de nombres con DomainModel.*
 using DetMatEf = DAL.Detalle_proyecto_material;

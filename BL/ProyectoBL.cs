@@ -2,7 +2,7 @@
 using DAL;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 using Services.Logs;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using BL.BL_Interfaces;
 
 namespace BL
 {
-    public class ProyectoBL : IProyectoRepository, IProyectoBL
+    public class ProyectoBL : IProyectoBL
     {
         public void Add(DomainModel.Proyecto entity)
         {

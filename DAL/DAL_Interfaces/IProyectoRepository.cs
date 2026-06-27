@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel.Interfaces
-{
-    public interface IClienteRepository : IGenericRepository<Cliente>
-    {
+using DomainModel;
 
+namespace DAL.DAL_Interfaces
+{
+    public interface IProyectoRepository : IGenericRepository<DomainModel.Proyecto>
+    {
     }
 }

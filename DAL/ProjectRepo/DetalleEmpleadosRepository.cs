@@ -9,7 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL.FactoryDAL;
 using DomainModel;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 
 // EF aliases
 using DetEmpEf = DAL.Detalle_proyecto_empleado;

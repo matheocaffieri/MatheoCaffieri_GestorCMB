@@ -3,7 +3,7 @@ using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 using Services.Logs;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using BL.BL_Interfaces;
 
 namespace BL
 {
-    public class ClienteBL : IClienteRepository, IClienteBL
+    public class ClienteBL : IClienteBL
     {
         private readonly IClienteRepository _repo;
         private readonly IUnitOfWork _uow;

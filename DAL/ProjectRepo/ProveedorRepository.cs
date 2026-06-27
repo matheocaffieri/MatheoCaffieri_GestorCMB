@@ -10,7 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 
 using DomainModel;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 
 // Alias a la entidad EF para evitar choque de nombres con DomainModel.Proveedor.
 using ProveedorEf = DAL.Proveedor;

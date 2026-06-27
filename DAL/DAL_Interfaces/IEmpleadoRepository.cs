@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel.Interfaces
+using DomainModel;
+
+namespace DAL.DAL_Interfaces
 {
-    public interface IMaterialRepository : IGenericRepository<Material>
+    public interface IEmpleadoRepository : IGenericRepository<DomainModel.Empleado>
     {
     }
 }

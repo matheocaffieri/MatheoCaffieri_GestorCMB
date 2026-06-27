@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainModel.Interfaces
+using DomainModel;
+
+namespace DAL.DAL_Interfaces
 {
-    public interface IInventarioRepository : IGenericRepository<Inventario>
+    public interface IInventarioRepository : IGenericRepository<DomainModel.Inventario>
     {
         DomainModel.Inventario GetByMaterialId(Guid idMaterial);
         decimal GetCantidad(Guid idMaterial);

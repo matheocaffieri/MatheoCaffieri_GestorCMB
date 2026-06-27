@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using DetEf = DAL.Detalle_informe_material_faltante;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 using DomainModel.Entities;
 
 

@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using DomainModel.Entities;
 
-namespace DomainModel.Interfaces
+using DomainModel;
+
+namespace DAL.DAL_Interfaces
 {
     public interface IInformeDeCompraRepository : IGenericRepository<InformeDeCompra>
     {

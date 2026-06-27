@@ -9,7 +9,7 @@ using System.Linq;
 using DAL.FactoryDAL;
 
 using DomainModel;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 
 // Aliases EF para evitar choque de nombres con DomainModel.*
 using ProyectoEf = DAL.Proyecto;

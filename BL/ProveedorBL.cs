@@ -3,7 +3,7 @@ using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 using Services.Logs;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using BL.BL_Interfaces;
 
 namespace BL
 {
-    public class ProveedorBL : IProveedorRepository, IGenericRepository<DomainModel.Proveedor>, IDisposable, IProveedorBL
+    public class ProveedorBL : IDisposable, IProveedorBL
     {
         private readonly IUnitOfWork _uow;
         private readonly IProveedorRepository _repo;
@@ -140,8 +140,6 @@ namespace BL
         public List<DomainModel.Proveedor> GetAll() => _repo.GetAll();
 
         // ===== Implementación explícita de IGenericRepository =====
-        List<DomainModel.Proveedor> IGenericRepository<DomainModel.Proveedor>.GetAll() => GetAll();
-        DomainModel.Proveedor IGenericRepository<DomainModel.Proveedor>.GetById(Guid id) => GetById(id);
     }
 
 }

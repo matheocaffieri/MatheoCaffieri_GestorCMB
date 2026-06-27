@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 using DAL.FactoryDAL;
 
 using DomainModel;
-using DomainModel.Interfaces;
+using DAL.DAL_Interfaces;
 
 // Alias a la entidad EF para evitar choque de nombres con DomainModel.MaterialFaltante.
 using MaterialFaltanteEf = DAL.Material_faltante;
