@@ -11,9 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class EmpleadoBL : IEmpleadoRepository
+    public class EmpleadoBL : IEmpleadoRepository, IEmpleadoBL
     {
         private readonly IEmpleadoRepository _repo;
         private readonly IUnitOfWork _uow;
@@ -115,9 +117,9 @@ namespace BL
 
         // ===== Lecturas (sin transacción ni log) =====
 
-        List<DomainModel.Empleado> IGenericRepository<DomainModel.Empleado>.GetAll() => _repo.GetAll();
+        public List<DomainModel.Empleado> GetAll() => _repo.GetAll();
 
-        DomainModel.Empleado IGenericRepository<DomainModel.Empleado>.GetById(Guid id)
+        public DomainModel.Empleado GetById(Guid id)
         {
             if (id == Guid.Empty) throw new AppException("err_id_required");
             return _repo.GetById(id);

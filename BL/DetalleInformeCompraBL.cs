@@ -7,9 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class DetalleInformeCompraBL
+    public class DetalleInformeCompraBL : IDetalleInformeCompraBL
     {
         public List<MaterialFaltante> GetMaterialesFaltantesDelInforme(Guid idInformeCompra)
         {

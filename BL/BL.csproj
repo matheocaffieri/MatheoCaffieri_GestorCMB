@@ -52,6 +52,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BL_Interfaces\IClienteBL.cs" />
+    <Compile Include="BL_Interfaces\IEmpleadoBL.cs" />
+    <Compile Include="BL_Interfaces\IMaterialBL.cs" />
+    <Compile Include="BL_Interfaces\IProveedorBL.cs" />
+    <Compile Include="BL_Interfaces\IInventarioBL.cs" />
+    <Compile Include="BL_Interfaces\IMaterialFaltanteBL.cs" />
+    <Compile Include="BL_Interfaces\IDetalleEmpleadoBL.cs" />
+    <Compile Include="BL_Interfaces\IDetalleMaterialBL.cs" />
+    <Compile Include="BL_Interfaces\IProyectoBL.cs" />
+    <Compile Include="BL_Interfaces\IDetalleInformeCompraBL.cs" />
+    <Compile Include="BL_Interfaces\IInformeMontoBL.cs" />
+    <Compile Include="BL_Interfaces\IProyectoEmpleadoBL.cs" />
+    <Compile Include="BL_Interfaces\IProyectoMaterialBL.cs" />
+    <Compile Include="BL_Interfaces\IInformeDeCompraBL.cs" />
     <Compile Include="ClienteBL.cs" />
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="DetalleEmpleadoBL.cs" />

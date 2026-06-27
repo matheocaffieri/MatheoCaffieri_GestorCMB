@@ -8,12 +8,14 @@ using Services.Logs;
 using System;
 using System.Collections.Generic;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
     /// <summary>
     /// Capa de negocio para Inventario: valida, loguea y delega en el repositorio.
     /// </summary>
-    public class InventarioBL : IInventarioRepository, IGenericRepository<DomainModel.Inventario>
+    public class InventarioBL : IInventarioRepository, IGenericRepository<DomainModel.Inventario>, IInventarioBL
     {
         private readonly IUnitOfWork _uow;
         private readonly IInventarioRepository _repo;

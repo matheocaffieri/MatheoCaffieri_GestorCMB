@@ -11,9 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class MaterialFaltanteBL : IMaterialesFaltantesRepository
+    public class MaterialFaltanteBL : IMaterialesFaltantesRepository, IMaterialFaltanteBL
     {
         private readonly IUnitOfWork _uow;
         private readonly IMaterialesFaltantesRepository _repo;

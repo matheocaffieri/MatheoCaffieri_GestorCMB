@@ -10,9 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class MaterialBL : IMaterialRepository
+    public class MaterialBL : IMaterialRepository, IMaterialBL
     {
         private readonly IMaterialRepository _materialRepository;
         private readonly IInventarioRepository _inventarioRepository;

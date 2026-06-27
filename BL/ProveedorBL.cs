@@ -11,9 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class ProveedorBL : IProveedorRepository, IGenericRepository<DomainModel.Proveedor>, IDisposable
+    public class ProveedorBL : IProveedorRepository, IGenericRepository<DomainModel.Proveedor>, IDisposable, IProveedorBL
     {
         private readonly IUnitOfWork _uow;
         private readonly IProveedorRepository _repo;

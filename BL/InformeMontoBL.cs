@@ -6,9 +6,11 @@ using Services.Logs;
 using System;
 using System.Linq;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class InformeMontoBL
+    public class InformeMontoBL : IInformeMontoBL
     {
         /// <summary>
         /// Recalcula totales de empleados y materiales del proyecto,

@@ -8,9 +8,11 @@ using Services.Logs;
 using System;
 using System.Data.Entity.Core.EntityClient;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class ProyectoEmpleadoBL
+    public class ProyectoEmpleadoBL : IProyectoEmpleadoBL
     {
         private const int MAX_PROYECTOS_ACTIVOS = 3;
 

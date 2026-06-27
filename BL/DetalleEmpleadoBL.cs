@@ -11,9 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class DetalleEmpleadoBL : IDetalleEmpleadosRepository
+    public class DetalleEmpleadoBL : IDetalleEmpleadosRepository, IDetalleEmpleadoBL
     {
         private readonly IDetalleEmpleadosRepository _repo;
         private readonly IUnitOfWork _uow;

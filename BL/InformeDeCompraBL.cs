@@ -11,9 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class InformeDeCompraBL
+    public class InformeDeCompraBL : IInformeDeCompraBL
     {
         public Guid GenerarDesdeFaltantes(Guid idProyecto, bool unicoPorDia = true)
         {

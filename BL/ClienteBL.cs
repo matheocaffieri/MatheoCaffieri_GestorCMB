@@ -8,9 +8,11 @@ using Services.Logs;
 using System;
 using System.Collections.Generic;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class ClienteBL : IClienteRepository
+    public class ClienteBL : IClienteRepository, IClienteBL
     {
         private readonly IClienteRepository _repo;
         private readonly IUnitOfWork _uow;

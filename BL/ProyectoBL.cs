@@ -11,9 +11,11 @@ using System.Text;
 using DomainModel.Entities;
 using System.Threading.Tasks;
 
+using BL.BL_Interfaces;
+
 namespace BL
 {
-    public class ProyectoBL : IProyectoRepository
+    public class ProyectoBL : IProyectoRepository, IProyectoBL
     {
         public void Add(DomainModel.Proyecto entity)
         {
