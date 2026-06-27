@@ -22,13 +22,12 @@ namespace BL
             if (idProyecto == Guid.Empty)
                 throw new AppException("err_proyecto_id_required");
 
-            var ctx = new GestorCMBEntities();
-            var uow = new SqlUnitOfWork(ctx);
+            var uow = DalFactory.CreateUnitOfWork();
 
             uow.Begin();
 
-            var informeRepo = new InformeDeCompraRepository(uow);
-            var detalleRepo = new DetalleInformeMaterialFaltanteRepository(uow);
+            var informeRepo = DalFactory.CreateInformeDeCompraRepository(uow);
+            var detalleRepo = DalFactory.CreateDetalleInformeMaterialFaltanteRepository(uow);
 
             try
             {
@@ -95,55 +94,48 @@ namespace BL
             finally
             {
                 uow.Dispose();
-                ctx.Dispose();
             }
         }
 
         public List<InformeDeCompra> GetAll()
         {
-            var ctx = new GestorCMBEntities();
-            var uow = new SqlUnitOfWork(ctx);
+            var uow = DalFactory.CreateUnitOfWork();
             try
             {
-                var repo = new InformeDeCompraRepository(uow);
+                var repo = DalFactory.CreateInformeDeCompraRepository(uow);
                 return repo.GetAll();
             }
             finally
             {
                 uow.Dispose();
-                ctx.Dispose();
             }
         }
 
         public List<InformeDeCompra> GetHistorial()
         {
-            var ctx = new GestorCMBEntities();
-            var uow = new SqlUnitOfWork(ctx);
+            var uow = DalFactory.CreateUnitOfWork();
             try
             {
-                var repo = new InformeDeCompraRepository(uow);
+                var repo = DalFactory.CreateInformeDeCompraRepository(uow);
                 return repo.GetHistorial();
             }
             finally
             {
                 uow.Dispose();
-                ctx.Dispose();
             }
         }
 
         public HashSet<Guid> GetMaterialesConInformesPendientes()
         {
-            var ctx = new GestorCMBEntities();
-            var uow = new SqlUnitOfWork(ctx);
+            var uow = DalFactory.CreateUnitOfWork();
             try
             {
-                var repo = new InformeDeCompraRepository(uow);
+                var repo = DalFactory.CreateInformeDeCompraRepository(uow);
                 return repo.GetMaterialesConInformesPendientes();
             }
             finally
             {
                 uow.Dispose();
-                ctx.Dispose();
             }
         }
 
@@ -152,11 +144,10 @@ namespace BL
             if (idInformeCompra == Guid.Empty)
                 throw new AppException("err_informe_id_required");
 
-            var ctx = new GestorCMBEntities();
-            var uow = new SqlUnitOfWork(ctx);
+            var uow = DalFactory.CreateUnitOfWork();
             uow.Begin();
 
-            var infRepo = new InformeDeCompraRepository(uow);
+            var infRepo = DalFactory.CreateInformeDeCompraRepository(uow);
 
             try
             {
@@ -185,7 +176,6 @@ namespace BL
             finally
             {
                 uow.Dispose();
-                ctx.Dispose();
             }
         }
 
@@ -196,8 +186,7 @@ namespace BL
             if (idInformeCompra == Guid.Empty)
                 throw new AppException("err_informe_id_required");
 
-            var ctx = new GestorCMBEntities();
-            var uow = new SqlUnitOfWork(ctx);
+            var uow = DalFactory.CreateUnitOfWork();
 
             uow.Begin();
 
@@ -205,7 +194,7 @@ namespace BL
             {
                 var db = uow.Context;
 
-                var detMatRepo = new DetalleMaterialesRepository(uow);
+                var detMatRepo = DalFactory.CreateDetalleMaterialesRepository(uow);
 
                 // 1) ids de Material_faltante incluidos en el informe
                 var idsFaltantes = db.Detalle_informe_material_faltante
@@ -306,7 +295,6 @@ namespace BL
             finally
             {
                 uow.Dispose();
-                ctx.Dispose();
             }
         }
     }

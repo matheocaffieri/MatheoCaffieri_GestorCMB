@@ -89,6 +89,7 @@
     <Compile Include="Empleado.cs">
       <DependentUpon>GestorCMBEntityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="FactoryDAL\DalFactory.cs" />
     <Compile Include="FactoryDAL\IUnitOfWork.cs" />
     <Compile Include="FactoryDAL\SqlUnitOfWork.cs" />
     <Compile Include="GestorCMBDataSet.Designer.cs">

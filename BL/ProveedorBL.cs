@@ -22,9 +22,8 @@ namespace BL
 
         public ProveedorBL()
         {
-            var ctx = new GestorCMBEntities();
-            _uow = new SqlUnitOfWork(ctx);
-            _repo = new ProveedorRepository(_uow);
+            _uow = DalFactory.CreateUnitOfWork();
+            _repo = DalFactory.CreateProveedorRepository(_uow);
         }
 
         // Ctor para DI / tests

@@ -22,9 +22,8 @@ namespace BL
 
         public InventarioBL()
         {
-            var ctx = new GestorCMBEntities();
-            _uow = new SqlUnitOfWork(ctx);
-            _repo = new InventarioRepository(_uow);
+            _uow = DalFactory.CreateUnitOfWork();
+            _repo = DalFactory.CreateInventarioRepository(_uow);
         }
 
         // DI / tests

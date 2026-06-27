@@ -22,10 +22,9 @@ namespace BL
 
         public EmpleadoBL()
         {
-            var ctx = new GestorCMBEntities();
-            _uow = new SqlUnitOfWork(ctx);
+            _uow = DalFactory.CreateUnitOfWork();
 
-            _repo = new EmpleadoRepository(_uow);
+            _repo = DalFactory.CreateEmpleadoRepository(_uow);
         }
 
         // DI / tests

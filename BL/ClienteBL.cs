@@ -19,10 +19,9 @@ namespace BL
 
         public ClienteBL()
         {
-            var ctx = new GestorCMBEntities();
-            _uow = new SqlUnitOfWork(ctx);
+            _uow = DalFactory.CreateUnitOfWork();
 
-            _repo = new ClienteRepository(_uow);
+            _repo = DalFactory.CreateClienteRepository(_uow);
         }
 
         // DI / tests

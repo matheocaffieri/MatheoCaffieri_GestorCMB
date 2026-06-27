@@ -22,10 +22,9 @@ namespace BL
 
         public DetalleMaterialBL()
         {
-            var ctx = new GestorCMBEntities();
-            _uow = new SqlUnitOfWork(ctx);
+            _uow = DalFactory.CreateUnitOfWork();
 
-            _repo = new DetalleMaterialesRepository(_uow);
+            _repo = DalFactory.CreateDetalleMaterialesRepository(_uow);
         }
 
         // DI / tests

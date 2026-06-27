@@ -1,4 +1,4 @@
-﻿using DAL;
+﻿using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Exceptions;
 using System;
@@ -17,8 +17,9 @@ namespace BL
         {
             if (idInformeCompra == Guid.Empty) throw new AppException("err_detalle_informe_id_required");
 
-            using (var context = new GestorCMBEntities())
+            using (var uow = DalFactory.CreateUnitOfWork())
             {
+                var context = uow.Context;
                 // Leemos directo con EF (rápido y seguro) para mostrar
                 var ids = context.Detalle_informe_material_faltante
                     .Where(d => d.idInformeCompra == idInformeCompra)

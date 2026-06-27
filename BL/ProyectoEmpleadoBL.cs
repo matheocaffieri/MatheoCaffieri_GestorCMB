@@ -21,13 +21,12 @@ namespace BL
             if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
             if (idEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
-            using (var ctx = new GestorCMBEntities())
-            using (var uow = new SqlUnitOfWork(ctx))
+            using (var uow = DalFactory.CreateUnitOfWork())
             {
                 uow.Begin();
 
-                IEmpleadoRepository empRepo = new EmpleadoRepository(uow);
-                IDetalleEmpleadosRepository detRepo = new DetalleEmpleadosRepository(uow);
+                IEmpleadoRepository empRepo = DalFactory.CreateEmpleadoRepository(uow);
+                IDetalleEmpleadosRepository detRepo = DalFactory.CreateDetalleEmpleadosRepository(uow);
 
                 try
                 {
@@ -78,13 +77,12 @@ namespace BL
             if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
             if (idEmpleado == Guid.Empty) throw new AppException("err_empleado_id_required");
 
-            using (var ctx = new GestorCMBEntities())
-            using (var uow = new SqlUnitOfWork(ctx))
+            using (var uow = DalFactory.CreateUnitOfWork())
             {
                 uow.Begin();
 
-                IEmpleadoRepository empRepo = new EmpleadoRepository(uow);
-                IDetalleEmpleadosRepository detRepo = new DetalleEmpleadosRepository(uow);
+                IEmpleadoRepository empRepo = DalFactory.CreateEmpleadoRepository(uow);
+                IDetalleEmpleadosRepository detRepo = DalFactory.CreateDetalleEmpleadosRepository(uow);
 
                 try
                 {

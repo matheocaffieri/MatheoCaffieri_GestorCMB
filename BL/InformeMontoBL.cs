@@ -34,9 +34,8 @@ namespace BL
                 MontoTotal      = montoTotal
             };
 
-            var ctx = new GestorCMBEntities();
-            var uow = new SqlUnitOfWork(ctx);
-            var repo = new InformeMontoRepository(uow);
+            var uow = DalFactory.CreateUnitOfWork();
+            var repo = DalFactory.CreateInformeMontoRepository(uow);
 
             uow.Begin();
             try

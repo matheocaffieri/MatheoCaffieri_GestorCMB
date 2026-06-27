@@ -22,11 +22,10 @@ namespace BL
 
         public MaterialBL()
         {
-            var ctx = new GestorCMBEntities();
-            _uow = new SqlUnitOfWork(ctx);
+            _uow = DalFactory.CreateUnitOfWork();
 
-            _materialRepository = new MaterialRepository(_uow);
-            _inventarioRepository = new InventarioRepository(_uow);
+            _materialRepository = DalFactory.CreateMaterialRepository(_uow);
+            _inventarioRepository = DalFactory.CreateInventarioRepository(_uow);
         }
 
         // ctor para DI/tests

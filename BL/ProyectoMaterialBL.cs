@@ -26,15 +26,14 @@ namespace BL
             if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
             if (cantidadSolicitada <= 0) throw new AppException("err_material_cantidad_invalida");
 
-            using (var ctx = new GestorCMBEntities())
-            using (var uow = new SqlUnitOfWork(ctx))
+            using (var uow = DalFactory.CreateUnitOfWork())
             {
                 uow.Begin();
 
-                var invRepo = new InventarioRepository(uow);
-                var detRepo = new DetalleMaterialesRepository(uow);
-                var matRepo = new MaterialRepository(uow);
-                var faltRepo = new MaterialFaltanteRepository(uow);
+                var invRepo = DalFactory.CreateInventarioRepository(uow);
+                var detRepo = DalFactory.CreateDetalleMaterialesRepository(uow);
+                var matRepo = DalFactory.CreateMaterialRepository(uow);
+                var faltRepo = DalFactory.CreateMaterialFaltanteRepository(uow);
 
                 try
                 {
@@ -102,13 +101,12 @@ namespace BL
             if (idProyecto == Guid.Empty) throw new AppException("err_proyecto_id_required");
             if (idMaterial == Guid.Empty) throw new AppException("err_inventario_material_required");
 
-            using (var ctx = new GestorCMBEntities())
-            using (var uow = new SqlUnitOfWork(ctx))
+            using (var uow = DalFactory.CreateUnitOfWork())
             {
                 uow.Begin();
 
-                var detRepo = new DetalleMaterialesRepository(uow);
-                var invRepo = new InventarioRepository(uow);
+                var detRepo = DalFactory.CreateDetalleMaterialesRepository(uow);
+                var invRepo = DalFactory.CreateInventarioRepository(uow);
 
                 try
                 {

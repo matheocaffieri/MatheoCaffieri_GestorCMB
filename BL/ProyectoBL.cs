@@ -1,5 +1,6 @@
 ﻿using DAL.ProjectRepo;
 using DAL;
+using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Exceptions;
 using DAL.DAL_Interfaces;
@@ -21,13 +22,12 @@ namespace BL
         {
             if (entity == null) throw new AppException("err_entity_null");
 
-            using (var ctx = new DAL.GestorCMBEntities())
-            using (var uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx))
+            using (var uow = DalFactory.CreateUnitOfWork())
             {
                 uow.Begin();
                 try
                 {
-                    var repo = new ProyectoRepository(uow);
+                    var repo = DalFactory.CreateProyectoRepository(uow);
                     repo.Add(entity);
                     uow.Commit();
                     LoggerLogic.Info($"[ProyectoBL] Proyecto agregado. Id={entity.IdProyecto} Desc='{entity.Descripcion}'");
@@ -51,13 +51,12 @@ namespace BL
         {
             if (entity == null) throw new AppException("err_entity_null");
 
-            using (var ctx = new DAL.GestorCMBEntities())
-            using (var uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx))
+            using (var uow = DalFactory.CreateUnitOfWork())
             {
                 uow.Begin();
                 try
                 {
-                    var repo = new ProyectoRepository(uow);
+                    var repo = DalFactory.CreateProyectoRepository(uow);
                     repo.Update(entity);
                     uow.Commit();
                     LoggerLogic.Info($"[ProyectoBL] Proyecto actualizado. Id={entity.IdProyecto}");
@@ -81,13 +80,12 @@ namespace BL
         {
             if (entity == null) throw new AppException("err_entity_null");
 
-            using (var ctx = new DAL.GestorCMBEntities())
-            using (var uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx))
+            using (var uow = DalFactory.CreateUnitOfWork())
             {
                 uow.Begin();
                 try
                 {
-                    var repo = new ProyectoRepository(uow);
+                    var repo = DalFactory.CreateProyectoRepository(uow);
                     repo.Delete(entity);
                     uow.Commit();
                     LoggerLogic.Info($"[ProyectoBL] Proyecto eliminado. Id={entity.IdProyecto}");
@@ -109,10 +107,9 @@ namespace BL
 
         public List<DomainModel.Proyecto> GetAll()
         {
-            using (var ctx = new DAL.GestorCMBEntities())
-            using (var uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx))
+            using (var uow = DalFactory.CreateUnitOfWork())
             {
-                var repo = new ProyectoRepository(uow);
+                var repo = DalFactory.CreateProyectoRepository(uow);
                 return repo.GetAll();
             }
         }
@@ -121,10 +118,9 @@ namespace BL
         {
             if (id == Guid.Empty) throw new AppException("err_id_required");
 
-            using (var ctx = new DAL.GestorCMBEntities())
-            using (var uow = new DAL.FactoryDAL.SqlUnitOfWork(ctx))
+            using (var uow = DalFactory.CreateUnitOfWork())
             {
-                var repo = new ProyectoRepository(uow);
+                var repo = DalFactory.CreateProyectoRepository(uow);
                 return repo.GetById(id);
             }
         }

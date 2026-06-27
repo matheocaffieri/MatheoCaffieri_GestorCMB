@@ -22,9 +22,8 @@ namespace BL
 
         public MaterialFaltanteBL()
         {
-            var ctx = new GestorCMBEntities();
-            _uow = new SqlUnitOfWork(ctx);
-            _repo = new MaterialFaltanteRepository(_uow);
+            _uow = DalFactory.CreateUnitOfWork();
+            _repo = DalFactory.CreateMaterialFaltanteRepository(_uow);
         }
 
         // DI / tests
