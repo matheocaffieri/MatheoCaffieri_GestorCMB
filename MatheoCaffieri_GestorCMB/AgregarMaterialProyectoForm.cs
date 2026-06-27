@@ -1,7 +1,7 @@
 ﻿using BL;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
 using Services.Logs;
@@ -71,7 +71,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             gestionarMaterialesDetalleLayoutPanel.Controls.Clear();
 
-            var invRepo = (IGenericRepository<Inventario>)new InventarioBL();
+            var invRepo = (IInventarioBL)new InventarioBL();
             List<Inventario> inventario = invRepo.GetAll();
 
             foreach (var inv in inventario)
@@ -110,7 +110,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             try
             {
-                var material = ((IGenericRepository<Material>)new MaterialBL()).GetById(e.IdMaterial);
+                var material = ((IMaterialBL)new MaterialBL()).GetById(e.IdMaterial);
                 double valorGanancia = material != null
                     ? (double)((decimal)material.CostoPorUnidad * ParametrosContext.MargenMateriales)
                     : 0;

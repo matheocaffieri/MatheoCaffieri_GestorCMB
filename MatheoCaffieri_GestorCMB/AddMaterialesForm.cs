@@ -1,7 +1,7 @@
 ﻿using BL;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using Services.Language;
 using Services.Logs;
 using System;
@@ -19,8 +19,8 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class AddMaterialesForm : Form
     {
-        private readonly IMaterialRepository _matBL;
-        private readonly IGenericRepository<Proveedor> _provBL;
+        private readonly IMaterialBL _matBL;
+        private readonly IProveedorBL _provBL;
         private readonly Material _editTarget;
         private bool IsEditMode => _editTarget != null;
 
@@ -36,7 +36,7 @@ namespace MatheoCaffieri_GestorCMB
             _editTarget = materialToEdit ?? throw new ArgumentNullException(nameof(materialToEdit));
         }
 
-        public AddMaterialesForm(IMaterialRepository materialBL, IGenericRepository<Proveedor> proveedorBL)
+        public AddMaterialesForm(IMaterialBL materialBL, IProveedorBL proveedorBL)
         {
             InitializeComponent();
             _matBL = materialBL ?? throw new ArgumentNullException(nameof(materialBL));

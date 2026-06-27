@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using Services.Language;
 using Services.Logs;
 
@@ -10,10 +10,10 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class EditClienteForm : Form
     {
-        private readonly IGenericRepository<Cliente> _repo;
+        private readonly IClienteBL _repo;
         private readonly Cliente _cliente;
 
-        public EditClienteForm(IGenericRepository<Cliente> repo, Cliente cliente)
+        public EditClienteForm(IClienteBL repo, Cliente cliente)
         {
             InitializeComponent();
 

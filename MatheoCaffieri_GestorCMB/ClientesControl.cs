@@ -1,7 +1,7 @@
 ﻿using BL;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using DomainModel.Login;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
@@ -28,7 +28,7 @@ namespace MatheoCaffieri_GestorCMB
         public ClientesControl(MainForm mainForm) : this(mainForm, new ClienteBL()) { }
 
         // DI / tests
-        public ClientesControl(MainForm mainForm, IGenericRepository<Cliente> clienteRepo)
+        public ClientesControl(MainForm mainForm, IClienteBL clienteRepo)
         {
             InitializeComponent();
 
@@ -45,7 +45,7 @@ namespace MatheoCaffieri_GestorCMB
             _clienteRepo = clienteRepo ?? throw new ArgumentNullException(nameof(clienteRepo));
         }
 
-        private readonly IGenericRepository<Cliente> _clienteRepo;
+        private readonly IClienteBL _clienteRepo;
         private readonly MainForm _mainForm;
 
 

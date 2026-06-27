@@ -1,6 +1,6 @@
 using BL;
 using DomainModel;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using DomainModel.Login;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
@@ -23,7 +23,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private readonly MainForm _mainForm;
 
-        public ProveedorControl(IGenericRepository<Proveedor> proveedorRepo)
+        public ProveedorControl(IProveedorBL proveedorRepo)
         {
             InitializeComponent();
 
@@ -51,7 +51,7 @@ namespace MatheoCaffieri_GestorCMB
             _proveedorRepo = proveedorRepo ?? throw new ArgumentNullException(nameof(proveedorRepo));
         }
 
-        private readonly IGenericRepository<Proveedor> _proveedorRepo;
+        private readonly IProveedorBL _proveedorRepo;
         private Label _lblCount;
         private Panel _scrollArea;
 

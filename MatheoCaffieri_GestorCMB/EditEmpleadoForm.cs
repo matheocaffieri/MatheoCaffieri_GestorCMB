@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using Services.Language;
 using Services.Logs;
 // Las claves de traducción para los labels del Designer están en Properties/Resources.resx (btn_editar, lbl_*, cap_editar_empleado).
@@ -19,13 +19,13 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class EditEmpleadoForm : Form
     {
-        private readonly IGenericRepository<Empleado> _repo;
+        private readonly IEmpleadoBL _repo;
         private readonly Empleado _empleado;
 
         // Constructor para edición
         private System.Drawing.Point _mouseLocation;
 
-        public EditEmpleadoForm(IGenericRepository<Empleado> repo, Empleado empleado)
+        public EditEmpleadoForm(IEmpleadoBL repo, Empleado empleado)
         {
             InitializeComponent();
 

@@ -1,7 +1,7 @@
 ﻿using BL;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using Services.Language;
 using Services.Logs;
 using Services.RoleService;
@@ -21,8 +21,8 @@ namespace MatheoCaffieri_GestorCMB
     public partial class AddProyectosForm : Form
     {
         public Point mouseLocation;
-        private readonly IGenericRepository<Proyecto> _proyectoRepo;
-        private readonly IGenericRepository<Cliente> _clienteRepo;
+        private readonly IProyectoBL _proyectoRepo;
+        private readonly IClienteBL _clienteRepo;
 
         private const string REQUIRED = "GESTIONAR_PROYECTOS";
 
@@ -38,7 +38,7 @@ namespace MatheoCaffieri_GestorCMB
             // InitializeComponent lo llama el ctor principal
         }
 
-        public AddProyectosForm(IGenericRepository<Proyecto> proyectoRepo, IGenericRepository<Cliente> clienteRepo)
+        public AddProyectosForm(IProyectoBL proyectoRepo, IClienteBL clienteRepo)
         {
             InitializeComponent();
 

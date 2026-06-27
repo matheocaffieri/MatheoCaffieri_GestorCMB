@@ -1,7 +1,7 @@
 ﻿using BL;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
 using Services.Logs;
@@ -58,7 +58,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             gestionarEmpleadosDetalleLayoutPanel.Controls.Clear();
 
-            var empleados = ((IGenericRepository<Empleado>)new EmpleadoBL()).GetAll();
+            var empleados = ((IEmpleadoBL)new EmpleadoBL()).GetAll();
 
             empleados = empleados.Where(e => e.IsActive).ToList();
 

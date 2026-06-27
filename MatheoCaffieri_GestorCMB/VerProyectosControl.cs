@@ -1,6 +1,6 @@
 ﻿using BL;
 using DomainModel;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
 using Services.RoleService;
@@ -188,7 +188,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void CargarListado(string filtro = "")
         {
-            List<Proyecto> todos = ((IGenericRepository<Proyecto>)new ProyectoBL()).GetAll();
+            List<Proyecto> todos = ((IProyectoBL)new ProyectoBL()).GetAll();
 
             var numeros = todos
                 .OrderBy(p => p.FechaInicio)

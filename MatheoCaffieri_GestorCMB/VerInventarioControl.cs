@@ -1,6 +1,6 @@
 using BL;
 using DomainModel;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
 using Services.Logs;
@@ -15,7 +15,7 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class VerInventarioControl : UserControl
     {
-        private readonly IGenericRepository<Inventario> _invRepo = new InventarioBL();
+        private readonly IInventarioBL _invRepo = new InventarioBL();
         private readonly InformeDeCompraBL _informesBL = new InformeDeCompraBL();
         private readonly MainForm _mainForm;
 

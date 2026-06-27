@@ -1,7 +1,7 @@
 using BL;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using Services.Language;
 using Services.Logs;
 using System;
@@ -13,8 +13,8 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class EditProyectoForm : Form
     {
-        private readonly IGenericRepository<Proyecto> _proyectoRepo;
-        private readonly IGenericRepository<Cliente> _clienteRepo;
+        private readonly IProyectoBL _proyectoRepo;
+        private readonly IClienteBL _clienteRepo;
         private readonly Proyecto _proyecto;
 
         private Point _mouseLocation;
@@ -22,7 +22,7 @@ namespace MatheoCaffieri_GestorCMB
         public EditProyectoForm(Proyecto proyecto)
             : this(proyecto, new ProyectoBL(), new ClienteBL()) { }
 
-        public EditProyectoForm(Proyecto proyecto, IGenericRepository<Proyecto> proyectoRepo, IGenericRepository<Cliente> clienteRepo)
+        public EditProyectoForm(Proyecto proyecto, IProyectoBL proyectoRepo, IClienteBL clienteRepo)
         {
             InitializeComponent();
 

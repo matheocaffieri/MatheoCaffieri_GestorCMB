@@ -1,7 +1,7 @@
 ﻿using BL;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services;
 using Services.Language;
@@ -197,7 +197,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void ObtenerDetallesEmpleadosItems(Guid idProyecto)
         {
-            IDetalleGeneric<DetalleProyectoEmpleado> detalleRepo = new DetalleEmpleadoBL();
+            IDetalleEmpleadoBL detalleRepo = new DetalleEmpleadoBL();
             List<DetalleProyectoEmpleado> detalleEmpleados = detalleRepo.GetAll(idProyecto);
 
             flowLayoutPanelEmp.SuspendLayout();
@@ -227,7 +227,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void ObtenerDetallesMaterialesItems(Guid idProyecto)
         {
-            IDetalleGeneric<DetalleProyectoMaterial> detalleRepo = new DetalleMaterialBL();
+            IDetalleMaterialBL detalleRepo = new DetalleMaterialBL();
             List<DetalleProyectoMaterial> detalleMateriales = detalleRepo.GetAll(idProyecto);
 
             flowLayoutPanelMat.SuspendLayout();
@@ -258,7 +258,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void ObtenerMaterialFaltanteItems(Guid idProyecto)
         {
-            IDetalleGeneric<MaterialFaltante> detalleRepo = new MaterialFaltanteBL();
+            IMaterialFaltanteBL detalleRepo = new MaterialFaltanteBL();
             List<MaterialFaltante> detalleMaterialesFaltantes = detalleRepo.GetAll(idProyecto);
 
             label7.Visible = false;

@@ -2,7 +2,7 @@ using BL;
 using Services.LoginService.Logic;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using DomainModel.Login;
 using Services.Language;
 using Services.Logs;
@@ -530,7 +530,7 @@ namespace MatheoCaffieri_GestorCMB
         {
             try
             {
-                var bl = (IEmpleadoRepository)new EmpleadoBL();
+                var bl = (IEmpleadoBL)new EmpleadoBL();
                 _lblEmpleadosVal.Text = bl.GetAll().Count(e => e.IsActive).ToString();
             }
             catch { _lblEmpleadosVal.Text = "—"; }

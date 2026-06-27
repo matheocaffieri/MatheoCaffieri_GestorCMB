@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using BL;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using Services.Language;
 using Services.Logs;
 
@@ -11,10 +11,10 @@ namespace MatheoCaffieri_GestorCMB
 {
     public partial class EditProveedorForm : Form
     {
-        private readonly IGenericRepository<Proveedor> _repo;
+        private readonly IProveedorBL _repo;
         private readonly Proveedor _proveedor;
 
-        public EditProveedorForm(IGenericRepository<Proveedor> repo, Proveedor proveedor)
+        public EditProveedorForm(IProveedorBL repo, Proveedor proveedor)
         {
             InitializeComponent();
 

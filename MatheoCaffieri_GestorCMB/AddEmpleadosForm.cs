@@ -1,7 +1,7 @@
 ﻿using BL;
 using DomainModel;
 using DomainModel.Exceptions;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using Services.Language;
 using Services.Logs;
 using Services.RoleService;
@@ -16,7 +16,7 @@ namespace MatheoCaffieri_GestorCMB
     {
         private const string REQUIRED = "GESTIONAR_EMPLEADOS";
 
-        private readonly IGenericRepository<Empleado> _empleadoRepo;
+        private readonly IEmpleadoBL _empleadoRepo;
 
         public Point mouseLocation;
 
@@ -25,7 +25,7 @@ namespace MatheoCaffieri_GestorCMB
             // acá NO va InitializeComponent, ya lo llama el otro ctor
         }
 
-        public AddEmpleadosForm(IGenericRepository<Empleado> empleadoRepo)
+        public AddEmpleadosForm(IEmpleadoBL empleadoRepo)
         {
             InitializeComponent();
 

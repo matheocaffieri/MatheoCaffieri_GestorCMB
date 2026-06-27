@@ -1,6 +1,6 @@
 using BL;
 using DomainModel;
-using DomainModel.Interfaces;
+using BL.BL_Interfaces;
 using DomainModel.Login;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
@@ -17,7 +17,7 @@ namespace MatheoCaffieri_GestorCMB
     {
         private const string REQUIRED = "VER_EMPLEADOS";
 
-        private readonly IGenericRepository<Empleado> _empleadoRepo = new EmpleadoBL();
+        private readonly IEmpleadoBL _empleadoRepo = new EmpleadoBL();
 
         private Panel            _scrollArea;
         private Label            _lblCount;
