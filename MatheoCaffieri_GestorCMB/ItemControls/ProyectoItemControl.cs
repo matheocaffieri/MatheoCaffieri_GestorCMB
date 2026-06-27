@@ -275,7 +275,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
                 return;
             }
 
-            if (!PermisosUI.Require(Interfaces.LoginInterfaces.TipoPermiso.VER_PROYECTOS))
+            if (!PermisosUI.Require(DomainModel.Login.TipoPermiso.VER_PROYECTOS))
                 return;
 
             // Cambiar la vista en el MainForm

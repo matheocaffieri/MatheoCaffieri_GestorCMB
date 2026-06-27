@@ -22,7 +22,7 @@ namespace MatheoCaffieri_GestorCMB
         private void ConfigurarParametrosControl_Load(object sender, EventArgs e)
         {
             // Backstop: si llegó acá sin permiso (navegación que no chequeó), no cargar nada.
-            if (!SessionContext.Has(Interfaces.LoginInterfaces.TipoPermiso.CONFIGURAR_PARAMETROS.ToString()))
+            if (!SessionContext.Has(DomainModel.Login.TipoPermiso.CONFIGURAR_PARAMETROS.ToString()))
                 return;
 
             try
@@ -44,7 +44,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonGuardar_Click(object sender, EventArgs e)
         {
-            if (!PermisosUI.Require(Interfaces.LoginInterfaces.TipoPermiso.CONFIGURAR_PARAMETROS))
+            if (!PermisosUI.Require(DomainModel.Login.TipoPermiso.CONFIGURAR_PARAMETROS))
                 return;
 
             if (_parametros == null) return;

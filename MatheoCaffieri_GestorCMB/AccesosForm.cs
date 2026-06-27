@@ -1,6 +1,6 @@
 ﻿using Services.RoleService;
 using DomainModel.Exceptions;
-using Interfaces.LoginInterfaces;
+using DomainModel.Login;
 using Services.Language;
 using Services.Logs;
 using System;

@@ -2,7 +2,7 @@
 using DomainModel;
 using DomainModel.Exceptions;
 using DomainModel.Interfaces;
-using Interfaces.LoginInterfaces;
+using DomainModel.Login;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
 using Services.Logs;

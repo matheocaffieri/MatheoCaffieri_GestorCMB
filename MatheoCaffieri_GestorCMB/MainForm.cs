@@ -1,6 +1,6 @@
 ﻿using Services.RoleService;
 using Services.LoginService.Logic;
-using Interfaces.LoginInterfaces;
+using DomainModel.Login;
 using Services.Language;
 using Services.RoleService.Logic;
 using System;

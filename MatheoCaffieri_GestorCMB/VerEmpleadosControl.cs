@@ -1,7 +1,7 @@
 using BL;
 using DomainModel;
 using DomainModel.Interfaces;
-using Interfaces.LoginInterfaces;
+using DomainModel.Login;
 using MatheoCaffieri_GestorCMB.ItemControls;
 using Services.Language;
 using Services.RoleService;

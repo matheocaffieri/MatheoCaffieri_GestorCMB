@@ -1,7 +1,6 @@
 ﻿using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Interfaces;
-using Services.Logs;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
