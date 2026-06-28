@@ -1,5 +1,5 @@
 ﻿using Services.LoginService.DataAccess;
-using DomainModel.Login;
+using Services.Login;
 using Services.LoginService;
 using Services.Logs;
 using System;

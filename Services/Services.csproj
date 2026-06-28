@@ -68,6 +68,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Login\Acceso.cs" />
+    <Compile Include="Login\IPermiso.cs" />
+    <Compile Include="Login\TipoPermiso.cs" />
+    <Compile Include="Login\Parametros.cs" />
+    <Compile Include="Login\UserSession.cs" />
+    <Compile Include="Login\Usuario.cs" />
     <Compile Include="Historial\SnapshotService.cs" />
     <Compile Include="GestorCMB_UsersDataSet.Designer.cs">
       <AutoGen>True</AutoGen>

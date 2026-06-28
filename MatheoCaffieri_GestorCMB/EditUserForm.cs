@@ -1,7 +1,7 @@
 ﻿using Services.RoleService;
 using Services.LoginService.Logic;
 using DomainModel.Exceptions;
-using DomainModel.Login;
+using Services.Login;
 using Services.Language;
 using Services.Logs;
 using System;

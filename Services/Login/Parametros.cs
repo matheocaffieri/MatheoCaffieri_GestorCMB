@@ -1,6 +1,6 @@
 using System;
 
-namespace DomainModel.Login
+namespace Services.Login
 {
     public class Parametros
     {

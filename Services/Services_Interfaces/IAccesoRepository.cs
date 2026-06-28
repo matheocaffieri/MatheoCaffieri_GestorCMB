@@ -1,4 +1,4 @@
-using DomainModel.Login;
+using Services.Login;
 using System.Collections.Generic;
 
 namespace Services.Services_Interfaces

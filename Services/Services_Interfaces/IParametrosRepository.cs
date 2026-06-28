@@ -1,4 +1,4 @@
-using DomainModel.Login;
+using Services.Login;
 
 namespace Services.Services_Interfaces
 {

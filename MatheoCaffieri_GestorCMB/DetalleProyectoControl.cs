@@ -535,7 +535,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonModificar_Click(object sender, EventArgs e)
         {
-            if (!PermisosUI.Require(DomainModel.Login.TipoPermiso.GESTIONAR_PROYECTOS))
+            if (!PermisosUI.Require(Services.Login.TipoPermiso.GESTIONAR_PROYECTOS))
                 return;
 
             using (var frm = new EditProyectoForm(_proyecto))
@@ -558,7 +558,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonGenerarInforme_Click(object sender, EventArgs e)
         {
-            if (!PermisosUI.Require(DomainModel.Login.TipoPermiso.GESTIONAR_INFORMES_COMPRA))
+            if (!PermisosUI.Require(Services.Login.TipoPermiso.GESTIONAR_INFORMES_COMPRA))
                 return;
 
             try

@@ -64,12 +64,6 @@
     <Compile Include="Entities\Inventario.cs" />
     <Compile Include="Entities\Material.cs" />
     <Compile Include="Entities\MaterialFaltante.cs" />
-    <Compile Include="Login\Acceso.cs" />
-    <Compile Include="Login\IPermiso.cs" />
-    <Compile Include="Login\TipoPermiso.cs" />
-    <Compile Include="Login\Parametros.cs" />
-    <Compile Include="Login\UserSession.cs" />
-    <Compile Include="Login\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Proveedor.cs" />
     <Compile Include="Entities\Proyecto.cs" />

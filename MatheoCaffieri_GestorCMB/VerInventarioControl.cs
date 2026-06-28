@@ -329,7 +329,7 @@ namespace MatheoCaffieri_GestorCMB
 
         private void buttonAgregarMaterial_Click(object sender, EventArgs e)
         {
-            if (!PermisosUI.Require(DomainModel.Login.TipoPermiso.GESTIONAR_MATERIALES))
+            if (!PermisosUI.Require(Services.Login.TipoPermiso.GESTIONAR_MATERIALES))
                 return;
 
             using (var form = new AddMaterialesForm())

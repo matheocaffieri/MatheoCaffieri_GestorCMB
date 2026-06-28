@@ -2,7 +2,7 @@
 using System.Configuration;
 using Services.LoginService.DataAccess;
 using DomainModel.Exceptions;
-using DomainModel.Login;
+using Services.Login;
 using System.Collections.Generic;
 using Services.LoginService;
 using Services.RoleService.Logic;
