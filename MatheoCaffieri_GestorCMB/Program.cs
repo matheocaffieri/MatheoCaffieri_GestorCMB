@@ -1,4 +1,5 @@
 ﻿using BL;
+using DAL;
 using Services.RoleService;
 using Services.LoginService.Logic;
 using DomainModel.Exceptions;
@@ -58,8 +59,7 @@ namespace MatheoCaffieri_GestorCMB
 
             try
             {
-                var dbManager = new DatabaseManager();
-                dbManager.InitializeDatabase();
+                new DatabaseService().WarmUp();
             }
             catch (Exception ex)
             {

@@ -67,7 +67,6 @@
     <Compile Include="BL_Interfaces\IProyectoMaterialBL.cs" />
     <Compile Include="BL_Interfaces\IInformeDeCompraBL.cs" />
     <Compile Include="ClienteBL.cs" />
-    <Compile Include="DatabaseManager.cs" />
     <Compile Include="DetalleEmpleadoBL.cs" />
     <Compile Include="DetalleInformeCompraBL.cs" />
     <Compile Include="DetalleMaterialBL.cs" />

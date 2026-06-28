@@ -543,6 +543,10 @@
       <Project>{ad1fcd23-43f5-4a57-ad86-dafb0abf790b}</Project>
       <Name>BL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{c6fff274-a158-484d-bbd3-ff7d9c2ddf44}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DomainModel\DomainModel.csproj">
       <Project>{f44ba8e1-9dd9-4860-907d-c3a82dc7b74e}</Project>
       <Name>DomainModel</Name>
