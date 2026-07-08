@@ -19,29 +19,16 @@ namespace BL
 
             using (var uow = DalFactory.CreateUnitOfWork())
             {
-                var context = uow.Context;
-                // Leemos directo con EF (rápido y seguro) para mostrar
-                var ids = context.Detalle_informe_material_faltante
-                    .Where(d => d.idInformeCompra == idInformeCompra)
-                    .Select(d => d.idMaterialFaltante)
-                    .ToList();
+                var detalleInfRepo = DalFactory.CreateDetalleInformeMaterialFaltanteRepository(uow);
+                var materialFaltanteRepo = DalFactory.CreateMaterialFaltanteRepository(uow);
+
+                var ids = detalleInfRepo.GetByInforme(idInformeCompra)
+                                        .Select(d => d.IdMaterialFaltante)
+                                        .ToList();
 
                 if (ids.Count == 0) return new List<MaterialFaltante>();
 
-                var faltantes = context.Material_faltante
-                    .Where(m => ids.Contains(m.idMaterialFaltante))
-                    .Select(m => new MaterialFaltante
-                    {
-                        IdMaterialFaltante = m.idMaterialFaltante,
-                        DescripcionArticuloFaltante = m.descripcionArticuloFaltante,
-                        TipoMaterialFaltante = m.tipoMaterialFaltante,
-                        TipoUnidadMaterialFaltante = m.tipoUnidadMaterialFaltante,
-                        IdProyecto = m.idProyecto,
-                        CantidadFaltante = m.cantidadFaltante
-                    })
-                    .ToList();
-
-                return faltantes;
+                return materialFaltanteRepo.GetByIds(ids);
             }
         }
     }

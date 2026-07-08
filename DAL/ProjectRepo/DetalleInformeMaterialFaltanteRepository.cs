@@ -107,5 +107,16 @@ namespace DAL.ProjectRepo
                        .Any(x => x.idInformeCompra == idInformeCompra &&
                                  x.idMaterialFaltante == idMaterialFaltante);
         }
+
+        // Borra en bloque los detalles que referencien alguno de estos faltantes
+        // (fetch tracked para que el Commit del UnitOfWork persista el DELETE).
+        public void DeleteByMaterialFaltanteIds(IEnumerable<Guid> ids)
+        {
+            var idList = ids?.ToList() ?? new List<Guid>();
+            if (idList.Count == 0) return;
+
+            var rows = _set.Where(x => idList.Contains(x.idMaterialFaltante)).ToList();
+            _set.RemoveRange(rows);
+        }
     }
 }

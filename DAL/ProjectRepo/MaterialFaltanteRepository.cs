@@ -83,5 +83,45 @@ namespace DAL.ProjectRepo
 
         }
 
+        public List<Guid> GetIdsByProyecto(Guid idProyecto)
+        {
+            return _set.AsNoTracking()
+                       .Where(d => d.idProyecto == idProyecto)
+                       .Select(d => d.idMaterialFaltante)
+                       .ToList();
+        }
+
+        public List<MaterialFaltante> GetByIds(IEnumerable<Guid> ids)
+        {
+            var idList = ids?.ToList() ?? new List<Guid>();
+            if (idList.Count == 0) return new List<MaterialFaltante>();
+
+            return _set.AsNoTracking()
+                       .Where(d => idList.Contains(d.idMaterialFaltante))
+                       .Select(ToDomainExpr)
+                       .ToList();
+        }
+
+        public List<MaterialFaltante> GetByIdsAndProyecto(IEnumerable<Guid> ids, Guid idProyecto)
+        {
+            var idList = ids?.ToList() ?? new List<Guid>();
+            if (idList.Count == 0) return new List<MaterialFaltante>();
+
+            return _set.AsNoTracking()
+                       .Where(d => idList.Contains(d.idMaterialFaltante) && d.idProyecto == idProyecto)
+                       .Select(ToDomainExpr)
+                       .ToList();
+        }
+
+        // Borra en bloque los faltantes indicados (fetch tracked para que el Commit del UnitOfWork persista el DELETE).
+        public void DeleteByIds(IEnumerable<Guid> ids)
+        {
+            var idList = ids?.ToList() ?? new List<Guid>();
+            if (idList.Count == 0) return;
+
+            var rows = _set.Where(d => idList.Contains(d.idMaterialFaltante)).ToList();
+            _set.RemoveRange(rows);
+        }
+
     }
 }

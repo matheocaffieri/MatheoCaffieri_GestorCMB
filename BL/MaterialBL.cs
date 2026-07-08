@@ -125,8 +125,8 @@ namespace BL
 
             // La FK de Detalle_proyecto_material bloquea el delete: avisar con un mensaje claro
             // en vez de dejar que explote el constraint en la DB.
-            bool asociadoAProyecto = _uow.Context.Detalle_proyecto_material
-                .Any(d => d.idMaterial == entity.IdMaterial);
+            IDetalleMaterialesRepository detalleMatRepo = DalFactory.CreateDetalleMaterialesRepository(_uow);
+            bool asociadoAProyecto = detalleMatRepo.ExistsByMaterial(entity.IdMaterial);
             if (asociadoAProyecto)
             {
                 LoggerLogic.Warn($"[MaterialBL] Intento de eliminar material asociado a un proyecto. Id={entity.IdMaterial}");

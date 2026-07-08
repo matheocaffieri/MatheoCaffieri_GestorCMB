@@ -98,5 +98,9 @@ namespace DAL.ProjectRepo
             _set.Remove(row);
             return cantidad;
         }
+
+        // ¿Hay algún detalle de proyecto que use este material? (chequeo de FK previo a borrar el material)
+        public bool ExistsByMaterial(Guid idMaterial)
+            => _set.AsNoTracking().Any(d => d.idMaterial == idMaterial);
     }
 }

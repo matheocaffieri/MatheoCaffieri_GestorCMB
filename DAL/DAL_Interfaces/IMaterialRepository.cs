@@ -10,5 +10,7 @@ namespace DAL.DAL_Interfaces
 {
     public interface IMaterialRepository : IGenericRepository<DomainModel.Material>
     {
+        // Busca el id de un material por descripción/tipo/unidad (match case-insensitive y trim).
+        Guid FindIdByDescripcionTipoUnidad(string descripcion, string tipoMaterial, string tipoUnidad);
     }
 }

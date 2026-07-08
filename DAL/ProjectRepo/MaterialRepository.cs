@@ -109,5 +109,25 @@ namespace DAL.ProjectRepo
                        .Select(ToDomainExpr)
                        .ToList();
         }
+
+        // Busca el id de un material por descripción/tipo/unidad.
+        // Filtra por descripción exacta en SQL (columna discriminante) y afina en memoria
+        // con comparación case-insensitive + trim. Devuelve Guid.Empty si no hay match.
+        public Guid FindIdByDescripcionTipoUnidad(string descripcion, string tipoMaterial, string tipoUnidad)
+        {
+            var descLow = (descripcion ?? "").Trim().ToLowerInvariant();
+            var tipoLow = (tipoMaterial ?? "").Trim().ToLowerInvariant();
+            var unidLow = (tipoUnidad ?? "").Trim().ToLowerInvariant();
+
+            return _set.AsNoTracking()
+                       .Where(m => m.descripcionArticulo == descripcion)
+                       .AsEnumerable()
+                       .Where(m =>
+                           (m.descripcionArticulo ?? "").Trim().ToLowerInvariant() == descLow &&
+                           (m.tipoMaterial        ?? "").Trim().ToLowerInvariant() == tipoLow &&
+                           (m.tipoUnidad          ?? "").Trim().ToLowerInvariant() == unidLow)
+                       .Select(m => m.idMaterial)
+                       .FirstOrDefault();
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace DAL.DAL_Interfaces
     {
         List<DetalleInformeMaterialFaltante> GetByInforme(Guid idInformeCompra);
         bool Exists(Guid idInformeCompra, Guid idMaterialFaltante);
+        void DeleteByMaterialFaltanteIds(IEnumerable<Guid> ids);
     }
 }

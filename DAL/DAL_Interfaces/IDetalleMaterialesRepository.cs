@@ -12,5 +12,6 @@ namespace DAL.DAL_Interfaces
     {
         void AddOrUpdate(Guid idProyecto, Guid idMaterial, int cantidad, double valorGanancia, DateTime fechaIngreso);
         int Delete(Guid idProyecto, Guid idMaterial);
+        bool ExistsByMaterial(Guid idMaterial);
     }
 }

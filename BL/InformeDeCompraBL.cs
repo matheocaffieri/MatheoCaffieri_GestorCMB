@@ -29,14 +29,11 @@ namespace BL
             var informeRepo = DalFactory.CreateInformeDeCompraRepository(uow);
             var detalleRepo = DalFactory.CreateDetalleInformeMaterialFaltanteRepository(uow);
 
+            var materialFaltanteRepo = DalFactory.CreateMaterialFaltanteRepository(uow);
+
             try
             {
-                var db = uow.Context;
-
-                var faltantesIds = db.Material_faltante
-                    .Where(m => m.idProyecto == idProyecto)
-                    .Select(m => m.idMaterialFaltante)
-                    .ToList();
+                var faltantesIds = materialFaltanteRepo.GetIdsByProyecto(idProyecto);
 
                 if (faltantesIds.Count == 0)
                     throw new AppException("err_informe_sin_faltantes");
@@ -190,25 +187,24 @@ namespace BL
 
             uow.Begin();
 
+            var detMatRepo = DalFactory.CreateDetalleMaterialesRepository(uow);
+            var detInfRepo = DalFactory.CreateDetalleInformeMaterialFaltanteRepository(uow);
+            var materialFaltanteRepo = DalFactory.CreateMaterialFaltanteRepository(uow);
+            var materialRepo = DalFactory.CreateMaterialRepository(uow);
+            var informeRepo = DalFactory.CreateInformeDeCompraRepository(uow);
+
             try
             {
-                var db = uow.Context;
-
-                var detMatRepo = DalFactory.CreateDetalleMaterialesRepository(uow);
-
                 // 1) ids de Material_faltante incluidos en el informe
-                var idsFaltantes = db.Detalle_informe_material_faltante
-                    .Where(d => d.idInformeCompra == idInformeCompra)
-                    .Select(d => d.idMaterialFaltante)
+                var idsFaltantes = detInfRepo.GetByInforme(idInformeCompra)
+                    .Select(d => d.IdMaterialFaltante)
                     .ToList();
 
                 if (idsFaltantes.Count == 0)
                     throw new AppException("err_informe_sin_materiales");
 
                 // 2) traer faltantes (solo del proyecto) que están en el informe
-                var faltantes = db.Material_faltante
-                    .Where(m => idsFaltantes.Contains(m.idMaterialFaltante) && m.idProyecto == idProyecto)
-                    .ToList();
+                var faltantes = materialFaltanteRepo.GetByIdsAndProyecto(idsFaltantes, idProyecto);
 
                 if (faltantes.Count == 0)
                     throw new AppException("err_informe_sin_faltantes_proyecto");
@@ -216,65 +212,42 @@ namespace BL
                 // 3) aplicar compra: sumar al detalle del proyecto
                 foreach (var f in faltantes)
                 {
-                    var descLow = (f.descripcionArticuloFaltante ?? "").Trim().ToLowerInvariant();
-                    var tipoLow = (f.tipoMaterialFaltante        ?? "").Trim().ToLowerInvariant();
-                    var unidLow = (f.tipoUnidadMaterialFaltante  ?? "").Trim().ToLowerInvariant();
-
-                    // Traemos candidatos por descripción (la más discriminante) y filtramos en memoria.
-                    var idMaterial = db.Material
-                        .Where(m => m.descripcionArticulo == f.descripcionArticuloFaltante)
-                        .AsEnumerable()
-                        .Where(m =>
-                            (m.descripcionArticulo ?? "").Trim().ToLowerInvariant() == descLow &&
-                            (m.tipoMaterial        ?? "").Trim().ToLowerInvariant() == tipoLow &&
-                            (m.tipoUnidad          ?? "").Trim().ToLowerInvariant() == unidLow)
-                        .Select(m => m.idMaterial)
-                        .FirstOrDefault();
+                    // Match del material por descripción/tipo/unidad (case-insensitive + trim) lo resuelve el repo.
+                    var idMaterial = materialRepo.FindIdByDescripcionTipoUnidad(
+                        f.DescripcionArticuloFaltante, f.TipoMaterialFaltante, f.TipoUnidadMaterialFaltante);
 
                     if (idMaterial == Guid.Empty)
                     {
-                        LoggerLogic.Warn($"[InformeDeCompraBL] Material no encontrado en inventario, se omite. Desc='{f.descripcionArticuloFaltante}'");
+                        LoggerLogic.Warn($"[InformeDeCompraBL] Material no encontrado en inventario, se omite. Desc='{f.DescripcionArticuloFaltante}'");
                         continue;
                     }
 
                     detMatRepo.AddOrUpdate(
                         idProyecto: idProyecto,
                         idMaterial: idMaterial,
-                        cantidad: (int)f.cantidadFaltante,
+                        cantidad: f.CantidadFaltante,
                         valorGanancia: 0,
                         fechaIngreso: DateTime.Today
                     );
                 }
 
-                // 4) guardar snapshot
-                var snapshot = faltantes.Select(f => new MaterialFaltante
-                {
-                    CantidadFaltante               = (int)f.cantidadFaltante,
-                    DescripcionArticuloFaltante    = f.descripcionArticuloFaltante,
-                    TipoMaterialFaltante           = f.tipoMaterialFaltante,
-                    TipoUnidadMaterialFaltante     = f.tipoUnidadMaterialFaltante
-                }).ToList();
-                SnapshotService.Guardar(idInformeCompra, snapshot);
+                // 4) guardar snapshot (los faltantes ya son entidades de dominio)
+                SnapshotService.Guardar(idInformeCompra, faltantes);
 
                 // 5) borrar TODOS los Detalle_informe que referencien estos faltantes
                 //    (puede haber informes viejos pendientes del mismo proyecto apuntando a los mismos IDs)
-                var detInfTodos = db.Detalle_informe_material_faltante
-                    .Where(d => idsFaltantes.Contains(d.idMaterialFaltante))
-                    .ToList();
-                db.Detalle_informe_material_faltante.RemoveRange(detInfTodos);
+                detInfRepo.DeleteByMaterialFaltanteIds(idsFaltantes);
 
                 // 6) marcar el informe actual como finalizado; cancelar los informes viejos huérfanos
-                var todosInformes = db.Informe_compra
-                    .Where(i => i.idProyecto == idProyecto && i.estado == "pendiente")
-                    .ToList();
-                foreach (var inf in todosInformes)
-                    inf.estado = inf.idInformeCompra == idInformeCompra ? "finalizado" : "cancelado";
+                var pendientes = informeRepo.GetByProyecto(idProyecto);
+                foreach (var inf in pendientes)
+                {
+                    inf.Estado = inf.IdInformeCompra == idInformeCompra ? "finalizado" : "cancelado";
+                    informeRepo.Update(inf);
+                }
 
                 // 7) borrar Material_faltante — ahora sin referencias pendientes
-                var mfRows = db.Material_faltante
-                    .Where(m => idsFaltantes.Contains(m.idMaterialFaltante))
-                    .ToList();
-                db.Material_faltante.RemoveRange(mfRows);
+                materialFaltanteRepo.DeleteByIds(idsFaltantes);
 
                 uow.Commit();
 
