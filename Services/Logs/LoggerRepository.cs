@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Diagnostics;   
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -51,6 +52,57 @@ namespace Services.Logs
                 cmd.ExecuteNonQuery();
             }
         }
+
+            // Lectura de los últimos logs de la BD, con filtros opcionales por texto y nivel.
+            // Mantiene el mismo SQL que consumía la UI (TOP + LIKE + Nivel + ORDER BY Fecha DESC).
+            public static List<LogEntry> ReadLogsFromDatabase(string filtroTexto = null, TraceLevel? nivel = null, int top = 500)
+            {
+                var cs = ConfigurationManager.ConnectionStrings["LogsConnection"].ConnectionString;
+                var result = new List<LogEntry>();
+
+                var sql = new StringBuilder();
+                sql.Append($@"
+                    SELECT TOP ({top}) Fecha, Nivel, Mensaje, Excepcion
+                    FROM Log
+                    WHERE 1=1");
+
+                var cmdParams = new List<SqlParameter>();
+
+                if (!string.IsNullOrWhiteSpace(filtroTexto))
+                {
+                    sql.Append(" AND (Mensaje LIKE @q OR Excepcion LIKE @q)");
+                    cmdParams.Add(new SqlParameter("@q", "%" + filtroTexto + "%"));
+                }
+                if (nivel.HasValue)
+                {
+                    sql.Append(" AND Nivel = @nivel");
+                    cmdParams.Add(new SqlParameter("@nivel", nivel.Value.ToString()));
+                }
+
+                sql.Append(" ORDER BY Fecha DESC;");
+
+                using (var cn = new SqlConnection(cs))
+                using (var cmd = new SqlCommand(sql.ToString(), cn))
+                {
+                    if (cmdParams.Count > 0) cmd.Parameters.AddRange(cmdParams.ToArray());
+                    cn.Open();
+                    using (var rd = cmd.ExecuteReader())
+                    {
+                        while (rd.Read())
+                        {
+                            result.Add(new LogEntry
+                            {
+                                Fecha = rd.GetDateTime(0),
+                                Nivel = rd.GetString(1),
+                                Mensaje = rd.IsDBNull(2) ? "" : rd.GetString(2),
+                                Excepcion = rd.IsDBNull(3) ? "" : rd.GetString(3)
+                            });
+                        }
+                    }
+                }
+
+                return result;
+            }
 
             private static string FormatLine(Log log, Exception ex)
             {

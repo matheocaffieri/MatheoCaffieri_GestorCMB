@@ -51,6 +51,12 @@ namespace Services.Logs
             Write(message, TraceLevel.Error, ex);
         }
 
+        // Lectura de logs desde la BD (para pantallas de consulta).
+        public static List<LogEntry> Leer(string filtroTexto = null, TraceLevel? nivel = null, int top = 500)
+        {
+            return LoggerRepository.ReadLogsFromDatabase(filtroTexto, nivel, top);
+        }
+
         // Método común
         private static void Write(string message, TraceLevel level, Exception ex)
         {

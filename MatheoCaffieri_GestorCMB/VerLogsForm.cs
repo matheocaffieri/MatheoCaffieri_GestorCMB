@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -63,59 +62,30 @@ namespace MatheoCaffieri_GestorCMB
             }
         }
 
-        private void CargarLogsDesdeSql(string cs, string filtroTexto = null, TraceLevel? nivel = null, int top = 500)
+        private void CargarLogs(string filtroTexto = null, TraceLevel? nivel = null, int top = 500)
         {
             listView1.BeginUpdate();
             listView1.Items.Clear();
 
-            var sql = new StringBuilder();
-            sql.Append($@"
-        SELECT TOP ({top}) Fecha, Nivel, Mensaje, Excepcion
-        FROM Log
-        WHERE 1=1");
-
-            var cmdParams = new List<SqlParameter>();
-
-            if (!string.IsNullOrWhiteSpace(filtroTexto))
+            foreach (var log in LoggerLogic.Leer(filtroTexto, nivel, top))
             {
-                sql.Append(" AND (Mensaje LIKE @q OR Excepcion LIKE @q)");
-                cmdParams.Add(new SqlParameter("@q", "%" + filtroTexto + "%"));
-            }
-            if (nivel.HasValue)
-            {
-                sql.Append(" AND Nivel = @nivel");
-                cmdParams.Add(new SqlParameter("@nivel", nivel.Value.ToString()));
-            }
-
-            sql.Append(" ORDER BY Fecha DESC;");
-
-            using (var cn = new SqlConnection(cs))
-            using (var cmd = new SqlCommand(sql.ToString(), cn))
-            {
-                if (cmdParams.Count > 0) cmd.Parameters.AddRange(cmdParams.ToArray());
-                cn.Open();
-                using (var rd = cmd.ExecuteReader())
+                var it = new ListViewItem(new[]
                 {
-                    while (rd.Read())
-                    {
-                        var fecha = rd.GetDateTime(0).ToString("yyyy-MM-dd HH:mm:ss");
-                        var nivelStr = rd.GetString(1);
-                        var msg = rd.IsDBNull(2) ? "" : rd.GetString(2);
-                        var ex = rd.IsDBNull(3) ? "" : rd.GetString(3);
-
-                        var it = new ListViewItem(new[] { fecha, nivelStr, msg, ex });
-                        // Colorear por nivel
-                        switch (nivelStr.ToLowerInvariant())
-                        {
-                            case "error": it.ForeColor = Color.Firebrick; break;
-                            case "warning": it.ForeColor = Color.DarkOrange; break;
-                            case "verbose":
-                            case "debug": it.ForeColor = Color.DimGray; break;
-                            default: it.ForeColor = Color.Black; break;
-                        }
-                        listView1.Items.Add(it);
-                    }
+                    log.Fecha.ToString("yyyy-MM-dd HH:mm:ss"),
+                    log.Nivel,
+                    log.Mensaje ?? "",
+                    log.Excepcion ?? ""
+                });
+                // Colorear por nivel
+                switch ((log.Nivel ?? "").ToLowerInvariant())
+                {
+                    case "error": it.ForeColor = Color.Firebrick; break;
+                    case "warning": it.ForeColor = Color.DarkOrange; break;
+                    case "verbose":
+                    case "debug": it.ForeColor = Color.DimGray; break;
+                    default: it.ForeColor = Color.Black; break;
                 }
+                listView1.Items.Add(it);
             }
 
             listView1.EndUpdate();
@@ -209,8 +179,7 @@ namespace MatheoCaffieri_GestorCMB
             try
             {
                 SetupListView();
-                var cs = System.Configuration.ConfigurationManager.ConnectionStrings["LogsConnection"]?.ConnectionString;
-                CargarLogsDesdeSql(cs);
+                CargarLogs();
             }
             catch (Exception ex)
             {

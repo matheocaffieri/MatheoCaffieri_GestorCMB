@@ -88,6 +88,7 @@
     <Compile Include="LoginService\PasswordHasher.cs" />
     <Compile Include="Logs\ILoggerStrategy.cs" />
     <Compile Include="Logs\Log.cs" />
+    <Compile Include="Logs\LogEntry.cs" />
     <Compile Include="Logs\LoggerFactory.cs" />
     <Compile Include="Logs\LoggerLogic.cs" />
     <Compile Include="Logs\LoggerRepository.cs" />
