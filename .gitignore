@@ -32,6 +32,8 @@ bld/
 [Oo]ut/
 [Ll]og/
 [Ll]ogs/
+# Excepcion: Services/Logs es codigo fuente (la capa de logging), no salida de logs.
+!Services/Logs/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
