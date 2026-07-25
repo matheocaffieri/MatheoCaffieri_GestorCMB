@@ -76,7 +76,7 @@ namespace MatheoCaffieri_GestorCMB
             this.BackColor      = Color.White;
             this.DoubleBuffered = true;
 
-            // ── HEADER ────────────────────────────────────────────
+            // ===== Encabezado =====
             var header = new Panel
             {
                 Dock      = DockStyle.Top,
@@ -101,14 +101,14 @@ namespace MatheoCaffieri_GestorCMB
             header.Controls.Add(btnBack);
             header.Controls.Add(lblTitle);
 
-            // ── CONTENT ───────────────────────────────────────────
+            // ===== Contenido =====
             var contentPanel = new Panel
             {
                 Dock      = DockStyle.Fill,
                 BackColor = Color.White,
             };
 
-            // ── SIDEBAR (formulario de alta) ───────────────────────
+            // ===== Panel lateral (formulario de alta) =====
             var sidebar = new Panel
             {
                 Dock      = DockStyle.Left,
@@ -173,7 +173,7 @@ namespace MatheoCaffieri_GestorCMB
             sidebar.Controls.Add(newTxTel);
             sidebar.Controls.Add(newAddBtn);
 
-            // ── DIVIDER ───────────────────────────────────────────
+            // ===== Separador =====
             var divider = new Panel
             {
                 Dock      = DockStyle.Left,
@@ -181,7 +181,7 @@ namespace MatheoCaffieri_GestorCMB
                 BackColor = Color.FromArgb(230, 230, 236),
             };
 
-            // ── RIGHT ─────────────────────────────────────────────
+            // ===== Panel derecho =====
             var rightPanel = new Panel
             {
                 Dock      = DockStyle.Fill,
@@ -300,7 +300,7 @@ namespace MatheoCaffieri_GestorCMB
             buttonSearchClientes = newSearchBtn;
             proveedorLayoutPanel = newGrid;
 
-            // ── ASSEMBLE ──────────────────────────────────────────
+            // ===== Armado final =====
             this.Controls.Add(contentPanel);
             this.Controls.Add(header);
 

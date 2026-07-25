@@ -33,10 +33,10 @@ namespace MatheoCaffieri_GestorCMB
         private Label _lblProyectoNombre, _lblProyectoTitulo, _lblProyectoFecha;
         private Proyecto _proximoProyecto;
 
-        // Rounded nav buttons (replace designer defaults)
+        // Botones de navegación redondeados (reemplazan a los del designer)
         private RoundedButton _btnProyectos, _btnInventario, _btnPersonal, _btnClientes;
 
-        // ── Constructor ────────────────────────────────────────────────────────
+        // ===== Constructor =====
         public HomeControl(MainForm mainForm)
         {
             InitializeComponent();
@@ -59,10 +59,10 @@ namespace MatheoCaffieri_GestorCMB
             this.Load += HomeControl_Load;
         }
 
-        // ── Replace designer square buttons with RoundedButtons ────────────────
+        // ===== Reemplazar los botones del designer por RoundedButton =====
         private void ReemplazarBotones()
         {
-            // Capture positions from designer-created buttons (set from .resx)
+            // Nos guardamos la posición de los botones del designer (viene del .resx)
             Point locProy = butMainProyectos.Location, locInv  = button2.Location,
                   locPers = button3.Location,           locCli  = button4.Location;
             Size  szProy  = butMainProyectos.Size,      szInv   = button2.Size,
@@ -93,7 +93,7 @@ namespace MatheoCaffieri_GestorCMB
             Controls.Add(_btnClientes);
         }
 
-        // ── Layout / scaling ───────────────────────────────────────────────────
+        // ===== Distribucion y escalado =====
         private void WrapContentInPanel()
         {
             _contentPanel = new Panel { Size = new Size(DesignWidth, DesignHeight) };
@@ -201,7 +201,7 @@ namespace MatheoCaffieri_GestorCMB
             }
         }
 
-        // ── Navigation handlers ────────────────────────────────────────────────
+        // ===== Navegacion =====
         private void butMainProyectos_Click(object sender, EventArgs e) =>
             mainForm.addUserControl(new VerProyectosControl(mainForm));
 
@@ -257,7 +257,7 @@ namespace MatheoCaffieri_GestorCMB
             }
         }
 
-        // ── Access control ─────────────────────────────────────────────────────
+        // ===== Control de acceso =====
         private void AplicarAccesosHome()
         {
             if (_btnProyectos == null) return;
@@ -332,7 +332,7 @@ namespace MatheoCaffieri_GestorCMB
             }
         }
 
-        // ── Metrics panel ──────────────────────────────────────────────────────
+        // ===== Panel de metricas =====
         private void CrearPanelMetricas()
         {
             _metricsWrapper = new Panel
@@ -345,7 +345,7 @@ namespace MatheoCaffieri_GestorCMB
 
             var card = new Panel { Dock = DockStyle.Fill, BackColor = Color.White };
 
-            // Rounded border drawn over the card
+            // Borde redondeado dibujado encima de la tarjeta
             card.Paint += (s, ev) =>
             {
                 var p = (Panel)s;
@@ -355,7 +355,7 @@ namespace MatheoCaffieri_GestorCMB
                     ev.Graphics.DrawPath(pen, path);
             };
 
-            // Clip children to the rounded rect
+            // Recortamos los hijos al rectángulo redondeado
             card.Resize += (s, ev) =>
             {
                 var p = (Panel)s;
@@ -560,7 +560,7 @@ namespace MatheoCaffieri_GestorCMB
             }
         }
 
-        // ── Shared drawing helper ──────────────────────────────────────────────
+        // ===== Dibujo compartido =====
         private static GraphicsPath MakeRoundRectPath(Rectangle r, int radius)
         {
             var path = new GraphicsPath();
@@ -572,7 +572,7 @@ namespace MatheoCaffieri_GestorCMB
             return path;
         }
 
-        // ── RoundedButton ──────────────────────────────────────────────────────
+        // ===== RoundedButton =====
         private sealed class RoundedButton : Button
         {
             public Image Icon { get; set; }
@@ -643,7 +643,7 @@ namespace MatheoCaffieri_GestorCMB
                 }
             }
 
-            // Draws the icon tinted to white (preserves alpha channel)
+            // Dibuja el icono teñido de blanco (respeta el canal alpha)
             private static void DrawIconWhite(Graphics g, Image img, Rectangle dest, float alpha)
             {
                 float[][] m = {

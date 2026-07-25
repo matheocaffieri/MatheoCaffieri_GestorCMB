@@ -316,8 +316,8 @@ namespace MatheoCaffieri_GestorCMB
         {
             if (panel1.ClientSize.Width == 0 || panel1.ClientSize.Height == 0) return;
 
-            // Freeze flow panels FIRST — before any size/width changes — so no intermediate
-            // layout runs while items are still at stale widths (which can corrupt AutoScrollPosition).
+            // Congelamos los flow panels ANTES de tocar cualquier tamaño: si no, corre un
+            // layout intermedio con los items todavía en el ancho viejo y se rompe el AutoScrollPosition.
             flowLayoutPanelEmp.SuspendLayout();
             flowLayoutPanelMat.SuspendLayout();
             flowLayoutPanelEmp.AutoScrollPosition = Point.Empty;
@@ -364,7 +364,7 @@ namespace MatheoCaffieri_GestorCMB
             ResizeFlowChildren(flowLayoutPanelEmp, empWidth);
             ResizeFlowChildren(flowLayoutPanelMat, matWidth);
 
-            // Resume with one clean layout pass now that all widths are correct.
+            // Recién ahora, con todos los anchos ya seteados, dejamos que haga un solo layout.
             flowLayoutPanelEmp.ResumeLayout(true);
             flowLayoutPanelMat.ResumeLayout(true);
             flowLayoutPanelEmp.AutoScrollPosition = Point.Empty;
@@ -387,8 +387,8 @@ namespace MatheoCaffieri_GestorCMB
         {
             if (panel == null) return;
 
-            // Use the explicitly passed panelWidth (not panel.ClientSize.Width) to avoid
-            // stale scrollbar state from reducing ClientSize incorrectly before layout runs.
+            // Usamos el panelWidth que llega por parámetro y no panel.ClientSize.Width: si la
+            // scrollbar todavía no se actualizó, el ClientSize viene achicado de más.
             bool willOverflow = panel.AutoScroll && GetFlowHeight(panel) > panel.Height;
             int w = panelWidth - panel.Padding.Left - panel.Padding.Right;
             if (willOverflow)

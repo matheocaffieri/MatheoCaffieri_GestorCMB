@@ -48,7 +48,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
 
         private void BuildCard()
         {
-            // ── Fila 1: nombre ────────────────────────────────────
+            // ===== Fila 1: nombre =====
             _lblNombre = new Label
             {
                 Font      = new Font("Microsoft YaHei UI", 9.5f, FontStyle.Bold),
@@ -59,7 +59,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
                 BackColor = Color.Transparent,
             };
 
-            // ── Fila 2: chip categoría ────────────────────────────
+            // ===== Fila 2: chip categoria =====
             _chip = new Panel
             {
                 Height    = 18,
@@ -87,7 +87,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             };
             _chip.Controls.Add(_lblChipTxt);
 
-            // ── Fila 2: info (proveedor · costo · unidad) ─────────
+            // ===== Fila 2: info (proveedor / costo / unidad) =====
             _lblInfo = new Label
             {
                 Font      = new Font("Microsoft YaHei UI", 8.5f),
@@ -98,7 +98,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
                 BackColor = Color.Transparent,
             };
 
-            // ── Stock panel ───────────────────────────────────────
+            // ===== Panel de stock =====
             _stockPanel = new Panel { Width = 60, BackColor = Color.Transparent };
 
             _btnIncrease = MakeArrowBtn("+");
@@ -120,7 +120,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             _stockPanel.Controls.Add(_lblCantidad);
             _stockPanel.Controls.Add(_btnIncrease);
 
-            // ── Badge "informe pendiente" (oculto por defecto) ────
+            // ===== Badge "informe pendiente" (oculto por defecto) =====
             _badgePendiente = new Panel
             {
                 Height    = 22,
@@ -151,7 +151,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             _badgePendiente.Click += (s, e) => InformePendienteClicked?.Invoke(this, EventArgs.Empty);
             _lblBadgeTxt.Click    += (s, e) => InformePendienteClicked?.Invoke(this, EventArgs.Empty);
 
-            // ── Action panel (edit + delete) ──────────────────────
+            // ===== Panel de acciones (editar + eliminar) =====
             _actionPanel = new Panel { Width = 66, BackColor = Color.Transparent };
 
             _btnEdit = MakeIconBtn("", Color.FromArgb(60, 100, 180));
@@ -287,7 +287,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             _badgePendiente.Invalidate();
         }
 
-        // ── Bind ──────────────────────────────────────────────────
+        // ===== Cargar datos =====
 
         public void Bind(Inventario inv)
         {
@@ -337,7 +337,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             if (_btnDecrease != null) _btnDecrease.Tag = idInventario;
         }
 
-        // ── Botones ───────────────────────────────────────────────
+        // ===== Botones =====
 
         private void BtnIncrease_Click(object sender, EventArgs e)
         {
@@ -406,7 +406,7 @@ namespace MatheoCaffieri_GestorCMB.ItemControls
             }
         }
 
-        // ── Colores por categoría ─────────────────────────────────
+        // ===== Colores por categoria =====
 
         private static readonly Color[] _palette =
         {

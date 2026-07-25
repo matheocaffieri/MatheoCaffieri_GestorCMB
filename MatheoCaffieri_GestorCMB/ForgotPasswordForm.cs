@@ -50,7 +50,7 @@ namespace MatheoCaffieri_GestorCMB
             StartPosition = FormStartPosition.CenterParent;
             ClientSize = new Size(420, 190);
 
-            // ── STEP 1 ──────────────────────────────────────────────────────
+            // ===== Paso 1 =====
             _panelStep1 = new Panel { Location = Point.Empty, Size = ClientSize };
 
             var lblTitle = new Label
@@ -82,7 +82,7 @@ namespace MatheoCaffieri_GestorCMB
             _panelStep1.Controls.AddRange(new Control[] { lblTitle, _txtMail, _btnEnviar });
             Controls.Add(_panelStep1);
 
-            // ── STEP 2 ──────────────────────────────────────────────────────
+            // ===== Paso 2 =====
             _panelStep2 = new Panel { Location = Point.Empty, Size = new Size(420, 340), Visible = false };
 
             _lblInfoMail = new Label

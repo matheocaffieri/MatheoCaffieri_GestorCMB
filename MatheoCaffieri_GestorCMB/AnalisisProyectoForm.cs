@@ -42,7 +42,7 @@ namespace MatheoCaffieri_GestorCMB
             radioAnios.Text   = LanguageService.Current?.T("val_anios")       ?? "Años";
         }
 
-        // ── Load ────────────────────────────────────────────────────────────
+        // ===== Carga =====
 
         private void AnalisisProyectoForm_Load(object sender, EventArgs e)
         {
@@ -60,7 +60,7 @@ namespace MatheoCaffieri_GestorCMB
             radioMeses.Checked = true; // dispara ActualizarGraficos via CheckedChanged
         }
 
-        // ── Filtro helpers ──────────────────────────────────────────────────
+        // ===== Filtros =====
 
         private string Filtro =>
             radioDias.Checked  ? "Días"  :
@@ -86,7 +86,7 @@ namespace MatheoCaffieri_GestorCMB
             }
         }
 
-        // ── Update ──────────────────────────────────────────────────────────
+        // ===== Actualizacion =====
 
         private void ActualizarGraficos()
         {
@@ -124,7 +124,7 @@ namespace MatheoCaffieri_GestorCMB
             BuildCostosChart(allPeriods, matPeriods, empPeriods);
         }
 
-        // ── Chart 1: Análisis de compras (columnas) ─────────────────────────
+        // ===== Grafico 1: Analisis de compras (columnas) =====
 
         private void BuildComprasChart(List<PeriodData> data)
         {
@@ -160,7 +160,7 @@ namespace MatheoCaffieri_GestorCMB
             ca.RecalculateAxesScale();
         }
 
-        // ── Chart 2: Costo del proyecto (línea) ─────────────────────────────
+        // ===== Grafico 2: Costo del proyecto (linea) =====
 
         private void BuildCostosChart(
             List<(DateTime Date, string Label)> periods,
@@ -208,7 +208,7 @@ namespace MatheoCaffieri_GestorCMB
             ca.RecalculateAxesScale();
         }
 
-        // ── Shared chart area styling ────────────────────────────────────────
+        // ===== Estilo comun de los graficos =====
 
         private static void StyleChartArea(ChartArea ca)
         {
@@ -225,7 +225,7 @@ namespace MatheoCaffieri_GestorCMB
             ca.AxisX.LabelStyle.IsEndLabelVisible = true;
         }
 
-        // ── Events ──────────────────────────────────────────────────────────
+        // ===== Eventos =====
 
         private void OnFiltroChanged(object sender, EventArgs e)
         {
@@ -233,7 +233,7 @@ namespace MatheoCaffieri_GestorCMB
                 ActualizarGraficos();
         }
 
-        // ── Helper DTO ──────────────────────────────────────────────────────
+        // ===== DTO interno =====
 
         private class PeriodData
         {

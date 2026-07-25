@@ -62,7 +62,7 @@ namespace MatheoCaffieri_GestorCMB
             this.BackColor      = Color.White;
             this.DoubleBuffered = true;
 
-            // ── HEADER ────────────────────────────────────────────
+            // ===== Encabezado =====
             var header = new Panel
             {
                 Dock      = DockStyle.Top,
@@ -98,7 +98,7 @@ namespace MatheoCaffieri_GestorCMB
                 newInformes.Location    = new Point(newProveedores.Left - newInformes.Width - 8, (p.Height - newInformes.Height) / 2);
             };
 
-            // ── SECTION BAR ───────────────────────────────────────
+            // ===== Barra de seccion =====
             var sectionBar = new Panel
             {
                 Dock      = DockStyle.Top,
@@ -168,7 +168,7 @@ namespace MatheoCaffieri_GestorCMB
                 BackColor = Color.FromArgb(230, 230, 236),
             };
 
-            // ── SCROLL + GRID ─────────────────────────────────────
+            // ===== Scroll + grilla =====
             _scrollArea = new Panel
             {
                 Dock       = DockStyle.Fill,
@@ -203,7 +203,7 @@ namespace MatheoCaffieri_GestorCMB
             buttonVerInformesCompra      = newInformes;
             buttonGestionarProveedores   = newProveedores;
 
-            // ── ASSEMBLE ──────────────────────────────────────────
+            // ===== Armado final =====
             this.Controls.Add(_scrollArea);
             this.Controls.Add(sepH);
             this.Controls.Add(sectionBar);

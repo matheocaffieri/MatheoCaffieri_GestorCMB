@@ -30,7 +30,7 @@ namespace MatheoCaffieri_GestorCMB
         private readonly UsuarioPermisosService    _userPermsSrv;
         private readonly AccesoService             _accesoSrv;
 
-        // ── estado UI ──────────────────────────────────────────────
+        // ===== Estado UI =====
         private Guid _rolSeleccionado = Guid.Empty;
         private FlowLayoutPanel _panelUsuariosLista;
         private FlowLayoutPanel _panelRolesBotones;
@@ -42,23 +42,23 @@ namespace MatheoCaffieri_GestorCMB
         private readonly Dictionary<TipoPermiso, ToggleSwitch> _toggles =
             new Dictionary<TipoPermiso, ToggleSwitch>();
 
-        // ── panel izquierdo scrollable ─────────────────────────────
+        // ===== panel izquierdo scrollable =====
         private Panel _leftScrollArea;
         private Panel _leftSepH;
         private Panel _leftFormCrear;
         private bool  _relayouting;
 
-        // ── lista de usuarios con colapso ──────────────────────────
+        // ===== lista de usuarios con colapso =====
         private const int USUARIOS_PREVIEW = 4;
         private bool _usersExpanded = false;
         private List<Usuario> _cachedUsuarios = new List<Usuario>();
 
-        // ── sección roles dinámica ─────────────────────────────────
+        // ===== seccion roles dinamica =====
         private Panel _rolesWrapper;
         private Panel _rolesScrollInner;
         private Panel _secRoles;
 
-        // ── definición de módulos ──────────────────────────────────
+        // ===== definicion de modulos =====
         // NombreKey es la clave de Resources.resx; se traduce en MakeModuloRow.
         private class Modulo
         {
@@ -157,7 +157,7 @@ namespace MatheoCaffieri_GestorCMB
             this.Controls.Add(root);
         }
 
-        // ── LEFT ──────────────────────────────────────────────────
+        // ===== Panel izquierdo =====
 
         private Panel BuildPanelLeft()
         {
@@ -272,7 +272,7 @@ namespace MatheoCaffieri_GestorCMB
             return form;
         }
 
-        // ── RIGHT ─────────────────────────────────────────────────
+        // ===== Panel derecho =====
 
         private Panel BuildPanelRight()
         {
