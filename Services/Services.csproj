@@ -80,6 +80,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Ayuda\AyudaService.cs" />
     <Compile Include="Language\ILanguageRepository.cs" />
     <Compile Include="Language\ILanguageService.cs" />
     <Compile Include="Language\Language.cs" />
