@@ -75,6 +75,9 @@
             resources.ApplyResources(this.buttonExit, "buttonExit");
             this.buttonExit.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             this.buttonExit.Name = "buttonExit";
+            // Sin TabStop: son botones de "barra de título"; si reciben foco de teclado,
+            // un Enter suelto cierra/minimiza la app sin querer.
+            this.buttonExit.TabStop = false;
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             //
@@ -84,6 +87,7 @@
             this.buttonMaximize.Location = new System.Drawing.Point(1012, 5);
             this.buttonMaximize.Size = new System.Drawing.Size(28, 22);
             this.buttonMaximize.Name = "buttonMaximize";
+            this.buttonMaximize.TabStop = false;
             this.buttonMaximize.Text = "□";
             this.buttonMaximize.UseVisualStyleBackColor = true;
             this.buttonMaximize.Click += new System.EventHandler(this.buttonMaximize_Click);
@@ -94,6 +98,7 @@
             this.buttonMinimize.Location = new System.Drawing.Point(982, 5);
             this.buttonMinimize.Size = new System.Drawing.Size(28, 22);
             this.buttonMinimize.Name = "buttonMinimize";
+            this.buttonMinimize.TabStop = false;
             this.buttonMinimize.Text = "─";
             this.buttonMinimize.UseVisualStyleBackColor = true;
             this.buttonMinimize.Click += new System.EventHandler(this.buttonMinimize_Click);
