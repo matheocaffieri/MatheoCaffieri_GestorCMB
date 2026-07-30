@@ -1,4 +1,4 @@
-﻿using DAL.FactoryDAL;
+using DAL.FactoryDAL;
 using DomainModel;
 using DAL.DAL_Interfaces;
 using System;
@@ -110,22 +110,20 @@ namespace DAL.ProjectRepo
                        .ToList();
         }
 
-        // Busca el id de un material por descripción/tipo/unidad.
-        // Filtra por descripción exacta en SQL (columna discriminante) y afina en memoria
-        // con comparación case-insensitive + trim. Devuelve Guid.Empty si no hay match.
         public Guid FindIdByDescripcionTipoUnidad(string descripcion, string tipoMaterial, string tipoUnidad)
         {
             var descLow = (descripcion ?? "").Trim().ToLowerInvariant();
             var tipoLow = (tipoMaterial ?? "").Trim().ToLowerInvariant();
             var unidLow = (tipoUnidad ?? "").Trim().ToLowerInvariant();
 
+            // Prefiltro por igualdad exacta en SQL; el match final (trim + case-insensitive)
+            // se resuelve en memoria porque SQL no colapsa espacios/mayúsculas igual que acá.
             return _set.AsNoTracking()
                        .Where(m => m.descripcionArticulo == descripcion)
                        .AsEnumerable()
-                       .Where(m =>
-                           (m.descripcionArticulo ?? "").Trim().ToLowerInvariant() == descLow &&
-                           (m.tipoMaterial        ?? "").Trim().ToLowerInvariant() == tipoLow &&
-                           (m.tipoUnidad          ?? "").Trim().ToLowerInvariant() == unidLow)
+                       .Where(m => (m.descripcionArticulo ?? "").Trim().ToLowerInvariant() == descLow
+                                && (m.tipoMaterial ?? "").Trim().ToLowerInvariant() == tipoLow
+                                && (m.tipoUnidad ?? "").Trim().ToLowerInvariant() == unidLow)
                        .Select(m => m.idMaterial)
                        .FirstOrDefault();
         }

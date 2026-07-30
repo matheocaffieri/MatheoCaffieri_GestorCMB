@@ -1,4 +1,4 @@
-﻿using Services.Language;
+using Services.Language;
 using Services.Logs;
 using Services.RoleService;
 using System;
@@ -22,7 +22,9 @@ namespace MatheoCaffieri_GestorCMB
 
         private const string REQUIRED = "VER_LOGS";
 
-
+        // Se pone en true al terminar el Load. Evita que los eventos de los
+        // filtros disparen consultas antes de que el ListView esté armado.
+        private bool _listo = false;
 
         public Point mouseLocation;
         public VerLogsForm()
@@ -45,20 +47,64 @@ namespace MatheoCaffieri_GestorCMB
 
         private void AplicarTraducciones()
         {
-            buttonArchivo.Text = LanguageService.Current?.T("btn_ver_archivo") ?? buttonArchivo.Text;
+            var t = LanguageService.Current;
+
+            buttonArchivo.Text = t?.T("btn_ver_archivo") ?? buttonArchivo.Text;
+            labelBuscar.Text = t?.T("lbl_buscar") ?? labelBuscar.Text;
+            labelNivel.Text = t?.T("lbl_nivel") ?? labelNivel.Text;
+            buttonBuscar.Text = t?.T("btn_buscar") ?? buttonBuscar.Text;
+
+            // Poblar el combo de niveles. El orden es fijo: el índice se mapea a
+            // TraceLevel en NivelSeleccionado(), así la traducción no afecta el filtro.
+            comboNivel.Items.Clear();
+            comboNivel.Items.Add(t?.T("cbo_nivel_todos") ?? "Todos"); // 0 -> null (todos)
+            comboNivel.Items.Add("Info");                             // 1 -> Info
+            comboNivel.Items.Add("Warning");                          // 2 -> Warning
+            comboNivel.Items.Add("Error");                            // 3 -> Error
+            comboNivel.SelectedIndex = 0;
         }
 
         private void SetupListView()
         {
+            var t = LanguageService.Current;
+
             listView1.View = View.Details;
             listView1.FullRowSelect = true;
             listView1.GridLines = true;
             if (listView1.Columns.Count == 0)
             {
-                listView1.Columns.Add("Fecha", 160);
-                listView1.Columns.Add("Nivel", 90);
-                listView1.Columns.Add("Mensaje", 500);
-                listView1.Columns.Add("Excepción", 300);
+                listView1.Columns.Add(t?.T("hdr_log_fecha") ?? "Fecha", 160);
+                listView1.Columns.Add(t?.T("hdr_log_nivel") ?? "Nivel", 90);
+                listView1.Columns.Add(t?.T("hdr_log_mensaje") ?? "Mensaje", 500);
+                listView1.Columns.Add(t?.T("hdr_log_excepcion") ?? "Excepción", 300);
+            }
+        }
+
+        // Traduce el índice seleccionado del combo a un TraceLevel? (null = todos).
+        private TraceLevel? NivelSeleccionado()
+        {
+            switch (comboNivel.SelectedIndex)
+            {
+                case 1: return TraceLevel.Info;
+                case 2: return TraceLevel.Warning;
+                case 3: return TraceLevel.Error;
+                default: return null; // 0 o sin selección => todos
+            }
+        }
+
+        // Relee los logs aplicando el texto buscado y el nivel elegido.
+        private void AplicarFiltros()
+        {
+            if (!_listo) return;
+
+            try
+            {
+                var texto = string.IsNullOrWhiteSpace(textBoxBuscar.Text) ? null : textBoxBuscar.Text.Trim();
+                CargarLogs(texto, NivelSeleccionado());
+            }
+            catch (Exception ex)
+            {
+                LoggerLogic.Error("[VerLogsForm] Error aplicando filtros de logs.", ex);
             }
         }
 
@@ -180,11 +226,31 @@ namespace MatheoCaffieri_GestorCMB
             {
                 SetupListView();
                 CargarLogs();
+                _listo = true;
             }
             catch (Exception ex)
             {
                 LoggerLogic.Error("[VerLogsForm] Error cargando logs desde SQL.", ex);
             }
+        }
+
+        private void buttonBuscar_Click(object sender, EventArgs e)
+        {
+            AplicarFiltros();
+        }
+
+        private void textBoxBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // evita el "ding" del sistema
+                AplicarFiltros();
+            }
+        }
+
+        private void comboNivel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AplicarFiltros();
         }
     }
 }

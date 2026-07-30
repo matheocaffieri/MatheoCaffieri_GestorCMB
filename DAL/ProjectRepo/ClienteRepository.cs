@@ -1,4 +1,4 @@
-﻿using DAL.FactoryDAL;
+using DAL.FactoryDAL;
 using DomainModel;
 using DAL.DAL_Interfaces;
 using System;

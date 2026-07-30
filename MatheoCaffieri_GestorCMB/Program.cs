@@ -1,5 +1,4 @@
-﻿using BL;
-using DAL;
+using BL;
 using Services.RoleService;
 using Services.LoginService.Logic;
 using DomainModel.Exceptions;
@@ -59,7 +58,7 @@ namespace MatheoCaffieri_GestorCMB
 
             try
             {
-                new DatabaseService().WarmUp();
+                new SistemaBL().WarmUp();
             }
             catch (Exception ex)
             {
@@ -69,10 +68,39 @@ namespace MatheoCaffieri_GestorCMB
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            VerificarIntegridadAlIniciar();
+
             var rolesService = AccessServicesFactory.CreateRolesService(cs);
             var usuarioService = new UsuarioService(cs);
 
             Application.Run(new LoginForm());
+        }
+
+        private static void VerificarIntegridadAlIniciar()
+        {
+            try
+            {
+                // Primer arranque: siembra la línea base. Arranques siguientes: verifica.
+                var anomalias = new BL.IntegridadBL().VerificarOInicializar();
+                if (anomalias.Count == 0)
+                    return;
+
+                var resumen = string.Join(", ",
+                    anomalias.GroupBy(a => a.Tabla).Select(g => $"{g.Key} ({g.Count()})"));
+
+                LoggerLogic.Error($"[Integridad] Al iniciar se detectaron {anomalias.Count} inconsistencias: {resumen}");
+
+                MessageBox.Show(
+                    string.Format(
+                        LanguageService.Current?.T("err_integridad_detectada_fmt") ?? "Se detectaron {0} inconsistencias de integridad:",
+                        anomalias.Count) + "\n\n" + resumen,
+                    LanguageService.Current?.T("cap_integridad") ?? "Integridad de datos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                LoggerLogic.Error("[Integridad] Error verificando integridad al iniciar.", ex);
+            }
         }
 
         private static void HandleFatalException(Exception ex)

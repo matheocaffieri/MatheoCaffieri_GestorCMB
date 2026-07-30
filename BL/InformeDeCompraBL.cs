@@ -3,7 +3,6 @@ using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;
 using DomainModel.Exceptions;
-using Services.Historial;
 using Services.Logs;
 using System;
 using System.Collections.Generic;
@@ -192,6 +191,7 @@ namespace BL
             var materialFaltanteRepo = DalFactory.CreateMaterialFaltanteRepository(uow);
             var materialRepo = DalFactory.CreateMaterialRepository(uow);
             var informeRepo = DalFactory.CreateInformeDeCompraRepository(uow);
+            var snapshotRepo = DalFactory.CreateInformeSnapshotFaltanteRepository(uow);
 
             try
             {
@@ -231,8 +231,8 @@ namespace BL
                     );
                 }
 
-                // 4) guardar snapshot (los faltantes ya son entidades de dominio)
-                SnapshotService.Guardar(idInformeCompra, faltantes);
+                // 4) guardar snapshot (mismo uow: entra en la transacción del Commit)
+                snapshotRepo.Guardar(idInformeCompra, faltantes);
 
                 // 5) borrar TODOS los Detalle_informe que referencien estos faltantes
                 //    (puede haber informes viejos pendientes del mismo proyecto apuntando a los mismos IDs)

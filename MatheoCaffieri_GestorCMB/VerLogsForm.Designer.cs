@@ -1,4 +1,4 @@
-﻿namespace MatheoCaffieri_GestorCMB
+namespace MatheoCaffieri_GestorCMB
 {
     partial class VerLogsForm
     {
@@ -33,6 +33,11 @@
             this.buttonExit = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.buttonArchivo = new System.Windows.Forms.Button();
+            this.labelBuscar = new System.Windows.Forms.Label();
+            this.textBoxBuscar = new System.Windows.Forms.TextBox();
+            this.buttonBuscar = new System.Windows.Forms.Button();
+            this.labelNivel = new System.Windows.Forms.Label();
+            this.comboNivel = new System.Windows.Forms.ComboBox();
             this.FormPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -92,13 +97,64 @@
             this.buttonArchivo.Text = "Ver archivo";
             this.buttonArchivo.UseVisualStyleBackColor = true;
             this.buttonArchivo.Click += new System.EventHandler(this.buttonArchivo_Click);
-            // 
+            //
+            // labelBuscar
+            //
+            this.labelBuscar.AutoSize = true;
+            this.labelBuscar.Location = new System.Drawing.Point(35, 34);
+            this.labelBuscar.Name = "labelBuscar";
+            this.labelBuscar.Size = new System.Drawing.Size(44, 13);
+            this.labelBuscar.TabIndex = 50;
+            this.labelBuscar.Text = "Buscar:";
+            //
+            // textBoxBuscar
+            //
+            this.textBoxBuscar.Location = new System.Drawing.Point(84, 31);
+            this.textBoxBuscar.Name = "textBoxBuscar";
+            this.textBoxBuscar.Size = new System.Drawing.Size(175, 20);
+            this.textBoxBuscar.TabIndex = 51;
+            this.textBoxBuscar.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxBuscar_KeyDown);
+            //
+            // buttonBuscar
+            //
+            this.buttonBuscar.Location = new System.Drawing.Point(265, 29);
+            this.buttonBuscar.Name = "buttonBuscar";
+            this.buttonBuscar.Size = new System.Drawing.Size(62, 23);
+            this.buttonBuscar.TabIndex = 52;
+            this.buttonBuscar.Text = "Buscar";
+            this.buttonBuscar.UseVisualStyleBackColor = true;
+            this.buttonBuscar.Click += new System.EventHandler(this.buttonBuscar_Click);
+            //
+            // labelNivel
+            //
+            this.labelNivel.AutoSize = true;
+            this.labelNivel.Location = new System.Drawing.Point(345, 34);
+            this.labelNivel.Name = "labelNivel";
+            this.labelNivel.Size = new System.Drawing.Size(36, 13);
+            this.labelNivel.TabIndex = 53;
+            this.labelNivel.Text = "Nivel:";
+            //
+            // comboNivel
+            //
+            this.comboNivel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboNivel.FormattingEnabled = true;
+            this.comboNivel.Location = new System.Drawing.Point(388, 30);
+            this.comboNivel.Name = "comboNivel";
+            this.comboNivel.Size = new System.Drawing.Size(121, 21);
+            this.comboNivel.TabIndex = 54;
+            this.comboNivel.SelectedIndexChanged += new System.EventHandler(this.comboNivel_SelectedIndexChanged);
+            //
             // VerLogsForm
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(620, 405);
+            this.Controls.Add(this.comboNivel);
+            this.Controls.Add(this.labelNivel);
+            this.Controls.Add(this.buttonBuscar);
+            this.Controls.Add(this.textBoxBuscar);
+            this.Controls.Add(this.labelBuscar);
             this.Controls.Add(this.buttonArchivo);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.FormPanel);
@@ -119,5 +175,10 @@
         private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Button buttonArchivo;
+        private System.Windows.Forms.Label labelBuscar;
+        private System.Windows.Forms.TextBox textBoxBuscar;
+        private System.Windows.Forms.Button buttonBuscar;
+        private System.Windows.Forms.Label labelNivel;
+        private System.Windows.Forms.ComboBox comboNivel;
     }
 }

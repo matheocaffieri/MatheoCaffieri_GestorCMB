@@ -74,19 +74,16 @@
     <Compile Include="Login\Parametros.cs" />
     <Compile Include="Login\UserSession.cs" />
     <Compile Include="Login\Usuario.cs" />
-    <Compile Include="Historial\SnapshotService.cs" />
-    <Compile Include="GestorCMB_UsersDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Ayuda\AyudaService.cs" />
     <Compile Include="Language\ILanguageRepository.cs" />
     <Compile Include="Language\ILanguageService.cs" />
     <Compile Include="Language\Language.cs" />
     <Compile Include="Language\LanguageService.cs" />
     <Compile Include="LoginService\LoginResult.cs" />
     <Compile Include="LoginService\PasswordHasher.cs" />
+    <Compile Include="Ayuda\AyudaService.cs" />
+    <Compile Include="Backup\BackupDb.cs" />
+    <Compile Include="Backup\BackupResult.cs" />
+    <Compile Include="Backup\BackupService.cs" />
     <Compile Include="Logs\ILoggerStrategy.cs" />
     <Compile Include="Logs\Log.cs" />
     <Compile Include="Logs\LogEntry.cs" />
@@ -135,17 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="GestorCMB_UsersDataSet.xsc">
-      <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="GestorCMB_UsersDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>GestorCMB_UsersDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="GestorCMB_UsersDataSet.xss">
-      <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -71,6 +71,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackupForm.Designer.cs" />
+    <Compile Include="BackupForm.cs" />
     <Compile Include="AccesosForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,11 +168,6 @@
     </Compile>
     <Compile Include="GestionUsuariosControl.Designer.cs">
       <DependentUpon>GestionUsuariosControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GestorCMB_UsersDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="HistorialInformesControl.cs">
       <SubType>UserControl</SubType>
@@ -340,6 +337,9 @@
     <Compile Include="VerProyectosControl.Designer.cs">
       <DependentUpon>VerProyectosControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="BackupForm.resx">
+      <DependentUpon>BackupForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AccesosForm.en-US.resx">
       <DependentUpon>AccesosForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -513,17 +513,6 @@
     <EmbeddedResource Include="VerProyectosControl.resx">
       <DependentUpon>VerProyectosControl.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="GestorCMB_UsersDataSet.xsc">
-      <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="GestorCMB_UsersDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>GestorCMB_UsersDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="GestorCMB_UsersDataSet.xss">
-      <DependentUpon>GestorCMB_UsersDataSet.xsd</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

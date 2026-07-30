@@ -1,4 +1,4 @@
-﻿using DAL;
+using DAL;
 using DAL.FactoryDAL;
 using DAL.ProjectRepo;
 using DomainModel;

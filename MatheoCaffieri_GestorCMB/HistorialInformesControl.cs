@@ -1,7 +1,6 @@
 using BL;
 using DomainModel;
 using MatheoCaffieri_GestorCMB.ItemControls;
-using Services.Historial;
 using Services.Language;
 using Services.Logs;
 using System;
@@ -229,7 +228,7 @@ namespace MatheoCaffieri_GestorCMB
                 if (inf.Estado == "cancelado")
                     faltantes = detInfBL.GetMaterialesFaltantesDelInforme(inf.IdInformeCompra);
                 else if (inf.Estado == "finalizado")
-                    faltantes = SnapshotService.Leer(inf.IdInformeCompra);
+                    faltantes = detInfBL.GetSnapshotFaltantesDelInforme(inf.IdInformeCompra);
 
                 var item = new HistorialInformeItemControl();
                 item.Bind(

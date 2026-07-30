@@ -952,4 +952,85 @@ ID: {0}</value>
   <data name="val_telefono_requerido" xml:space="preserve">
     <value>The phone number is required.</value>
   </data>
+  <data name="btn_backup" xml:space="preserve">
+    <value>Generate backup</value>
+  </data>
+  <data name="btn_backup_generar" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="btn_cerrar" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="btn_examinar" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="btn_recalcular_dv" xml:space="preserve">
+    <value>Rebuild baseline</value>
+  </data>
+  <data name="btn_verificar_integridad" xml:space="preserve">
+    <value>Verify integrity</value>
+  </data>
+  <data name="cap_integridad" xml:space="preserve">
+    <value>Data integrity</value>
+  </data>
+  <data name="cbo_nivel_todos" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="err_backup_fmt" xml:space="preserve">
+    <value>Error backing up {0}: {1}</value>
+  </data>
+  <data name="err_backup_generico" xml:space="preserve">
+    <value>The backup could not be generated.</value>
+  </data>
+  <data name="err_integridad_detectada_fmt" xml:space="preserve">
+    <value>Detected {0} integrity inconsistencies:</value>
+  </data>
+  <data name="err_integridad_generico" xml:space="preserve">
+    <value>Integrity check failed.</value>
+  </data>
+  <data name="hdr_log_excepcion" xml:space="preserve">
+    <value>Exception</value>
+  </data>
+  <data name="hdr_log_fecha" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="hdr_log_mensaje" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="hdr_log_nivel" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="lbl_backup_destino" xml:space="preserve">
+    <value>Destination folder:</value>
+  </data>
+  <data name="lbl_backup_seleccione" xml:space="preserve">
+    <value>Select the databases to back up:</value>
+  </data>
+  <data name="lbl_backup_titulo" xml:space="preserve">
+    <value>Database backup</value>
+  </data>
+  <data name="lbl_buscar" xml:space="preserve">
+    <value>Search:</value>
+  </data>
+  <data name="lbl_nivel" xml:space="preserve">
+    <value>Level:</value>
+  </data>
+  <data name="msg_backup_completado_fmt" xml:space="preserve">
+    <value>Backup finished: {0} of {1} databases.</value>
+  </data>
+  <data name="msg_integridad_ok" xml:space="preserve">
+    <value>Integrity OK: no tampering detected.</value>
+  </data>
+  <data name="msg_recalcular_dv_confirm" xml:space="preserve">
+    <value>This will rebuild the digit baseline from the current data. Do this only if the external changes are legitimate. Continue?</value>
+  </data>
+  <data name="msg_recalcular_dv_ok" xml:space="preserve">
+    <value>Baseline rebuilt.</value>
+  </data>
+  <data name="val_backup_sin_destino" xml:space="preserve">
+    <value>Choose a destination folder.</value>
+  </data>
+  <data name="val_backup_sin_seleccion" xml:space="preserve">
+    <value>Select at least one database.</value>
+  </data>
 </root>

@@ -52,6 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BL_Interfaces\IIntegridadBL.cs" />
+    <Compile Include="BL_Interfaces\ISistemaBL.cs" />
+    <Compile Include="IntegridadBL.cs" />
+    <Compile Include="SistemaBL.cs" />
     <Compile Include="BL_Interfaces\IClienteBL.cs" />
     <Compile Include="BL_Interfaces\IEmpleadoBL.cs" />
     <Compile Include="BL_Interfaces\IMaterialBL.cs" />

@@ -1,4 +1,4 @@
-﻿using DAL.FactoryDAL;
+using DAL.FactoryDAL;
 using DomainModel;
 using DomainModel.Exceptions;
 using System;
@@ -29,6 +29,16 @@ namespace BL
                 if (ids.Count == 0) return new List<MaterialFaltante>();
 
                 return materialFaltanteRepo.GetByIds(ids);
+            }
+        }
+
+        public List<MaterialFaltante> GetSnapshotFaltantesDelInforme(Guid idInformeCompra)
+        {
+            if (idInformeCompra == Guid.Empty) throw new AppException("err_detalle_informe_id_required");
+
+            using (var uow = DalFactory.CreateUnitOfWork())
+            {
+                return DalFactory.CreateInformeSnapshotFaltanteRepository(uow).Leer(idInformeCompra);
             }
         }
     }

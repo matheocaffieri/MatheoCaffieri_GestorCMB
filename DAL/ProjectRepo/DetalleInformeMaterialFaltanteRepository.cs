@@ -1,4 +1,4 @@
-﻿using DAL.FactoryDAL;
+using DAL.FactoryDAL;
 using DomainModel;
 using System;
 using System.Collections.Generic;

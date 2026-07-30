@@ -29,6 +29,9 @@ namespace MatheoCaffieri_GestorCMB
             this.labelPorcentUtilidad = new System.Windows.Forms.Label();
             this.buttonGuardar = new System.Windows.Forms.Button();
             this.labelStatus = new System.Windows.Forms.Label();
+            this.buttonBackup = new System.Windows.Forms.Button();
+            this.buttonVerificarIntegridad = new System.Windows.Forms.Button();
+            this.buttonRecalcularDV = new System.Windows.Forms.Button();
             this.groupBoxParametros.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numMargenEmpleados)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMargenMateriales)).BeginInit();
@@ -164,6 +167,42 @@ namespace MatheoCaffieri_GestorCMB
             this.labelStatus.Text = "";
             this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
+            // buttonBackup
+            //
+            this.buttonBackup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonBackup.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.buttonBackup.Location = new System.Drawing.Point(30, 340);
+            this.buttonBackup.Name = "buttonBackup";
+            this.buttonBackup.Size = new System.Drawing.Size(220, 32);
+            this.buttonBackup.TabIndex = 12;
+            this.buttonBackup.Text = "Generar copia de seguridad";
+            this.buttonBackup.UseVisualStyleBackColor = true;
+            this.buttonBackup.Click += new System.EventHandler(this.buttonBackup_Click);
+            //
+            // buttonVerificarIntegridad
+            //
+            this.buttonVerificarIntegridad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonVerificarIntegridad.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.buttonVerificarIntegridad.Location = new System.Drawing.Point(260, 340);
+            this.buttonVerificarIntegridad.Name = "buttonVerificarIntegridad";
+            this.buttonVerificarIntegridad.Size = new System.Drawing.Size(200, 32);
+            this.buttonVerificarIntegridad.TabIndex = 13;
+            this.buttonVerificarIntegridad.Text = "Verificar integridad";
+            this.buttonVerificarIntegridad.UseVisualStyleBackColor = true;
+            this.buttonVerificarIntegridad.Click += new System.EventHandler(this.buttonVerificarIntegridad_Click);
+            //
+            // buttonRecalcularDV
+            //
+            this.buttonRecalcularDV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonRecalcularDV.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.buttonRecalcularDV.Location = new System.Drawing.Point(470, 340);
+            this.buttonRecalcularDV.Name = "buttonRecalcularDV";
+            this.buttonRecalcularDV.Size = new System.Drawing.Size(200, 32);
+            this.buttonRecalcularDV.TabIndex = 14;
+            this.buttonRecalcularDV.Text = "Recalcular línea base";
+            this.buttonRecalcularDV.UseVisualStyleBackColor = true;
+            this.buttonRecalcularDV.Click += new System.EventHandler(this.buttonRecalcularDV_Click);
+            //
             // ConfigurarParametrosControl
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -172,6 +211,9 @@ namespace MatheoCaffieri_GestorCMB
             this.Controls.Add(this.groupBoxParametros);
             this.Controls.Add(this.buttonGuardar);
             this.Controls.Add(this.labelStatus);
+            this.Controls.Add(this.buttonBackup);
+            this.Controls.Add(this.buttonVerificarIntegridad);
+            this.Controls.Add(this.buttonRecalcularDV);
             this.Name = "ConfigurarParametrosControl";
             this.Size = new System.Drawing.Size(700, 400);
             this.groupBoxParametros.ResumeLayout(false);
@@ -196,5 +238,8 @@ namespace MatheoCaffieri_GestorCMB
         private System.Windows.Forms.Label labelPorcentUtilidad;
         private System.Windows.Forms.Button buttonGuardar;
         private System.Windows.Forms.Label labelStatus;
+        private System.Windows.Forms.Button buttonBackup;
+        private System.Windows.Forms.Button buttonVerificarIntegridad;
+        private System.Windows.Forms.Button buttonRecalcularDV;
     }
 }
