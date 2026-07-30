@@ -45,6 +45,7 @@ namespace MatheoCaffieri_GestorCMB
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Application.AddMessageFilter(new AyudaMessageFilter());
 
             var cs = ConfigurationManager.ConnectionStrings["MatheoCaffieri_GestorCMB.Properties.Settings.ConnUsuarios"]?.ConnectionString;
             if (string.IsNullOrWhiteSpace(cs))

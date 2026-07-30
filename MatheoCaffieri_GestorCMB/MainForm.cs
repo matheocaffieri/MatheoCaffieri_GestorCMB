@@ -254,6 +254,15 @@ namespace MatheoCaffieri_GestorCMB
             userControl.BringToFront();
         }
 
+        // Para la ayuda contextual: F1 necesita saber qué pantalla está viendo
+        // el usuario, y acá el "form activo" siempre es MainForm.
+        public string NombrePantallaActual()
+        {
+            return MainPanel.Controls.Count > 0
+                ? MainPanel.Controls[0].GetType().Name
+                : null;
+        }
+
         private void verProyectosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Require(TipoPermiso.VER_PROYECTOS.ToString()))

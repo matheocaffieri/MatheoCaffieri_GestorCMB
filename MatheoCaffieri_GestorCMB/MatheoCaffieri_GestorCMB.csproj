@@ -303,6 +303,7 @@
     <Compile Include="HomeControl.Designer.cs">
       <DependentUpon>HomeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="AyudaMessageFilter.cs" />
     <Compile Include="PermisosUI.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Validaciones.cs" />
