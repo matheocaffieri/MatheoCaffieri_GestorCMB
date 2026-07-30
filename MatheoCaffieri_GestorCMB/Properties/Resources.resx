@@ -1120,4 +1120,13 @@ ID: {0}</value>
   <data name="val_backup_sin_seleccion" xml:space="preserve">
     <value>Seleccioná al menos una base.</value>
   </data>
+  <data name="mnu_ayuda" xml:space="preserve">
+    <value>Ayuda</value>
+  </data>
+  <data name="cap_ayuda" xml:space="preserve">
+    <value>Ayuda</value>
+  </data>
+  <data name="err_manual_no_encontrado" xml:space="preserve">
+    <value>No se encontró el manual de ayuda. Reinstalá la aplicación o contactá al administrador.</value>
+  </data>
 </root>

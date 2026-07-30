@@ -1033,4 +1033,13 @@ ID: {0}</value>
   <data name="val_backup_sin_seleccion" xml:space="preserve">
     <value>Select at least one database.</value>
   </data>
+  <data name="mnu_ayuda" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="cap_ayuda" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="err_manual_no_encontrado" xml:space="preserve">
+    <value>Help manual not found. Reinstall the application or contact your administrator.</value>
+  </data>
 </root>
