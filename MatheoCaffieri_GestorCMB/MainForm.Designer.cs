@@ -51,6 +51,7 @@
             this.verLogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gestionarUsuariosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configurarParametrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.FormPanel.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -114,7 +115,8 @@
             this.proyectosToolStripMenuItem,
             this.inventarioToolStripMenuItem,
             this.personalToolStripMenuItem,
-            this.ajustesToolStripMenuItem});
+            this.ajustesToolStripMenuItem,
+            this.ayudaToolStripMenuItem});
             this.menuStrip1.Name = "menuStrip1";
             // 
             // homeToolStripMenuItem
@@ -224,6 +226,11 @@
             this.configurarParametrosToolStripMenuItem.Text = "Configurar Parámetros";
             this.configurarParametrosToolStripMenuItem.Click += new System.EventHandler(this.configurarParametrosToolStripMenuItem_Click);
             //
+            // ayudaToolStripMenuItem
+            //
+            this.ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
+            this.ayudaToolStripMenuItem.Click += new System.EventHandler(this.ayudaToolStripMenuItem_Click);
+            //
             // MainPanel
             //
             resources.ApplyResources(this.MainPanel, "MainPanel");
@@ -277,6 +284,7 @@
         private System.Windows.Forms.ToolStripMenuItem agregarProveedoresToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gestionarUsuariosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem configurarParametrosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ayudaToolStripMenuItem;
     }
 }
 

@@ -56,6 +56,8 @@ namespace MatheoCaffieri_GestorCMB
         {
             configurarParametrosToolStripMenuItem.Text =
                 LanguageService.Current?.T("mnu_configurar_parametros") ?? "Configurar Parámetros";
+            ayudaToolStripMenuItem.Text =
+                LanguageService.Current?.T("mnu_ayuda") ?? "Ayuda";
         }
 
         private bool Require(string permiso)
@@ -411,6 +413,19 @@ namespace MatheoCaffieri_GestorCMB
 
             var control = new ConfigurarParametrosControl(_parametrosService);
             addUserControl(control);
+        }
+
+        private void ayudaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // La ayuda es libre: no pasa por Require() a propósito.
+            if (!Services.Ayuda.AyudaService.AbrirManual())
+            {
+                MessageBox.Show(
+                    LanguageService.Current?.T("err_manual_no_encontrado")
+                        ?? "No se encontró el manual de ayuda. Reinstalá la aplicación o contactá al administrador.",
+                    LanguageService.Current?.T("cap_ayuda") ?? "Ayuda",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }
