@@ -63,6 +63,8 @@ namespace MatheoCaffieri_GestorCMB
             this.buttonExitAM.Name = "buttonExitAM";
             this.buttonExitAM.Size = new System.Drawing.Size(21, 19);
             this.buttonExitAM.TabIndex = 31;
+            // Sin TabStop: mismo criterio que MainForm, un Enter con foco acá cerraba el visor
+            this.buttonExitAM.TabStop = false;
             this.buttonExitAM.Text = "X";
             this.buttonExitAM.UseVisualStyleBackColor = true;
             this.buttonExitAM.Click += new System.EventHandler(this.buttonExitAM_Click);
@@ -74,6 +76,7 @@ namespace MatheoCaffieri_GestorCMB
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(22, 19);
             this.buttonExit.TabIndex = 0;
+            this.buttonExit.TabStop = false;
             this.buttonExit.Text = "X";
             this.buttonExit.UseVisualStyleBackColor = true;
             // 
